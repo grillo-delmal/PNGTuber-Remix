@@ -53,21 +53,22 @@ func wobble():
 	%Wobble.position.x = lerp(%Wobble.position.x, sin(Global.tick*actor.dictmain.xFrq)*actor.dictmain.xAmp, 0.15)
 	%Wobble.position.y = lerp(%Wobble.position.y, sin(Global.tick*actor.dictmain.yFrq)*actor.dictmain.yAmp, 0.15)
 
-func rotationalDrag(length,delta):
+func rotationalDrag(length,_delta):
 	%Drag.rotation = sin(Global.tick*actor.dictmain.rot_frq)*deg_to_rad(actor.dictmain.rdragStr)
-	var yvel = (length * actor.dictmain.rdragStr)
+	var yvel = ((length * actor.dictmain.rdragStr)* 0.5)
 	
 	#Calculate Max angle
 	
 	yvel = clamp(yvel,actor.dictmain.rLimitMin,actor.dictmain.rLimitMax)
 	
-	%Rotation.rotation = move_toward(%Rotation.rotation,deg_to_rad(yvel),(2* delta))
+	%Rotation.rotation = lerp_angle(%Rotation.rotation,deg_to_rad(yvel),0.15)
 
-func stretch(length,delta):
-	var yvel = (length * actor.dictmain.stretchAmount * delta)
+func stretch(length,_delta):
+	var yvel = (length * actor.dictmain.stretchAmount * 0.01)
 	var target = Vector2(1.0-yvel,1.0+yvel)
 	
-	%Squish.scale = %Squish.scale.move_toward(target,(2* delta))
+	%Squish.scale = lerp(%Squish.scale,target,0.1)
+
 
 func static_prev():
 	%Pos.position = Vector2(0,0)

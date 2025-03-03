@@ -259,7 +259,7 @@ func get_state(id):
 		advanced_lipsyc()
 
 		
-		%Sprite2D.scale = Vector2(1,1)
+		%Squish.scale = Vector2(1,1)
 		%Pos.position = Vector2(0,0)
 		if dictmain.one_shot:
 			fidx = 0

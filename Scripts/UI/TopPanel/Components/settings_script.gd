@@ -90,7 +90,6 @@ func choosing_device(id):
 	if id != null:
 		if AudioServer.get_input_device_list().has(devices[id]):
 			AudioServer.input_device = devices[id]
-			ProjectSettings.set("audio/driver/mix_rate", AudioServer.get_mix_rate())
 			Themes.theme_settings.microphone = devices[id]
 			Themes.save()
 	else:

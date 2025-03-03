@@ -36,7 +36,7 @@ var speech_delay : float :
 func _physics_process(_delta):
 	sample = audio.get_bus_peak_volume_left_db(2, 0)
 	linear_sampler = db_to_linear(sample) 
-	volume = linear_sampler * Global.settings_dict.sensitivity_limit
+	volume = lerp(volume, linear_sampler * Global.settings_dict.sensitivity_limit, 0.1)
 	speech_value = volume
 	speech_delay = delay
 	

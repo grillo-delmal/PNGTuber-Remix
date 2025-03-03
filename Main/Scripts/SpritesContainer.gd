@@ -49,8 +49,10 @@ func _process(delta):
 	
 	get_parent().position.y = clamp(get_parent().position.y + (yVel * delta),-90000000, 0)
 	
-	get_parent().position.y = lerp(get_parent().position.y, 0.0, 0.08)
-	bounceChange = hold - get_parent().position.y
+	if get_parent().position.y < 16:
+		bounceChange = hold - get_parent().position.y
+#	get_parent().position.y = lerp(get_parent().position.y, 0.0, 0.05)
+	
 	
 	yVel = clamp(yVel + Global.settings_dict.bounceGravity* delta,-90000000, 90000000)
 	
@@ -68,9 +70,8 @@ func _process(delta):
 			set_mo_float()
 		else:
 			position = lerp(position, pos, 0.05)
-			
 		if current_mo_anim != "Squish":
-			scale = lerp(scale, Vector2(1.0,1.0), 0.06)
+			scale = lerp(scale, Vector2(1.0,1.0), 0.08)
 			
 	elif not currenly_speaking:
 		if current_mc_anim == "Bouncy":
@@ -85,7 +86,7 @@ func _process(delta):
 			position = lerp(position, pos, 0.05)
 		
 		if current_mc_anim != "Squish":
-			scale = lerp(scale, Vector2(1.0,1.0), 0.06)
+			scale = lerp(scale, Vector2(1.0,1.0), 0.08)
 
 
 
@@ -134,7 +135,6 @@ func get_state(state):
 
 func not_speaking():
 	currenly_speaking = false
-	
 	match mouth_closed:
 		0:
 			set_mc_idle()
@@ -204,7 +204,7 @@ func set_mc_squish():
 	var yvel = (position.y * 0.01)
 	var target = Vector2(1.0-yvel,1.0+yvel)
 
-	scale = lerp(scale,target,0.5)
+	scale = lerp(scale,target,0.08)
 
 
 
@@ -238,4 +238,4 @@ func set_mo_squish():
 	var yvel = (position.y * 0.01)
 	var target = Vector2(1.0-yvel,1.0+yvel)
 
-	scale = lerp(scale,target,0.5)
+	scale = lerp(scale,target,0.08)

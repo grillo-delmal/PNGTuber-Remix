@@ -142,7 +142,6 @@ func _ready():
 	if theme_settings.microphone != null:
 		if AudioServer.get_input_device_list().has(theme_settings.microphone):
 			AudioServer.input_device = theme_settings.microphone
-			ProjectSettings.set("audio/driver/mix_rate", AudioServer.get_mix_rate())
 
 func window_size_changed():
 	theme_settings.screen_size = get_window().size
