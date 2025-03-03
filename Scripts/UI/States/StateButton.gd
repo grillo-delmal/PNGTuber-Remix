@@ -23,6 +23,7 @@ func _input(event):
 func bg_key_pressed(key):
 	if InputMap.action_get_events(input_key).size() > 0:
 		var inputs = InputMap.action_get_events(input_key)[0]
+		print("t")
 		if key == inputs.as_text():
 			Global.get_sprite_states(state)
 

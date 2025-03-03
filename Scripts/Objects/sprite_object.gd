@@ -177,11 +177,12 @@ func _process(_delta):
 func wiggle_sprite():
 	var wiggle_val = sin(Global.tick*dictmain.wiggle_freq)*dictmain.wiggle_amp
 	if dictmain.wiggle_physics:
-		if get_parent() is Sprite2D or get_parent() is WigglyAppendage2D:
+		if get_parent() is Sprite2D or get_parent() is WigglyAppendage2D && is_instance_valid(get_parent()):
 			var c_parent = get_parent().owner
-			var c_parrent_length = (c_parent.get_node("Movements").glob.y - c_parent.get_node("%Dragger").global_position.y)
-			wiggle_val = wiggle_val + (c_parrent_length/10)
-		
+			if c_parent != null && is_instance_valid(c_parent):
+				var c_parrent_length = (c_parent.get_node("Movements").glob.y - c_parent.get_node("%Drag").global_position.y)
+				wiggle_val = wiggle_val + (c_parrent_length/10)
+			
 	
 	if !get_parent() is Sprite2D:
 		%Sprite2D.material.set_shader_parameter("rotation", wiggle_val )

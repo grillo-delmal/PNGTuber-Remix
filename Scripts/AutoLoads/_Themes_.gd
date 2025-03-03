@@ -24,6 +24,7 @@ var save_timer : Timer = Timer.new()
 	properties = 0,
 	layers = -100,
 	lipsync_file_path = OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres",
+	microphone = null,
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
@@ -138,6 +139,10 @@ func _ready():
 	add_child(popup)
 	popup.hide()
 	
+	if theme_settings.microphone != null:
+		if AudioServer.get_input_device_list().has(theme_settings.microphone):
+			AudioServer.input_device = theme_settings.microphone
+			ProjectSettings.set("audio/driver/mix_rate", AudioServer.get_mix_rate())
 
 func window_size_changed():
 	theme_settings.screen_size = get_window().size

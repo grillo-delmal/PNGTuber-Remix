@@ -3,9 +3,12 @@ extends TabBar
 @export var sprite : AnimatedSprite2D
 
 ## Last phoneme matches
+@warning_ignore("unused_private_class_variable")
 var _matches := []
 
+
 ## Last fingerprint
+@warning_ignore("unused_private_class_variable")
 var _fingerprint := LipSyncFingerprint.new()
 
 func _ready() -> void:

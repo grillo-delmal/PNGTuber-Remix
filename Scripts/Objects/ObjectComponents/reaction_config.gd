@@ -23,10 +23,10 @@ func asset(key):
 func should_disappear(key):
 	if actor.should_disappear:
 		if key in actor.saved_keys:
-			actor.get_node("%Drag").visible = false
+			%Drag.visible = false
 			actor.was_active_before = false
 			if !actor.is_asset && !%Drag.visible:
-				actor.get_node("%Drag").visible = true
+				%Drag.visible = true
 				actor.was_active_before = true
 
 func update_to_mode_change(mode : int):

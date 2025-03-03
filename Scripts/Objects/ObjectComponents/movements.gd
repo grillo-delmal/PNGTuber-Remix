@@ -32,13 +32,13 @@ func movements(delta):
 		var length = (glob.y - %Dragger.global_position.y)
 		
 		if actor.dictmain.physics:
-			if actor.get_parent() is Sprite2D or actor.get_parent() is WigglyAppendage2D && is_instance_valid(actor.get_parent()):
+			if (actor.get_parent() is Sprite2D && is_instance_valid(actor.get_parent())) or (actor.get_parent() is WigglyAppendage2D && is_instance_valid(actor.get_parent())):
 				var c_parent = actor.get_parent().owner
-				
-				var c_parrent_length = (c_parent.get_node("%Movements").glob.y - c_parent.get_node("%Dragger").global_position.y)
-				var c_parrent_length2 = (c_parent.get_node("%Movements").glob.x - c_parent.get_node("%Dragger").global_position.x)
-				length += c_parrent_length + c_parrent_length2
-		
+				if c_parent != null && is_instance_valid(c_parent):
+					var c_parrent_length = (c_parent.get_node("%Movements").glob.y - c_parent.get_node("%Drag").global_position.y)
+					var c_parrent_length2 = (c_parent.get_node("%Movements").glob.x - c_parent.get_node("%Drag").global_position.x)
+					length += c_parrent_length + c_parrent_length2
+			
 		rotationalDrag(length, delta)
 		stretch(length, delta)
 

@@ -282,8 +282,8 @@ func export_images(images = get_tree().get_nodes_in_group("Sprites")):
 					
 			elif sprite.is_apng:
 				var file = FileAccess.open(dire +"/" + sprite.sprite_name + str(randi()) + ".apng", FileAccess.WRITE)
-				var exp = AImgIOAPNGExporter.new().export_animation(sprite.frames, 10, self, "_progress_report", [])
-				file.store_buffer(exp)
+				var exp_image = AImgIOAPNGExporter.new().export_animation(sprite.frames, 10, self, "_progress_report", [])
+				file.store_buffer(exp_image)
 				file.close()
 				file = null
 				if !sprite.frames2.is_empty():

@@ -10,8 +10,12 @@ func _ready() -> void:
 	sliders_revalue(Global.settings_dict)
 	check_data()
 	devices = AudioServer.get_input_device_list()
+	
 	for i in devices:
 		%MicroPhoneMenu.get_popup().add_item(i)
+		if i == Themes.theme_settings.microphone:
+			%MicroPhoneMenu.select(devices.find(i))
+	
 	
 	for i in get_tree().get_nodes_in_group("StateButtons"):
 		var remap_btn = preload("res://UI/StateButton/state_remap_button.tscn").instantiate()
@@ -87,6 +91,8 @@ func choosing_device(id):
 		if AudioServer.get_input_device_list().has(devices[id]):
 			AudioServer.input_device = devices[id]
 			ProjectSettings.set("audio/driver/mix_rate", AudioServer.get_mix_rate())
+			Themes.theme_settings.microphone = devices[id]
+			Themes.save()
 	else:
 		reset_mic_list()
 
@@ -99,6 +105,8 @@ func reset_mic_list():
 	devices.append_array(AudioServer.get_output_device_list())
 	for i in devices:
 		%MicroPhoneMenu.get_popup().add_item(i)
+		
+	choosing_device(0)
 
 
 func _on_anti_al_check_toggled(toggled_on):
