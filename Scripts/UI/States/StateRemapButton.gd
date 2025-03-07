@@ -30,7 +30,7 @@ func _toggled(_button_pressed):
 
 func _unhandled_input(event):
 	if not event is InputEventMouseMotion:
-		if event.is_pressed():
+		if event.is_released():
 			if !get_parent().get_index() in range(Global.settings_dict.saved_inputs.size()):
 				Global.settings_dict.saved_inputs.append(event)
 			else:

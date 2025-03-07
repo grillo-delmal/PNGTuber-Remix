@@ -166,7 +166,7 @@ func _notification(what):
 	elif what == MainLoop.NOTIFICATION_APPLICATION_FOCUS_OUT:
 		rec_inp = true
 
-func _on_background_input_capture_bg_key_pressed(_node, keys_pressed):
+func _on_background_input_capture_bg_key_pressed(_node, keys_pressed : Dictionary):
 	if Global.settings_dict.checkinput:
 		var keyStrings = []
 		var costumeKeys = []
@@ -191,7 +191,13 @@ func _on_background_input_capture_bg_key_pressed(_node, keys_pressed):
 			
 		
 		for key in keyStrings:
-			var i = costumeKeys.find(key)
+			var e = InputEventKey.new()
+			e.keycode = OS.find_keycode_from_string(key)
+			e.alt_pressed = keys_pressed.get(KEY_ALT, false)
+			e.shift_pressed = keys_pressed.get(KEY_SHIFT, false)
+			e.ctrl_pressed = keys_pressed.get(KEY_CTRL, false)
+			e.meta_pressed = keys_pressed.get(KEY_META, false)
+			var i = costumeKeys.find(e.as_text())
 			if i >= 0:
 				if costumeKeys[i] not in keys:
 				#	print(keys)
