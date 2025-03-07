@@ -60,7 +60,12 @@ func choosing_files(id):
 			main.load_append_sprites()
 		8:
 			if path != null:
-				SaveAndLoad.save_file(path)
+				if !path.is_empty():
+					SaveAndLoad.save_file(path)
+				else:
+					main.save_as_file()
+			else:
+				main.save_as_file()
 		9:
 			export_images(get_tree().get_nodes_in_group("Sprites"))
 			

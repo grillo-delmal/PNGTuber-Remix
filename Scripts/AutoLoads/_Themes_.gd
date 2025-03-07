@@ -28,11 +28,17 @@ var save_timer : Timer = Timer.new()
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
+var additional_output = null
+
+func _exit_tree() -> void:
+	if additional_output:
+		DisplayServer.unregister_additional_output(additional_output)
+		print("Additional output unregistered.")
+		additional_output.free()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		popup.popup_centered()
-
 
 func save_before_closing():
 	if theme_settings.save_on_exit:
@@ -66,6 +72,8 @@ func auto_save():
 	
 
 func _ready():
+	additional_output = Object.new()
+	DisplayServer.register_additional_output(additional_output)
 	save_timer.timeout.connect(auto_save)
 	save_timer.one_shot = true
 	add_child(save_timer)
@@ -142,6 +150,8 @@ func _ready():
 	if theme_settings.microphone != null:
 		if AudioServer.get_input_device_list().has(theme_settings.microphone):
 			AudioServer.input_device = theme_settings.microphone
+			
+	
 
 func window_size_changed():
 	theme_settings.screen_size = get_window().size

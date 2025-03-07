@@ -1,7 +1,7 @@
 [gd_scene load_steps=58 format=3 uid="uid://r2walrps7ne"]
 
 [ext_resource type="Texture2D" uid="uid://byc1nc0xfubaq" path="res://TutorialAssets/Pickles/pickle1.png" id="1_128t5"]
-[ext_resource type="Script" path="res://Scripts/UI/Others/pop_up.gd" id="1_si4kh"]
+[ext_resource type="Script" uid="uid://dwa2v8yxe8sff" path="res://Scripts/UI/Others/pop_up.gd" id="1_si4kh"]
 [ext_resource type="Texture2D" uid="uid://4u3y5i46130w" path="res://TutorialAssets/Pickles/pickle2.png" id="2_2ctcb"]
 [ext_resource type="Texture2D" uid="uid://c7wt5f2qinnlu" path="res://TutorialAssets/Pickles/pickle3.png" id="3_oi4po"]
 [ext_resource type="Texture2D" uid="uid://d2jcon746n427" path="res://TutorialAssets/Pickles/pickle4.png" id="4_rqqei"]

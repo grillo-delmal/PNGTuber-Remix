@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://bidkgcxxq68n6"]
 
-[ext_resource type="Script" path="res://Scripts/UI/LeftPanel/ViewportControl.gd" id="1_f7gcc"]
+[ext_resource type="Script" uid="uid://wbmjkjgx7ndd" path="res://Scripts/UI/LeftPanel/ViewportControl.gd" id="1_f7gcc"]
 [ext_resource type="Texture2D" uid="uid://dst8ervfhipkm" path="res://UI/Assets/ZoominButton.png" id="2_ehuh8"]
 [ext_resource type="Texture2D" uid="uid://x1nc07bigmj1" path="res://UI/Assets/ZoomResetButton.png" id="3_00355"]
 [ext_resource type="Texture2D" uid="uid://bxuqwqa2tk5j8" path="res://UI/Assets/ZoomOutButton.png" id="4_h7cy5"]

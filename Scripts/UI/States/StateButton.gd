@@ -14,16 +14,15 @@ func _on_pressed():
 func initial_update():
 	Global.get_sprite_states(state)
 
-
 func _input(event):
 	if input_key != "Null" or input_key != "":
-		if event.is_action_pressed(input_key):
-			Global.get_sprite_states(state)
+		if InputMap.has_action(input_key):
+			if event.is_action_pressed(input_key):
+				Global.get_sprite_states(state)
 
 func bg_key_pressed(key):
 	if InputMap.action_get_events(input_key).size() > 0:
 		var inputs = InputMap.action_get_events(input_key)[0]
-		print("t")
 		if key == inputs.as_text():
 			Global.get_sprite_states(state)
 

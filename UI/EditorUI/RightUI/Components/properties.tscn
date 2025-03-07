@@ -1,9 +1,9 @@
 [gd_scene load_steps=6 format=3 uid="uid://c3f86pv0can01"]
 
-[ext_resource type="Script" path="res://Scripts/UI/RightPanel/properties_script.gd" id="1_q3kfe"]
-[ext_resource type="Script" path="res://Scripts/UI/Others/Spinboxes.gd" id="1_tcd20"]
-[ext_resource type="Script" path="res://UI/BetterSlider/BetterToggles.gd" id="2_7ymxr"]
-[ext_resource type="Script" path="res://Scripts/UI/States/AssetStateButton.gd" id="3_wheig"]
+[ext_resource type="Script" uid="uid://d4lt20s0e5gkc" path="res://Scripts/UI/RightPanel/properties_script.gd" id="1_q3kfe"]
+[ext_resource type="Script" uid="uid://181yhrus3jhb" path="res://Scripts/UI/Others/Spinboxes.gd" id="1_tcd20"]
+[ext_resource type="Script" uid="uid://dy1cd6xda1pu5" path="res://UI/BetterSlider/BetterToggles.gd" id="2_7ymxr"]
+[ext_resource type="Script" uid="uid://cjsuqv0mug802" path="res://Scripts/UI/States/AssetStateButton.gd" id="3_wheig"]
 [ext_resource type="Texture2D" uid="uid://8rb6kumug0p5" path="res://UI/Assets/DeleteButton.png" id="4_b0hoy"]
 
 [node name="Properties" type="Control"]

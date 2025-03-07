@@ -78,6 +78,8 @@ var spinbox_held : bool = false
 @onready var sprite_container = get_tree().get_root().get_node("Main/%SpritesContainer")
 @onready var top_ui = get_tree().get_root().get_node("Main/%TopUI")
 
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	get_window().min_size = Vector2(1000,720)
@@ -85,6 +87,7 @@ func _ready():
 	blinking()
 	get_window().title = "PNGTube-Remix V" + str(ProjectSettings.get_setting("application/config/version"))
 	current_state = 0
+
 
 func blinking():
 	blink_timer.wait_time = settings_dict.blink_speed

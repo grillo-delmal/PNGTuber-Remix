@@ -95,6 +95,8 @@ var is_plus_first_import : bool = false
 	mouse_rotation = 0.0,
 	mouse_scale_x = 0.0,
 	mouse_scale_y = 0.0,
+	mouse_rotation_max = 0.0,
+	mouse_rotation_min = 0.0,
 	}
 
 var smooth_rot = 0.0

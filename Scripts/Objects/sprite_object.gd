@@ -22,8 +22,9 @@ var glob
 var sprite_type : String = "Sprite2D"
 var currently_speaking : bool = false
 var is_plus_first_import : bool = false
+var image_data : PackedByteArray = []
 
-@onready var dictmain : Dictionary = {
+var dictmain : Dictionary = {
 	xFrq = 0,
 	xAmp = 0,
 	yFrq = 0,
@@ -34,21 +35,21 @@ var is_plus_first_import : bool = false
 	dragSpeed = 0,
 	stretchAmount = 0,
 	blend_mode = "Normal",
-	visible = visible,
-	colored = modulate,
-	tint = self_modulate,
-	z_index = z_index,
+	visible = true,
+	colored = Color.WHITE,
+	tint = Color.WHITE,
+	z_index = 0,
 	open_eyes = true,
 	open_mouth = false,
 	should_blink = false,
 	should_talk =  false,
 	animation_speed = 1,
 	hframes = 1,
-	scale = scale,
+	scale = Vector2(1,1),
 	folder = false,
 #	global_position = global_position,
-	position = position,
-	rotation = rotation,
+	position = Vector2.ZERO,
+	rotation = 0.0,
 	offset = Vector2(0,0),
 	ignore_bounce = false,
 	clip = 0,
@@ -80,6 +81,9 @@ var is_plus_first_import : bool = false
 	mouse_rotation = 0.0,
 	mouse_scale_x = 0.0,
 	mouse_scale_y = 0.0,
+	mouse_rotation_max = 0.0,
+	mouse_rotation_min = 0.0,
+	
 	}
 
 var anim_texture 

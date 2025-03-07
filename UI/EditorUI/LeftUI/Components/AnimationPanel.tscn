@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://qjip1w7hh1ss"]
 
-[ext_resource type="Script" path="res://Scripts/UI/LeftPanel/animation_panel_scripts.gd" id="1_phr78"]
+[ext_resource type="Script" uid="uid://bpskqcxi1aufc" path="res://Scripts/UI/LeftPanel/animation_panel_scripts.gd" id="1_phr78"]
 
 [node name="AnimationPanel" type="Panel"]
 custom_minimum_size = Vector2(210, 196)

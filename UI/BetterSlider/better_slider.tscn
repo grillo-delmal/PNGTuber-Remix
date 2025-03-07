@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://clxl1gighe78l"]
 
-[ext_resource type="Script" path="res://UI/BetterSlider/better_slider.gd" id="1_dnfx4"]
+[ext_resource type="Script" uid="uid://0xm3lpjke4lf" path="res://UI/BetterSlider/better_slider.gd" id="1_dnfx4"]
 
 [node name="BetterSlider" type="HBoxContainer" groups=["InputsUIs"]]
 anchors_preset = 10

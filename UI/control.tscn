@@ -1,14 +1,14 @@
 [gd_scene load_steps=10 format=3 uid="uid://ngta1o5yiqxs"]
 
-[ext_resource type="Script" path="res://Scripts/UI/UIInput.gd" id="3_1eur5"]
-[ext_resource type="Script" path="res://Scripts/UI/States/StatesStuff.gd" id="3_pa6sx"]
+[ext_resource type="Script" uid="uid://bpegrg5a15v2v" path="res://Scripts/UI/UIInput.gd" id="3_1eur5"]
+[ext_resource type="Script" uid="uid://bjehgsjwju532" path="res://Scripts/UI/States/StatesStuff.gd" id="3_pa6sx"]
 [ext_resource type="PackedScene" uid="uid://cpcj4o080w37m" path="res://UI/EditorUI/LeftUI/left_panel.tscn" id="5_0cvxm"]
-[ext_resource type="Script" path="res://Scripts/UI/Others/LightControl.gd" id="6_5v3ft"]
+[ext_resource type="Script" uid="uid://1wvjbd0qwxir" path="res://Scripts/UI/Others/LightControl.gd" id="6_5v3ft"]
 [ext_resource type="PackedScene" uid="uid://c3f86pv0can01" path="res://UI/EditorUI/RightUI/Components/properties.tscn" id="8_i4djb"]
 [ext_resource type="PackedScene" uid="uid://ccvo3k5t6lis6" path="res://UI/EditorUI/RightUI/Components/movement.tscn" id="9_fwbkq"]
-[ext_resource type="Script" path="res://UI/BetterSlider/BetterToggles.gd" id="9_n3hq1"]
+[ext_resource type="Script" uid="uid://dy1cd6xda1pu5" path="res://UI/BetterSlider/BetterToggles.gd" id="9_n3hq1"]
 [ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="10_m6pfk"]
-[ext_resource type="Script" path="res://Scripts/UI/Others/Spinboxes.gd" id="26_0wx0w"]
+[ext_resource type="Script" uid="uid://181yhrus3jhb" path="res://Scripts/UI/Others/Spinboxes.gd" id="26_0wx0w"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -548,6 +548,7 @@ flat = false
 alignment = 0
 item_count = 6
 popup/item_0/text = "Idle"
+popup/item_0/id = 0
 popup/item_1/text = "Bouncy"
 popup/item_1/id = 1
 popup/item_2/text = "One Bounce"
@@ -577,6 +578,7 @@ flat = false
 alignment = 0
 item_count = 6
 popup/item_0/text = "Idle"
+popup/item_0/id = 0
 popup/item_1/text = "Bouncy"
 popup/item_1/id = 1
 popup/item_2/text = "One Bounce"

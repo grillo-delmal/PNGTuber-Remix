@@ -1,8 +1,8 @@
 [gd_scene load_steps=13 format=3 uid="uid://bpmlfhv30o08l"]
 
-[ext_resource type="Script" path="res://Scripts/UI/TopPanel/top_ui.gd" id="2_fpnkx"]
-[ext_resource type="Script" path="res://Scripts/Misc/OnlineLinks.gd" id="3_tep3f"]
-[ext_resource type="Script" path="res://Scripts/UI/TopPanel/TopBarInput.gd" id="4_r6evh"]
+[ext_resource type="Script" uid="uid://buog53mcsao0g" path="res://Scripts/UI/TopPanel/top_ui.gd" id="2_fpnkx"]
+[ext_resource type="Script" uid="uid://bafvsv0wf438w" path="res://Scripts/Misc/OnlineLinks.gd" id="3_tep3f"]
+[ext_resource type="Script" uid="uid://qy3riyrj7tll" path="res://Scripts/UI/TopPanel/TopBarInput.gd" id="4_r6evh"]
 [ext_resource type="Texture2D" uid="uid://bq4tg8ia2crwh" path="res://UI/Assets/LinksButtonImages/GithubLogo.png" id="6_0f73e"]
 [ext_resource type="Texture2D" uid="uid://whhnbdvw3i1j" path="res://UI/Assets/LinksButtonImages/TumblrLogo.png" id="7_ja8k8"]
 [ext_resource type="Texture2D" uid="uid://kmyr2ks7oil4" path="res://UI/Assets/LinksButtonImages/RedditLogo.png" id="8_3p41m"]
@@ -57,6 +57,7 @@ theme_override_font_sizes/font_size = 16
 text = "   Files "
 item_count = 9
 popup/item_0/text = "New"
+popup/item_0/id = 0
 popup/item_1/text = "Open"
 popup/item_1/id = 1
 popup/item_2/text = "Save"
@@ -83,6 +84,7 @@ theme_override_font_sizes/font_size = 16
 text = " Mode "
 item_count = 3
 popup/item_0/text = "Editor"
+popup/item_0/id = 0
 popup/item_1/text = "PNGTube"
 popup/item_1/id = 1
 popup/item_2/text = "Script"
@@ -98,6 +100,7 @@ theme_override_font_sizes/font_size = 16
 text = " BG Color "
 item_count = 7
 popup/item_0/text = "Red"
+popup/item_0/id = 0
 popup/item_1/text = "Blue"
 popup/item_1/id = 1
 popup/item_2/text = "Green"
@@ -147,6 +150,7 @@ theme_override_font_sizes/font_size = 16
 text = " Window "
 item_count = 2
 popup/item_0/text = "Toggle Borders"
+popup/item_0/id = 0
 popup/item_1/text = "Save Window (position, size, etc..)"
 popup/item_1/id = 1
 
@@ -159,6 +163,7 @@ theme_override_font_sizes/font_size = 16
 text = " About "
 item_count = 3
 popup/item_0/text = "Credits"
+popup/item_0/id = 0
 popup/item_1/text = "About"
 popup/item_1/id = 1
 popup/item_2/text = "Mini Tutorial (Wip)"
@@ -193,9 +198,9 @@ visible = false
 custom_minimum_size = Vector2(79, 0)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0.74558, 0.74558, 0.74558, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 14
 text = "Deselect"
@@ -353,7 +358,7 @@ size = Vector2i(435, 207)
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 431.0
-offset_bottom = 203.0
+offset_bottom = 222.0
 
 [node name="AboutLabel" type="Label" parent="CreditPopUp/VBoxContainer"]
 layout_mode = 2

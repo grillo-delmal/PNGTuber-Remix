@@ -2,6 +2,8 @@ extends Control
 
 signal key_pressed
 
+var sprite_paths : PackedStringArray
+
 var filepath : Array = []
 enum State {
 	LoadFile,
@@ -88,8 +90,13 @@ func _on_file_dialog_file_selected(path):
 
 func _on_file_dialog_files_selected(paths):
 	if current_state == State.LoadSprites or current_state == State.AddAppend:
+		sprite_paths = paths
+	#	%ConfirmTrim.popup_centered()
+		import_objects()
+
+func import_objects():
 	#	var sprite_nodes = []
-		for path in paths:
+		for path in sprite_paths:
 			
 			var sprte_obj
 			if current_state == State.LoadSprites:
@@ -111,6 +118,8 @@ func _on_file_dialog_files_selected(paths):
 				Global.update_layers.emit(0, sprte_obj, "WiggleApp")
 			else:
 				Global.update_layers.emit(0, sprte_obj, "Sprite2D")
+
+
 
 func _on_confirmation_dialog_confirmed():
 	Themes.theme_settings.path = ""

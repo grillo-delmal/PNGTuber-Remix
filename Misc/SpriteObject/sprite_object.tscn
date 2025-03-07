@@ -1,13 +1,13 @@
 [gd_scene load_steps=13 format=3 uid="uid://du5v1xpm5fjcm"]
 
-[ext_resource type="Script" path="res://Scripts/Objects/sprite_object.gd" id="1_i7wd5"]
+[ext_resource type="Script" uid="uid://q3wblwc0jg28" path="res://Scripts/Objects/sprite_object.gd" id="1_i7wd5"]
 [ext_resource type="Texture2D" uid="uid://bt5ep2bnr2x76" path="res://Misc/SpriteObject/origin.png" id="2_1i6gu"]
-[ext_resource type="Shader" path="res://Scripts/Shaders/SpriteShader.gdshader" id="3_lejuk"]
+[ext_resource type="Shader" uid="uid://c8aq5jfqgs2ro" path="res://Scripts/Shaders/SpriteShader.gdshader" id="3_lejuk"]
 [ext_resource type="Texture2D" uid="uid://cppqjhaoi70l5" path="res://Misc/EasyBlend/Blends/add.png" id="3_updi2"]
-[ext_resource type="Texture2D" uid="uid://dv27xjbwfkacl" path="res://Misc/TestAssets/Lamp.png" id="3_x1bf3"]
-[ext_resource type="Shader" path="res://Scripts/Shaders/SpriteSelection.gdshader" id="6_3ws45"]
-[ext_resource type="Script" path="res://Scripts/Objects/ObjectComponents/movements.gd" id="8_aa1sy"]
-[ext_resource type="Script" path="res://Scripts/Objects/ObjectComponents/reaction_config.gd" id="9_hkdvl"]
+[ext_resource type="Texture2D" uid="uid://prj2o2vhe2nu" path="res://UI/EditorUI/LeftUI/Components/LayerView/PlaceholderText.svg" id="5_nxel7"]
+[ext_resource type="Shader" uid="uid://b5yyx2nj4wj3x" path="res://Scripts/Shaders/SpriteSelection.gdshader" id="6_3ws45"]
+[ext_resource type="Script" uid="uid://c3cp6t3oh8fmh" path="res://Scripts/Objects/ObjectComponents/movements.gd" id="8_aa1sy"]
+[ext_resource type="Script" uid="uid://dwyy1dflsfctu" path="res://Scripts/Objects/ObjectComponents/reaction_config.gd" id="9_hkdvl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1tqhp"]
 resource_local_to_scene = true
@@ -18,15 +18,15 @@ shader_parameter/line_thickness = 2.5
 shader_parameter/frequency = 10.0
 shader_parameter/phase_speed = 1.0
 shader_parameter/base_line_color = Vector4(0, 0, 0, 1)
+shader_parameter/Blend = ExtResource("3_updi2")
 shader_parameter/Intensity = 1.0
 shader_parameter/wiggle = false
 shader_parameter/rotation = 0.0
 shader_parameter/rotation_offset = Vector2(0.5, 0.5)
 shader_parameter/marshing_ants = false
-shader_parameter/Blend = ExtResource("3_updi2")
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_upggl"]
-diffuse_texture = ExtResource("3_x1bf3")
+diffuse_texture = ExtResource("5_nxel7")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vf3uq"]
 resource_local_to_scene = true

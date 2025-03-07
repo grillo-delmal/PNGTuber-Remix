@@ -1,7 +1,7 @@
 [gd_scene load_steps=15 format=3 uid="uid://cfjpkynuomjse"]
 
 [ext_resource type="Texture2D" uid="uid://djvq48ngt4g2q" path="res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/Collapse1.png" id="1_6761a"]
-[ext_resource type="Script" path="res://UI/EditorUI/LeftUI/Components/LayerView/Scripts/layer_item.gd" id="1_l3niq"]
+[ext_resource type="Script" uid="uid://dqnua0hhs6yr4" path="res://UI/EditorUI/LeftUI/Components/LayerView/Scripts/layer_item.gd" id="1_l3niq"]
 [ext_resource type="Texture2D" uid="uid://prj2o2vhe2nu" path="res://UI/EditorUI/LeftUI/Components/LayerView/PlaceholderText.svg" id="1_msyel"]
 [ext_resource type="Texture2D" uid="uid://mygcxkn7mfd0" path="res://UI/EditorUI/LeftUI/Components/LayerView/Assets/Intendation3.png" id="2_t3juo"]
 [ext_resource type="Texture2D" uid="uid://bxbkfc7segv4a" path="res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/Collapse2.png" id="2_wqf1w"]

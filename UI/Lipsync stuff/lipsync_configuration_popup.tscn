@@ -1,9 +1,9 @@
 [gd_scene load_steps=23 format=3 uid="uid://dvq0c1qpx2vo5"]
 
 [ext_resource type="Texture2D" uid="uid://ci6qr5aaw55b4" path="res://Misc/TestAssets/MouthAssets/MouthTH.png" id="1_au3fa"]
-[ext_resource type="Script" path="res://Scripts/Lipsync Scripts/lipsync_configuration_popup.gd" id="1_hl02m"]
+[ext_resource type="Script" uid="uid://b5dn8nbq7bfa1" path="res://Scripts/Lipsync Scripts/lipsync_configuration_popup.gd" id="1_hl02m"]
 [ext_resource type="Texture2D" uid="uid://cqgd1q4i527o8" path="res://Misc/TestAssets/MouthAssets/MouthS.png" id="2_ppb5f"]
-[ext_resource type="Script" path="res://Scripts/Lipsync Scripts/calibration_tree.gd" id="2_yucjp"]
+[ext_resource type="Script" uid="uid://dahlt80hulmva" path="res://Scripts/Lipsync Scripts/calibration_tree.gd" id="2_yucjp"]
 [ext_resource type="Texture2D" uid="uid://b8y26ab24g2o4" path="res://Misc/TestAssets/MouthAssets/MouthT.png" id="3_cs6of"]
 [ext_resource type="Texture2D" uid="uid://2aquomstqx5g" path="res://Misc/TestAssets/MouthAssets/MouthE.png" id="4_pxbl8"]
 [ext_resource type="Texture2D" uid="uid://duqct75wvludd" path="res://Misc/TestAssets/MouthAssets/MouthF.png" id="5_t75vy"]
@@ -16,9 +16,9 @@
 [ext_resource type="Texture2D" uid="uid://bp33kti2vyvhb" path="res://Misc/TestAssets/MouthAssets/MouthG.png" id="12_tc06v"]
 [ext_resource type="Texture2D" uid="uid://7w6o1538wfy3" path="res://Misc/TestAssets/MouthAssets/MouthL.png" id="13_qbydv"]
 [ext_resource type="Texture2D" uid="uid://bx0wddxqvmjvb" path="res://Misc/TestAssets/MouthAssets/MouthSilent.png" id="14_m2i65"]
-[ext_resource type="Script" path="res://Scripts/Lipsync Scripts/inspector_tab.gd" id="17_c25av"]
-[ext_resource type="Script" path="res://Scripts/Lipsync Scripts/fingerprint_tab.gd" id="18_cl2hy"]
-[ext_resource type="Script" path="res://Scripts/Lipsync Scripts/phonemes_tab.gd" id="19_uhohj"]
+[ext_resource type="Script" uid="uid://bfvds6wsw0wsg" path="res://Scripts/Lipsync Scripts/inspector_tab.gd" id="17_c25av"]
+[ext_resource type="Script" uid="uid://bu4wponkf4i03" path="res://Scripts/Lipsync Scripts/fingerprint_tab.gd" id="18_cl2hy"]
+[ext_resource type="Script" uid="uid://ceitfwi6o8fx5" path="res://Scripts/Lipsync Scripts/phonemes_tab.gd" id="19_uhohj"]
 
 [sub_resource type="Gradient" id="Gradient_m67kp"]
 offsets = PackedFloat32Array(0, 0.154717)

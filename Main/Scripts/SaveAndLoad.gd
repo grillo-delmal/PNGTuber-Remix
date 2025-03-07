@@ -231,7 +231,7 @@ func load_sprite(sprite_obj, sprite):
 	if sprite.has("normal"):
 		var normalBytes = sprite.normal
 		if normalBytes != null:
-			var nimg = Image.new()							
+			var nimg = Image.new()
 			if sprite.normal is not PackedByteArray:
 				var img_normal = Marshalls.base64_to_raw(sprite.normal)
 				nimg.load_png_from_buffer(img_normal)

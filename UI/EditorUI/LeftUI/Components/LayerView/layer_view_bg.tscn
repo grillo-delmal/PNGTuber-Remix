@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://mldwqrl5tu11"]
 
-[ext_resource type="Script" path="res://UI/EditorUI/LeftUI/Components/LayerView/Scripts/layer_view_bg.gd" id="1_bam6n"]
+[ext_resource type="Script" uid="uid://kxhu61la7eav" path="res://UI/EditorUI/LeftUI/Components/LayerView/Scripts/layer_view_bg.gd" id="1_bam6n"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_htsfg"]
 

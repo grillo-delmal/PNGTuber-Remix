@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cpcj4o080w37m"]
 
 [ext_resource type="PackedScene" uid="uid://bidkgcxxq68n6" path="res://UI/EditorUI/LeftUI/Components/camera_panel.tscn" id="1_kxhh7"]
-[ext_resource type="Script" path="res://Scripts/UI/LeftPanel/left_panel.gd" id="1_v5jxx"]
+[ext_resource type="Script" uid="uid://b2h705vpr64xt" path="res://Scripts/UI/LeftPanel/left_panel.gd" id="1_v5jxx"]
 [ext_resource type="PackedScene" uid="uid://qjip1w7hh1ss" path="res://UI/EditorUI/LeftUI/Components/AnimationPanel.tscn" id="2_7mw86"]
 [ext_resource type="PackedScene" uid="uid://7r3v4vohf4at" path="res://UI/EditorUI/LeftUI/Components/LayersPanel.tscn" id="3_fepe2"]
 

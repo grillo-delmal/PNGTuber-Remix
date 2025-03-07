@@ -12,17 +12,13 @@ func initial_state():
 func _on_delete_state_pressed():
 	if Global.settings_dict.states.size() > 1:
 		
-		var state_remap = get_tree().get_nodes_in_group("StateRemapButton")
 		var state_btn  = get_tree().get_nodes_in_group("StateButtons")
 		
-		InputMap.erase_action(state_remap[Global.current_state].action)
-		
-		state_remap[Global.current_state].get_parent().queue_free()
+		InputMap.erase_action(state_btn[Global.current_state].input_key)
 		
 		
 		state_btn[Global.current_state].queue_free()
 		
-		Global.settings_dict.saved_inputs.remove_at(Global.current_state)
 		Global.settings_dict.states.remove_at(Global.current_state)
 		Global.settings_dict.light_states.remove_at(Global.current_state)
 		
