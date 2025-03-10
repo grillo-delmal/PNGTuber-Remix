@@ -3,7 +3,6 @@ extends Node
 
 var save_dict : Dictionary = {}
 
-
 func save_file(path):
 	Themes.theme_settings.path = path
 	get_tree().get_root().get_node("Main/%TopUI/TopBarInput").path = path
@@ -85,6 +84,8 @@ func save_file(path):
 			var sprt_dict = {
 				img = img,
 				normal = normal_img,
+				image_data = sprt.image_data,
+				normal_data = sprt.normal_data,
 				states = cleaned_array,
 				img_animated = sprt.img_animated,
 				sprite_name = sprt.sprite_name,
@@ -177,6 +178,10 @@ func load_file(path, should_load_path = false):
 			else:
 				load_sprite(sprite_obj, sprite)
 
+			if sprite.has("image_data"):
+				sprite_obj.image_data = sprite.image_data 
+				sprite_obj.normal_data = sprite.normal_data 
+				
 			sprite_obj.sprite_id = sprite.sprite_id
 			sprite_obj.parent_id = sprite.parent_id
 			sprite_obj.sprite_name = sprite.sprite_name
@@ -209,7 +214,11 @@ func load_file(path, should_load_path = false):
 		get_tree().get_root().get_node("Main/%Control/UIInput").reinfoanim()
 		Themes.save()
 		file.close()
-
+		
+		if Global.settings_dict.anti_alias:
+			Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		else:
+			Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
 
 func load_sprite(sprite_obj, sprite):
 	var img_data
@@ -335,7 +344,7 @@ func load_pngplus_file(path):
 		sprite_obj.dictmain.z_index = load_dict[i]["zindex"]
 		sprite_obj.dictmain.position = str_to_var(load_dict[i]["pos"])
 		sprite_obj.dictmain.offset = str_to_var(load_dict[i]["offset"])
-	#	sprite_obj.dictmain.offset -= str_to_var(load_dict[i]["offset"])
+	#	sprite_obj.dictmain.position -= str_to_var(load_dict[i]["offset"])
 
 		var test = load_dict[i]["showBlink"]
 		var test2 = load_dict[i]["showTalk"]

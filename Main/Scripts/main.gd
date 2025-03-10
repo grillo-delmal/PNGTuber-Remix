@@ -3,6 +3,7 @@ extends Control
 signal key_pressed
 
 var sprite_paths : PackedStringArray
+var sprite_path : String
 
 var filepath : Array = []
 enum State {
@@ -83,16 +84,40 @@ func _on_file_dialog_file_selected(path):
 			SaveAndLoad.save_file(path)
 			
 		State.ReplaceSprite:
-			%FileImporter.replace_texture(path)
-			
+			if Themes.theme_settings.enable_trimmer:
+				var apng_test = AImgIOAPNGImporter.load_from_file(path)
+				if apng_test != ["No frames", null]:
+					%FileImporter.trim = false
+					%FileImporter.replace_texture(path)
+				else:
+					sprite_path = path
+					%ConfirmTrim.popup_centered()
+			else:
+				%FileImporter.trim = false
+				%FileImporter.replace_texture(path)
+
 		State.AddNormal:
-			%FileImporter.add_normal(path)
+			if Themes.theme_settings.enable_trimmer:
+				var apng_test = AImgIOAPNGImporter.load_from_file(path)
+				if apng_test != ["No frames", null]:
+					%FileImporter.trim = false
+					%FileImporter.add_normal(path)
+				else:
+					sprite_path = path
+					%ConfirmTrim.popup_centered()
+			else:
+				%FileImporter.trim = false
+				%FileImporter.add_normal(path)
+
 
 func _on_file_dialog_files_selected(paths):
 	if current_state == State.LoadSprites or current_state == State.AddAppend:
 		sprite_paths = paths
-	#	%ConfirmTrim.popup_centered()
-		import_objects()
+		if Themes.theme_settings.enable_trimmer:
+			%ConfirmTrim.popup_centered()
+		else:
+			%FileImporter.trim = false
+			import_objects()
 
 func import_objects():
 	#	var sprite_nodes = []

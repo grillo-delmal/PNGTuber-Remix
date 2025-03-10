@@ -42,7 +42,6 @@ func choosing_window(id):
 		1:
 			Themes.window_size_changed()
 
-
 func choosing_files(id):
 	var main = get_tree().get_root().get_node("Main")
 	match id:
@@ -71,7 +70,6 @@ func choosing_files(id):
 			
 		10:
 			add_a_lipsync_config()
-		
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("save"):
@@ -192,33 +190,26 @@ func update_bg_color(color, transparency):
 	Global.settings_dict.is_transparent = transparency
 	%BGColorPicker.color = color
 
-
 func origin_alias():
 	if Global.settings_dict.anti_alias:
 		Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
-
 	else:
 		Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
 
-
 func _on_hide_ui_button_toggled(toggled_on):
 	get_tree().get_root().get_node("Main/%Control").visible = toggled_on
-
 
 func _on_basic_temp_button_pressed():
 	SaveAndLoad.load_file("res://DemoModels/PickleModel.pngRemix")
 	%TempPopUp.hide()
 
-
 func _on_bg_temp_button_pressed():
 	SaveAndLoad.load_file("res://DemoModels/PickleModelWithBackground.pngRemix")
 	%TempPopUp.hide()
 
-
 func _on_normalm_temp_button_pressed():
 	SaveAndLoad.load_file("res://DemoModels/PickleModelWithNormalMap.pngRemix")
 	%TempPopUp.hide()
-
 
 func _on_follow_mouse_temp_button_pressed():
 	SaveAndLoad.load_file("res://DemoModels/PickleModelFollowMouse.pngRemix")
@@ -228,11 +219,8 @@ func _on_asset_temp_button_pressed():
 	SaveAndLoad.load_file("res://DemoModels/PickleModelAssets.pngRemix")
 	%TempPopUp.hide()
 
-
-
 func _on_deselect_button_pressed():
 	desel_everything()
-
 
 func desel_everything():
 	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
@@ -309,6 +297,17 @@ func export_images(images = get_tree().get_nodes_in_group("Sprites")):
 					normimg = sprite.get_node("%Sprite2D").texture.normal_texture.get_image()
 					normimg.save_png(dire +"/" + sprite.sprite_name + "Normal" + str(randi()) + ".png")
 					normimg = null
+				
+				if !sprite.image_data.is_empty():
+					var img_d = Image.new()
+					img_d.load_png_from_buffer(sprite.image_data)
+					img_d.save_png(dire +"/" + sprite.sprite_name + str(randi()) + ".png")
+					img_d = null
+				if !sprite.normal_data.is_empty():
+					var img_d = Image.new()
+					img_d.load_png_from_buffer(sprite.normal_data)
+					img_d.save_png(dire +"/" + sprite.sprite_name + str(randi()) + ".png")
+					img_d = null
 
 func _on_background_focus_entered() -> void:
 	Global.spinbox_held = true

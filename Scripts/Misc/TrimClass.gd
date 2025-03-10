@@ -57,3 +57,18 @@ static func trim_image(image: Image) -> Image:
 	trimmed_image.blit_rect(image, trim_info.rect, Vector2.ZERO)
 	
 	return trimmed_image
+
+static func trim_normal(image : Image, normal : Image) -> Image:
+	var trim_info = calculate_trim_info(image)
+	
+	# If no trim needed, return original image
+	if trim_info.is_empty():
+		return normal
+	
+	# Create trimmed normal
+	var trimmed_image = Image.create(trim_info.width, trim_info.height, false, normal.get_format())
+	
+	# Blit the non-transparent area
+	trimmed_image.blit_rect(normal, trim_info.rect, Vector2.ZERO)
+	
+	return trimmed_image

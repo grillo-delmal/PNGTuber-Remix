@@ -72,12 +72,17 @@ func stretch(length,_delta):
 
 func static_prev():
 	%Pos.position = Vector2(0,0)
-	%Sprite2D.self_modulate.s = 0
+	%Sprite2D.self_modulate = actor.dictmain.tint
 	%Pos.modulate.s = 0
 	%Wobble.rotation = 0
 	%Wobble.position = Vector2(0,0)
-	%Sprite2D.scale = Vector2(1,1)
+	%Squish.scale = Vector2(1,1)
 	%Dragger.global_position = %Wobble.global_position
+	%Rotation.rotation = 0.0
+	%Drag.rotation = 0.0
+	%Drag.scale = Vector2(1,1)
+	%Squish.rotation = 0.0
+
 
 func follow_wiggle():
 	if actor.dictmain.follow_wa_tip:

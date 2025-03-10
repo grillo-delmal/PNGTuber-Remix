@@ -33,6 +33,7 @@ func check_data():
 	%AutoLoadCheck.button_pressed = Themes.theme_settings.auto_load
 	%SaveOnExitCheck.button_pressed = Themes.theme_settings.save_on_exit
 	%AutoSaveCheck.button_pressed = Global.settings_dict.auto_save
+	%ImportTrim.button_pressed = Themes.theme_settings.enable_trimmer
 
 func _physics_process(_delta):
 	%VolumeBar.value = GlobalMicAudio.volume
@@ -136,3 +137,8 @@ func _on_auto_save_check_toggled(toggled_on):
 		Themes.save_timer.start()
 	else:
 		Themes.save_timer.stop()
+
+
+func _on_import_trim_toggled(toggled_on: bool) -> void:
+	Themes.theme_settings.enable_trimmer = toggled_on
+	Themes.save()

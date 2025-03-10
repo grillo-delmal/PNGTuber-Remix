@@ -6,7 +6,7 @@ var heldTicks = 0
 var squish = 1
 
 # Misc
-var treeitem : LayerItem
+var treeitem = null
 var visb
 
 var sprite_name : String = ""
@@ -23,6 +23,7 @@ var sprite_type : String = "Sprite2D"
 var currently_speaking : bool = false
 var is_plus_first_import : bool = false
 var image_data : PackedByteArray = []
+var normal_data : PackedByteArray = []
 
 var dictmain : Dictionary = {
 	xFrq = 0,
@@ -144,12 +145,7 @@ func animation():
 func _process(_delta):
 	if Global.held_sprite == self:
 		%Grab.mouse_filter = 1
-		%Ghost.texture = %Sprite2D.texture
-		%Ghost.hframes = %Sprite2D.hframes
-		%Ghost.frame = %Sprite2D.frame
-		%Ghost.flip_h = %Sprite2D.flip_h
-		%Ghost.flip_v = %Sprite2D.flip_v
-		%Ghost.show()
+		%Selection.show()
 	
 		if dictmain.wiggle:
 			%WiggleOrigin.show()
@@ -157,12 +153,10 @@ func _process(_delta):
 			%WiggleOrigin.position = Vector2(pos.x, pos.y)
 		else:
 			%WiggleOrigin.hide()
-		%Ghost.material.set_shader_parameter("wiggle", dictmain.wiggle)
-		%Ghost.material.set_shader_parameter("rotation", %Sprite2D.material.get_shader_parameter("rotation"))
 		
 	else:
 		%Grab.mouse_filter = 2
-		%Ghost.hide()
+		%Selection.hide()
 		%WiggleOrigin.hide()
 	
 	if dragging:
@@ -175,6 +169,9 @@ func _process(_delta):
 	if !Global.static_view:
 		if dictmain.wiggle:
 			wiggle_sprite()
+	else:
+		if dictmain.wiggle:
+			%Sprite2D.material.set_shader_parameter("rotation", 0)
 		
 	advanced_lipsyc()
 

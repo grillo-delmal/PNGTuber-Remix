@@ -140,7 +140,7 @@ func reinfo():
 	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
 		await get_tree().create_timer(0.01).timeout
 		held_sprite_is_true()
-		%Name.text = Global.held_sprite.treeitem.get_node("%NameLabel").text
+		%Name.text = Global.held_sprite.sprite_name
 		%AdvancedLipSync.button_pressed = Global.held_sprite.dictmain.advanced_lipsync
 		if Global.held_sprite.sprite_type == "Sprite2D":
 			%WiggleStuff.show()
@@ -187,7 +187,7 @@ func reinfoanim():
 
 
 func _on_name_text_submitted(new_text):
-	Global.held_sprite.treeitem.get_node("%NameLabel").text = new_text
+	Global.held_sprite.treeitem.set_text(0, new_text)
 	Global.held_sprite.sprite_name = new_text
 	Global.held_sprite.save_state(Global.current_state)
 	Global.spinbox_held = false

@@ -6,7 +6,7 @@ var heldTicks = 0
 var squish = 1
 var currently_speaking : bool = false
 # Misc
-var treeitem : LayerItem
+var treeitem = null
 var visb
 var sprite_name : String = ""
 @export var states : Array = [{}]
@@ -25,8 +25,10 @@ var anim_texture
 var anim_texture_normal 
 var img_animated : bool = false
 var is_plus_first_import : bool = false
+var image_data : PackedByteArray = []
+var normal_data : PackedByteArray = []
 
-@onready var dictmain : Dictionary = {
+var dictmain : Dictionary = {
 	xFrq = 0,
 	xAmp = 0,
 	yFrq = 0,
@@ -37,21 +39,21 @@ var is_plus_first_import : bool = false
 	dragSpeed = 0,
 	stretchAmount = 0,
 	blend_mode = "Normal",
-	visible = visible,
-	colored = modulate,
-	tint = self_modulate,
-	z_index = z_index,
+	visible = true,
+	colored = Color.WHITE,
+	tint = Color.WHITE,
+	z_index = 0,
 	open_eyes = true,
 	open_mouth = false,
 	should_blink = false,
 	should_talk =  false,
 	animation_speed = 1,
 	hframes = 1,
-	scale = scale,
+	scale = Vector2(1.0,1.0),
 	folder = false,
-	position = position,
-	rotation = rotation,
-	offset = %Sprite2D.position,
+	position = Vector2.ZERO,
+	rotation = 0.0,
+	offset = Vector2.ZERO,
 	ignore_bounce = false,
 	clip = 0,
 	physics = true,

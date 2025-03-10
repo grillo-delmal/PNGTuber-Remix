@@ -45,8 +45,7 @@ func import_apng_sprite(path : String , spawn) -> CanvasTexture:
 
 func import_png(path : String, spawn) -> CanvasTexture:
 	var img = Image.load_from_file(path)
-#	var og_image = img.duplicate(true)
-	'''
+	var og_image = img.duplicate(true)
 	if trim:
 		img = ImageTrimmer.trim_image(img)
 		var original_width = og_image.get_width()
@@ -60,10 +59,9 @@ func import_png(path : String, spawn) -> CanvasTexture:
 		# Adjust position to keep image visually stable
 		spawn.dictmain.offset += Vector2(center_shift_x, center_shift_y)
 		spawn.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
-		var buffer = FileAccess.get_file_as_bytes(path)
-		spawn.image_data = buffer
-		buffer.close()
-	'''
+	var buffer = FileAccess.get_file_as_bytes(path)
+	spawn.image_data = buffer
+
 	img.fix_alpha_edges()
 	var texture = ImageTexture.create_from_image(img)
 	var img_can = CanvasTexture.new()
@@ -87,6 +85,12 @@ func add_normal(path):
 
 	else:
 		var img = Image.load_from_file(path)
+		if trim:
+			if !Global.held_sprite.image_data.is_empty():
+				var og_image = Image.new()
+				og_image.load_png_from_buffer(Global.held_sprite.image_data)
+				img = ImageTrimmer.trim_normal(og_image, img)
+		Global.held_sprite.normal_data = FileAccess.get_file_as_bytes(path)
 		img.fix_alpha_edges()
 		var texture = ImageTexture.create_from_image(img)
 		Global.held_sprite.get_node("%Sprite2D").texture.normal_texture = texture
@@ -111,6 +115,24 @@ func replace_texture(path):
 		Global.held_sprite.img_animated = false
 	else:
 		var img = Image.load_from_file(path)
+		var og_image = img.duplicate(true)
+		if trim:
+			img = ImageTrimmer.trim_image(img)
+			var original_width = og_image.get_width()
+			var original_height = og_image.get_height()
+			var trimmed_width = img.get_width()
+			var trimmed_height = img.get_height()
+			# Calculate offset to maintain visual position
+			var trim_info = ImageTrimmer.calculate_trim_info(og_image)
+			var center_shift_x = trim_info.min_x - ((original_width - trimmed_width) / 2.0)
+			var center_shift_y = trim_info.min_y - ((original_height - trimmed_height) / 2.0)
+			# Adjust position to keep image visually stable
+			Global.held_sprite.dictmain.offset += Vector2(center_shift_x, center_shift_y)
+			Global.held_sprite.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
+			Global.update_offset_spins.emit()
+		var buffer = FileAccess.get_file_as_bytes(path)
+		Global.held_sprite.image_data = buffer
+			
 		var texture = ImageTexture.create_from_image(img)
 		var img_can = CanvasTexture.new()
 		img.fix_alpha_edges()
@@ -129,9 +151,23 @@ func replace_texture(path):
 	Global.reinfo.emit()
 
 func _on_confirm_trim_confirmed() -> void:
-	trim = true
-	get_parent().import_objects()
+	if get_parent().current_state == get_parent().State.AddNormal:
+		trim = true
+		add_normal(get_parent().sprite_path)
+	elif get_parent().current_state == get_parent().State.ReplaceSprite:
+		trim = true
+		replace_texture(get_parent().sprite_path)
+	else:
+		trim = true
+		get_parent().import_objects()
 
 func _on_confirm_trim_canceled() -> void:
-	trim = false
-	get_parent().import_objects()
+	if get_parent().current_state == get_parent().State.AddNormal:
+		trim = false
+		add_normal(get_parent().sprite_path)
+	elif get_parent().current_state == get_parent().State.ReplaceSprite:
+		trim = false
+		replace_texture(get_parent().sprite_path)
+	else:
+		trim = false
+		get_parent().import_objects()

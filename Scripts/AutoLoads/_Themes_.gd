@@ -1,5 +1,7 @@
 extends Node
 
+signal theme_changed
+
 @onready var top_bar = get_tree().get_root().get_node("Main/%TopUI")
 var ui_theme
 var popup = preload("res://UI/TopUI/popup_panel.tscn").instantiate()
@@ -25,16 +27,11 @@ var save_timer : Timer = Timer.new()
 	layers = -100,
 	lipsync_file_path = OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres",
 	microphone = null,
+	enable_trimmer = false,
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
 var additional_output = null
-
-func _exit_tree() -> void:
-	if additional_output:
-		DisplayServer.unregister_additional_output(additional_output)
-		print("Additional output unregistered.")
-		additional_output.free()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -72,7 +69,7 @@ func auto_save():
 	
 
 func _ready():
-	additional_output = Object.new()
+	additional_output = RefCounted.new()
 	DisplayServer.register_additional_output(additional_output)
 	save_timer.timeout.connect(auto_save)
 	save_timer.one_shot = true
@@ -177,35 +174,43 @@ func loaded_UI(id):
 
 
 func _on_ui_theme_button_item_selected(index):
+	theme_changed.emit(index)
 	match index:
 		0:
 			get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 			popup.theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
+			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 		1:
 			get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
 			popup.theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
+			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
 		2:
 			get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
 			popup.theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
+			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
 		3:
 			get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
 			popup.theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
+			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
 		4:
 			get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
 			popup.theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
+			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
 		5:
 			get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/GreenTheme/Green_theme.tres")
 			popup.theme = preload("res://Themes/GreenTheme/Green_theme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/GreenTheme/Green_theme.tres")
+			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/GreenTheme/Green_theme.tres")
 		6:
 			get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
 			popup.theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
+			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
 	theme_settings.theme_id = index
 	Global.theme_update.emit(index)
 	save()

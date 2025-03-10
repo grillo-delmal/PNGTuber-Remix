@@ -4,8 +4,26 @@ var sprite_obj = preload("res://Misc/SpriteObject/sprite_object.tscn")
 var append_obj = preload("res://Misc/AppendageObject/Appendage_object.tscn")
 
 func _ready() -> void:
+	Themes.theme_changed.connect(change_theme)
 	Global.deselect.connect(nullfy)
 	Global.reinfo.connect(enable)
+
+func change_theme(index):
+	match index:
+		0:
+			%LayerPopup.theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
+		1:
+			%LayerPopup.theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
+		2:
+			%LayerPopup.theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
+		3:
+			%LayerPopup.theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
+		4:
+			%LayerPopup.theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
+		5:
+			%LayerPopup.theme = preload("res://Themes/GreenTheme/Green_theme.tres")
+		6:
+			%LayerPopup.theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
 
 func nullfy():
 	%ReplaceButton.disabled = true
@@ -28,11 +46,10 @@ func enable():
 
 func _on_delete_button_pressed():
 	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
-		Global.held_sprite.treeitem.get_parent().queue_free()
+		Global.held_sprite.treeitem.free()
 		Global.held_sprite.queue_free()
 		Global.held_sprite = null
 		Global.deselect.emit()
-		Global.top_ui.get_node("%DeselectButton").hide()
 
 func _on_duplicate_button_pressed():
 	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
@@ -60,6 +77,7 @@ func _on_duplicate_button_pressed():
 		
 		obj.dictmain = Global.held_sprite.dictmain.duplicate()
 		obj.states = Global.held_sprite.states.duplicate()
+		obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		Global.update_layers.emit(0, obj, obj.sprite_type)
 		obj.sprite_id = obj.get_instance_id()
 		obj.get_state(Global.current_state)

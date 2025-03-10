@@ -215,10 +215,11 @@ func _on_visible_toggled(toggled_on):
 	if toggled_on:
 		Global.held_sprite.dictmain.visible = true
 		Global.held_sprite.visible = true
+		Global.held_sprite.treeitem.set_button(0, 0, preload("res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/EyeButton.png"))
 	else:
 		Global.held_sprite.dictmain.visible = false
 		Global.held_sprite.visible = false
-	Global.held_sprite.treeitem.update_visib_buttons()
+		Global.held_sprite.treeitem.set_button(0, 0, preload("res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/EyeButton2.png"))
 	Global.held_sprite.save_state(Global.current_state)
 
 func _on_z_order_spinbox_value_changed(value):
