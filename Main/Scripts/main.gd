@@ -79,7 +79,15 @@ func add_normal_sprite():
 func _on_file_dialog_file_selected(path): 
 	match current_state:
 		State.LoadFile:
-			SaveAndLoad.load_file(path)
+			%FileImporter.trim = false
+			if path.get_extension() == "save":
+				if Themes.theme_settings.enable_trimmer:
+					sprite_path = path
+					%ConfirmTrim.popup_centered()					
+				else:					
+					SaveAndLoad.load_file(path)
+			else:
+				SaveAndLoad.load_file(path)
 		State.SaveFileAs:
 			SaveAndLoad.save_file(path)
 			

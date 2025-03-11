@@ -308,25 +308,29 @@ func load_pngplus_file(path):
 	for i in load_dict:
 		var sprite_obj = preload("res://Misc/SpriteObject/sprite_object.tscn").instantiate()
 		var img_data = Marshalls.base64_to_raw(load_dict[i]["imageData"])
-		var img = Image.new()
-		img.load_png_from_buffer(img_data)
-		var img_tex = ImageTexture.new()
-		img_tex.set_image(img)
-		var img_can = CanvasTexture.new()
-		img_can.diffuse_texture = img_tex
-		sprite_obj.get_node("%Sprite2D").texture = img_can
+		if (load_dict[i]["frames"] > 1): #If animated, we don't want to trim the sprite
+			var img = Image.new()
+			img.load_png_from_buffer(img_data)
+			var img_tex = ImageTexture.new()
+			img_tex.set_image(img)
+			var img_can = CanvasTexture.new()
+			img_can.diffuse_texture = img_tex
+			sprite_obj.get_node("%Sprite2D").texture = img_can
+		else:			
+			var img_can = Global.main.get_node("%FileImporter").import_png_from_buffer(img_data, "", sprite_obj)			
+			sprite_obj.get_node("%Sprite2D").texture = img_can
 		
 	#	'''
 	
 		sprite_obj.is_plus_first_import = true
 		sprite_obj.sprite_id = load_dict[i]["identification"]
 		sprite_obj.parent_id = load_dict[i]["parentId"]
-		sprite_obj.sprite_name = "Sprite " + str(i)
+		sprite_obj.sprite_name = load_dict[i]["path"].get_file().trim_suffix(".png")
 		
 		sprite_obj.dictmain.xFrq = load_dict[i]["xFrq"]
-		sprite_obj.dictmain.xAmp = load_dict[i]["xAmp"]
+		sprite_obj.dictmain.xAmp = float(load_dict[i]["xAmp"])
 		sprite_obj.dictmain.yFrq = load_dict[i]["yFrq"]
-		sprite_obj.dictmain.yAmp = load_dict[i]["yAmp"]
+		sprite_obj.dictmain.yAmp = float(load_dict[i]["yAmp"])
 		sprite_obj.dictmain.dragSpeed = load_dict[i]["drag"]
 		sprite_obj.dictmain.rdragStr = load_dict[i]["rotDrag"]
 		sprite_obj.dictmain.stretchAmount = load_dict[i]["stretchAmount"]
@@ -343,8 +347,7 @@ func load_pngplus_file(path):
 		sprite_obj.dictmain.rLimitMax = load_dict[i]["rLimitMax"]
 		sprite_obj.dictmain.z_index = load_dict[i]["zindex"]
 		sprite_obj.dictmain.position = str_to_var(load_dict[i]["pos"])
-		sprite_obj.dictmain.offset = str_to_var(load_dict[i]["offset"])
-	#	sprite_obj.dictmain.position -= str_to_var(load_dict[i]["offset"])
+		sprite_obj.dictmain.offset += str_to_var(load_dict[i]["offset"])
 
 		var test = load_dict[i]["showBlink"]
 		var test2 = load_dict[i]["showTalk"]
@@ -383,7 +386,7 @@ func load_pngplus_file(path):
 				ndict.visible = false
 			else:
 				ndict.visible = true
-			sprite_obj.states[l] = ndict
+			sprite_obj.states[int(l)] = ndict
 		Global.sprite_container.add_child(sprite_obj)
 		sprite_obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		

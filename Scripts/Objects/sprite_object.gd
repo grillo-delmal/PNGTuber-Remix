@@ -319,11 +319,12 @@ func reparent_obj(parent):
 func zazaza(parent):
 	for i in parent:
 		if i.sprite_id == parent_id:
+			dictmain.position -= i.dictmain.offset
 			if is_plus_first_import:
 				for state in states:
 					if !state.is_empty():
 						global = global_position
-						state.position = to_local(global) - state.offset
+						state.position = dictmain.position
 
 func proper_apng_one_shot():
 	var cframe: AImgIOFrame = frames[0]
