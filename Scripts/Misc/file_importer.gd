@@ -11,7 +11,7 @@ func import_sprite(path : String):
 	if apng_test != ["No frames", null]:
 		img_tex = import_apng_sprite(path, spawn)
 	else:
-		img_tex = import_png(path, spawn)
+		img_tex = import_png_from_file(path, spawn)
 	spawn.get_node("%Sprite2D").texture = img_tex
 	return spawn
 
@@ -22,7 +22,7 @@ func import_appendage(path : String):
 	if apng_test != ["No frames", null]:
 		img_tex = import_apng_sprite(path , spawn)
 	else:
-		img_tex = import_png(path, spawn)
+		img_tex = import_png_from_file(path, spawn)
 	
 	spawn.get_node("%Sprite2D").texture = img_tex
 	return spawn
@@ -42,9 +42,24 @@ func import_apng_sprite(path : String , spawn) -> CanvasTexture:
 	spawn.is_apng = true
 	spawn.sprite_name = "(Apng) " + path.get_file().get_basename() 
 	return img_can
-
-func import_png(path : String, spawn) -> CanvasTexture:
+	
+func import_png_from_buffer(buffer: PackedByteArray, name: String, spawn) -> CanvasTexture:
+	var img = Image.new()
+	img.load_png_from_buffer(buffer)
+	var img_can = import_png(img, spawn)	
+	spawn.image_data = buffer
+	spawn.sprite_name = name
+	return img_can
+	
+func import_png_from_file(path: String, spawn) -> CanvasTexture:
 	var img = Image.load_from_file(path)
+	var img_can = import_png(img, spawn)	
+	var buffer = FileAccess.get_file_as_bytes(path)
+	spawn.image_data = buffer
+	spawn.sprite_name = path.get_file().get_basename()
+	return img_can
+	
+func import_png(img: Image, spawn) -> CanvasTexture:
 	var og_image = img.duplicate(true)
 	if trim:
 		img = ImageTrimmer.trim_image(img)
@@ -59,14 +74,12 @@ func import_png(path : String, spawn) -> CanvasTexture:
 		# Adjust position to keep image visually stable
 		spawn.dictmain.offset += Vector2(center_shift_x, center_shift_y)
 		spawn.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
-	var buffer = FileAccess.get_file_as_bytes(path)
-	spawn.image_data = buffer
+
 
 	img.fix_alpha_edges()
 	var texture = ImageTexture.create_from_image(img)
 	var img_can = CanvasTexture.new()
 	img_can.diffuse_texture = texture
-	spawn.sprite_name = path.get_file().get_basename()
 	return img_can
 
 func add_normal(path):
@@ -157,6 +170,9 @@ func _on_confirm_trim_confirmed() -> void:
 	elif get_parent().current_state == get_parent().State.ReplaceSprite:
 		trim = true
 		replace_texture(get_parent().sprite_path)
+	elif get_parent().current_state == get_parent().State.LoadFile:
+		trim = true
+		SaveAndLoad.load_file(get_parent().sprite_path)
 	else:
 		trim = true
 		get_parent().import_objects()
@@ -168,6 +184,9 @@ func _on_confirm_trim_canceled() -> void:
 	elif get_parent().current_state == get_parent().State.ReplaceSprite:
 		trim = false
 		replace_texture(get_parent().sprite_path)
+	elif get_parent().current_state == get_parent().State.LoadFile:
+		trim = false
+		SaveAndLoad.load_file(get_parent().path)
 	else:
 		trim = false
 		get_parent().import_objects()
