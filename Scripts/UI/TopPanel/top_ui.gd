@@ -27,8 +27,8 @@ func sliders_revalue(settings_dict):
 	%YFreqWobbleSlider.value = settings_dict.yFrq
 	%YAmpWobbleSlider.value = settings_dict.yAmp
 
-	get_tree().get_root().get_node("Main/SubViewportContainer/%Camera2D").zoom = settings_dict.zoom
-	get_tree().get_root().get_node("Main/SubViewportContainer/%CamPos").global_position = settings_dict.pan
+	get_tree().get_root().get_node("Main/%Camera2D").zoom = settings_dict.zoom
+	get_tree().get_root().get_node("Main/%CamPos").global_position = settings_dict.pan
 	
 	get_tree().get_root().get_node("Main/%Control/%BlinkSpeedSlider").value = Global.settings_dict.blink_speed
 	update_fps(settings_dict.max_fps)

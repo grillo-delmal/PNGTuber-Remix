@@ -2,10 +2,9 @@ extends Node
 
 
 func _ready() -> void:
-	if Global.main.has_node("%SubViewport"):
-		var view1 = Global.main.get_node("%SubViewport")
-		%SubViewport.world_2d = view1.world_2d
-		
+	var view1 = Global.main.get_node("%SubViewport")
+	%SubViewport.world_2d = view1.world_2d
+	
 
 func _on_zoom_in_button_pressed():
 	if %Camera2D.zoom.x < 3.9:

@@ -25,7 +25,6 @@ func _on_focus_entered() -> void:
 		
 	%Select.show()
 	Global.held_sprite = data.sprite_object
-	Global.held_sprite.get_node("%Selection").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 	if Global.held_sprite.has_node("%Origin"):
 		Global.held_sprite.get_node("%Origin").show()
 	Global.reinfo.emit()

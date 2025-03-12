@@ -39,10 +39,10 @@ func update_to_mode_change(mode : int):
 					if actor.dictmain.open_mouth:
 						%Rotation.modulate.a = 1
 					else:
-						%Rotation.modulate.a = 0.3
+						%Rotation.modulate.a = 0.2
 				if !actor.currently_speaking:
 					if !actor.dictmain.open_mouth:
-						%Rotation.modulate.a = 0.3
+						%Rotation.modulate.a = 0.2
 					else:
 						%Rotation.modulate.a = 1
 			else:
@@ -74,14 +74,14 @@ func editor_blink():
 				
 				%Pos.modulate.a = 1
 			else:
-				%Pos.modulate.a = 0.3
+				%Pos.modulate.a = 0.2
 		
 		%Blink.wait_time = 0.2 * Global.settings_dict.blink_speed
 		%Blink.start()
 		await  %Blink.timeout
 		if actor.dictmain.should_blink:
 			if not actor.dictmain.open_eyes:
-				%Pos.modulate.a = 0.3
+				%Pos.modulate.a = 0.2
 			else:
 				%Pos.modulate.a = 1
 		else:
@@ -141,7 +141,7 @@ func speaking():
 					actor.animation()
 					
 			else:
-				%Rotation.modulate.a = 0.3
+				%Rotation.modulate.a = 0.2
 		else:
 			%Rotation.modulate.a = 1
 	actor.currently_speaking = true
@@ -169,7 +169,7 @@ func not_speaking():
 		if actor.dictmain.should_talk:
 			if actor.dictmain.open_mouth:
 				
-				%Rotation.modulate.a = 0.3
+				%Rotation.modulate.a = 0.2
 			else:
 				if actor.dictmain.one_shot:
 					actor.fidx = 0

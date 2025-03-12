@@ -43,12 +43,12 @@ func import_apng_sprite(path : String , spawn) -> CanvasTexture:
 	spawn.sprite_name = "(Apng) " + path.get_file().get_basename() 
 	return img_can
 	
-func import_png_from_buffer(buffer: PackedByteArray, name: String, spawn) -> CanvasTexture:
+func import_png_from_buffer(buffer: PackedByteArray, sprite_name: String, spawn) -> CanvasTexture:
 	var img = Image.new()
 	img.load_png_from_buffer(buffer)
 	var img_can = import_png(img, spawn)	
 	spawn.image_data = buffer
-	spawn.sprite_name = name
+	spawn.sprite_name = sprite_name
 	return img_can
 	
 func import_png_from_file(path: String, spawn) -> CanvasTexture:
@@ -74,7 +74,6 @@ func import_png(img: Image, spawn) -> CanvasTexture:
 		# Adjust position to keep image visually stable
 		spawn.dictmain.offset += Vector2(center_shift_x, center_shift_y)
 		spawn.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
-
 
 	img.fix_alpha_edges()
 	var texture = ImageTexture.create_from_image(img)
@@ -123,7 +122,7 @@ func replace_texture(path):
 		var text = ImageTexture.create_from_image(cframe.content)
 		var img_can = CanvasTexture.new()
 		img_can.diffuse_texture = text
-		Global.held_sprite.treeitem.get_node("%Icon").texture = Global.held_sprite.texture
+		ImageTrimmer.set_thumbnail(Global.held_sprite.treeitem)
 		Global.held_sprite.is_apng = true
 		Global.held_sprite.img_animated = false
 	else:
@@ -154,7 +153,7 @@ func replace_texture(path):
 		img_can.diffuse_texture = texture
 		Global.held_sprite.get_node("%Sprite2D").texture = img_can
 		Global.held_sprite.save_state(Global.current_state)
-		Global.held_sprite.treeitem.get_node("%Icon").texture = texture
+		ImageTrimmer.set_thumbnail(Global.held_sprite.treeitem)
 		
 	if Global.held_sprite.sprite_type == "WiggleApp":
 		Global.held_sprite.correct_sprite_size()
@@ -172,7 +171,7 @@ func _on_confirm_trim_confirmed() -> void:
 		replace_texture(get_parent().sprite_path)
 	elif get_parent().current_state == get_parent().State.LoadFile:
 		trim = true
-		SaveAndLoad.load_file(get_parent().sprite_path)
+		SaveAndLoad.load_file(get_parent().model_path)
 	else:
 		trim = true
 		get_parent().import_objects()
@@ -186,7 +185,7 @@ func _on_confirm_trim_canceled() -> void:
 		replace_texture(get_parent().sprite_path)
 	elif get_parent().current_state == get_parent().State.LoadFile:
 		trim = false
-		SaveAndLoad.load_file(get_parent().path)
+		SaveAndLoad.load_file(get_parent().model_path)
 	else:
 		trim = false
 		get_parent().import_objects()

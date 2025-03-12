@@ -177,37 +177,37 @@ func _on_ui_theme_button_item_selected(index):
 	theme_changed.emit(index)
 	match index:
 		0:
-			get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
+			get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 			popup.theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 		1:
-			get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
+			get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
 			popup.theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
 		2:
-			get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
+			get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
 			popup.theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
 		3:
-			get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
+			get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
 			popup.theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
 		4:
-			get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
+			get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
 			popup.theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
 		5:
-			get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/GreenTheme/Green_theme.tres")
+			get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/GreenTheme/Green_theme.tres")
 			popup.theme = preload("res://Themes/GreenTheme/Green_theme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/GreenTheme/Green_theme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/GreenTheme/Green_theme.tres")
 		6:
-			get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
+			get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
 			popup.theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
 			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")

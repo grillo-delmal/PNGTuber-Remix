@@ -144,18 +144,24 @@ func animation():
 
 func _process(_delta):
 	if Global.held_sprite == self:
-		%Grab.mouse_filter = 1
+		%Grab.mouse_filter = Control.MouseFilter.MOUSE_FILTER_PASS
+		%Selection.texture = %Sprite2D.texture
 		%Selection.show()
-	
+		%Selection.hframes = %Sprite2D.hframes
+		%Selection.frame = %Sprite2D.frame
+		
 		if dictmain.wiggle:
 			%WiggleOrigin.show()
 			var pos = (%Sprite2D.material.get_shader_parameter("rotation_offset") * %Sprite2D.texture.get_size())/2
 			%WiggleOrigin.position = Vector2(pos.x, pos.y)
+			%Selection.material.set_shader_parameter("wiggle", true)
+			%Selection.material.set_shader_parameter("rotation_offset", %Sprite2D.material.get_shader_parameter("rotation_offset"))
 		else:
+			%Selection.material.set_shader_parameter("wiggle", false)
 			%WiggleOrigin.hide()
 		
 	else:
-		%Grab.mouse_filter = 2
+		%Grab.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE
 		%Selection.hide()
 		%WiggleOrigin.hide()
 	

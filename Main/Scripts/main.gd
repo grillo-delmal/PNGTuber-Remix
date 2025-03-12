@@ -4,6 +4,7 @@ signal key_pressed
 
 var sprite_paths : PackedStringArray
 var sprite_path : String
+var model_path : String
 
 var filepath : Array = []
 enum State {
@@ -82,9 +83,9 @@ func _on_file_dialog_file_selected(path):
 			%FileImporter.trim = false
 			if path.get_extension() == "save":
 				if Themes.theme_settings.enable_trimmer:
-					sprite_path = path
-					%ConfirmTrim.popup_centered()					
-				else:					
+					model_path = path
+					%ConfirmTrim.popup_centered()
+				else:
 					SaveAndLoad.load_file(path)
 			else:
 				SaveAndLoad.load_file(path)

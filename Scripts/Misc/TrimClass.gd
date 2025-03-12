@@ -72,3 +72,34 @@ static func trim_normal(image : Image, normal : Image) -> Image:
 	trimmed_image.blit_rect(normal, trim_info.rect, Vector2.ZERO)
 	
 	return trimmed_image
+
+
+static func set_thumbnail(item : TreeItem):
+	var img = Image.new()
+	img = item.get_metadata(0).sprite_object.get_node("%Sprite2D").texture.get_image().duplicate(true)
+
+	var thumbnail_size = 32
+	
+	# Create a transparent square image
+	var square_img = Image.create(thumbnail_size, thumbnail_size, false, Image.FORMAT_RGBA8)
+	square_img.fill(Color(0, 0, 0, 0))
+	
+	var scaled_img = img.duplicate()
+	var scale_factor = min(
+		float(thumbnail_size) / scaled_img.get_width(),
+		float(thumbnail_size) / scaled_img.get_height()
+	)
+	
+	var new_width = int(scaled_img.get_width() * scale_factor)
+	var new_height = int(scaled_img.get_height() * scale_factor)
+	
+	scaled_img.resize(new_width, new_height, Image.INTERPOLATE_BILINEAR)
+	
+	var offset_x = (thumbnail_size - new_width) / 2
+	var offset_y = (thumbnail_size - new_height) / 2
+	
+	square_img.blit_rect(scaled_img, Rect2(0, 0, new_width, new_height), Vector2(offset_x, offset_y))
+	
+	var texture = ImageTexture.create_from_image(square_img)
+	item.set_icon(0, texture)
+	# Force the tree to redraw to ensure thumbnails appear immediately

@@ -3,7 +3,7 @@
 Note : This is a forked version of PNGTuber+, credits for the core stuff goes to Kaiakairos. make sure to support them :D
 If you always wanted to try the most recent version, install Godot then clone the repository to open the project files. Builds/ compiled versions will only be for main updates or bugs that needed to be patched quickly 
 
-_<br> This project uses Godot 4.3 </br>_
+_<br> This project uses Godot 4.4 </br>_
 
 
 <h3>PNGTube-Remix!</h3>
@@ -13,6 +13,7 @@ _<br> This project uses Godot 4.3 </br>_
 <br>Due to being remade from scratch, some features aren't 1:1 from the og source, yet. Since it is still being worked on, but expect things to be reimplemented soon!</br>
 
 <br>The UI had been remade to be much easier to understand thanks to [LeoRson](https://github.com/LeoRson). A document will be made when the first full release is out.</br>
+<br>Special Thanks to [michaelivey](https://github.com/michaelivey) (General Tekno) and [Guuvita](https://x.com/Guuvita) for helping in implementing the Trimming and model optimization features!</br>
 <br>An in-app doc will be added too, tho.. not as complex, more of a heads up!</br>
 [RoadMap](https://trello.com/b/w9Iz2vah/pngtuber-remix)
 

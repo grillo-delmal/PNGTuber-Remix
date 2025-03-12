@@ -51,6 +51,7 @@ func save_file(path):
 				saved_keys = sprt.saved_keys,
 				show_only = sprt.show_only,
 				is_collapsed = sprt.is_collapsed,
+				is_premultiplied = true,
 			}
 			
 			sprites_array.append(sprt_dict)
@@ -99,6 +100,7 @@ func save_file(path):
 				show_only = sprt.show_only,
 				saved_keys = sprt.saved_keys,
 				is_collapsed = sprt.is_collapsed,
+				is_premultiplied = true,
 			}
 			sprites_array.append(sprt_dict)
 		
@@ -230,7 +232,8 @@ func load_sprite(sprite_obj, sprite):
 	else:
 		img.load_png_from_buffer(sprite.img)
 		
-	img.fix_alpha_edges()
+	if sprite.has("is_premultiplied") == false:
+		img.fix_alpha_edges()
 	var img_tex = ImageTexture.new()
 	img_tex.set_image(img)
 	var img_can = CanvasTexture.new()
@@ -258,7 +261,8 @@ func load_apng(sprite_obj, sprite):
 	sprite_obj.frames = tex
 	
 	for n in sprite_obj.frames:
-		n.content.fix_alpha_edges()
+		if sprite.has("is_premultiplied") == false:
+			n.content.fix_alpha_edges()
 	
 	var cframe: AImgIOFrame = sprite_obj.frames[0]
 	
@@ -271,6 +275,7 @@ func load_apng(sprite_obj, sprite):
 		sprite_obj.frames2 = texn
 		for n in sprite_obj.frames2:
 			n.content.fix_alpha_edges()
+		#	n.content.premultiply_alpha()
 		
 		var cframe2: AImgIOFrame = sprite_obj.frames2[0]
 		var text2 = ImageTexture.create_from_image(cframe2.content)
@@ -316,8 +321,8 @@ func load_pngplus_file(path):
 			var img_can = CanvasTexture.new()
 			img_can.diffuse_texture = img_tex
 			sprite_obj.get_node("%Sprite2D").texture = img_can
-		else:			
-			var img_can = Global.main.get_node("%FileImporter").import_png_from_buffer(img_data, "", sprite_obj)			
+		else:
+			var img_can = Global.main.get_node("%FileImporter").import_png_from_buffer(img_data, "", sprite_obj)
 			sprite_obj.get_node("%Sprite2D").texture = img_can
 		
 	#	'''

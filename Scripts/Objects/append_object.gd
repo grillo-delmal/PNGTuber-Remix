@@ -155,8 +155,10 @@ func _process(_delta):
 	if !Global.static_view:
 		if dictmain.auto_wag:
 			%Sprite2D.curvature = clamp(sin(Global.tick*(dictmain.wag_freq))*dictmain.wag_speed, deg_to_rad(dictmain.wag_mini), deg_to_rad(dictmain.wag_max))
+	else:
+		if dictmain.auto_wag:
+			%Sprite2D.curvature = 0.0
 		
-
 	%Grab.anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 
 func wiggle_sprite():

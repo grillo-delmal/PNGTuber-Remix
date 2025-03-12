@@ -25,26 +25,45 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 		print("can't drop")
 		return
 	
+	#print(true_pos)
+	var og_pos = item.get_metadata(0).sprite_object.global_position
 	if true_pos == 0:
 		item.get_parent().remove_child(item)
 		other_item.add_child(item)
-		item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
-		other_item.get_metadata(0).sprite_object.get_node("%Sprite2D").add_child(item.get_metadata(0).sprite_object)
-		item.get_metadata(0).sprite_object.parent_id = other_item.get_metadata(0).sprite_object.sprite_id
-
+		if other_item == get_root():
+			item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
+			item.get_metadata(0).sprite_object.parent_id = 0
+			Global.sprite_container.add_child(item.get_metadata(0).sprite_object)
+		else:
+			item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
+			other_item.get_metadata(0).sprite_object.get_node("%Sprite2D").add_child(item.get_metadata(0).sprite_object)
+			item.get_metadata(0).sprite_object.parent_id = other_item.get_metadata(0).sprite_object.sprite_id
+		item.get_metadata(0).sprite_object.global_position = og_pos
+		item.get_metadata(0).sprite_object.dictmain.position = item.get_metadata(0).sprite_object.position
+		item.get_metadata(0).sprite_object.save_state(Global.current_state)
+		
 	elif true_pos == -1:
 		if other_item.get_parent() != item.get_parent():
 			if other_item.get_parent() == get_root():
 				item.get_metadata(0).sprite_object.parent_id = 0
 			else:
-				item.get_metadata(0).sprite_object.parent_id = other_item.get_metadata(0).sprite_object.parent_id
+				item.move_after(other_item)
+				if other_item == get_root():
+					item.get_metadata(0).sprite_object.parent_id = 0
+					item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
+					Global.sprite_container.add_child(item.get_metadata(0).sprite_object)
+					item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object,item.get_index())
+				else:
+					item.get_metadata(0).sprite_object.parent_id = other_item.get_metadata(0).sprite_object.parent_id
+					item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
+					other_item.get_metadata(0).sprite_object.get_parent().add_child(item.get_metadata(0).sprite_object)
+					item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object,item.get_index())
 				
-			item.move_before(other_item)
-			item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
-			other_item.get_metadata(0).sprite_object.get_parent().add_child(item.get_metadata(0).sprite_object)
-			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object,item.get_index())
+			item.get_metadata(0).sprite_object.global_position = og_pos
+			item.get_metadata(0).sprite_object.dictmain.position = item.get_metadata(0).sprite_object.position
+			item.get_metadata(0).sprite_object.save_state(Global.current_state)
 		else:
-			item.get_parent().move_child(item, clamp(other_item.get_index(), 0, other_item.get_index() + 1))
+			item.move_before(other_item)
 			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object,item.get_index())
 
 	elif true_pos == 1:
@@ -52,16 +71,24 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 			if other_item.get_parent() == get_root():
 				item.get_metadata(0).sprite_object.parent_id = 0
 			else:
-				item.get_metadata(0).sprite_object.parent_id = other_item.get_metadata(0).sprite_object.parent_id
+				item.move_after(other_item)
+				if other_item == get_root():
+					item.get_metadata(0).sprite_object.parent_id = 0
+					item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
+					Global.sprite_container.add_child(item.get_metadata(0).sprite_object)
+					item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(item.get_index(), 0, item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1))
+				else:
+					item.get_metadata(0).sprite_object.parent_id = other_item.get_metadata(0).sprite_object.parent_id
+					item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
+					other_item.get_metadata(0).sprite_object.get_parent().add_child(item.get_metadata(0).sprite_object)
+					item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(item.get_index()+1, 0, item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1))
+			item.get_metadata(0).sprite_object.global_position = og_pos
+			item.get_metadata(0).sprite_object.dictmain.position = item.get_metadata(0).sprite_object.position
+			item.get_metadata(0).sprite_object.save_state(Global.current_state)
 				
-			item.move_after(other_item)
-			item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
-			other_item.get_metadata(0).sprite_object.get_parent().add_child(item.get_metadata(0).sprite_object)
-			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(item.get_index(), 0, item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1))
-			
 		else:
-			item.get_parent().move_child(item, clamp(other_item.get_index()+1, 0, other_item.get_index() + 1))
-			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object,item.get_index())
+			item.move_after(other_item)
+			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(item.get_index()+1, 0, item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1))
 
 
 func get_all_layeritems(layeritem, recursive) -> Array:

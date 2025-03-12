@@ -83,7 +83,7 @@ func choosing_mode(id):
 	var saved_id = 0
 	match id:
 		0:
-			get_parent().get_parent().get_parent().get_node("SubViewportContainer").mouse_filter = 1
+	#		Global.main.get_node("SubViewportContainer").mouse_filter = 1
 			get_viewport().transparent_bg = false
 			RenderingServer.set_default_clear_color(Color.SLATE_GRAY)
 			get_tree().get_root().get_node("Main/%Control").show()
@@ -93,13 +93,13 @@ func choosing_mode(id):
 			saved_id = 0
 		
 		1:
-			get_parent().get_parent().get_parent().get_node("SubViewportContainer").mouse_filter = 1
+		#	Global.main.get_node("SubViewportContainer").mouse_filter = 1
 			RenderingServer.set_default_clear_color(Global.settings_dict.bg_color)
 			get_viewport().transparent_bg = Global.settings_dict.is_transparent
 			get_tree().get_root().get_node("Main/%Control").hide()
 			is_editor = false
 			light.get_node("Grab").hide()
-			get_tree().get_root().get_node("Main/%Control/%LSShapeVis").button_pressed = false
+			Global.main.get_node("%Control/%LSShapeVis").button_pressed = false
 			%HideUIButton.hide()
 			%HideUIButton.button_pressed = false
 			Global.deselect.emit()
@@ -108,10 +108,10 @@ func choosing_mode(id):
 			%PreviewModeCheck.button_pressed = false
 			saved_id = 1
 		2:
-			get_parent().get_parent().get_parent().get_node("SubViewportContainer").mouse_filter = 1
+		#	Global.main.get_node("SubViewportContainer").mouse_filter = 1
 			get_viewport().transparent_bg = false
 			RenderingServer.set_default_clear_color(Color.SLATE_GRAY)
-			get_tree().get_root().get_node("Main/%Control").hide()
+			Global.main.get_node("%Control").hide()
 			%HideUIButton.button_pressed = true
 			is_editor = true
 			%PreviewModeCheck.hide()

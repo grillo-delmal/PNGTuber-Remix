@@ -20,8 +20,7 @@ func _ready() -> void:
 	Global.update_layer_visib.connect(update_visib_buttons)
 
 func deselect_all():
-	for i in get_tree().get_nodes_in_group("Layers"):
-		i.deselect()
+	tree.deselect_all()
 
 func choosing_layers_popup(id):
 	var main = get_tree().get_root().get_node("Main")
@@ -61,9 +60,9 @@ func add_new_layer_item(new_item, type):
 		if new_item.dictmain.folder:
 			new_layer_item.set_icon(0,preload("res://UI/Assets/FolderButton.png"))
 		else:
-			new_layer_item.set_icon(0,new_item.get_node("%Sprite2D").texture)
+			ImageTrimmer.set_thumbnail(new_layer_item)
 	elif type == "WiggleApp":
-		new_layer_item.set_icon(0,new_item.get_node("%Sprite2D").texture)
+		ImageTrimmer.set_thumbnail(new_layer_item)
 	new_layer_item.set_text(0, new_item.sprite_name)
 	new_layer_item.add_button(0, preload("res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/EyeButton.png"))
 	new_item.treeitem = new_layer_item
@@ -111,16 +110,29 @@ func _on_layers_tree_item_collapsed(item: TreeItem) -> void:
 	item.get_metadata(0).sprite_object.is_collapsed = item.collapsed
 
 func _on_layers_tree_empty_clicked(_click_position: Vector2, _mouse_button_index: int) -> void:
+	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
+		if Global.held_sprite.has_node("%Origin"):
+			Global.held_sprite.get_node("%Origin").hide()
+	Global.held_sprite = null
 	tree.deselect_all()
 	Global.deselect.emit()
 
 func _on_layers_tree_item_selected() -> void:
 	if tree.get_selected() != tree.get_root():
+		if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
+			if Global.held_sprite.has_node("%Origin"):
+				Global.held_sprite.get_node("%Origin").hide()
 		Global.held_sprite = tree.get_selected().get_metadata(0).sprite_object
-		Global.held_sprite.get_node("%Selection").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		if Global.held_sprite.has_node("%Origin"):
 			Global.held_sprite.get_node("%Origin").show()
 		Global.reinfo.emit()
+	elif tree.get_selected() == tree.get_root():
+		if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
+			if Global.held_sprite.has_node("%Origin"):
+				Global.held_sprite.get_node("%Origin").hide()
+		Global.held_sprite = null
+		Global.deselect.emit()
+		tree.deselect_all()
 
 
 func _on_layers_tree_button_clicked(item: TreeItem, column: int, id: int, _mouse_button_index: int) -> void:

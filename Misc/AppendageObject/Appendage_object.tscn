@@ -14,17 +14,11 @@
 resource_local_to_scene = true
 shader = ExtResource("3_p6byp")
 shader_parameter/enabled = false
-shader_parameter/line_color = Vector4(1, 1, 1, 1)
-shader_parameter/line_thickness = 1.0
-shader_parameter/frequency = 10.0
-shader_parameter/phase_speed = 1.0
-shader_parameter/base_line_color = Vector4(0, 0, 0, 0)
 shader_parameter/Blend = ExtResource("2_2g5n2")
 shader_parameter/Intensity = 1.0
 shader_parameter/wiggle = true
 shader_parameter/rotation = 0.0
 shader_parameter/rotation_offset = Vector2(0.5, 0.5)
-shader_parameter/marshing_ants = false
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_swft8"]
 diffuse_texture = ExtResource("5_mwqm8")
