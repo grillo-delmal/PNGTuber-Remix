@@ -84,7 +84,8 @@ var dictmain : Dictionary = {
 	mouse_scale_y = 0.0,
 	mouse_rotation_max = 0.0,
 	mouse_rotation_min = 0.0,
-	
+	non_animated_sheet = false,
+	frame = 0,
 	}
 
 var anim_texture 
@@ -121,23 +122,29 @@ func _ready():
 	%Dragger.global_position = %Wobble.global_position
 
 func animation():
-	if not dictmain.advanced_lipsync:
+	if not dictmain.non_animated_sheet:
+		if not dictmain.advanced_lipsync:
+			%Sprite2D.hframes = dictmain.hframes
+			%Sprite2D.vframes = 1
+			if dictmain.hframes > 1:
+				coord = dictmain.hframes -1
+				if not coord <= 0:
+					if %Sprite2D.frame == coord:
+						if dictmain.one_shot:
+							return
+						%Sprite2D.frame = 0
+						
+					elif dictmain.hframes > 1:
+						%Sprite2D.set_frame_coords(Vector2(clamp(%Sprite2D.frame +1, 0,coord), 0))
+						
+			else:
+				%Sprite2D.set_frame_coords(Vector2(0, 0))
+		
+	elif dictmain.non_animated_sheet:
 		%Sprite2D.hframes = dictmain.hframes
 		%Sprite2D.vframes = 1
 		if dictmain.hframes > 1:
-			coord = dictmain.hframes -1
-			if not coord <= 0:
-				if %Sprite2D.frame == coord:
-					if dictmain.one_shot:
-						return
-					%Sprite2D.frame = 0
-					
-				elif dictmain.hframes > 1:
-					%Sprite2D.set_frame_coords(Vector2(clamp(%Sprite2D.frame +1, 0,coord), 0))
-					
-		else:
-			%Sprite2D.set_frame_coords(Vector2(0, 0))
-	
+			%Sprite2D.frame = dictmain.frame
 	
 	$Animation.wait_time = 1.0/dictmain.animation_speed 
 	$Animation.start()

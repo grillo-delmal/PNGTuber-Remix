@@ -46,14 +46,16 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 		if other_item.get_parent() != item.get_parent():
 			if other_item.get_parent() == get_root():
 				item.get_metadata(0).sprite_object.parent_id = 0
+				item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
+				Global.sprite_container.add_child(item.get_metadata(0).sprite_object)
 			else:
-				item.move_after(other_item)
 				if other_item == get_root():
 					item.get_metadata(0).sprite_object.parent_id = 0
 					item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
 					Global.sprite_container.add_child(item.get_metadata(0).sprite_object)
 					item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object,item.get_index())
 				else:
+					item.move_after(other_item)
 					item.get_metadata(0).sprite_object.parent_id = other_item.get_metadata(0).sprite_object.parent_id
 					item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
 					other_item.get_metadata(0).sprite_object.get_parent().add_child(item.get_metadata(0).sprite_object)
@@ -70,14 +72,17 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 		if other_item.get_parent() != item.get_parent():
 			if other_item.get_parent() == get_root():
 				item.get_metadata(0).sprite_object.parent_id = 0
+				item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
+				Global.sprite_container.add_child(item.get_metadata(0).sprite_object)
+				
 			else:
-				item.move_after(other_item)
 				if other_item == get_root():
 					item.get_metadata(0).sprite_object.parent_id = 0
 					item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
 					Global.sprite_container.add_child(item.get_metadata(0).sprite_object)
 					item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(item.get_index(), 0, item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1))
 				else:
+					item.move_after(other_item)
 					item.get_metadata(0).sprite_object.parent_id = other_item.get_metadata(0).sprite_object.parent_id
 					item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
 					other_item.get_metadata(0).sprite_object.get_parent().add_child(item.get_metadata(0).sprite_object)

@@ -55,7 +55,8 @@ func held_sprite_is_null():
 	%FollowWiggleAppTip.disabled = true
 	%XoffsetSpinBox.editable = false
 	%YoffsetSpinBox.editable = false
-
+	%NonAnimatedSheetCheck.disabled = true
+	%FrameSpinbox.editable = false
 
 
 func held_sprite_is_true():
@@ -77,6 +78,9 @@ func held_sprite_is_true():
 		%WAGravityY.editable = true
 		%ClosedLoopCheck.disabled = false
 		%AutoWagCheck.disabled = false
+	elif Global.held_sprite.sprite_type == "Sprite2D":
+		%NonAnimatedSheetCheck.disabled = false
+		%FrameSpinbox.editable = true
 	
 	%AnimationOneShot.disabled = false
 	%AnimationReset.disabled = false
@@ -149,6 +153,8 @@ func reinfo():
 			%FollowParentEffect.button_pressed = Global.held_sprite.dictmain.follow_parent_effects
 			%XoffsetSpinBox.value = Global.held_sprite.dictmain.wiggle_rot_offset.x
 			%YoffsetSpinBox.value = Global.held_sprite.dictmain.wiggle_rot_offset.y
+			%NonAnimatedSheetCheck.button_pressed = Global.held_sprite.dictmain.non_animated_sheet
+			%FrameSpinbox.value = Global.held_sprite.dictmain.frame
 
 		elif Global.held_sprite.sprite_type == "WiggleApp":
 			%WiggleStuff.hide()
@@ -398,4 +404,21 @@ func _on_squish_amount_changed(value : float):
 func _on_blink_chance_slider_value_changed(value: float) -> void:
 	%BlinkChanceLabel.text = "Blink Chance : " + str(value)
 	Global.settings_dict.blink_chance = value
-	
+
+func _on_non_animated_sheet_check_toggled(toggled_on: bool) -> void:
+	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
+		if Global.held_sprite.sprite_type == "Sprite2D":
+			%FrameSpinbox.max_value = Global.held_sprite.get_node("%Sprite2D").hframes - 1
+			Global.held_sprite.dictmain.non_animated_sheet = toggled_on
+			Global.held_sprite.animation()
+		if toggled_on:
+			%FrameHBox.show()
+		else:
+			%FrameHBox.hide()
+
+func _on_frame_spinbox_value_changed(value: float) -> void:
+	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
+		if Global.held_sprite.sprite_type == "Sprite2D":
+			%FrameSpinbox.max_value = Global.held_sprite.get_node("%Sprite2D").hframes - 1
+			Global.held_sprite.dictmain.frame = clamp(value, 0, Global.held_sprite.get_node("%Sprite2D").hframes - 1)
+			Global.held_sprite.get_node("%Sprite2D").frame = clamp(value, 0, Global.held_sprite.get_node("%Sprite2D").hframes - 1)
