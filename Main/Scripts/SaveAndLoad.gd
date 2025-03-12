@@ -341,7 +341,12 @@ func load_pngplus_file(path):
 		sprite_obj.dictmain.stretchAmount = load_dict[i]["stretchAmount"]
 		sprite_obj.dictmain.ignore_bounce = load_dict[i]["ignoreBounce"]
 		sprite_obj.dictmain.hframes = load_dict[i]["frames"]
-		sprite_obj.dictmain.animation_speed = load_dict[i]["animSpeed"]
+
+		# convert PLUS animSpeed into Remix animation_speed (animation fps)
+		# This assumes PLUS was set to thhe default Engine.max_fps of 60.
+		var animSpeed = load_dict[i]["animSpeed"]
+		if (animSpeed != 0.0) :
+			sprite_obj.dictmain.animation_speed = 60 / int(360.0 / float(animSpeed))
 		
 		if load_dict[i]["clipped"]:
 			sprite_obj.dictmain.clip = 2

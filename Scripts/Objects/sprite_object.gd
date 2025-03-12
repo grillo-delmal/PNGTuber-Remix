@@ -139,7 +139,7 @@ func animation():
 			%Sprite2D.set_frame_coords(Vector2(0, 0))
 	
 	
-	$Animation.wait_time = 1/dictmain.animation_speed 
+	$Animation.wait_time = 1.0/dictmain.animation_speed 
 	$Animation.start()
 
 func _process(_delta):
