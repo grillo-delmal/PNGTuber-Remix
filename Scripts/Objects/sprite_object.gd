@@ -232,10 +232,18 @@ func get_state(id):
 			if dictmain.hframes > 1:
 				%Sprite2D.frame = 0
 				print(%Sprite2D.frame)
-			elif is_apng:
+			if is_apng:
 				fidx = 0
-				
-		
+			'''
+			elif img_animated:
+				%Sprite2D.texture.diffuse_texture.current_frame = 0
+				if %Sprite2D.texture.normal_texture != null:
+					%Sprite2D.texture.normal_texture.current_frame = 0
+
+				%Sprite2D.texture.diffuse_texture.one_shot = dictmain.one_shot
+				if %Sprite2D.texture.normal_texture != null:
+					%Sprite2D.texture.normal_texture.one_shot = dictmain.one_shot
+		'''
 		%Sprite2D.position = dictmain.offset 
 		%Sprite2D.scale = Vector2(1,1)
 		
@@ -263,8 +271,7 @@ func get_state(id):
 				%Pos.show()
 			else:
 				%Pos.hide()
-		
-		
+
 		visible = dictmain.visible
 		%ReactionConfig.speaking()
 		%ReactionConfig.not_speaking()
@@ -272,9 +279,11 @@ func get_state(id):
 		set_blend(dictmain.blend_mode)
 		advanced_lipsyc()
 
-		
 		%Squish.scale = Vector2(1,1)
-		%Pos.position = Vector2(0,0)
+		if dictmain.look_at_mouse_pos == 0:
+			%Pos.position.x = 0
+		if dictmain.look_at_mouse_pos_y == 0:
+			%Pos.position.y = 0
 		if dictmain.one_shot:
 			fidx = 0
 			proper_apng_one_shot()
@@ -322,6 +331,12 @@ func _on_grab_button_up():
 	if Global.held_sprite == self && dragging:
 		save_state(Global.current_state)
 		dragging = false
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_released("lmb"):
+		if Global.held_sprite == self && dragging:
+			save_state(Global.current_state)
+			dragging = false
 
 func reparent_obj(parent):
 	for i in parent:

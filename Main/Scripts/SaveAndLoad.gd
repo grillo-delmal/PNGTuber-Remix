@@ -30,10 +30,7 @@ func save_file(path):
 				if !st.is_empty():
 					cleaned_array.append(st)
 
-			
-			
 		#	print(cleaned_array)
-			
 			
 			var sprt_dict = {
 				img = img,
@@ -58,16 +55,11 @@ func save_file(path):
 		else:
 			if sprt.img_animated:
 				img = sprt.anim_texture
-			if sprt.img_animated:
-				img = sprt.anim_texture
 			else:
 				img = sprt.get_node("%Sprite2D").texture.diffuse_texture.get_image().save_png_to_buffer()
 				
 			var normal_img
 			if sprt.get_node("%Sprite2D").texture.normal_texture:
-				if sprt.img_animated:
-					normal_img = sprt.anim_texture_normal
-
 				if sprt.img_animated:
 					normal_img = sprt.anim_texture_normal
 				else:
@@ -79,8 +71,6 @@ func save_file(path):
 				if !st.is_empty():
 					cleaned_array.append(st)
 
-			
-			
 		#	print(cleaned_array)
 			var sprt_dict = {
 				img = img,
@@ -139,6 +129,8 @@ func load_file(path, should_load_path = false):
 		if !load_dict.has("sprites_array"):
 			return
 		Global.settings_dict.merge(load_dict.settings_dict, true)
+		if load_dict.settings_dict.has("saved_inputs"):
+			Global.settings_dict.saved_inputs = load_dict.settings_dict.saved_inputs
 		get_tree().get_root().get_node("Main/%Control/StatesStuff").update_states(load_dict.settings_dict.states)
 		
 		
@@ -178,7 +170,13 @@ func load_file(path, should_load_path = false):
 			if sprite.has("is_apng"):
 				load_apng(sprite_obj, sprite)
 			else:
-				load_sprite(sprite_obj, sprite)
+				if sprite.has("img_animated"):
+					if sprite.img_animated:
+						load_gif(sprite_obj, sprite)
+					else:
+						load_sprite(sprite_obj, sprite)
+				else:
+					load_sprite(sprite_obj, sprite)
 
 			if sprite.has("image_data"):
 				sprite_obj.image_data = sprite.image_data 
@@ -200,6 +198,7 @@ func load_file(path, should_load_path = false):
 			#	get_tree().get_nodes_in_group("StateRemapButton")[input].update_stuff()
 		else:
 			var idx = 0
+			Global.settings_dict.saved_inputs.resize(get_tree().get_nodes_in_group("StateButtons").size())
 			for input in Global.settings_dict.saved_inputs:
 				get_tree().get_nodes_in_group("StateButtons")[idx].saved_event = input
 				get_tree().get_nodes_in_group("StateButtons")[idx].update_stuff()
@@ -221,6 +220,8 @@ func load_file(path, should_load_path = false):
 			Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		else:
 			Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
+	
+	get_tree().get_root().get_node("Main/%Marker").current_screen = Global.settings_dict.monitor
 
 func load_sprite(sprite_obj, sprite):
 	var img_data
@@ -283,6 +284,29 @@ func load_apng(sprite_obj, sprite):
 	sprite_obj.texture = img_can
 	sprite_obj.is_apng = true
 	sprite_obj.get_node("%Sprite2D").texture = img_can
+
+func load_gif(sprite_obj, sprite):
+	pass
+	'''
+	var gif_texture : AnimatedTexture = GifManager.animated_texture_from_buffer(sprite.img)
+	sprite_obj.anim_texture = sprite.img
+	var img_can = CanvasTexture.new()
+	if sprite.has("is_premultiplied") == false:
+		for n in gif_texture.frames:
+			gif_texture.get_frame_texture(n).get_image().fix_alpha_edges()
+			
+	img_can.diffuse_texture = gif_texture
+	if sprite.has("normal"):
+		if sprite.normal != null:
+			var gif_normal = GifManager.animated_texture_from_buffer(sprite.normal)
+			
+			for n in gif_normal.frames:
+				gif_normal.get_frame_texture(n).get_image().fix_alpha_edges()
+			
+			img_can.normal_texture = gif_normal
+			sprite_obj.anim_texture_normal = sprite.normal
+	sprite_obj.get_node("%Sprite2D").texture = img_can
+'''
 
 func load_pngplus_file(path):
 	Themes.theme_settings.path = path
@@ -411,3 +435,4 @@ func load_pngplus_file(path):
 	
 	Global.load_sprite_states(0)
 	get_tree().get_root().get_node("Main/%Control/UIInput").reinfoanim()
+	get_tree().get_root().get_node("Main/%Marker").current_screen = 9999

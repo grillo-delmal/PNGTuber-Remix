@@ -62,6 +62,7 @@ var settings_dict : Dictionary = {
 	
 	should_delta = false,
 	max_fps = 241,
+	monitor = 9999,
 }
 
 var mode : int = 0 : 

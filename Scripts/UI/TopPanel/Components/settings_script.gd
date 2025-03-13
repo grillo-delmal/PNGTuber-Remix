@@ -24,6 +24,18 @@ func _ready() -> void:
 		remap_btn.get_node("StateRemapButton").state_button = i
 		remap_btn.get_node("StateRemapButton").update_stuff()
 		%Grid.add_child(remap_btn)
+	
+	%SelectedScreen.add_item("All Screens")
+	for i in DisplayServer.get_screen_count():
+		%SelectedScreen.add_item("Screen " + str(i))
+	if Global.settings_dict.monitor == 9999:
+		%SelectedScreen.select(0)
+	else:
+		if %SelectedScreen.item_count > Global.settings_dict.monitor:
+			%SelectedScreen.select(Global.settings_dict.monitor)
+		else:
+			Global.settings_dict.monitor = 9999
+			%SelectedScreen.select(0)
 
 
 func close():
@@ -142,3 +154,12 @@ func _on_auto_save_check_toggled(toggled_on):
 func _on_import_trim_toggled(toggled_on: bool) -> void:
 	Themes.theme_settings.enable_trimmer = toggled_on
 	Themes.save()
+
+
+func _on_selected_screen_item_selected(index: int) -> void:
+	if index == 0:
+		get_tree().get_root().get_node("Main/%Marker").current_screen = 9999
+	else:
+		get_tree().get_root().get_node("Main/%Marker").current_screen = index - 1
+	
+	Global.settings_dict.monitor = get_tree().get_root().get_node("Main/%Marker").current_screen

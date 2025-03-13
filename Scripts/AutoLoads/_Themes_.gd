@@ -31,7 +31,7 @@ var save_timer : Timer = Timer.new()
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
-var additional_output = null
+var additional_output = RefCounted.new()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -66,10 +66,11 @@ func auto_save():
 	save()
 	if Global.settings_dict.auto_save:
 		save_timer.start()
-	
+
+func _exit_tree() -> void:
+	DisplayServer.unregister_additional_output(additional_output)
 
 func _ready():
-	additional_output = RefCounted.new()
 	DisplayServer.register_additional_output(additional_output)
 	save_timer.timeout.connect(auto_save)
 	save_timer.one_shot = true

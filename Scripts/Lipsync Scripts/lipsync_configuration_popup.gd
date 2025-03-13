@@ -11,7 +11,7 @@ var current : FileType = FileType.Load
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	theme = get_parent().get_node("UIHolder").theme
+	theme = Global.main.get_node("%UIHolder").theme
 	close_requested.connect(close)
 	%Shapes.stop()
 	%Shapes.frame = 13

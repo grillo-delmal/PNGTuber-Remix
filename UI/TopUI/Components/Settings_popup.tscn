@@ -155,6 +155,18 @@ value = 241.0
 layout_mode = 2
 theme_override_constants/separation = 5
 
+[node name="HBoxContainer2" type="HBoxContainer" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/GridContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Follow Mouse Screen : "
+
+[node name="SelectedScreen" type="OptionButton" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/GridContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="Audio" type="ScrollContainer" parent="SettingVbox/SettingsTab"]
 visible = false
 layout_mode = 2
@@ -453,6 +465,7 @@ popup/item_6/id = 6
 [connection signal="toggled" from="SettingVbox/SettingsTab/Model Settings/MarginContainer/GridContainer/DeltaTimeCheck" to="SettingsScript" method="_on_delta_time_check_toggled"]
 [connection signal="drag_ended" from="SettingVbox/SettingsTab/Model Settings/MarginContainer/GridContainer/HBoxContainer/MaxFPSlider" to="SettingsScript" method="_on_max_fp_slider_drag_ended"]
 [connection signal="value_changed" from="SettingVbox/SettingsTab/Model Settings/MarginContainer/GridContainer/HBoxContainer/MaxFPSlider" to="SettingsScript" method="_on_max_fp_slider_value_changed"]
+[connection signal="item_selected" from="SettingVbox/SettingsTab/Model Settings/MarginContainer/GridContainer/HBoxContainer2/SelectedScreen" to="SettingsScript" method="_on_selected_screen_item_selected"]
 [connection signal="drag_ended" from="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/GridContainer2/VolumeBar/VolumeSlider" to="SettingsScript" method="_on_volume_slider_drag_ended"]
 [connection signal="drag_ended" from="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/GridContainer2/DelayBar/DelaySlider" to="SettingsScript" method="_on_delay_slider_drag_ended"]
 [connection signal="drag_ended" from="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/GridContainer2/SensitivityBar/SensitivitySlider" to="SettingsScript" method="_on_sensitivity_slider_drag_ended"]

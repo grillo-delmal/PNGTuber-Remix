@@ -154,7 +154,6 @@ func import_objects():
 				Global.update_layers.emit(0, sprte_obj, "Sprite2D")
 
 
-
 func _on_confirmation_dialog_confirmed():
 	Themes.theme_settings.path = ""
 	%TopUI/TopBarInput.path = ""
@@ -163,6 +162,8 @@ func _on_confirmation_dialog_confirmed():
 	clear_sprites()
 	Global.settings_dict.max_fps = 241
 	%TopUI.update_fps(241)
+	get_tree().get_root().get_node("Main/%Marker").current_screen = 9999
+	Global.settings_dict.monitor = 9999
 
 func clear_sprites():
 	Global.held_sprite = null

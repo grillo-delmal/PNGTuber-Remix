@@ -180,8 +180,16 @@ func get_state(id):
 	if not states[id].is_empty():
 		var dict = states[id]
 		dictmain.merge(dict, true)
-		
-		
+		'''
+		if img_animated && dictmain.should_reset:
+			%Sprite2D.texture.diffuse_texture.current_frame = 0
+			if %Sprite2D.texture.normal_texture != null:
+				%Sprite2D.texture.normal_texture.current_frame = 0
+
+			%Sprite2D.texture.diffuse_texture.one_shot = dictmain.one_shot
+			if %Sprite2D.texture.normal_texture != null:
+				%Sprite2D.texture.normal_texture.one_shot = dictmain.one_shot
+		'''
 		%Wobble.z_index = dictmain.z_index
 		modulate = dictmain.colored
 		visible = dictmain.visible
@@ -194,7 +202,10 @@ func get_state(id):
 		%Sprite2D.closed = dictmain.wiggle_closed_loop
 		%Sprite2D.gravity = dictmain.wiggle_gravity
 		
-		
+		if dictmain.look_at_mouse_pos == 0:
+			%Pos.position.x = 0
+		if dictmain.look_at_mouse_pos_y == 0:
+			%Pos.position.y = 0
 		
 		if %Sprite2D.segment_count != dictmain.wiggle_segm:
 			%Sprite2D.segment_count = dictmain.wiggle_segm
@@ -295,6 +306,12 @@ func _on_grab_button_up():
 	if Global.held_sprite == self:
 		dragging = false
 		save_state(Global.current_state)
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_released("lmb"):
+		if Global.held_sprite == self && dragging:
+			save_state(Global.current_state)
+			dragging = false
 
 func reparent_obj(parent):
 	for i in parent:
