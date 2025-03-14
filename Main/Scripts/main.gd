@@ -153,7 +153,6 @@ func import_objects():
 			else:
 				Global.update_layers.emit(0, sprte_obj, "Sprite2D")
 
-
 func _on_confirmation_dialog_confirmed():
 	Themes.theme_settings.path = ""
 	%TopUI/TopBarInput.path = ""

@@ -41,6 +41,11 @@ func choosing_window(id):
 			Themes.toggle_borders()
 		1:
 			Themes.window_size_changed()
+		2:
+			%WindowButton.get_popup().toggle_item_checked(2)
+			Themes.set_always_on_top(%WindowButton.get_popup().is_item_checked(2))
+		3:
+			Themes.center_window()
 
 func choosing_files(id):
 	var main = get_tree().get_root().get_node("Main")
@@ -76,8 +81,7 @@ func _input(event: InputEvent) -> void:
 		if path != null:
 			SaveAndLoad.save_file(path)
 		else:
-			var main = get_tree().get_root().get_node("Main")
-			main.save_as_file()
+			Global.main.save_as_file()
 
 func choosing_mode(id):
 	var saved_id = 0

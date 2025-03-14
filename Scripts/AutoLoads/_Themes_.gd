@@ -28,6 +28,7 @@ var save_timer : Timer = Timer.new()
 	lipsync_file_path = OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres",
 	microphone = null,
 	enable_trimmer = false,
+	always_on_top = false,
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
@@ -109,6 +110,8 @@ func _ready():
 			get_tree().get_root().get_node("Main/%Control/%HSplitContainer").split_offset = theme_settings.left
 			get_tree().get_root().get_node("Main/%Control/%HSplit").split_offset = theme_settings.right
 			get_tree().get_root().get_node("Main/%Control/%VSplitContainer").split_offset = theme_settings.properties
+			Global.top_ui.get_node("%WindowButton").get_popup().set_item_checked(2, theme_settings.always_on_top)
+			get_window().always_on_top = theme_settings.always_on_top
 			
 			get_window().position = theme_settings.screen_pos
 			
@@ -237,21 +240,29 @@ func toggle_borders():
 	save()
 
 
-@warning_ignore("integer_division")
+
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("toggle_borders"):
 		toggle_borders()
 	
 	if Input.is_action_just_pressed("center_screen"):
-		var ds = DisplayServer.screen_get_size(0)
-		get_window().position = Vector2i(ds.x/2- get_window().size.x/2,ds.y/2- get_window().size.y/2)
-		window_size_changed()
+		center_window()
 
+@warning_ignore("integer_division")
+func center_window():
+	var i = DisplayServer.window_get_current_screen()
+	var ds = DisplayServer.screen_get_size(i)
+	get_window().position = DisplayServer.screen_get_position(i) + Vector2i(ds.x/2- get_window().size.x/2,ds.y/2- get_window().size.y/2)
+	window_size_changed()
+
+func set_always_on_top(toggle):
+	theme_settings.always_on_top = toggle
+	get_window().always_on_top = theme_settings.always_on_top
+	save()
 
 func _on_h_split_container_dragged(offset: int) -> void:
 	theme_settings.left = offset
 	save()
-
 
 func _on_h_split_dragged(offset: int) -> void:
 	theme_settings.right = offset
