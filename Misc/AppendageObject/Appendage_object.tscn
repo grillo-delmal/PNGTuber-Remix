@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cb6sos2p8qbrr"]
+[gd_scene load_steps=17 format=3 uid="uid://cb6sos2p8qbrr"]
 
 [ext_resource type="Script" uid="uid://cpxma1104nmwe" path="res://Scripts/Objects/append_object.gd" id="1_yuqos"]
 [ext_resource type="Texture2D" uid="uid://cppqjhaoi70l5" path="res://Misc/EasyBlend/Blends/add.png" id="2_2g5n2"]
@@ -9,6 +9,7 @@
 [ext_resource type="Shader" uid="uid://di5vad1bc51ed" path="res://Scripts/Shaders/SpriteSelectionWA.gdshader" id="8_cwgos"]
 [ext_resource type="Script" uid="uid://c3cp6t3oh8fmh" path="res://Scripts/Objects/ObjectComponents/movements.gd" id="9_sj5r0"]
 [ext_resource type="Script" uid="uid://dwyy1dflsfctu" path="res://Scripts/Objects/ObjectComponents/reaction_config.gd" id="10_ggfxw"]
+[ext_resource type="Script" uid="uid://dfyvj4w18tr1" path="res://Scripts/Misc/AnimatedSpriteTextureScripts/AnimatedSpriteTexture.gd" id="10_wmc63"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1tqhp"]
 resource_local_to_scene = true
@@ -131,10 +132,17 @@ unique_name_in_owner = true
 script = ExtResource("9_sj5r0")
 actor = NodePath("..")
 
-[node name="ReactionConfig" type="Node" parent="." node_paths=PackedStringArray("actor")]
+[node name="ReactionConfig" type="Node" parent="." node_paths=PackedStringArray("actor", "animation_handler")]
 unique_name_in_owner = true
 script = ExtResource("10_ggfxw")
 actor = NodePath("..")
+animation_handler = NodePath("../AnimatedSpriteTexture")
+
+[node name="AnimatedSpriteTexture" type="Node" parent="." node_paths=PackedStringArray("actor", "sprite_node")]
+script = ExtResource("10_wmc63")
+actor = NodePath("..")
+sprite_node = NodePath("../Pos/Wobble/Squish/Drag/Rotation/AppendageFlip/Sprite2D")
+metadata/_custom_type_script = "uid://dfyvj4w18tr1"
 
 [connection signal="button_down" from="Pos/Wobble/Squish/Drag/Rotation/AppendageFlip/Sprite2D/Grab" to="." method="_on_grab_button_down"]
 [connection signal="button_up" from="Pos/Wobble/Squish/Drag/Rotation/AppendageFlip/Sprite2D/Grab" to="." method="_on_grab_button_up"]

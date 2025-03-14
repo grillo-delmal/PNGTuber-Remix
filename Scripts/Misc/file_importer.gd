@@ -46,12 +46,19 @@ func import_apng_sprite(path : String , spawn) -> CanvasTexture:
 	img_can.diffuse_texture = text
 	spawn.is_apng = true
 	spawn.sprite_name = "(Apng) " + path.get_file().get_basename() 
+	for i in spawn.frames:
+		var new_frame : AnimatedFrame = AnimatedFrame.new()
+		new_frame.texture = ImageTexture.create_from_image(i.content)
+		new_frame.duration = i.duration
+		spawn.get_node("%AnimatedSpriteTexture").frames.append(new_frame)
+
+	
 	return img_can
 	
 func import_png_from_buffer(buffer: PackedByteArray, sprite_name: String, spawn) -> CanvasTexture:
 	var img = Image.new()
 	img.load_png_from_buffer(buffer)
-	var img_can = import_png(img, spawn)	
+	var img_can = import_png(img, spawn)
 	spawn.image_data = buffer
 	spawn.sprite_name = sprite_name
 	return img_can
@@ -106,6 +113,7 @@ func import_png(img: Image, spawn) -> CanvasTexture:
 	return img_can
 
 func add_normal(path):
+	
 	if path.get_extension() == "gif":
 		pass
 		'''
@@ -132,6 +140,12 @@ func add_normal(path):
 			var cframe: AImgIOFrame = Global.held_sprite.frames2[0]
 			var text = ImageTexture.create_from_image(cframe.content)
 			Global.held_sprite.get_node("%Sprite2D").texture.normal_texture = text
+			for i in Global.held_sprite.frames2:
+				var new_frame : AnimatedFrame = AnimatedFrame.new()
+				new_frame.texture = ImageTexture.create_from_image(i.content)
+				new_frame.duration = i.duration
+				Global.held_sprite.get_node("%AnimatedSpriteTexture").frames2.append(new_frame)
+
 
 		else:
 			var img = Image.load_from_file(path)
@@ -183,6 +197,12 @@ func replace_texture(path):
 			ImageTrimmer.set_thumbnail(Global.held_sprite.treeitem)
 			Global.held_sprite.is_apng = true
 			Global.held_sprite.img_animated = false
+			for i in Global.held_sprite.frames:
+				var new_frame : AnimatedFrame = AnimatedFrame.new()
+				new_frame.texture = ImageTexture.create_from_image(i.content)
+				new_frame.duration = i.duration
+				Global.held_sprite.get_node("%AnimatedSpriteTexture").frames.append(new_frame)
+			
 		else:
 			var img = Image.load_from_file(path)
 			var og_image = img.duplicate(true)

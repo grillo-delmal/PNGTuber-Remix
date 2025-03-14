@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://du5v1xpm5fjcm"]
+[gd_scene load_steps=16 format=3 uid="uid://du5v1xpm5fjcm"]
 
 [ext_resource type="Script" uid="uid://q3wblwc0jg28" path="res://Scripts/Objects/sprite_object.gd" id="1_i7wd5"]
 [ext_resource type="Texture2D" uid="uid://bt5ep2bnr2x76" path="res://Misc/SpriteObject/origin.png" id="2_1i6gu"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dv27xjbwfkacl" path="res://Misc/TestAssets/Lamp.png" id="5_nxel7"]
 [ext_resource type="Shader" uid="uid://b5yyx2nj4wj3x" path="res://Scripts/Shaders/SpriteSelection.gdshader" id="6_4cvp6"]
 [ext_resource type="Script" uid="uid://c3cp6t3oh8fmh" path="res://Scripts/Objects/ObjectComponents/movements.gd" id="8_aa1sy"]
+[ext_resource type="Script" uid="uid://dfyvj4w18tr1" path="res://Scripts/Misc/AnimatedSpriteTextureScripts/AnimatedSpriteTexture.gd" id="9_4cvp6"]
 [ext_resource type="Script" uid="uid://dwyy1dflsfctu" path="res://Scripts/Objects/ObjectComponents/reaction_config.gd" id="9_hkdvl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1tqhp"]
@@ -128,10 +129,18 @@ unique_name_in_owner = true
 script = ExtResource("8_aa1sy")
 actor = NodePath("..")
 
-[node name="ReactionConfig" type="Node" parent="." node_paths=PackedStringArray("actor")]
+[node name="ReactionConfig" type="Node" parent="." node_paths=PackedStringArray("actor", "animation_handler")]
 unique_name_in_owner = true
 script = ExtResource("9_hkdvl")
 actor = NodePath("..")
+animation_handler = NodePath("../AnimatedSpriteTexture")
+
+[node name="AnimatedSpriteTexture" type="Node" parent="." node_paths=PackedStringArray("actor", "sprite_node")]
+unique_name_in_owner = true
+script = ExtResource("9_4cvp6")
+actor = NodePath("..")
+sprite_node = NodePath("../Pos/Wobble/Squish/Drag/Rotation/Sprite2D")
+metadata/_custom_type_script = "uid://dfyvj4w18tr1"
 
 [connection signal="button_down" from="Pos/Wobble/Squish/Drag/Rotation/Sprite2D/Grab" to="." method="_on_grab_button_down"]
 [connection signal="button_up" from="Pos/Wobble/Squish/Drag/Rotation/Sprite2D/Grab" to="." method="_on_grab_button_up"]

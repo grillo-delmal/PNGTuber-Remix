@@ -238,8 +238,9 @@ func get_state(id):
 #		animation()
 		set_blend(dictmain.blend_mode)
 		if dictmain.one_shot:
-			fidx = 0
-		played_once = false
+			if is_apng:
+				%AnimatedSpriteTexture.index = 0
+				%AnimatedSpriteTexture.proper_apng_one_shot()
 
 func update_wiggle_parts():
 	if %Sprite2D.segment_count != dictmain.wiggle_segm:
@@ -322,37 +323,3 @@ func reparent_obj(parent):
 					var global = global_position
 					zaza.position = to_local(global)
 					#position = zaza.position
-
-func proper_apng_one_shot():
-	var cframe: AImgIOFrame = frames[0]
-	var tex = ImageTexture.create_from_image(cframe.content)
-	%Sprite2D.texture.diffuse_texture = tex
-	if %Sprite2D.texture.normal_texture:
-		var cframe2 = frames2[0]
-		%Sprite2D.texture.normal_texture = ImageTexture.create_from_image(cframe2.content)
-
-func _physics_process(delta):
-	var cframe2: AImgIOFrame
-	if is_apng:
-		if !played_once:
-			if len(frames) == 0:
-				return
-			if fidx >= len(frames):
-				fidx = 0
-				if dictmain.one_shot:
-					played_once = true
-					return
-			dt += delta
-			var cframe: AImgIOFrame = frames[fidx]
-			if %Sprite2D.texture.normal_texture:
-				cframe2= frames2[fidx]
-			if dt >= cframe.duration:
-				dt -= cframe.duration
-				fidx += 1
-			# yes this does this every _process, oh well
-			var tex = ImageTexture.create_from_image(cframe.content)
-			%Sprite2D.texture.diffuse_texture = tex
-			if %Sprite2D.texture.normal_texture:
-				if frames2.size() != frames.size():
-					frames2.resize(frames.size())
-				%Sprite2D.texture.normal_texture = ImageTexture.create_from_image(cframe2.content)

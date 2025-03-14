@@ -131,7 +131,6 @@ func _on_file_dialog_files_selected(paths):
 func import_objects():
 	#	var sprite_nodes = []
 		for path in sprite_paths:
-			
 			var sprte_obj
 			if current_state == State.LoadSprites:
 				sprte_obj = %FileImporter.import_sprite(path)
@@ -152,6 +151,7 @@ func import_objects():
 				Global.update_layers.emit(0, sprte_obj, "WiggleApp")
 			else:
 				Global.update_layers.emit(0, sprte_obj, "Sprite2D")
+
 
 func _on_confirmation_dialog_confirmed():
 	Themes.theme_settings.path = ""

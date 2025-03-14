@@ -281,6 +281,18 @@ func load_apng(sprite_obj, sprite):
 		var cframe2: AImgIOFrame = sprite_obj.frames2[0]
 		var text2 = ImageTexture.create_from_image(cframe2.content)
 		img_can.normal_texture = text2
+		
+	for i in sprite_obj.frames:
+		var new_frame : AnimatedFrame = AnimatedFrame.new()
+		new_frame.texture = ImageTexture.create_from_image(i.content)
+		new_frame.duration = i.duration
+		sprite_obj.get_node("%AnimatedSpriteTexture").frames.append(new_frame)
+	for i in sprite_obj.frames2:
+		var new_frame : AnimatedFrame = AnimatedFrame.new()
+		new_frame.texture = ImageTexture.create_from_image(i.content)
+		new_frame.duration = i.duration
+		sprite_obj.get_node("%AnimatedSpriteTexture").frames2.append(new_frame)
+
 	sprite_obj.texture = img_can
 	sprite_obj.is_apng = true
 	sprite_obj.get_node("%Sprite2D").texture = img_can

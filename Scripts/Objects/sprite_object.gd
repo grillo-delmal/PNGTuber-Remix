@@ -232,7 +232,7 @@ func get_state(id):
 			if dictmain.hframes > 1:
 				%Sprite2D.frame = 0
 				print(%Sprite2D.frame)
-			if is_apng:
+			elif is_apng:
 				fidx = 0
 			'''
 			elif img_animated:
@@ -244,6 +244,16 @@ func get_state(id):
 				if %Sprite2D.texture.normal_texture != null:
 					%Sprite2D.texture.normal_texture.one_shot = dictmain.one_shot
 		'''
+		
+		if dictmain.one_shot:
+			if is_apng:
+				%AnimatedSpriteTexture.index = 0
+				%AnimatedSpriteTexture.proper_apng_one_shot()
+			elif dictmain.hframes > 1:
+				%Sprite2D.frame = 0
+				print(%Sprite2D.frame)
+		played_once = false
+		
 		%Sprite2D.position = dictmain.offset 
 		%Sprite2D.scale = Vector2(1,1)
 		
@@ -284,10 +294,7 @@ func get_state(id):
 			%Pos.position.x = 0
 		if dictmain.look_at_mouse_pos_y == 0:
 			%Pos.position.y = 0
-		if dictmain.one_shot:
-			fidx = 0
-			proper_apng_one_shot()
-		played_once = false
+
 
 func check_talk():
 	if dictmain.should_talk:
@@ -353,37 +360,3 @@ func zazaza(parent):
 					if !state.is_empty():
 						global = global_position
 						state.position = dictmain.position
-
-func proper_apng_one_shot():
-	var cframe: AImgIOFrame = frames[0]
-	var tex = ImageTexture.create_from_image(cframe.content)
-	%Sprite2D.texture.diffuse_texture = tex
-	if %Sprite2D.texture.normal_texture:
-		var cframe2 = frames2[0]
-		%Sprite2D.texture.normal_texture = ImageTexture.create_from_image(cframe2.content)
-
-func _physics_process(delta):
-	var cframe2: AImgIOFrame
-	if is_apng:
-		if !played_once:
-			if len(frames) == 0:
-				return
-			if fidx >= len(frames):
-				if dictmain.one_shot:
-					played_once = true
-					return
-				fidx = 0
-			dt += delta
-			var cframe: AImgIOFrame = frames[fidx]
-			if %Sprite2D.texture.normal_texture:
-				cframe2= frames2[fidx]
-			if dt >= cframe.duration:
-				dt -= cframe.duration
-				fidx += 1
-			# yes this does this every _process, oh well
-			var tex = ImageTexture.create_from_image(cframe.content)
-			%Sprite2D.texture.diffuse_texture = tex
-			if %Sprite2D.texture.normal_texture:
-				if frames2.size() != frames.size():
-					frames2.resize(frames.size())
-				%Sprite2D.texture.normal_texture = ImageTexture.create_from_image(cframe2.content)
