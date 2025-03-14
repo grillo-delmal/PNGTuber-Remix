@@ -226,6 +226,15 @@ func get_state(id):
 
 		%Sprite2D.set_clip_children_mode(dictmain.clip)
 		rotation = dictmain.rotation
+
+		if dictmain.flip_h:
+			%AppendageFlip.scale.x = -1
+		else:
+			%AppendageFlip.scale.x = 1
+		if dictmain.flip_v:
+			%AppendageFlip.scale.y = -1
+		else:
+			%AppendageFlip.scale.y = 1
 		
 		if dictmain.should_blink:
 			if dictmain.open_eyes:
