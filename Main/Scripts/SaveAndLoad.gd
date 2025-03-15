@@ -7,7 +7,7 @@ func save_file(path):
 	Themes.theme_settings.path = path
 	get_tree().get_root().get_node("Main/%TopUI/TopBarInput").path = path
 	var sprites = get_tree().get_nodes_in_group("Sprites")
-	var inputs = get_tree().get_nodes_in_group("StateRemapButton")
+	var inputs = get_tree().get_nodes_in_group("StateButtons")
 	
 	
 	var sprites_array : Array = []
@@ -220,8 +220,15 @@ func load_file(path, should_load_path = false):
 			Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		else:
 			Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
+		
+		if Global.settings_dict.auto_save:
+			Themes.save_timer.wait_time = Global.settings_dict.auto_save_timer * 60
+			Themes.save_timer.start()
+		else:
+			Themes.save_timer.stop()
 	
 	get_tree().get_root().get_node("Main/%Marker").current_screen = Global.settings_dict.monitor
+	
 
 func load_sprite(sprite_obj, sprite):
 	var img_data

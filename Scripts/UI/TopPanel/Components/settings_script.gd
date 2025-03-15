@@ -95,7 +95,7 @@ func _on_delta_time_check_toggled(toggled_on: bool) -> void:
 
 func _on_auto_save_spin_value_changed(value):
 	Themes.save_timer.wait_time = value * 60
-	Global.settings_dict.auto_save_timer = Themes.save_timer.wait_time
+	Global.settings_dict.auto_save_timer = value
 
 
 

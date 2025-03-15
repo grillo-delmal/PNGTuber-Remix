@@ -303,9 +303,7 @@ func _on_advanced_lip_sync_toggled(toggled_on):
 			Global.held_sprite.advanced_lipsyc()
 			Global.held_sprite.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 			Global.held_sprite.save_state(Global.current_state)
-		%AnimationFramesSlider.editable = !toggled_on
-		%AnimationSpeedSlider.editable = !toggled_on
-		
+			Global.reinfo.emit()
 
 func _on_advanced_lip_sync_mouse_entered():
 	%AdvancedLipSyncLabel.show()
