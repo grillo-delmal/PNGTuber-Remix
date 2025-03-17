@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b28gjkefgi5bs"]
+[gd_scene load_steps=13 format=3 uid="uid://b28gjkefgi5bs"]
 
 [ext_resource type="Script" uid="uid://bn6wdd2hwqxfp" path="res://Main/Scripts/main.gd" id="1_6pthk"]
 [ext_resource type="Script" uid="uid://u4rstm0uk8wb" path="res://Scripts/Misc/file_importer.gd" id="2_j4lix"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://by4pbr6yeut1c" path="res://Main/Scripts/monitor_tracking.gd" id="5_rj11h"]
 [ext_resource type="Script" uid="uid://c5idljtng82vs" path="res://Main/Scripts/AudioStreamPlayer.gd" id="5_swrrk"]
 [ext_resource type="PackedScene" uid="uid://bpmlfhv30o08l" path="res://UI/TopUI/top_ui.tscn" id="7_qwnpc"]
+[ext_resource type="Script" uid="uid://bpgihreqd50ud" path="res://Main/websocket_handler.gd" id="10_qac2q"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_f6fdm"]
 blend_mode = 4
@@ -161,6 +162,9 @@ autostart = true
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.05
+
+[node name="WebsocketHandler" type="Node" parent="."]
+script = ExtResource("10_qac2q")
 
 [connection signal="canceled" from="FileImporter/ConfirmTrim" to="FileImporter" method="_on_confirm_trim_canceled"]
 [connection signal="close_requested" from="FileImporter/ConfirmTrim" to="FileImporter" method="_on_confirm_trim_canceled"]
