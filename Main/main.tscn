@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://by4pbr6yeut1c" path="res://Main/Scripts/monitor_tracking.gd" id="5_rj11h"]
 [ext_resource type="Script" uid="uid://c5idljtng82vs" path="res://Main/Scripts/AudioStreamPlayer.gd" id="5_swrrk"]
 [ext_resource type="PackedScene" uid="uid://bpmlfhv30o08l" path="res://UI/TopUI/top_ui.tscn" id="7_qwnpc"]
-[ext_resource type="Script" uid="uid://bpgihreqd50ud" path="res://Main/websocket_handler.gd" id="10_qac2q"]
+[ext_resource type="Script" uid="uid://bpgihreqd50ud" path="res://Main/Scripts/websocket_handler.gd" id="10_qac2q"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_f6fdm"]
 blend_mode = 4
