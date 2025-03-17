@@ -142,8 +142,7 @@ locale/translations=PackedStringArray("res://Localization/RemixV1 Translations -
 
 [rendering]
 
-rendering_device/driver="d3d12"
-rendering_device/driver.windows="d3d12"
-renderer/rendering_method="mobile"
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 viewport/transparent_background=true

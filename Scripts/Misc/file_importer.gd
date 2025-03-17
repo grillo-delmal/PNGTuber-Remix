@@ -8,10 +8,8 @@ func import_sprite(path : String):
 	var spawn = sprite.instantiate()
 	var apng_test = AImgIOAPNGImporter.load_from_file(path)
 	var img_tex : CanvasTexture 
-	
 	if path.get_extension() == "gif":
-		pass
-
+		img_tex = import_gif(path, spawn)
 	elif apng_test != ["No frames", null]:
 		img_tex = import_apng_sprite(path, spawn)
 	else:
@@ -64,13 +62,9 @@ func import_png_from_buffer(buffer: PackedByteArray, sprite_name: String, spawn)
 	return img_can
 
 func import_gif(path : String, spawn) -> CanvasTexture:
-	pass
-	return 
-	'''
 	var g_file = FileAccess.get_file_as_bytes(path)
 	var gif_tex = GifManager.animated_texture_from_buffer(g_file)
 	var img_can = CanvasTexture.new()
-	
 	for n in gif_tex.frames:
 		gif_tex.get_frame_texture(n).get_image().fix_alpha_edges()
 	img_can.diffuse_texture = gif_tex
@@ -78,9 +72,8 @@ func import_gif(path : String, spawn) -> CanvasTexture:
 	spawn.anim_texture_normal = null
 	spawn.img_animated = true
 	spawn.is_apng = false
+	spawn.sprite_name = "(Gif)" + path.get_file().get_basename() 
 	return img_can
-#	
-'''
 
 func import_png_from_file(path: String, spawn) -> CanvasTexture:
 	var img = Image.load_from_file(path)
@@ -113,20 +106,15 @@ func import_png(img: Image, spawn) -> CanvasTexture:
 	return img_can
 
 func add_normal(path):
-	
 	if path.get_extension() == "gif":
-		pass
-		'''
 		var g_file = FileAccess.get_file_as_bytes(path)
 		var gif_tex = GifManager.animated_texture_from_buffer(g_file)
 		
 		for n in gif_tex.frames:
 			gif_tex.get_frame_texture(n).get_image().fix_alpha_edges()
-		
-		
+
 		Global.held_sprite.anim_texture_normal = g_file
 		Global.held_sprite.get_node("%Sprite2D").texture.normal_texture = gif_tex
-		'''
 	else:
 		var apng_test = AImgIOAPNGImporter.load_from_file(path)
 		if apng_test != ["No frames", null]:
@@ -160,10 +148,8 @@ func add_normal(path):
 			Global.held_sprite.get_node("%Sprite2D").texture.normal_texture = texture
 		Global.get_sprite_states(Global.current_state)
 
-func replace_texture(path):
-	if path.get_extension() == "gif":
-		pass
-		'''
+func replace_texture(path : String):
+	if path.get_extension().to_lower() == "gif":
 		var g_file = FileAccess.get_file_as_bytes(path)
 		var gif_tex = GifManager.animated_texture_from_buffer(g_file)
 		var img_can = CanvasTexture.new()
@@ -174,12 +160,12 @@ func replace_texture(path):
 		img_can.diffuse_texture = gif_tex
 		Global.held_sprite.anim_texture = g_file
 		Global.held_sprite.anim_texture_normal = null
-		Global.held_sprite.texture = img_can
+	#	Global.held_sprite.texture = img_can
 		Global.held_sprite.get_node("%Sprite2D").texture = img_can
 		Global.held_sprite.img_animated = true
 		Global.held_sprite.is_apng = false
 		Global.held_sprite.save_state(Global.current_state)
-		'''
+		ImageTrimmer.set_thumbnail(Global.held_sprite.treeitem)
 	else:
 		var apng_test = AImgIOAPNGImporter.load_from_file(path)
 		if apng_test != ["No frames", null]:
@@ -237,8 +223,8 @@ func replace_texture(path):
 			Global.held_sprite.correct_sprite_size()
 			Global.held_sprite.update_wiggle_parts()
 		Global.held_sprite.get_node("%Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
-		Global.get_sprite_states(Global.current_state)
-		Global.reinfo.emit()
+	Global.get_sprite_states(Global.current_state)
+	Global.reinfo.emit()
 
 func _on_confirm_trim_confirmed() -> void:
 	if get_parent().current_state == get_parent().State.AddNormal:

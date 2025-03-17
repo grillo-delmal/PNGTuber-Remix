@@ -21,7 +21,7 @@ func save_file(path):
 			var exporter := AImgIOAPNGExporter.new()
 			img = exporter.export_animation(sprt.frames, 10, self, "_progress_report", [])
 			var normal_img
-			if !sprt.frames2.is_empty:
+			if !sprt.frames2.is_empty():
 				normal_img = exporter.export_animation(sprt.frames2, 10, self, "_progress_report", [])
 			
 			var cleaned_array = []
@@ -305,8 +305,6 @@ func load_apng(sprite_obj, sprite):
 	sprite_obj.get_node("%Sprite2D").texture = img_can
 
 func load_gif(sprite_obj, sprite):
-	pass
-	'''
 	var gif_texture : AnimatedTexture = GifManager.animated_texture_from_buffer(sprite.img)
 	sprite_obj.anim_texture = sprite.img
 	var img_can = CanvasTexture.new()
@@ -325,7 +323,7 @@ func load_gif(sprite_obj, sprite):
 			img_can.normal_texture = gif_normal
 			sprite_obj.anim_texture_normal = sprite.normal
 	sprite_obj.get_node("%Sprite2D").texture = img_can
-'''
+
 
 func load_pngplus_file(path):
 	Themes.theme_settings.path = path

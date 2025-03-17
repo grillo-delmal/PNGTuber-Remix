@@ -45,13 +45,13 @@ func save_as_file():
 	%FileDialog.show()
 
 func load_sprites():
-	%FileDialog.filters = ["*.png, *.apng", "*.png", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
+	%FileDialog.filters = ["*.png, *.apng, *.gif", "*.png", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
 	$FileDialog.file_mode = 1
 	current_state = State.LoadSprites
 	%FileDialog.show()
 
 func load_append_sprites():
-	%FileDialog.filters = ["*.png, *.apng", "*.png", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
+	%FileDialog.filters = ["*.png, *.apng, *.gif", "*.png", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
 	$FileDialog.file_mode = 1
 	current_state = State.AddAppend
 	%FileDialog.show()
@@ -59,7 +59,7 @@ func load_append_sprites():
 func replacing_sprite():
 	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
 		if not Global.held_sprite.dictmain.folder:
-			%FileDialog.filters = ["*.png, *.apng", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
+			%FileDialog.filters = ["*.png, *.apng, *.gif", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
 			$FileDialog.file_mode = 0
 			current_state = State.ReplaceSprite
 			%FileDialog.show()

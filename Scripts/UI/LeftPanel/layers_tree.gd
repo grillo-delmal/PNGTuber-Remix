@@ -25,6 +25,10 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 		print("can't drop")
 		return
 	
+	if other_item == item:
+		print("can't drop")
+		return
+	
 	#print(true_pos)
 	var og_pos = item.get_metadata(0).sprite_object.global_position
 	if true_pos == 0:
