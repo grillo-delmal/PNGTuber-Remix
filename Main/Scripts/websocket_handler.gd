@@ -200,9 +200,9 @@ func _on_message(peer_id: int, message: String):
 				#print("Change state received from peer %d " % peer_id)
 				#print(json_data["state_id"])
 				
-				var state_id = int(json_data["state_id"])
+				var state_id = int(json_data["state_id"])-1
 				if state_id in Global.settings_dict.get("states"):
-					Global.current_state = state_id-1
+					Global.current_state = state_id
 					Global.load_sprite_states(Global.current_state)
 					send(peer_id,'{"event":"state", result:"success"}')
 				else:
