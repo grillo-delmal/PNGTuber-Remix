@@ -96,7 +96,7 @@ static func set_thumbnail(item : TreeItem):
 	var new_width = int(scaled_img.get_width() * scale_factor)
 	var new_height = int(scaled_img.get_height() * scale_factor)
 	
-	scaled_img.resize(new_width, new_height, Image.INTERPOLATE_BILINEAR)
+	scaled_img.resize(max(new_width, 1), max(new_height,1), Image.INTERPOLATE_BILINEAR)
 	
 	var offset_x = (thumbnail_size - new_width) / 2
 	var offset_y = (thumbnail_size - new_height) / 2

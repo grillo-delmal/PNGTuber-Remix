@@ -77,7 +77,7 @@ func import_gif(path : String, spawn) -> CanvasTexture:
 
 func import_png_from_file(path: String, spawn) -> CanvasTexture:
 	var img = Image.load_from_file(path)
-	var img_can = import_png(img, spawn)	
+	var img_can = import_png(img, spawn)
 	var buffer = FileAccess.get_file_as_bytes(path)
 	spawn.image_data = buffer
 	spawn.sprite_name = path.get_file().get_basename()
@@ -203,8 +203,18 @@ func replace_texture(path : String):
 				var center_shift_x = trim_info.min_x - ((original_width - trimmed_width) / 2.0)
 				var center_shift_y = trim_info.min_y - ((original_height - trimmed_height) / 2.0)
 				# Adjust position to keep image visually stable
+				var glob_pos : Array = []
+				for i in Global.held_sprite.get_node("%Sprite2D").get_children():
+					if i is SpriteObject:
+						glob_pos.append({obj = i,
+						og_pos = i.global_position})
 				Global.held_sprite.dictmain.offset += Vector2(center_shift_x, center_shift_y)
 				Global.held_sprite.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
+				for i in glob_pos:
+					i.obj.global_position = i.og_pos
+					i.obj.dictmain.position = i.obj.position
+					i.obj.save_state(Global.current_state)
+					
 				Global.update_offset_spins.emit()
 			var buffer = FileAccess.get_file_as_bytes(path)
 			Global.held_sprite.image_data = buffer

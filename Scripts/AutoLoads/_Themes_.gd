@@ -4,7 +4,7 @@ signal theme_changed
 
 @onready var top_bar = get_tree().get_root().get_node("Main/%TopUI")
 var ui_theme
-var popup = preload("res://UI/TopUI/popup_panel.tscn").instantiate()
+var popup = preload("res://UI/EditorUI/TopUI/Components/popup_panel.tscn").instantiate()
 var save_timer : Timer = Timer.new()
 
 @warning_ignore("integer_division")
@@ -132,7 +132,7 @@ func _ready():
 		theme_settings.theme_id = 0
 		create_file.store_var(theme_settings)
 		create_file.close()
-		get_tree().get_root().get_node("Main/UIHolder").theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
+		get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	get_window().size_changed.connect(window_size_changed)
 	
 	

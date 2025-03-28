@@ -176,6 +176,8 @@ func load_file(path, should_load_path = false):
 					else:
 						load_sprite(sprite_obj, sprite)
 				else:
+					
+					
 					load_sprite(sprite_obj, sprite)
 
 			if sprite.has("image_data"):
@@ -246,8 +248,6 @@ func load_sprite(sprite_obj, sprite):
 	img_tex.set_image(img)
 	var img_can = CanvasTexture.new()
 	img_can.diffuse_texture = img_tex
-	
-
 	if sprite.has("normal"):
 		var normalBytes = sprite.normal
 		if normalBytes != null:
@@ -262,6 +262,26 @@ func load_sprite(sprite_obj, sprite):
 			nimg_tex.set_image(nimg)
 			img_can.normal_texture = nimg_tex
 	sprite_obj.get_node("%Sprite2D").texture = img_can
+
+func load_trimmed_sprite(sprite_obj, sprite):
+	var img_data
+	
+
+	if sprite.img is not PackedByteArray:
+		img_data = Marshalls.base64_to_raw(sprite.img)
+	else:
+		img_data = sprite.img
+	
+	Global.main.get_node("%FileImporter").trim = true
+	var img_can = Global.main.get_node("%FileImporter").import_png_from_buffer(img_data, "", sprite_obj)
+
+	# Adjust position to keep image visually stable
+	#sprite_obj.dictmain.offset += Vector2(center_shift_x, center_shift_y)
+#	sprite_obj.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
+#	for i in sprite_obj.states:
+	#	i.offset += Vector2(center_shift_x, center_shift_y)
+	sprite_obj.get_node("%Sprite2D").texture = img_can
+
 
 func load_apng(sprite_obj, sprite):
 	var img = AImgIOAPNGImporter.load_from_buffer(sprite.img)

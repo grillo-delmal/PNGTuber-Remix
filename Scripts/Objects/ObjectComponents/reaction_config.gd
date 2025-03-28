@@ -128,9 +128,8 @@ func speaking():
 		%Rotation.show()
 		if actor.dictmain.should_talk:
 			if actor.dictmain.open_mouth:
-				if actor.dictmain.one_shot:
-					%Rotation.modulate.a = 1
-					reset_animations()
+				%Rotation.modulate.a = 1
+				reset_animations()
 			else:
 				%Rotation.modulate.a = 0.2
 		else:
@@ -162,7 +161,6 @@ func not_speaking():
 		%Rotation.show()
 		if actor.dictmain.should_talk:
 			if actor.dictmain.open_mouth:
-				
 				%Rotation.modulate.a = 0.2
 			else:
 				reset_animations()
