@@ -46,6 +46,7 @@ gradient = SubResource("Gradient_uswo1")
 
 [node name="AppendageObject" type="Node2D" groups=["Sprites"]]
 script = ExtResource("1_yuqos")
+states = null
 
 [node name="Pos" type="Node2D" parent="."]
 unique_name_in_owner = true

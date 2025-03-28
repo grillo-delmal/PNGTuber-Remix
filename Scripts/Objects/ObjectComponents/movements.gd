@@ -111,8 +111,23 @@ func rainbow():
 		%Pos.modulate.s = 0
 
 func follow_mouse(delta):
+	var main_marker = get_tree().get_root().get_node("Main/%Marker")
+	var mouse
+	if main_marker.current_screen != main_marker.ALL_SCREENS_ID:
+		if !main_marker.mouse_in_current_screen():
+			mouse = Vector2.ZERO
+		else:
+			var viewport_size = actor.get_viewport().size
+			var origin = actor.get_global_transform_with_canvas().origin
+			var x_per = 1.0 - origin.x/float(viewport_size.x)
+			var y_per = 1.0 - origin.y/float(viewport_size.y)
+			var display_size = DisplayServer.screen_get_size(main_marker.current_screen)
+			var offset = Vector2(display_size.x * x_per, display_size.y * y_per)
+			var mouse_pos = DisplayServer.mouse_get_position() - DisplayServer.screen_get_position(main_marker.current_screen)
+			mouse = Vector2(mouse_pos - display_size) + offset 
+	else:
+		mouse = actor.get_local_mouse_position()
 	if actor.dictmain.follow_mouse_velocity:
-		var mouse = get_tree().get_root().get_node("Main/%Marker").coords
 		var distance = last_mouse_position - mouse
 		if !distance.is_zero_approx():
 			var vel = -(distance/delta)
@@ -123,14 +138,13 @@ func follow_mouse(delta):
 		%Pos.position.y = lerp(%Pos.position.y, last_dist.y, 0.1)
 		var clamping = clamp(last_dist.angle()*actor.dictmain.mouse_rotation,deg_to_rad(actor.dictmain.rLimitMin),deg_to_rad(actor.dictmain.rLimitMax))
 		%Squish.rotation = lerp_angle(%Squish.rotation ,clamping,0.1)
-		var dire = Vector2.ZERO - (last_mouse_position - get_tree().get_root().get_node("Main/%Marker").coords)
+		var dire = Vector2.ZERO - (last_mouse_position - main_marker.coords)
 		var scl_x = abs(dire.x) *actor.dictmain.mouse_scale_x *0.005
 		var scl_y = abs(dire.y) *actor.dictmain.mouse_scale_y *0.005
 		%Drag.scale.x = lerp(%Drag.scale.x, float(clamp(1 - scl_x, 0.15 , 1)), 0.1)
 		%Drag.scale.y = lerp(%Drag.scale.y, float(clamp(1 - scl_y,  0.15 , 1)), 0.1)
 		last_mouse_position = mouse
 	else:
-		var mouse = get_tree().get_root().get_node("Main/%Marker").coords
 		var dir = Vector2.ZERO.direction_to(mouse)
 		var dist = mouse.length()
 		%Pos.position.x = lerp(%Pos.position.x, dir.x * min(dist, actor.dictmain.look_at_mouse_pos), 0.1)
@@ -138,7 +152,7 @@ func follow_mouse(delta):
 		var clamping = clamp(mouse.angle()*actor.dictmain.mouse_rotation,deg_to_rad(actor.dictmain.rLimitMin),deg_to_rad(actor.dictmain.rLimitMax))
 		%Squish.rotation = lerp_angle(%Squish.rotation ,clamping,0.1)
 #		print(clamping)
-		var dire = Vector2.ZERO - get_tree().get_root().get_node("Main/%Marker").coords
+		var dire = Vector2.ZERO - main_marker.coords
 		var scl_x = (abs(dire.x) *actor.dictmain.mouse_scale_x *0.005) * Global.settings_dict.zoom.x
 		var scl_y = (abs(dire.y) *actor.dictmain.mouse_scale_y *0.005) * Global.settings_dict.zoom.y
 		%Drag.scale.x = lerp(%Drag.scale.x, float(clamp(1 - scl_x, 0.15 , 1)), 0.1)

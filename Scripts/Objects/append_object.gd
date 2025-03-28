@@ -1,4 +1,4 @@
-extends Node2D
+extends SpriteObject
 
 #Movement
 var heldTicks = 0

@@ -16,12 +16,16 @@ func _process(_delta):
 		coords = global_mouse_pos
 	else:
 		# Specific screen mode
-		var screen_pos = DisplayServer.screen_get_position(current_screen)
-		var screen_size = DisplayServer.screen_get_size(current_screen)
-		var relative_pos = Vector2i(global_mouse_pos) - screen_pos
-		
-		if (DisplayServer.mouse_get_position().x >= screen_pos.x and DisplayServer.mouse_get_position().x < (screen_size.x + screen_pos.x) and 
-			DisplayServer.mouse_get_position().y >= screen_pos.y and DisplayServer.mouse_get_position().y < (screen_size.y + screen_pos.y)):
+		if (mouse_in_current_screen()):
+			var screen_pos = DisplayServer.screen_get_position(current_screen)
+			var relative_pos = Vector2i(global_mouse_pos) - screen_pos
 			coords = Vector2i(relative_pos)
 		else:
 			coords = Vector2i(0,0)
+
+func mouse_in_current_screen():
+	var screen_pos = DisplayServer.screen_get_position(current_screen)
+	var screen_size = DisplayServer.screen_get_size(current_screen)
+	var mouse_pos = DisplayServer.mouse_get_position()
+	return (mouse_pos.x >= screen_pos.x and mouse_pos.x < (screen_size.x + screen_pos.x) and 
+			mouse_pos.y >= screen_pos.y and mouse_pos.y < (screen_size.y + screen_pos.y))

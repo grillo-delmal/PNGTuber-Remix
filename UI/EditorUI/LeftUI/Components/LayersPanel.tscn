@@ -188,6 +188,7 @@ item_6/id = 6
 [node name="LayersTree" type="Tree" parent="Layers"]
 layout_mode = 2
 theme_override_colors/relationship_line_color = Color(0, 0, 0, 0.392157)
+theme_override_colors/guide_color = Color(0, 0, 0, 0.196078)
 theme_override_constants/h_separation = 1
 theme_override_constants/v_separation = 2
 theme_override_constants/inner_item_margin_bottom = 2
@@ -196,7 +197,7 @@ theme_override_constants/inner_item_margin_right = 2
 theme_override_constants/inner_item_margin_top = 2
 theme_override_constants/item_margin = 6
 theme_override_constants/icon_max_width = 25
-theme_override_constants/draw_guides = 0
+theme_override_constants/draw_guides = 2
 theme_override_constants/draw_relationship_lines = 2
 theme_override_constants/relationship_line_width = 2
 theme_override_constants/parent_hl_line_width = 2

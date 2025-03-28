@@ -1,4 +1,4 @@
-extends Node2D
+extends SpriteObject
 
 #Movement
 var heldTicks = 0
@@ -156,6 +156,7 @@ func _process(_delta):
 		%Selection.show()
 		%Selection.hframes = %Sprite2D.hframes
 		%Selection.frame = %Sprite2D.frame
+		%Selection.flip_h = %Sprite2D.flip_h
 		
 		if dictmain.wiggle:
 			%WiggleOrigin.show()

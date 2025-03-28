@@ -8,9 +8,9 @@ var bg_color = Color.DIM_GRAY
 var is_transparent : bool
 var is_editor : bool = true
 var last_path : String = ""
-var settings = preload("res://UI/TopUI/Components/Settings_popup.tscn")
+var settings = preload("res://UI/EditorUI/TopUI/Components/Settings_popup.tscn")
 
-var tutorial = preload("res://UI/EditorUI/TopUI/tutorial_pop_up.tscn")
+var tutorial = preload("res://UI/EditorUI/TopUI/Components/tutorial_pop_up.tscn")
 
 @onready var light = get_tree().get_root().get_node("Main/%LightSource")
 

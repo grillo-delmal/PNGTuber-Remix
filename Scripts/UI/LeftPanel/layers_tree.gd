@@ -31,6 +31,7 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 	
 	#print(true_pos)
 	var og_pos = item.get_metadata(0).sprite_object.global_position
+	print(true_pos)
 	if true_pos == 0:
 		item.get_parent().remove_child(item)
 		other_item.add_child(item)
@@ -59,7 +60,7 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 					Global.sprite_container.add_child(item.get_metadata(0).sprite_object)
 					item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object,item.get_index())
 				else:
-					item.move_after(other_item)
+					item.move_before(other_item)
 					item.get_metadata(0).sprite_object.parent_id = other_item.get_metadata(0).sprite_object.parent_id
 					item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
 					other_item.get_metadata(0).sprite_object.get_parent().add_child(item.get_metadata(0).sprite_object)
@@ -97,7 +98,8 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 				
 		else:
 			item.move_after(other_item)
-			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(item.get_index()+1, 0, item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1))
+			var count = item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1
+			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(other_item.get_metadata(0).sprite_object.get_index()+1, 0, count))
 
 
 func get_all_layeritems(layeritem, recursive) -> Array:

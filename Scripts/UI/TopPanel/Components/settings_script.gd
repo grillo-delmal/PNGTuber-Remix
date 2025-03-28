@@ -32,7 +32,7 @@ func _ready() -> void:
 		%SelectedScreen.select(0)
 	else:
 		if %SelectedScreen.item_count > Global.settings_dict.monitor:
-			%SelectedScreen.select(Global.settings_dict.monitor)
+			%SelectedScreen.select(Global.settings_dict.monitor + 1)
 		else:
 			Global.settings_dict.monitor = 9999
 			%SelectedScreen.select(0)
