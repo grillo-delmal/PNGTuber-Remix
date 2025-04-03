@@ -15,25 +15,33 @@ var t = {
 	actual_value = 0,
 }
 
+var mic_restart_timer : Timer = Timer.new()
 
 
 var _fingerprint := LipSyncFingerprint.new()
 var _matches := []
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	mic_restart_timer.timeout.connect(mic_restart_timer_timeout)
+	mic_restart_timer.one_shot = true
+	add_child(mic_restart_timer)
 	record_bus_index = AudioServer.get_bus_index("Mic")
 	record_effect = AudioServer.get_bus_effect(record_bus_index, 0)
-	await get_tree().create_timer(0.05).timeout
+	await get_tree().current_scene.ready
 	global_lipsync()
 
 
 
 func _on_mic_timer_timeout():
-	playing = false
-	await get_tree().create_timer(0.05).timeout
-	playing = true
-	$MicTimer.start()
+	stop()
+	mic_restart_timer.wait_time = 0.08
+	mic_restart_timer.start()
 
+
+
+func mic_restart_timer_timeout():
+	play()
+	$MicTimer.start()
 
 func global_lipsync():
 	_fingerprint.populate(LipSyncGlobals.speech_spectrum)

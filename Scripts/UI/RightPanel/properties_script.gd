@@ -307,6 +307,7 @@ func _on_eye_option_item_selected(index: int) -> void:
 		2:
 			Global.held_sprite.dictmain.should_blink = true
 			Global.held_sprite.dictmain.open_eyes = false
+	Global.blink.emit()
 
 func _on_mouth_option_item_selected(index: int) -> void:
 	match index:
@@ -318,3 +319,4 @@ func _on_mouth_option_item_selected(index: int) -> void:
 		2:
 			Global.held_sprite.dictmain.should_talk = true
 			Global.held_sprite.dictmain.open_mouth = false
+	Global.not_speaking.emit()

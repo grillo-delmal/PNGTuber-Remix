@@ -156,8 +156,9 @@ bus = &"Mic"
 script = ExtResource("5_swrrk")
 
 [node name="MicTimer" type="Timer" parent="AudioStreamPlayer"]
-wait_time = 30.0
+wait_time = 60.0
 autostart = true
+ignore_time_scale = true
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.05
