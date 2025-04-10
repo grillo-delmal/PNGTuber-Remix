@@ -1,12 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://ngta1o5yiqxs"]
+[gd_scene load_steps=11 format=3 uid="uid://ngta1o5yiqxs"]
 
+[ext_resource type="Script" uid="uid://dvpyywoct4riy" path="res://Scripts/UI/control.gd" id="1_1r6xj"]
 [ext_resource type="Script" uid="uid://bpegrg5a15v2v" path="res://Scripts/UI/UIInput.gd" id="3_1eur5"]
-[ext_resource type="Script" uid="uid://bjehgsjwju532" path="res://Scripts/UI/States/StatesStuff.gd" id="3_pa6sx"]
 [ext_resource type="PackedScene" uid="uid://cpcj4o080w37m" path="res://UI/EditorUI/LeftUI/left_panel.tscn" id="5_0cvxm"]
 [ext_resource type="Script" uid="uid://1wvjbd0qwxir" path="res://Scripts/UI/Others/LightControl.gd" id="6_5v3ft"]
 [ext_resource type="PackedScene" uid="uid://c3f86pv0can01" path="res://UI/EditorUI/RightUI/Components/properties.tscn" id="8_i4djb"]
 [ext_resource type="PackedScene" uid="uid://ccvo3k5t6lis6" path="res://UI/EditorUI/RightUI/Components/movement.tscn" id="9_fwbkq"]
 [ext_resource type="Script" uid="uid://dy1cd6xda1pu5" path="res://UI/BetterSlider/BetterToggles.gd" id="9_n3hq1"]
+[ext_resource type="PackedScene" uid="uid://bk2xbsvlmq0or" path="res://UI/StateButton/state_panel.tscn" id="10_1r6xj"]
 [ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="10_m6pfk"]
 [ext_resource type="Script" uid="uid://181yhrus3jhb" path="res://Scripts/UI/Others/Spinboxes.gd" id="26_0wx0w"]
 
@@ -20,9 +21,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
-
-[node name="StatesStuff" type="Node" parent="."]
-script = ExtResource("3_pa6sx")
+script = ExtResource("1_1r6xj")
 
 [node name="UIInput" type="Node" parent="."]
 unique_name_in_owner = true
@@ -297,8 +296,8 @@ unique_name_in_owner = true
 layout_mode = 2
 sp_type = "WiggleApp"
 label_text = "Curvature : "
-mini_value = -1.57
-max_value = 1.57
+mini_value = -10.0
+max_value = 10.0
 step = 0.01
 value_to_update = "wiggle_curve"
 
@@ -917,53 +916,8 @@ unique_name_in_owner = true
 layout_mode = 2
 max_value = 12.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer"]
-custom_minimum_size = Vector2(350, 107)
+[node name="StatePanel" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer" instance=ExtResource("10_1r6xj")]
 layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 20.0
-theme_override_constants/separation = 0
-metadata/_edit_use_anchors_ = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/VBoxContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="AddState" type="Button" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "Add State"
-
-[node name="DeleteState" type="Button" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(80, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-theme_override_font_sizes/font_size = 16
-text = "Delete State"
-metadata/_edit_use_anchors_ = true
-
-[node name="HSeparator" type="HSeparator" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_constants/separation = 10
-
-[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 70)
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 20.0
-horizontal_scroll_mode = 0
-
-[node name="StateButtons" type="GridContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/VBoxContainer/ScrollContainer"]
-unique_name_in_owner = true
-clip_contents = true
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 20.0
-theme_override_constants/h_separation = 6
-theme_override_constants/v_separation = 5
-columns = 9
 
 [connection signal="focus_entered" from="HSplitContainer/HSplit/RightPanel/Properties/Name" to="UIInput" method="_on_name_focus_entered"]
 [connection signal="focus_exited" from="HSplitContainer/HSplit/RightPanel/Properties/Name" to="UIInput" method="_on_name_focus_exited"]
@@ -999,5 +953,3 @@ columns = 9
 [connection signal="value_changed" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Experimental/ScrollContainer6/MarginContainer/VBoxContainer/VBoxContainer/HBox3/RSSlider" to="UIInput" method="_on_rs_slider_value_changed"]
 [connection signal="toggled" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Experimental/ScrollContainer6/MarginContainer/VBoxContainer/NonAnimatedSheetCheck" to="UIInput" method="_on_non_animated_sheet_check_toggled"]
 [connection signal="value_changed" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Experimental/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox/FrameSpinbox" to="UIInput" method="_on_frame_spinbox_value_changed"]
-[connection signal="pressed" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/VBoxContainer/HBoxContainer/AddState" to="StatesStuff" method="_on_add_state_pressed"]
-[connection signal="pressed" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/VBoxContainer/HBoxContainer/DeleteState" to="StatesStuff" method="_on_delete_state_pressed"]

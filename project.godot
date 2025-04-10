@@ -12,7 +12,7 @@ config_version=5
 
 config/name="PNGTube-Remix"
 config/version="1.3.5"
-run/main_scene="res://Main/main.tscn"
+run/main_scene="uid://ckgt30cxu04dj"
 config/auto_accept_quit=false
 config/quit_on_go_back=false
 config/features=PackedStringArray("4.4")
@@ -34,6 +34,8 @@ GlobalAudioStreamPlayer="*res://Main/Scripts/AudioStreamPlayer.gd"
 Themes="*res://Scripts/AutoLoads/_Themes_.gd"
 LipSyncGlobals="*res://UI/Lipsync stuff/godot-lip-sync/lip_sync_globals.gd"
 GlobalMicAudio="*res://Main/Scripts/GlobalMicAudio.gd"
+GlobalInputCapture="*res://Scripts/AutoLoads/GlobalInputCapture.gd"
+GAudioStreamPlayer="*res://Scripts/AutoLoads/audio_stream_player.tscn"
 
 [debug]
 

@@ -2,9 +2,10 @@ extends Node
 
 @onready var mc_anim = %MouthClosedAnim
 @onready var mo_anim = %MouthOpenAnim
-@onready var contain = Global.sprite_container
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	await get_tree().current_scene.ready
+	%ScrollContainer.get_tab_bar().focus_mode = Control.FocusMode.FOCUS_NONE
 	%LightColor.get_picker().picker_shape = 1
 	%LightColor.get_picker().presets_visible = false
 	%LightColor.get_picker().color_modes_visible = false
@@ -93,51 +94,51 @@ func held_sprite_is_true():
 
 
 func _on_mo_anim_state_pressed(id):
-	contain.mouth_open = id
+	Global.sprite_container.mouth_open = id
 	match id:
 		0:
-			contain.current_mo_anim = "Idle"
+			Global.sprite_container.current_mo_anim = "Idle"
 		1:
-			contain.current_mo_anim = "Bouncy"
+			Global.sprite_container.current_mo_anim = "Bouncy"
 		2:
-			contain.current_mo_anim = "Wavy"
+			Global.sprite_container.current_mo_anim = "Wavy"
 		3:
-			contain.current_mo_anim = "One Bounce"
+			Global.sprite_container.current_mo_anim = "One Bounce"
 		4:
-			contain.current_mo_anim = "Wobble"
+			Global.sprite_container.current_mo_anim = "Wobble"
 		5:
-			contain.current_mo_anim = "Squish"
+			Global.sprite_container.current_mo_anim = "Squish"
 		6:
-			contain.current_mo_anim = "Float"
+			Global.sprite_container.current_mo_anim = "Float"
 			
-	mo_anim.text = contain.current_mo_anim
+	mo_anim.text = Global.sprite_container.current_mo_anim
 	
-	contain.save_state(Global.current_state)
+	Global.sprite_container.save_state(Global.current_state)
 
 func _on_mc_anim_state_pressed(id):
-	contain.mouth_closed = id
+	Global.sprite_container.mouth_closed = id
 	match id:
 		0:
-			contain.current_mc_anim = "Idle"
+			Global.sprite_container.current_mc_anim = "Idle"
 		1:
-			contain.current_mc_anim = "Bouncy"
+			Global.sprite_container.current_mc_anim = "Bouncy"
 		2:
-			contain.current_mc_anim = "Wavy"
+			Global.sprite_container.current_mc_anim = "Wavy"
 			
 		3:
-			contain.current_mc_anim = "One Bounce"
+			Global.sprite_container.current_mc_anim = "One Bounce"
 			
 		4:
-			contain.current_mc_anim = "Wobble"
+			Global.sprite_container.current_mc_anim = "Wobble"
 			
 		5:
-			contain.current_mc_anim = "Squish"
+			Global.sprite_container.current_mc_anim = "Squish"
 			
 		6:
-			contain.current_mc_anim = "Float"
+			Global.sprite_container.current_mc_anim = "Float"
 			
-	mc_anim.text = contain.current_mc_anim
-	contain.save_state(Global.current_state)
+	mc_anim.text = Global.sprite_container.current_mc_anim
+	Global.sprite_container.save_state(Global.current_state)
 
 func reinfo():
 	held_sprite_is_null()
@@ -186,10 +187,10 @@ func reinfo():
 
 
 func reinfoanim():
-	mc_anim.text = contain.current_mc_anim
-	mo_anim.text = contain.current_mo_anim
-	%ShouldSquish.button_pressed = contain.should_squish
-	%SquishAmount.get_node("%SliderValue").value = contain.squish_amount
+	mc_anim.text = Global.sprite_container.current_mc_anim
+	mo_anim.text = Global.sprite_container.current_mo_anim
+	%ShouldSquish.button_pressed = Global.sprite_container.should_squish
+	%SquishAmount.get_node("%SliderValue").value = Global.sprite_container.squish_amount
 
 
 func _on_name_text_submitted(new_text):
@@ -391,12 +392,12 @@ func _on_name_focus_exited() -> void:
 	Global.spinbox_held = false
 
 func _on_should_squish_toggled(toggled_on: bool) -> void:
-	contain.should_squish = toggled_on
-	contain.save_state(Global.current_state)
+	Global.sprite_container.should_squish = toggled_on
+	Global.sprite_container.save_state(Global.current_state)
 
 func _on_squish_amount_changed(value : float):
-	contain.squish_amount = value
-	contain.save_state(Global.current_state)
+	Global.sprite_container.squish_amount = value
+	Global.sprite_container.save_state(Global.current_state)
 
 
 func _on_blink_chance_slider_value_changed(value: float) -> void:

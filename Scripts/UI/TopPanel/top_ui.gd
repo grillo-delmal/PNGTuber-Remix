@@ -2,6 +2,7 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	await get_tree().current_scene.ready
 	sliders_revalue(Global.settings_dict)
 	Global.reinfo.connect(info_held)
 	Global.slider_values.connect(sliders_revalue)
@@ -27,10 +28,9 @@ func sliders_revalue(settings_dict):
 	%YFreqWobbleSlider.value = settings_dict.yFrq
 	%YAmpWobbleSlider.value = settings_dict.yAmp
 
-	get_tree().get_root().get_node("Main/%Camera2D").zoom = settings_dict.zoom
-	get_tree().get_root().get_node("Main/%CamPos").global_position = settings_dict.pan
-	
-	get_tree().get_root().get_node("Main/%Control/%BlinkSpeedSlider").value = Global.settings_dict.blink_speed
+	if Global.camera != null && is_instance_valid(Global.camera):
+		Global.camera.zoom = settings_dict.zoom
+		Global.camera.get_parent().global_position = settings_dict.pan
 	update_fps(settings_dict.max_fps)
 	if Global.settings_dict.auto_save:
 		Themes.save_timer.start()

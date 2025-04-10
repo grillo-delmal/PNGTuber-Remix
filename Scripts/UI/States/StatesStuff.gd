@@ -1,7 +1,12 @@
 extends Node
+class_name StateUI
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Global.delete_states.connect(delete_all_states)
+	Global.remake_states.connect(update_states)
+	Global.reset_states.connect(initial_state)
 	delete_all_states()
 	initial_state()
 
@@ -75,6 +80,7 @@ func delete_all_states():
 		
 	Global.settings_dict.states = []
 	Global.settings_dict.light_states = [{}]
+	
 
 func add_state():
 	var button = preload("res://UI/StateButton/state_button.tscn").instantiate()
@@ -98,6 +104,8 @@ func add_state():
 		if i.states.size() != state_count:
 			for l in abs(i.states.size() - state_count):
 				i.states.append({})
+	
+	Global.settings_dict.saved_inputs.resize(Global.settings_dict.states.size())
 
 func update_states(states):
 	var states_size = states.size()

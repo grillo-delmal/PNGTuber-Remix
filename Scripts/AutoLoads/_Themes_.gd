@@ -2,10 +2,11 @@ extends Node
 
 signal theme_changed
 
-@onready var top_bar = get_tree().get_root().get_node("Main/%TopUI")
+var top_bar = null
 var ui_theme
 var popup = preload("res://UI/EditorUI/TopUI/Components/popup_panel.tscn").instantiate()
 var save_timer : Timer = Timer.new()
+var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 
 @warning_ignore("integer_division")
 @onready var theme_settings : Dictionary = {
@@ -29,6 +30,8 @@ var save_timer : Timer = Timer.new()
 	microphone = null,
 	enable_trimmer = false,
 	always_on_top = false,
+	menu_popup = true,
+	software_mode = 0,
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
@@ -80,7 +83,8 @@ func _ready():
 		ResourceSaver.save(preload("res://UI/Lipsync stuff/PrebuildFile/DefaultTraining.tres"),OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres")
 		LipSyncGlobals.file_data = ResourceLoader.load(OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres")
 	await  get_tree().create_timer(0.1).timeout
-	top_bar = get_tree().get_root().get_node("Main/%TopUI")
+	if get_tree().get_root().has_node("Main/%TopUI"):
+		top_bar = get_tree().get_root().get_node("Main/%TopUI")
 	
 	var file = FileAccess
 	if file.file_exists(OS.get_executable_path().get_base_dir() + "/Preferences.pRDat"):
@@ -106,11 +110,6 @@ func _ready():
 				get_window().borderless = false
 			elif !theme_settings.borders:
 				get_window().borderless = true
-			
-			get_tree().get_root().get_node("Main/%Control/%HSplitContainer").split_offset = theme_settings.left
-			get_tree().get_root().get_node("Main/%Control/%HSplit").split_offset = theme_settings.right
-			get_tree().get_root().get_node("Main/%Control/%VSplitContainer").split_offset = theme_settings.properties
-			Global.top_ui.get_node("%WindowButton").get_popup().set_item_checked(2, theme_settings.always_on_top)
 			get_window().always_on_top = theme_settings.always_on_top
 			
 			get_window().position = theme_settings.screen_pos
@@ -132,19 +131,15 @@ func _ready():
 		theme_settings.theme_id = 0
 		create_file.store_var(theme_settings)
 		create_file.close()
-		get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	get_window().size_changed.connect(window_size_changed)
 	
-	
-	get_tree().get_root().get_node("Main/%Control/%HSplitContainer").dragged.connect(_on_h_split_container_dragged)
-	get_tree().get_root().get_node("Main/%Control/%HSplit").dragged.connect(_on_h_split_dragged)
-	get_tree().get_root().get_node("Main/%Control/%VSplitContainer").dragged.connect(_on_v_split_container_dragged)
 	
 	await get_tree().create_timer(0.05).timeout
 	get_window().size = theme_settings.screen_size
 	check_ui()
 #	top_bar.check_data()
-	top_bar.sliders_revalue(Global.settings_dict)
+	if top_bar != null && is_instance_valid(top_bar):
+		top_bar.sliders_revalue(Global.settings_dict)
 	add_child(popup)
 	popup.hide()
 	
@@ -163,60 +158,42 @@ func window_size_changed():
 		theme_settings.screen_window = 2
 	else:
 		theme_settings.screen_window = 0
-	
-	top_bar.get_node("%WindowSize").text = "Window Size " + str(theme_settings.screen_size)
+		
+	if top_bar != null && is_instance_valid(top_bar):
+		top_bar.get_node("%WindowSize").text = "Window Size " + str(theme_settings.screen_size)
 	save()
 
 func check_ui():
-	if theme_settings.mode == 0:
-		top_bar.get_node("%TopBarInput").choosing_mode(0)
-	else:
-		top_bar.get_node("%TopBarInput").choosing_mode(1)
+	if top_bar != null && is_instance_valid(top_bar):
+		if theme_settings.mode == 0:
+			top_bar.get_node("%TopBarInput").choosing_mode(0)
+		else:
+			top_bar.get_node("%TopBarInput").choosing_mode(1)
 
 func loaded_UI(id):
 	_on_ui_theme_button_item_selected(id)
 
 
 func _on_ui_theme_button_item_selected(index):
-	theme_changed.emit(index)
 	match index:
 		0:
-			get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
-			popup.theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
-			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
-			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
+			current_theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 		1:
-			get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
-			popup.theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
-			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
-			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
+			current_theme = preload("res://Themes/BlueTheme/BlueTheme.tres")
 		2:
-			get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
-			popup.theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
-			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
-			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
+			current_theme = preload("res://Themes/OrangeTheme/OrangeTheme.tres")
 		3:
-			get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
-			popup.theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
-			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
-			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
+			current_theme = preload("res://Themes/WhiteTheme/WhiteTheme.tres")
 		4:
-			get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
-			popup.theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
-			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
-			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
+			current_theme = preload("res://Themes/DarkTheme/DarkTheme.tres")
 		5:
-			get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/GreenTheme/Green_theme.tres")
-			popup.theme = preload("res://Themes/GreenTheme/Green_theme.tres")
-			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/GreenTheme/Green_theme.tres")
-			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/GreenTheme/Green_theme.tres")
+			current_theme = preload("res://Themes/GreenTheme/Green_theme.tres")
 		6:
-			get_tree().get_root().get_node("Main/%UIHolder").theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
-			popup.theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
-			get_tree().get_root().get_node("Main/%ConfirmationDialog").theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
-			get_tree().get_root().get_node("Main/%ConfirmTrim").theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
+			current_theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
+	
+	popup.theme = current_theme
 	theme_settings.theme_id = index
-	Global.theme_update.emit(index)
+	Global.theme_update.emit(current_theme)
 	save()
 
 

@@ -7,8 +7,8 @@ func _ready() -> void:
 	Global.speaking.connect(speaking)
 	Global.not_speaking.connect(not_speaking)
 	Global.blink.connect(blink)
-	get_tree().get_root().get_node("Main").key_pressed.connect(asset)
-	get_tree().get_root().get_node("Main").key_pressed.connect(should_disappear)
+	Global.key_pressed.connect(asset)
+	Global.key_pressed.connect(should_disappear)
 	Global.mode_changed.connect(update_to_mode_change)
 	Global.blink.connect(editor_blink)
 

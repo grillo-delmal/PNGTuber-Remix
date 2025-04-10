@@ -1,0 +1,56 @@
+[gd_scene load_steps=2 format=3 uid="uid://bk2xbsvlmq0or"]
+
+[ext_resource type="Script" uid="uid://bjehgsjwju532" path="res://Scripts/UI/States/StatesStuff.gd" id="1_j5jjx"]
+
+[node name="StatePanel" type="VBoxContainer"]
+custom_minimum_size = Vector2(350, 107)
+size_flags_vertical = 3
+size_flags_stretch_ratio = 20.0
+theme_override_constants/separation = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="StatesStuff" type="Node" parent="."]
+script = ExtResource("1_j5jjx")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+alignment = 1
+
+[node name="AddState" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Add State"
+
+[node name="DeleteState" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 16
+text = "Delete State"
+metadata/_edit_use_anchors_ = true
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 20.0
+horizontal_scroll_mode = 0
+
+[node name="StateButtons" type="GridContainer" parent="ScrollContainer"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 20.0
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 5
+columns = 9
+
+[connection signal="pressed" from="HBoxContainer/AddState" to="StatesStuff" method="_on_add_state_pressed"]
+[connection signal="pressed" from="HBoxContainer/DeleteState" to="StatesStuff" method="_on_delete_state_pressed"]

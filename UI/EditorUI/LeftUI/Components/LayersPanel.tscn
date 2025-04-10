@@ -187,6 +187,7 @@ item_6/id = 6
 
 [node name="LayersTree" type="Tree" parent="Layers"]
 layout_mode = 2
+focus_mode = 0
 theme_override_colors/relationship_line_color = Color(0, 0, 0, 0.392157)
 theme_override_colors/guide_color = Color(0, 0, 0, 0.196078)
 theme_override_constants/h_separation = 1

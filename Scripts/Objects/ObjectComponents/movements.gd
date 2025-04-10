@@ -112,7 +112,7 @@ func rainbow():
 		%Pos.modulate.s = 0
 
 func follow_mouse(_delta):
-	var main_marker = get_tree().get_root().get_node("Main/%Marker")
+	var main_marker = Global.main.get_node("%Marker")
 	if main_marker.current_screen != main_marker.ALL_SCREENS_ID:
 		if !main_marker.mouse_in_current_screen():
 			mouse = Vector2.ZERO

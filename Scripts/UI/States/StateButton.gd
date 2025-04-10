@@ -5,7 +5,7 @@ extends Button
 var saved_event : InputEvent
 
 func _ready():
-	get_tree().get_root().get_node("Main").key_pressed.connect(bg_key_pressed)
+	Global.key_pressed.connect(bg_key_pressed)
 
 func _on_pressed():
 	Global.get_sprite_states(state)

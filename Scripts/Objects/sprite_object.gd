@@ -116,6 +116,7 @@ var global
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Global.reparent_objects.connect(reparent_obj)
 	og_glob = dictmain.position
 	animation()
 	%Dragger.top_level = true
