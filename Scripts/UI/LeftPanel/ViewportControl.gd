@@ -2,6 +2,7 @@ extends Node
 
 
 func _ready() -> void:
+	await get_tree().current_scene.ready
 	var view1 = Global.main.get_node("%SubViewport")
 	%SubViewport.world_2d = view1.world_2d
 	

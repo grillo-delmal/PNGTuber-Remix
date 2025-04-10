@@ -1,7 +1,5 @@
 extends Control
 
-signal key_pressed
-
 var sprite_paths : PackedStringArray
 var sprite_path : String
 var model_path : String
@@ -23,11 +21,23 @@ var rec_inp : bool = false
 
 @onready var origin = %SpritesContainer
 var of
-var keys : Array = []
-var already_input_keys : Array = []
 
 func _ready():
+	Global.main = self
+	Global.sprite_container = %SpritesContainer
+	Global.top_ui = %TopUI
+	Global.light = %LightSource
+	Global.camera = %Camera2D
+	
+	Global.theme_update.connect(update_theme)
+	Global.file_dialog = %FileDialog
 	%FileDialog.use_native_dialog = true
+	update_theme(Themes.current_theme)
+
+func update_theme(new_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")):
+	%UIHolder.theme = new_theme
+	%ConfirmTrim.theme = new_theme
+	%ConfirmationDialog.theme = new_theme
 
 func new_file():
 	%ConfirmationDialog.popup()
@@ -174,8 +184,8 @@ func clear_sprites():
 	for i in %SpritesContainer.get_children():
 		i.queue_free()
 	
-	%Control/StatesStuff.delete_all_states()
-	%Control/StatesStuff.initial_state()
+	Global.delete_states.emit()
+	Global.reset_states.emit()
 	%Camera2D.zoom = Vector2(1,1)
 	%CamPos.global_position = Vector2(640, 360)
 	Global.settings_dict.zoom = Vector2(1,1)
@@ -208,44 +218,3 @@ func _notification(what):
 		rec_inp = false
 	elif what == MainLoop.NOTIFICATION_APPLICATION_FOCUS_OUT:
 		rec_inp = true
-
-func _on_background_input_capture_bg_key_pressed(_node, keys_pressed : Dictionary):
-	if Global.settings_dict.checkinput:
-		var keyStrings = []
-		var costumeKeys = []
-		
-		for l in get_tree().get_nodes_in_group("StateButtons"):
-			if InputMap.action_get_events(l.input_key).size() > 0:
-				costumeKeys.append(InputMap.action_get_events(l.input_key)[0].as_text())
-				
-		for l in get_tree().get_nodes_in_group("Sprites"):
-			if InputMap.action_get_events(str(l.sprite_id)).size() > 0:
-				costumeKeys.append(InputMap.action_get_events(str(l.sprite_id))[0].as_text())
-		
-		for i in keys_pressed:
-			if keys_pressed[i]:
-				if OS.get_keycode_string(i) not in already_input_keys:
-					keyStrings.append(OS.get_keycode_string(i))
-		
-		already_input_keys = keyStrings
-		
-		if %FileDialog.visible:
-			return
-			
-		
-		for key in keyStrings:
-			var e = InputEventKey.new()
-			e.keycode = OS.find_keycode_from_string(key)
-			e.alt_pressed = keys_pressed.get(KEY_ALT, false)
-			e.shift_pressed = keys_pressed.get(KEY_SHIFT, false)
-			e.ctrl_pressed = keys_pressed.get(KEY_CTRL, false)
-			e.meta_pressed = keys_pressed.get(KEY_META, false)
-			var i = costumeKeys.find(e.as_text())
-			if i >= 0:
-				if costumeKeys[i] not in keys:
-				#	print(keys)
-				#	print(costumeKeys[i])
-					key_pressed.emit(costumeKeys[i])
-					keys.append(costumeKeys[i])
-	
-	keys = []

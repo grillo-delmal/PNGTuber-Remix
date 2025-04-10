@@ -124,6 +124,7 @@ var last_dist : Vector2 = Vector2(0,0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Global.reparent_objects.connect(reparent_obj)
 	%Dragger.top_level = true
 	%Dragger.global_position = %Wobble.global_position
 	set_process(true)

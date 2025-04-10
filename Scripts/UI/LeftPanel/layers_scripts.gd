@@ -3,8 +3,6 @@ extends Node
 signal sprite_info 
 
 @export var layers_popup: PopupMenu 
-@onready var uiinput: = get_tree().get_root().get_node("Main/%Control/UIInput")
-@onready var topbarinput: = get_tree().get_root().get_node("Main/%TopUI/TopBarInput")
 @export var tree : Tree 
 @export var layer_buttons : Node
 
@@ -82,8 +80,6 @@ func remake_layers(sprites : Array = get_tree().get_nodes_in_group("Sprites")):
 	correct_rearrange(sprites)
 	update_visib_buttons()
 	collapsing(sprites)
-	for i in sprites:
-		i.reparent_obj(get_tree().get_nodes_in_group("Sprites"))
 
 func correct_rearrange(sprites : Array = get_tree().get_nodes_in_group("Sprites")):
 	for i in sprites:

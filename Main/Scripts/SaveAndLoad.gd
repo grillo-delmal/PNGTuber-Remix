@@ -5,7 +5,7 @@ var save_dict : Dictionary = {}
 
 func save_file(path):
 	Themes.theme_settings.path = path
-	get_tree().get_root().get_node("Main/%TopUI/TopBarInput").path = path
+	Global.top_ui.get_node("TopBarInput").path = path
 	var sprites = get_tree().get_nodes_in_group("Sprites")
 	var inputs = get_tree().get_nodes_in_group("StateButtons")
 	
@@ -116,12 +116,12 @@ func load_file(path, should_load_path = false):
 			Global.top_ui.get_node("TopBarInput").path = path
 		#	print("t")
 		
-		get_tree().get_root().get_node("Main/%Control/StatesStuff").delete_all_states()
+		Global.delete_states.emit()
 		Global.main.clear_sprites()
 		
-		get_tree().get_root().get_node("Main/Timer").start()
-		get_tree().get_root().get_node("Main/%Control/StatesStuff").delete_all_states()
-		await get_tree().get_root().get_node("Main/Timer").timeout
+		Global.main.get_node("Timer").start()
+		Global.delete_states.emit()
+		await Global.main.get_node("Timer").timeout
 		
 		var file = FileAccess.open(path, FileAccess.READ)
 		var load_dict = file.get_var(true)
@@ -131,7 +131,7 @@ func load_file(path, should_load_path = false):
 		Global.settings_dict.merge(load_dict.settings_dict, true)
 		if load_dict.settings_dict.has("saved_inputs"):
 			Global.settings_dict.saved_inputs = load_dict.settings_dict.saved_inputs
-		get_tree().get_root().get_node("Main/%Control/StatesStuff").update_states(load_dict.settings_dict.states)
+		Global.remake_states.emit(load_dict.settings_dict.states)
 		
 		
 		for sprite in load_dict.sprites_array:
@@ -212,9 +212,11 @@ func load_file(path, should_load_path = false):
 					i.states.append({})
 		Global.load_sprite_states(0)
 		Global.remake_layers.emit()
+		Global.reparent_objects.emit(get_tree().get_nodes_in_group("Sprites"))
 		Global.slider_values.emit(Global.settings_dict)
 		Global.load_sprite_states(0)
-		get_tree().get_root().get_node("Main/%Control/UIInput").reinfoanim()
+		if Global.main.has_node("%Control"):
+			Global.main.get_node("%Control/UIInput").reinfoanim()
 		Themes.save()
 		file.close()
 		
@@ -229,7 +231,7 @@ func load_file(path, should_load_path = false):
 		else:
 			Themes.save_timer.stop()
 	
-	get_tree().get_root().get_node("Main/%Marker").current_screen = Global.settings_dict.monitor
+	Global.main.get_node("%Marker").current_screen = Global.settings_dict.monitor
 	
 
 func load_sprite(sprite_obj, sprite):
@@ -281,7 +283,6 @@ func load_trimmed_sprite(sprite_obj, sprite):
 #	for i in sprite_obj.states:
 	#	i.offset += Vector2(center_shift_x, center_shift_y)
 	sprite_obj.get_node("%Sprite2D").texture = img_can
-
 
 func load_apng(sprite_obj, sprite):
 	var img = AImgIOAPNGImporter.load_from_buffer(sprite.img)
@@ -343,7 +344,6 @@ func load_gif(sprite_obj, sprite):
 			img_can.normal_texture = gif_normal
 			sprite_obj.anim_texture_normal = sprite.normal
 	sprite_obj.get_node("%Sprite2D").texture = img_can
-
 
 func load_pngplus_file(path):
 	Themes.theme_settings.path = path

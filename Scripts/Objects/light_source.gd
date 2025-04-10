@@ -2,19 +2,23 @@ extends PointLight2D
 
 var of = 0
 var dragging
-@onready var light_controls = get_tree().get_root().get_node("Main/%Control/%HBox25")
-@onready var light_control_node = get_tree().get_root().get_node("Main/%Control/LightControl")
+var light_controls = null
+var light_control_node = null
 
 
 func _ready():
+	if get_tree().get_root().has_node("Main"):
+		light_controls = get_tree().get_root().get_node("Main/%Control/%HBox25")
+		light_control_node = get_tree().get_root().get_node("Main/%Control/LightControl")
 	Global.light_info.connect(get_state)
 
 
 func _process(_delta):
 	if dragging && $Grab.visible:
 		global_position = get_global_mouse_position() - of
-		light_controls.get_node("LightPosXSpinBox").value = global_position.x
-		light_controls.get_node("LightPosYSpinBox").value = global_position.y
+		if light_controls != null && is_instance_valid(light_controls):
+			light_controls.get_node("LightPosXSpinBox").value = global_position.x
+			light_controls.get_node("LightPosYSpinBox").value = global_position.y
 
 func save_state(id):
 	var dict = {
@@ -45,7 +49,8 @@ func get_state(state):
 		$Grab.modulate = color
 		$Grab.hide()
 		
-		light_control_node.reset_info(self)
+		if light_control_node != null && is_instance_valid(light_control_node):
+			light_control_node.reset_info(self)
 
 func _on_grab_button_down():
 	if $Grab.visible:

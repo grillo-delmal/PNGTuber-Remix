@@ -4,6 +4,7 @@ extends Node
 var glob : Vector2 = Vector2.ZERO
 var last_mouse_position : Vector2 = Vector2(0,0)
 var last_dist : Vector2 = Vector2(0,0)
+var mouse : Vector2 = Vector2(0,0)
 
 func _process(delta: float) -> void:
 	if !Global.static_view:
@@ -110,9 +111,8 @@ func rainbow():
 		%Sprite2D.self_modulate = actor.dictmain.tint
 		%Pos.modulate.s = 0
 
-func follow_mouse(delta):
-	var main_marker = get_tree().get_root().get_node("Main/%Marker")
-	var mouse
+func follow_mouse(_delta):
+	var main_marker = Global.main.get_node("%Marker")
 	if main_marker.current_screen != main_marker.ALL_SCREENS_ID:
 		if !main_marker.mouse_in_current_screen():
 			mouse = Vector2.ZERO
@@ -130,10 +130,10 @@ func follow_mouse(delta):
 	if actor.dictmain.follow_mouse_velocity:
 		var distance = last_mouse_position - mouse
 		if !distance.is_zero_approx():
-			var vel = -(distance/delta)
+			var vel = -(distance/5)
 			var dir = Vector2.ZERO.direction_to(vel)
-			var dist = vel.length()
-			last_dist = Vector2(dir.x * min(dist, actor.dictmain.look_at_mouse_pos),dir.y * min(dist, actor.dictmain.look_at_mouse_pos_y))
+			var dist = vel.limit_length(Vector2(actor.dictmain.look_at_mouse_pos,actor.dictmain.look_at_mouse_pos_y).length()).length()
+			last_dist = Vector2(dir.x * (dist),dir.y * (dist))
 		%Pos.position.x = lerp(%Pos.position.x, last_dist.x, 0.1)
 		%Pos.position.y = lerp(%Pos.position.y, last_dist.y, 0.1)
 		var clamping = clamp(last_dist.angle()*actor.dictmain.mouse_rotation,deg_to_rad(actor.dictmain.rLimitMin),deg_to_rad(actor.dictmain.rLimitMax))
@@ -157,6 +157,8 @@ func follow_mouse(delta):
 		var scl_y = (abs(dire.y) *actor.dictmain.mouse_scale_y *0.005) * Global.settings_dict.zoom.y
 		%Drag.scale.x = lerp(%Drag.scale.x, float(clamp(1 - scl_x, 0.15 , 1)), 0.1)
 		%Drag.scale.y = lerp(%Drag.scale.y, float(clamp(1 - scl_y,  0.15 , 1)), 0.1)
+
+
 
 func auto_rotate():
 	%Wobble.rotate(actor.dictmain.should_rot_speed)

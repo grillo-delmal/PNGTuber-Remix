@@ -1,5 +1,7 @@
 extends Node2D
 
+signal key_pressed
+
 signal blink
 
 signal reinfo
@@ -14,6 +16,7 @@ signal reinfoanim
 signal remake_layers
 signal update_layers
 signal update_layer_visib
+signal reparent_objects
 
 signal new_file
 
@@ -24,6 +27,9 @@ signal theme_update
 signal update_pos_spins
 signal update_offset_spins
 
+signal delete_states
+signal remake_states
+signal reset_states
 
 var blink_timer : Timer = Timer.new()
 var held_sprite = null
@@ -75,9 +81,12 @@ var new_rot = 0
 var static_view : bool = false
 var spinbox_held : bool = false
 
-@onready var main = get_tree().get_root().get_node("Main")
-@onready var sprite_container = get_tree().get_root().get_node("Main/%SpritesContainer")
-@onready var top_ui = get_tree().get_root().get_node("Main/%TopUI")
+var main = null
+var sprite_container = null
+var top_ui = null
+var file_dialog : FileDialog = null
+var light = null
+var camera : Camera2D = null
 
 
 
@@ -176,7 +185,7 @@ func moving_origin(delta):
 			offset()
 			
 			
-		if get_tree().get_root().get_node("Main").can_scroll:
+		if main.can_scroll:
 			if Input.is_action_pressed("ctrl"):
 				if Input.is_action_just_pressed("lmb"):
 					var of = held_sprite.get_parent().to_local(held_sprite.get_parent().get_global_mouse_position()) - held_sprite.position

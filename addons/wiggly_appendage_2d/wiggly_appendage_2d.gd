@@ -16,7 +16,7 @@ enum {
 ## Length of segments
 @export var segment_length: float = 30.0
 ## How much the appendge should curve
-@export_range(-1.57, 1.57) var curvature: float = 0.0
+@export_range(-10.0, 10.0) var curvature: float = 0.0
 ## How much more the later parts of the appendge should curve
 @export_range(-3.0, 3.0) var curvature_exponent: float = 0.0
 ## Max angle for every segment. This is the actual value used in calculations

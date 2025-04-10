@@ -116,6 +116,7 @@ var global
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Global.reparent_objects.connect(reparent_obj)
 	og_glob = dictmain.position
 	animation()
 	%Dragger.top_level = true
@@ -278,14 +279,16 @@ func get_state(id):
 		
 		if dictmain.should_blink:
 			if dictmain.open_eyes:
-				
 				%Pos.show()
 			else:
 				%Pos.hide()
+		else:
+			%Pos.show()
 
 		visible = dictmain.visible
 		%ReactionConfig.speaking()
 		%ReactionConfig.not_speaking()
+		
 		animation()
 		set_blend(dictmain.blend_mode)
 		advanced_lipsyc()

@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3 uid="uid://ckgt30cxu04dj"]
+
+[ext_resource type="PackedScene" uid="uid://b28gjkefgi5bs" path="res://Main/main.tscn" id="1_gqyth"]
+[ext_resource type="Script" uid="uid://bu4x5kkbran8t" path="res://Scripts/UI/Menu/menu.gd" id="1_orlfr"]
+[ext_resource type="PackedScene" uid="uid://ictpm6d87pn6" path="res://UI/Menu/menu_screen_popup.tscn" id="3_ls8lc"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_orlfr")
+
+[node name="Scene" type="Node" parent="."]
+
+[node name="Main" parent="Scene" instance=ExtResource("1_gqyth")]
+
+[node name="MenuScreenPopup" parent="." node_paths=PackedStringArray("container") instance=ExtResource("3_ls8lc")]
+unique_name_in_owner = true
+visible = false
+container = NodePath("../Scene")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="OpenPopup" type="Button" parent="CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -30.0
+offset_bottom = 29.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 14
+text = "!"
+
+[connection signal="pressed" from="CanvasLayer/OpenPopup" to="." method="_on_open_popup_pressed"]

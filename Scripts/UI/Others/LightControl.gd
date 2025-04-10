@@ -1,6 +1,5 @@
 extends Node
 
-@onready var light = get_tree().get_root().get_node("Main/%LightSource")
 
 func _ready():
 	Global.light_info.connect(get_info)
@@ -8,27 +7,32 @@ func _ready():
 	%LightSizeBSlider.get_node("SliderValue").value_changed.connect(_on_light_size_slider_value_changed)
 
 func _on_light_energy_slider_value_changed(value):
-	light.energy = value
-	light.save_state(Global.current_state)
+	if Global.light != null && is_instance_valid(Global.light):
+		Global.light.energy = value
+		Global.light.save_state(Global.current_state)
 
 
 func _on_light_color_color_changed(color):
-	light.color = color
-	light.save_state(Global.current_state)
+	if Global.light != null && is_instance_valid(Global.light):
+		Global.light.color = color
+		Global.light.save_state(Global.current_state)
 
 
 func _on_light_source_vis_toggled(toggled_on):
-	light.visible = toggled_on
-	light.save_state(Global.current_state)
+	if Global.light != null && is_instance_valid(Global.light):
+		Global.light.visible = toggled_on
+		Global.light.save_state(Global.current_state)
 
 
 func _on_ls_shape_vis_toggled(toggled_on):
-	light.get_node("Grab").visible = toggled_on
+	if Global.light != null && is_instance_valid(Global.light):
+		Global.light.get_node("Grab").visible = toggled_on
 
 
 func _on_light_size_slider_value_changed(value):
-	light.scale = Vector2(value,value)
-	light.save_state(Global.current_state)
+	if Global.light != null && is_instance_valid(Global.light):
+		Global.light.scale = Vector2(value,value)
+		Global.light.save_state(Global.current_state)
 
 
 func get_info(state):
@@ -38,8 +42,8 @@ func get_info(state):
 		%LightColor.color = dict.color
 		%LightEnergyBSlider.get_node("SliderValue").value = dict.energy
 		%LightSizeBSlider.get_node("SliderValue").value = dict.scale.x
-		%LightPosXSpinBox.value = light.global_position.x
-		%LightPosYSpinBox.value = light.global_position.y
+		%LightPosXSpinBox.value = Global.light.global_position.x
+		%LightPosYSpinBox.value = Global.light.global_position.y
 	%DarkenCheck.button_pressed = Global.settings_dict.darken
 	%DarkenColor.color = Global.settings_dict.dim_color
 
@@ -55,18 +59,22 @@ func reset_info(light_source):
 
 
 func _on_darken_check_toggled(toggled_on):
-	Global.settings_dict.darken = toggled_on
+	if Global.light != null && is_instance_valid(Global.light):
+		Global.settings_dict.darken = toggled_on
 
 
 func _on_light_pos_x_spin_box_value_changed(value):
-	light.global_position.x = value
-	light.save_state(Global.current_state)
+	if Global.light != null && is_instance_valid(Global.light):
+		Global.light.global_position.x = value
+		Global.light.save_state(Global.current_state)
 
 
 func _on_light_pos_y_spin_box_value_changed(value):
-	light.global_position.y = value
-	light.save_state(Global.current_state)
+	if Global.light != null && is_instance_valid(Global.light):
+		Global.light.global_position.y = value
+		Global.light.save_state(Global.current_state)
 
 
 func _on_darken_color_color_changed(color):
-	Global.settings_dict.dim_color = color
+	if Global.light != null && is_instance_valid(Global.light):
+		Global.settings_dict.dim_color = color

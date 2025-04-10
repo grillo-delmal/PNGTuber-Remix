@@ -12,8 +12,6 @@ var settings = preload("res://UI/EditorUI/TopUI/Components/Settings_popup.tscn")
 
 var tutorial = preload("res://UI/EditorUI/TopUI/Components/tutorial_pop_up.tscn")
 
-@onready var light = get_tree().get_root().get_node("Main/%LightSource")
-
 var path = ""
 
 func _ready():
@@ -29,6 +27,8 @@ func _ready():
 	%GravityAmountSlider.get_node("%SliderValue").value_changed.connect(_on_gravity_amount_slider_value_changed)
 
 	ProjectSettings.set("audio/driver/mix_rate", AudioServer.get_mix_rate())
+	
+	%WindowButton.get_popup().set_item_checked(2, Themes.theme_settings.always_on_top)
 	
 	print(OS.get_executable_path().get_base_dir() + "/autosaves")
 	if !DirAccess.dir_exists_absolute(OS.get_executable_path().get_base_dir() + "/autosaves"):
@@ -48,7 +48,7 @@ func choosing_window(id):
 			Themes.center_window()
 
 func choosing_files(id):
-	var main = get_tree().get_root().get_node("Main")
+	var main = Global.main
 	match id:
 		0:
 			main.new_file()
@@ -90,8 +90,9 @@ func choosing_mode(id):
 	#		Global.main.get_node("SubViewportContainer").mouse_filter = 1
 			get_viewport().transparent_bg = false
 			RenderingServer.set_default_clear_color(Color.SLATE_GRAY)
-			get_tree().get_root().get_node("Main/%Control").show()
+			Global.main.get_node("%Control").show()
 			%HideUIButton.button_pressed = true
+			%HideUIButton.show()
 			is_editor = true
 			%PreviewModeCheck.show()
 			saved_id = 0
@@ -100,9 +101,10 @@ func choosing_mode(id):
 		#	Global.main.get_node("SubViewportContainer").mouse_filter = 1
 			RenderingServer.set_default_clear_color(Global.settings_dict.bg_color)
 			get_viewport().transparent_bg = Global.settings_dict.is_transparent
-			get_tree().get_root().get_node("Main/%Control").hide()
+			Global.main.get_node("%Control").hide()
 			is_editor = false
-			light.get_node("Grab").hide()
+			if Global.light != null && is_instance_valid(Global.light):
+				Global.light.get_node("Grab").hide()
 			Global.main.get_node("%Control/%LSShapeVis").button_pressed = false
 			%HideUIButton.hide()
 			%HideUIButton.button_pressed = false
@@ -201,7 +203,7 @@ func origin_alias():
 		Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
 
 func _on_hide_ui_button_toggled(toggled_on):
-	get_tree().get_root().get_node("Main/%Control").visible = toggled_on
+	Global.main.get_node("%Control").visible = toggled_on
 
 func _on_basic_temp_button_pressed():
 	SaveAndLoad.load_file("res://DemoModels/PickleModel.pngRemix")
