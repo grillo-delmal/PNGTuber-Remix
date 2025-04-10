@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://dw4brgrpdpurf" path="res://Misc/LightSource/light_source.tscn" id="3_eo07p"]
 [ext_resource type="Theme" uid="uid://c5v4ocnimqa4i" path="res://Themes/WhiteTheme/WhiteTheme.tres" id="5_4hh1t"]
 [ext_resource type="Script" uid="uid://by4pbr6yeut1c" path="res://Main/Scripts/monitor_tracking.gd" id="5_rj11h"]
+
+[ext_resource type="Script" uid="uid://bpgihreqd50ud" path="res://Main/Scripts/websocket_handler.gd" id="10_qac2q"]
 [ext_resource type="PackedScene" uid="uid://bpmlfhv30o08l" path="res://UI/EditorUI/TopUI/top_ui.tscn" id="7_qwnpc"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_f6fdm"]
@@ -146,6 +148,9 @@ use_native_dialog = true
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.05
+
+[node name="WebsocketHandler" type="Node" parent="."]
+script = ExtResource("10_qac2q")
 
 [connection signal="canceled" from="FileImporter/ConfirmTrim" to="FileImporter" method="_on_confirm_trim_canceled"]
 [connection signal="close_requested" from="FileImporter/ConfirmTrim" to="FileImporter" method="_on_confirm_trim_canceled"]
