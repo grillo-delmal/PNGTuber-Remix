@@ -171,7 +171,7 @@ func _on_confirmation_dialog_confirmed():
 	clear_sprites()
 	Global.settings_dict.max_fps = 241
 	%TopUI.update_fps(241)
-	get_tree().get_root().get_node("Main/%Marker").current_screen = 9999
+	Global.main.get_node("%Marker").current_screen = 9999
 	Global.settings_dict.monitor = 9999
 
 func clear_sprites():

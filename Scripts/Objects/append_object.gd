@@ -1,32 +1,5 @@
 extends SpriteObject
 
-#Movement
-var heldTicks = 0
-#Wobble
-var squish = 1
-var currently_speaking : bool = false
-# Misc
-var treeitem = null
-var visb
-var sprite_name : String = ""
-@export var states : Array = [{}]
-var coord
-var dragging : bool = false
-var of = Vector2(0,0)
-
-var sprite_id : float
-var parent_id : float = 0
-var physics_effect = 1
-var glob
-
-var sprite_type : String = "WiggleApp"
-
-var anim_texture 
-var anim_texture_normal 
-var img_animated : bool = false
-var is_plus_first_import : bool = false
-var image_data : PackedByteArray = []
-var normal_data : PackedByteArray = []
 
 var sprite_data : Dictionary = {
 	xFrq = 0,
@@ -103,24 +76,6 @@ var sprite_data : Dictionary = {
 
 var smooth_rot = 0.0
 var smooth_glob = Vector2(0.0,0.0)
-var is_apng : bool = false
-var is_collapsed : bool = false
-
-var dt = 0.0
-var frames : Array[AImgIOFrame] = []
-var frames2 : Array[AImgIOFrame] = []
-var fidx = 0
-var played_once : bool = false
-
-var saved_event : InputEvent
-var is_asset : bool = false
-var was_active_before : bool = true
-var should_disappear : bool = false
-var show_only : bool = false
-var saved_keys : Array = []
-
-var last_mouse_position : Vector2 = Vector2(0,0)
-var last_dist : Vector2 = Vector2(0,0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -181,16 +136,6 @@ func get_state(id):
 	if not states[id].is_empty():
 		var dict = states[id]
 		sprite_data.merge(dict, true)
-		'''
-		if img_animated && sprite_data.should_reset:
-			%Sprite2D.texture.diffuse_texture.current_frame = 0
-			if %Sprite2D.texture.normal_texture != null:
-				%Sprite2D.texture.normal_texture.current_frame = 0
-
-			%Sprite2D.texture.diffuse_texture.one_shot = sprite_data.one_shot
-			if %Sprite2D.texture.normal_texture != null:
-				%Sprite2D.texture.normal_texture.one_shot = sprite_data.one_shot
-		'''
 		%Wobble.z_index = sprite_data.z_index
 		modulate = sprite_data.colored
 		visible = sprite_data.visible
@@ -285,29 +230,6 @@ func check_talk():
 		else:
 			%Rotation.show()
 
-func set_blend(blend):
-	match  blend:
-		"Normal":
-			%Sprite2D.material.set_shader_parameter("enabled", false)
-		"Add":
-			%Sprite2D.material.set_shader_parameter("enabled", true)
-			%Sprite2D.material.set_shader_parameter("Blend", preload("res://Misc/EasyBlend/Blends/add.png"))
-		"Subtract":
-			%Sprite2D.material.set_shader_parameter("enabled", true)
-			%Sprite2D.material.set_shader_parameter("Blend", preload("res://Misc/EasyBlend/Blends/exclusion.png"))
-		"Multiply":
-			%Sprite2D.material.set_shader_parameter("enabled", true)
-			%Sprite2D.material.set_shader_parameter("Blend", preload("res://Misc/EasyBlend/Blends/multiply.png"))
-		"Burn":
-			%Sprite2D.material.set_shader_parameter("enabled", true)
-			%Sprite2D.material.set_shader_parameter("Blend", preload("res://Misc/EasyBlend/Blends/burn.png"))
-		"HardMix":
-			%Sprite2D.material.set_shader_parameter("enabled", true)
-			%Sprite2D.material.set_shader_parameter("Blend", preload("res://Misc/EasyBlend/Blends/hardmix.png"))
-		"Cursed":
-			%Sprite2D.material.set_shader_parameter("enabled", true)
-			%Sprite2D.material.set_shader_parameter("Blend", preload("res://Misc/EasyBlend/Blends/test1.png"))
-
 func _on_grab_button_down():
 	if Global.held_sprite == self:
 		of = get_parent().to_local(get_global_mouse_position()) - position
@@ -323,13 +245,3 @@ func _input(event: InputEvent) -> void:
 		if Global.held_sprite == self && dragging:
 			save_state(Global.current_state)
 			dragging = false
-
-func reparent_obj(parent):
-	for i in parent:
-		if i.sprite_id == parent_id:
-			reparent(i.get_node("%Sprite2D"))
-			if is_plus_first_import:
-				for zaza in states:
-					var global = global_position
-					zaza.position = to_local(global)
-					#position = zaza.position

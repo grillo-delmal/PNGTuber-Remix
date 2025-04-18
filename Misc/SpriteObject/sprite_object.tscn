@@ -44,8 +44,10 @@ colors = PackedColorArray(0, 0, 0, 0)
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_5cd6y"]
 gradient = SubResource("Gradient_4xt5n")
 
-[node name="SpriteObject" type="Node2D" groups=["Sprites"]]
+[node name="SpriteObject" type="Node2D" node_paths=PackedStringArray("sprite_object") groups=["Sprites"]]
 script = ExtResource("1_i7wd5")
+sprite_object = NodePath("Pos/Wobble/Squish/Drag/Rotation/Sprite2D")
+sprite_type = "Sprite2D"
 
 [node name="Pos" type="Node2D" parent="."]
 unique_name_in_owner = true

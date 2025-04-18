@@ -53,13 +53,14 @@ func _on_delete_button_pressed():
 
 func _on_duplicate_button_pressed():
 	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
+		var layers_to_dup : Array = %LayersTree.get_all_layeritems_with_parent(Global.held_sprite.treeitem, true)
+		var sprites : Array = []
 		var obj
 		if Global.held_sprite.sprite_type == "WiggleApp":
 			obj = append_obj.instantiate()
 			
 		else:
 			obj = sprite_obj.instantiate()
-		
 		obj.scale = Global.held_sprite.scale
 		obj.sprite_data.scale = Global.held_sprite.scale
 		Global.sprite_container.add_child(obj)
@@ -78,8 +79,43 @@ func _on_duplicate_button_pressed():
 		obj.sprite_data = Global.held_sprite.sprite_data.duplicate()
 		obj.states = Global.held_sprite.states.duplicate()
 		obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
-		Global.update_layers.emit(0, obj, obj.sprite_type)
-		obj.sprite_id = obj.get_instance_id()
+	#	Global.update_layers.emit(0, obj, obj.sprite_type)
+		obj.sprite_id = Global.held_sprite.treeitem.get_instance_id()
+		obj.parent_id = Global.held_sprite.parent_id
+		sprites.append(obj)
+		
+		for i in layers_to_dup:
+			if Global.held_sprite.sprite_type == "WiggleApp":
+				obj = append_obj.instantiate()
+				
+			else:
+				obj = sprite_obj.instantiate()
+			obj.scale = i.child.get_metadata(0).sprite_object.scale
+			obj.sprite_data.scale = i.child.get_metadata(0).sprite_object.scale
+			Global.sprite_container.add_child(obj)
+			if obj.sprite_type != "Folder":
+				obj.get_node("%Sprite2D").texture = i.child.get_metadata(0).sprite_object.get_node("%Sprite2D").texture
+			obj.sprite_name = "Duplicate" + i.child.get_metadata(0).sprite_object.sprite_name 
+
+			if i.child.get_metadata(0).sprite_object.sprite_data.folder:
+				obj.sprite_data.folder = true
+			
+			if i.child.get_metadata(0).sprite_object.img_animated:
+				obj.img_animated = true
+				obj.anim_texture = i.child.get_metadata(0).sprite_object.anim_texture
+				obj.anim_texture_normal = i.child.get_metadata(0).sprite_object.anim_texture_normal 
+			
+			obj.sprite_data = i.child.get_metadata(0).sprite_object.sprite_data.duplicate()
+			obj.states = i.child.get_metadata(0).sprite_object.states.duplicate()
+			obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
+			Global.update_layers.emit(0, obj, obj.sprite_type)
+			obj.sprite_id = i.child.get_instance_id()
+			obj.parent_id = i.parent.get_instance_id()
+			sprites.append(obj)
+		
+		Global.remake_layers.emit()
+		Global.reparent_objects.emit(sprites)
+		
 		obj.get_state(Global.current_state)
 
 
@@ -112,3 +148,6 @@ func _on_del_normal_button_pressed():
 		if !Global.held_sprite.is_apng:
 			if not Global.held_sprite.sprite_data.folder:
 				Global.held_sprite.get_node("%Sprite2D").texture.normal_texture = null
+
+func _on_add_appendage_pressed() -> void:
+	Global.main.load_append_sprites()

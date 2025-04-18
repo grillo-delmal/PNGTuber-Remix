@@ -183,7 +183,6 @@ func not_speaking():
 			
 	actor.currently_speaking = false
 
-
 func reset_gif_anim():
 	if actor.img_animated:
 		%Sprite2D.texture.diffuse_texture.current_frame = 0

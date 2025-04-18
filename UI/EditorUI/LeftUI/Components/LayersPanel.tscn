@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://7r3v4vohf4at"]
+[gd_scene load_steps=12 format=3 uid="uid://7r3v4vohf4at"]
 
 [ext_resource type="Script" uid="uid://sipcpctah7rf" path="res://Scripts/UI/LeftPanel/layers_panel_scripts.gd" id="1_jg6ph"]
 [ext_resource type="Texture2D" uid="uid://dst8ervfhipkm" path="res://UI/Assets/ZoominButton.png" id="2_r48vs"]
 [ext_resource type="Texture2D" uid="uid://bobj6c6goa1d3" path="res://UI/Assets/FolderButton.png" id="3_4imd6"]
+[ext_resource type="Texture2D" uid="uid://bl0hqylj4sn5e" path="res://UI/Assets/AddAppendage.png" id="3_bjklo"]
 [ext_resource type="Texture2D" uid="uid://dkly2qhfs7vd8" path="res://UI/Assets/ReplaceButton.png" id="4_fs6qq"]
 [ext_resource type="Texture2D" uid="uid://bv1t65n5ha20j" path="res://UI/Assets/DupButton.png" id="5_rccg0"]
 [ext_resource type="Texture2D" uid="uid://8rb6kumug0p5" path="res://UI/Assets/DeleteButton.png" id="6_jo6pm"]
@@ -65,7 +66,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 7
+theme_override_constants/separation = 2
 alignment = 1
 
 [node name="AddSpriteButton" type="Button" parent="ButtonsPanel/LayersButtons"]
@@ -77,6 +78,17 @@ tooltip_text = "Add Sprite"
 focus_mode = 0
 mouse_default_cursor_shape = 2
 icon = ExtResource("2_r48vs")
+expand_icon = true
+
+[node name="AddAppendage" type="Button" parent="ButtonsPanel/LayersButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Add Appendage"
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("3_bjklo")
 expand_icon = true
 
 [node name="FolderButton" type="Button" parent="ButtonsPanel/LayersButtons"]
@@ -186,6 +198,7 @@ item_6/text = "Deselect"
 item_6/id = 6
 
 [node name="LayersTree" type="Tree" parent="Layers"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 theme_override_colors/relationship_line_color = Color(0, 0, 0, 0.392157)
@@ -210,6 +223,7 @@ allow_reselect = true
 script = ExtResource("11_hewhr")
 
 [connection signal="pressed" from="ButtonsPanel/LayersButtons/AddSpriteButton" to="LayersPanelScripts" method="_on_add_sprite_button_pressed"]
+[connection signal="pressed" from="ButtonsPanel/LayersButtons/AddAppendage" to="LayersPanelScripts" method="_on_add_appendage_pressed"]
 [connection signal="pressed" from="ButtonsPanel/LayersButtons/FolderButton" to="LayersPanelScripts" method="_on_folder_button_pressed"]
 [connection signal="pressed" from="ButtonsPanel/LayersButtons/ReplaceButton" to="LayersPanelScripts" method="_on_replace_button_pressed"]
 [connection signal="pressed" from="ButtonsPanel/LayersButtons/DuplicateButton" to="LayersPanelScripts" method="_on_duplicate_button_pressed"]

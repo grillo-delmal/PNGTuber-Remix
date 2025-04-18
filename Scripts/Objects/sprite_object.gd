@@ -1,29 +1,5 @@
 extends SpriteObject
 
-#Movement
-var heldTicks = 0
-#Wobble
-var squish = 1
-
-# Misc
-var treeitem = null
-var visb
-
-var sprite_name : String = ""
-@export var states : Array = [{}]
-var coord
-var dragging : bool = false
-var of = Vector2(0,0)
-
-var sprite_id : float
-var parent_id 
-var physics_effect = 1
-var glob
-var sprite_type : String = "Sprite2D"
-var currently_speaking : bool = false
-var is_plus_first_import : bool = false
-var image_data : PackedByteArray = []
-var normal_data : PackedByteArray = []
 
 var sprite_data : Dictionary = {
 	xFrq = 0,
@@ -46,6 +22,7 @@ var sprite_data : Dictionary = {
 	should_talk =  false,
 	animation_speed = 1,
 	hframes = 1,
+	vframes = 1,
 	scale = Vector2(1,1),
 	folder = false,
 #	global_position = global_position,
@@ -88,31 +65,6 @@ var sprite_data : Dictionary = {
 	frame = 0,
 	}
 
-var anim_texture 
-var anim_texture_normal 
-var img_animated : bool = false
-var is_apng : bool = false
-var is_collapsed : bool = false
-var played_once : bool = false
-
-
-@onready var og_glob = global_position
-
-var dt = 0.0
-var frames : Array[AImgIOFrame] = []
-var frames2 : Array[AImgIOFrame] = []
-var fidx = 0
-
-var saved_event : InputEvent
-var is_asset : bool = false
-var was_active_before : bool = true
-var show_only : bool = false
-var should_disappear : bool = false
-var saved_keys : Array = []
-
-var last_mouse_position : Vector2 = Vector2(0,0)
-var last_dist : Vector2 = Vector2(0,0)
-var global
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -126,21 +78,14 @@ func animation():
 	if not sprite_data.non_animated_sheet:
 		if not sprite_data.advanced_lipsync:
 			%Sprite2D.hframes = sprite_data.hframes
-			%Sprite2D.vframes = 1
-			if sprite_data.hframes > 1:
-				coord = sprite_data.hframes -1
-				if not coord <= 0:
-					if %Sprite2D.frame == coord:
-						if sprite_data.one_shot:
-							return
-						%Sprite2D.frame = 0
-						
-					elif sprite_data.hframes > 1:
-						%Sprite2D.set_frame_coords(Vector2(clamp(%Sprite2D.frame +1, 0,coord), 0))
-						
+			%Sprite2D.vframes = sprite_data.vframes
+			if sprite_data.hframes > 1 or sprite_data.vframes > 1:
+				if sprite_data.one_shot &&  %Sprite2D.frame == (sprite_data.hframes*sprite_data.vframes) - 1:
+					return
+				%Sprite2D.frame = wrapi(%Sprite2D.frame + 1, 0, (sprite_data.hframes*sprite_data.vframes))
 			else:
-				%Sprite2D.set_frame_coords(Vector2(0, 0))
-		
+				%Sprite2D.frame = 0
+
 	elif sprite_data.non_animated_sheet:
 		%Sprite2D.hframes = sprite_data.hframes
 		%Sprite2D.vframes = 1
@@ -156,8 +101,10 @@ func _process(_delta):
 		%Selection.texture = %Sprite2D.texture
 		%Selection.show()
 		%Selection.hframes = %Sprite2D.hframes
+		%Selection.vframes = %Sprite2D.vframes
 		%Selection.frame = %Sprite2D.frame
 		%Selection.flip_h = %Sprite2D.flip_h
+		%Selection.flip_v = %Sprite2D.flip_v
 		
 		if sprite_data.wiggle:
 			%WiggleOrigin.show()
@@ -230,22 +177,6 @@ func get_state(id):
 		var dict = states[id]
 		sprite_data.merge(dict, true)
 		
-		if sprite_data.should_reset:
-			if sprite_data.hframes > 1:
-				%Sprite2D.frame = 0
-				print(%Sprite2D.frame)
-			elif is_apng:
-				fidx = 0
-		
-		if sprite_data.one_shot:
-			if is_apng:
-				%AnimatedSpriteTexture.index = 0
-				%AnimatedSpriteTexture.proper_apng_one_shot()
-			elif sprite_data.hframes > 1:
-				%Sprite2D.frame = 0
-				print(%Sprite2D.frame)
-		played_once = false
-		
 		%Sprite2D.position = sprite_data.offset 
 		%Sprite2D.scale = Vector2(1,1)
 		
@@ -289,7 +220,6 @@ func get_state(id):
 		if sprite_data.look_at_mouse_pos_y == 0:
 			%Pos.position.y = 0
 
-
 func check_talk():
 	if sprite_data.should_talk:
 		if sprite_data.open_mouth:
@@ -298,29 +228,6 @@ func check_talk():
 			%Rotation.show()
 	else:
 		%Rotation.show()
-
-func set_blend(blend):
-	match  blend:
-		"Normal":
-			%Sprite2D.material.set_shader_parameter("enabled", false)
-		"Add":
-			%Sprite2D.material.set_shader_parameter("enabled", true)
-			%Sprite2D.material.set_shader_parameter("Blend", preload("res://Misc/EasyBlend/Blends/add.png"))
-		"Subtract":
-			%Sprite2D.material.set_shader_parameter("enabled", true)
-			%Sprite2D.material.set_shader_parameter("Blend", preload("res://Misc/EasyBlend/Blends/exclusion.png"))
-		"Multiply":
-			%Sprite2D.material.set_shader_parameter("enabled", true)
-			%Sprite2D.material.set_shader_parameter("Blend", preload("res://Misc/EasyBlend/Blends/multiply.png"))
-		"Burn":
-			%Sprite2D.material.set_shader_parameter("enabled", true)
-			%Sprite2D.material.set_shader_parameter("Blend", preload("res://Misc/EasyBlend/Blends/burn.png"))
-		"HardMix":
-			%Sprite2D.material.set_shader_parameter("enabled", true)
-			%Sprite2D.material.set_shader_parameter("Blend", preload("res://Misc/EasyBlend/Blends/hardmix.png"))
-		"Cursed":
-			%Sprite2D.material.set_shader_parameter("enabled", true)
-			%Sprite2D.material.set_shader_parameter("Blend", preload("res://Misc/EasyBlend/Blends/test1.png"))
 
 func _on_grab_button_down():
 	if Global.held_sprite == self:
@@ -338,12 +245,6 @@ func _input(event: InputEvent) -> void:
 		if Global.held_sprite == self && dragging:
 			save_state(Global.current_state)
 			dragging = false
-
-func reparent_obj(parent):
-	for i in parent:
-		if i.sprite_id == parent_id:
-			#global = global_position
-			reparent(i.get_node("%Sprite2D"))
 
 func zazaza(parent):
 	for i in parent:
