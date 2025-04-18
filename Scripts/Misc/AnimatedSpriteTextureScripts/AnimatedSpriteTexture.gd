@@ -16,7 +16,7 @@ func _physics_process(delta):
 			if len(frames) == 0:
 				return
 			if index >= len(frames):
-				if actor.dictmain.one_shot:
+				if actor.sprite_data.one_shot:
 					played_once = true
 					return
 				index = 0

@@ -28,7 +28,7 @@ offset_bottom = 596.0
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/side_margin = 0
+theme_override_constants/side_margin = 1
 current_tab = 0
 
 [node name="Model Settings" type="ScrollContainer" parent="SettingVbox/SettingsTab"]
@@ -44,11 +44,6 @@ size_flags_vertical = 3
 custom_minimum_size = Vector2(428, 0)
 layout_mode = 2
 size_flags_vertical = 0
-
-[node name="Sp2" type="HSeparator" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/GridContainer"]
-custom_minimum_size = Vector2(428, 0)
-layout_mode = 2
-theme_override_constants/separation = 5
 
 [node name="InputCheckButton" type="CheckButton" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/GridContainer"]
 unique_name_in_owner = true
@@ -440,7 +435,7 @@ max_lines_visible = 5
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-item_count = 7
+item_count = 8
 popup/item_0/text = "Purple"
 popup/item_0/id = 0
 popup/item_1/text = "Blue"
@@ -455,6 +450,8 @@ popup/item_5/text = "Green"
 popup/item_5/id = 5
 popup/item_6/text = "Funky"
 popup/item_6/id = 6
+popup/item_7/text = "Frutiger Aero"
+popup/item_7/id = 7
 
 [connection signal="toggled" from="SettingVbox/SettingsTab/Model Settings/MarginContainer/GridContainer/InputCheckButton" to="SettingsScript" method="_on_input_check_button_toggled"]
 [connection signal="toggled" from="SettingVbox/SettingsTab/Model Settings/MarginContainer/GridContainer/AntiAlCheck" to="SettingsScript" method="_on_anti_al_check_toggled"]

@@ -1,9 +1,17 @@
 extends Tree
 
+var held_item : TreeItem = null
 
-func _get_drag_data(at_position: Vector2) -> Variant:
+
+func _get_drag_data(_at_position: Vector2) -> Variant:
 	drop_mode_flags = 3
-	return get_item_at_position(at_position)
+	if held_item == null:
+		held_item = get_selected()
+		return held_item
+	else:
+		return held_item
+#	else:
+	#	return null
 
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	return data is TreeItem
@@ -23,10 +31,12 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 	
 	if other_item in items:
 		print("can't drop")
+		held_item = null
 		return
 	
 	if other_item == item:
 		print("can't drop")
+		held_item = null
 		return
 	
 	#print(true_pos)
@@ -44,7 +54,7 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 			other_item.get_metadata(0).sprite_object.get_node("%Sprite2D").add_child(item.get_metadata(0).sprite_object)
 			item.get_metadata(0).sprite_object.parent_id = other_item.get_metadata(0).sprite_object.sprite_id
 		item.get_metadata(0).sprite_object.global_position = og_pos
-		item.get_metadata(0).sprite_object.dictmain.position = item.get_metadata(0).sprite_object.position
+		item.get_metadata(0).sprite_object.sprite_data.position = item.get_metadata(0).sprite_object.position
 		item.get_metadata(0).sprite_object.save_state(Global.current_state)
 		
 	elif true_pos == -1:
@@ -67,7 +77,7 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 					item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object,item.get_index())
 				
 			item.get_metadata(0).sprite_object.global_position = og_pos
-			item.get_metadata(0).sprite_object.dictmain.position = item.get_metadata(0).sprite_object.position
+			item.get_metadata(0).sprite_object.sprite_data.position = item.get_metadata(0).sprite_object.position
 			item.get_metadata(0).sprite_object.save_state(Global.current_state)
 		else:
 			item.move_before(other_item)
@@ -93,14 +103,14 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 					other_item.get_metadata(0).sprite_object.get_parent().add_child(item.get_metadata(0).sprite_object)
 					item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(item.get_index()+1, 0, item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1))
 			item.get_metadata(0).sprite_object.global_position = og_pos
-			item.get_metadata(0).sprite_object.dictmain.position = item.get_metadata(0).sprite_object.position
+			item.get_metadata(0).sprite_object.sprite_data.position = item.get_metadata(0).sprite_object.position
 			item.get_metadata(0).sprite_object.save_state(Global.current_state)
 				
 		else:
 			item.move_after(other_item)
 			var count = item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1
 			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(other_item.get_metadata(0).sprite_object.get_index()+1, 0, count))
-
+	held_item = null
 
 func get_all_layeritems(layeritem, recursive) -> Array:
 	var children := []

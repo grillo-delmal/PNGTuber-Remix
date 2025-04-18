@@ -1,0 +1,136 @@
+[gd_scene load_steps=3 format=3 uid="uid://dk4y4x3f5jmri"]
+
+[ext_resource type="Script" uid="uid://bimhkpsielfws" path="res://Scripts/UI/RightPanel/model_animations.gd" id="1_xngbb"]
+[ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="2_wkbb7"]
+
+[node name="ModelAnimationsPanel" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Model Animations"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ModelAnimations" type="Node" parent="."]
+script = ExtResource("1_xngbb")
+
+[node name="Grid" type="GridContainer" parent="."]
+layout_mode = 2
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="MouthClosedAnimLabel" type="Label" parent="Grid"]
+custom_minimum_size = Vector2(116, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Mouth Closed :"
+
+[node name="MouthClosedAnim" type="MenuButton" parent="Grid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "Idle"
+flat = false
+alignment = 0
+item_count = 6
+popup/item_0/text = "Idle"
+popup/item_0/id = 0
+popup/item_1/text = "Bouncy"
+popup/item_1/id = 1
+popup/item_2/text = "One Bounce"
+popup/item_2/id = 3
+popup/item_3/text = "Wobble"
+popup/item_3/id = 4
+popup/item_4/text = "Squish"
+popup/item_4/id = 5
+popup/item_5/text = "Float"
+popup/item_5/id = 6
+
+[node name="MouthOpenAnimLabel" type="Label" parent="Grid"]
+custom_minimum_size = Vector2(116, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Mouth Open :  "
+
+[node name="MouthOpenAnim" type="MenuButton" parent="Grid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Idle"
+flat = false
+alignment = 0
+item_count = 6
+popup/item_0/text = "Idle"
+popup/item_0/id = 0
+popup/item_1/text = "Bouncy"
+popup/item_1/id = 1
+popup/item_2/text = "One Bounce"
+popup/item_2/id = 3
+popup/item_3/text = "Wobble"
+popup/item_3/id = 4
+popup/item_4/text = "Squish"
+popup/item_4/id = 5
+popup/item_5/text = "Float"
+popup/item_5/id = 6
+
+[node name="BlinkSpeedLabel" type="Label" parent="Grid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(116, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Blink Speed : "
+
+[node name="BlinkSpeedSlider" type="HSlider" parent="Grid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(210, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 1.0
+max_value = 12.0
+step = 0.1
+value = 1.0
+
+[node name="BlinkChanceLabel" type="Label" parent="Grid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(116, 0)
+layout_mode = 2
+text = "Blink Chance : "
+
+[node name="BlinkChanceSlider" type="HSlider" parent="Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 2.0
+max_value = 200.0
+value = 9.0
+rounded = true
+
+[node name="ShouldSquish" type="CheckBox" parent="Grid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(116, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Squish on Blink"
+
+[node name="SquishAmount" parent="." instance=ExtResource("2_wkbb7")]
+unique_name_in_owner = true
+layout_mode = 2
+label_text = "Squish Amount"
+mini_value = 1.001
+max_value = 10.0
+step = 0.001
+value_to_update = ""
+
+[connection signal="value_changed" from="Grid/BlinkSpeedSlider" to="ModelAnimations" method="_on_blink_speed_slider_value_changed"]
+[connection signal="value_changed" from="Grid/BlinkChanceSlider" to="ModelAnimations" method="_on_blink_chance_slider_value_changed"]
+[connection signal="toggled" from="Grid/ShouldSquish" to="ModelAnimations" method="_on_should_squish_toggled"]

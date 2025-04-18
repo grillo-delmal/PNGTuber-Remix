@@ -25,7 +25,7 @@ var is_plus_first_import : bool = false
 var image_data : PackedByteArray = []
 var normal_data : PackedByteArray = []
 
-var dictmain : Dictionary = {
+var sprite_data : Dictionary = {
 	xFrq = 0,
 	xAmp = 0,
 	yFrq = 0,
@@ -117,37 +117,37 @@ var global
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.reparent_objects.connect(reparent_obj)
-	og_glob = dictmain.position
+	og_glob = sprite_data.position
 	animation()
 	%Dragger.top_level = true
 	%Dragger.global_position = %Wobble.global_position
 
 func animation():
-	if not dictmain.non_animated_sheet:
-		if not dictmain.advanced_lipsync:
-			%Sprite2D.hframes = dictmain.hframes
+	if not sprite_data.non_animated_sheet:
+		if not sprite_data.advanced_lipsync:
+			%Sprite2D.hframes = sprite_data.hframes
 			%Sprite2D.vframes = 1
-			if dictmain.hframes > 1:
-				coord = dictmain.hframes -1
+			if sprite_data.hframes > 1:
+				coord = sprite_data.hframes -1
 				if not coord <= 0:
 					if %Sprite2D.frame == coord:
-						if dictmain.one_shot:
+						if sprite_data.one_shot:
 							return
 						%Sprite2D.frame = 0
 						
-					elif dictmain.hframes > 1:
+					elif sprite_data.hframes > 1:
 						%Sprite2D.set_frame_coords(Vector2(clamp(%Sprite2D.frame +1, 0,coord), 0))
 						
 			else:
 				%Sprite2D.set_frame_coords(Vector2(0, 0))
 		
-	elif dictmain.non_animated_sheet:
-		%Sprite2D.hframes = dictmain.hframes
+	elif sprite_data.non_animated_sheet:
+		%Sprite2D.hframes = sprite_data.hframes
 		%Sprite2D.vframes = 1
-		if dictmain.hframes > 1:
-			%Sprite2D.frame = dictmain.frame
+		if sprite_data.hframes > 1:
+			%Sprite2D.frame = sprite_data.frame
 	
-	$Animation.wait_time = 1.0/dictmain.animation_speed 
+	$Animation.wait_time = 1.0/sprite_data.animation_speed 
 	$Animation.start()
 
 func _process(_delta):
@@ -159,7 +159,7 @@ func _process(_delta):
 		%Selection.frame = %Sprite2D.frame
 		%Selection.flip_h = %Sprite2D.flip_h
 		
-		if dictmain.wiggle:
+		if sprite_data.wiggle:
 			%WiggleOrigin.show()
 			var pos = (%Sprite2D.material.get_shader_parameter("rotation_offset") * %Sprite2D.texture.get_size())/2
 			%WiggleOrigin.position = Vector2(pos.x, pos.y)
@@ -177,22 +177,22 @@ func _process(_delta):
 	if dragging:
 		var mpos = get_parent().to_local(get_global_mouse_position())
 		position = mpos - of
-		dictmain.position = position
+		sprite_data.position = position
 		save_state(Global.current_state)
 		Global.update_pos_spins.emit()
 		
 	if !Global.static_view:
-		if dictmain.wiggle:
+		if sprite_data.wiggle:
 			wiggle_sprite()
 	else:
-		if dictmain.wiggle:
+		if sprite_data.wiggle:
 			%Sprite2D.material.set_shader_parameter("rotation", 0)
 		
 	advanced_lipsyc()
 
 func wiggle_sprite():
-	var wiggle_val = sin(Global.tick*dictmain.wiggle_freq)*dictmain.wiggle_amp
-	if dictmain.wiggle_physics:
+	var wiggle_val = sin(Global.tick*sprite_data.wiggle_freq)*sprite_data.wiggle_amp
+	if sprite_data.wiggle_physics:
 		if get_parent() is Sprite2D or get_parent() is WigglyAppendage2D && is_instance_valid(get_parent()):
 			var c_parent = get_parent().owner
 			if c_parent != null && is_instance_valid(c_parent):
@@ -203,14 +203,14 @@ func wiggle_sprite():
 	if !get_parent() is Sprite2D:
 		%Sprite2D.material.set_shader_parameter("rotation", wiggle_val )
 	elif get_parent() is Sprite2D:
-		if dictmain.follow_parent_effects:
+		if sprite_data.follow_parent_effects:
 			var c_parent = get_parent().owner
 			%Sprite2D.material.set_shader_parameter("rotation", c_parent.get_node("%Sprite2D").material.get_shader_parameter("rotation"))
 		else:
 			%Sprite2D.material.set_shader_parameter("rotation", wiggle_val )
 
 func advanced_lipsyc():
-	if dictmain.advanced_lipsync:
+	if sprite_data.advanced_lipsync:
 		if %Sprite2D.hframes != 14:
 			%Sprite2D.hframes = 14
 		if currently_speaking:
@@ -222,87 +222,77 @@ func advanced_lipsyc():
 			%Sprite2D.frame_coords.x = 13
 
 func save_state(id):
-	var dict : Dictionary = dictmain.duplicate()
+	var dict : Dictionary = sprite_data.duplicate()
 	states[id] = dict
 
 func get_state(id):
 	if not states[id].is_empty():
 		var dict = states[id]
-		dictmain.merge(dict, true)
+		sprite_data.merge(dict, true)
 		
-		if dictmain.should_reset:
-			if dictmain.hframes > 1:
+		if sprite_data.should_reset:
+			if sprite_data.hframes > 1:
 				%Sprite2D.frame = 0
 				print(%Sprite2D.frame)
 			elif is_apng:
 				fidx = 0
-			'''
-			elif img_animated:
-				%Sprite2D.texture.diffuse_texture.current_frame = 0
-				if %Sprite2D.texture.normal_texture != null:
-					%Sprite2D.texture.normal_texture.current_frame = 0
-
-				%Sprite2D.texture.diffuse_texture.one_shot = dictmain.one_shot
-				if %Sprite2D.texture.normal_texture != null:
-					%Sprite2D.texture.normal_texture.one_shot = dictmain.one_shot
-		'''
 		
-		if dictmain.one_shot:
+		if sprite_data.one_shot:
 			if is_apng:
 				%AnimatedSpriteTexture.index = 0
 				%AnimatedSpriteTexture.proper_apng_one_shot()
-			elif dictmain.hframes > 1:
+			elif sprite_data.hframes > 1:
 				%Sprite2D.frame = 0
 				print(%Sprite2D.frame)
 		played_once = false
 		
-		%Sprite2D.position = dictmain.offset 
+		%Sprite2D.position = sprite_data.offset 
 		%Sprite2D.scale = Vector2(1,1)
 		
-		%Wobble.z_index = dictmain.z_index
-		modulate = dictmain.colored
-		scale = dictmain.scale
-	#	global_position = dictmain.global_position
-		position = dictmain.position
+		%Wobble.z_index = sprite_data.z_index
+		modulate = sprite_data.colored
+		scale = sprite_data.scale
+	#	global_position = sprite_data.global_position
+		position = sprite_data.position
 
-		%Sprite2D.set_clip_children_mode(dictmain.clip)
-		rotation = dictmain.rotation
-		%Sprite2D.material.set_shader_parameter("wiggle", dictmain.wiggle)
-		%Sprite2D.material.set_shader_parameter("rotation_offset", dictmain.wiggle_rot_offset)
+		%Sprite2D.set_clip_children_mode(sprite_data.clip)
+		rotation = sprite_data.rotation
+		%Sprite2D.material.set_shader_parameter("wiggle", sprite_data.wiggle)
+		%Sprite2D.material.set_shader_parameter("rotation_offset", sprite_data.wiggle_rot_offset)
 		
 		
-		%Sprite2D.flip_h = dictmain.flip_sprite_h
-		%Sprite2D.flip_v = dictmain.flip_sprite_v
+		%Sprite2D.flip_h = sprite_data.flip_sprite_h
+		%Sprite2D.flip_v = sprite_data.flip_sprite_v
 
-		if dictmain.advanced_lipsync:
+		if sprite_data.advanced_lipsync:
 			%Sprite2D.hframes = 6
 		
-		if dictmain.should_blink:
-			if dictmain.open_eyes:
+		if sprite_data.should_blink:
+			if sprite_data.open_eyes:
 				%Pos.show()
 			else:
 				%Pos.hide()
 		else:
 			%Pos.show()
 
-		visible = dictmain.visible
+		visible = sprite_data.visible
 		%ReactionConfig.speaking()
 		%ReactionConfig.not_speaking()
 		
 		animation()
-		set_blend(dictmain.blend_mode)
+		set_blend(sprite_data.blend_mode)
 		advanced_lipsyc()
 
 		%Squish.scale = Vector2(1,1)
-		if dictmain.look_at_mouse_pos == 0:
+		if sprite_data.look_at_mouse_pos == 0:
 			%Pos.position.x = 0
-		if dictmain.look_at_mouse_pos_y == 0:
+		if sprite_data.look_at_mouse_pos_y == 0:
 			%Pos.position.y = 0
 
 
 func check_talk():
-	if dictmain.should_talk:
-		if dictmain.open_mouth:
+	if sprite_data.should_talk:
+		if sprite_data.open_mouth:
 			%Rotation.hide()
 		else:
 			%Rotation.show()
@@ -358,9 +348,9 @@ func reparent_obj(parent):
 func zazaza(parent):
 	for i in parent:
 		if i.sprite_id == parent_id:
-			dictmain.position -= i.dictmain.offset
+			sprite_data.position -= i.sprite_data.offset
 			if is_plus_first_import:
 				for state in states:
 					if !state.is_empty():
 						global = global_position
-						state.position = dictmain.position
+						state.position = sprite_data.position

@@ -1,6 +1,7 @@
 extends Node
 class_name StateUI
 
+var state_button  = preload("res://UI/StateButton/state_button.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -83,7 +84,7 @@ func delete_all_states():
 	
 
 func add_state():
-	var button = preload("res://UI/StateButton/state_button.tscn").instantiate()
+	var button = state_button.instantiate()
 	var state_count = Global.settings_dict.states.size()
 	button.state = state_count
 	button.text = str(state_count + 1) 
@@ -110,7 +111,7 @@ func add_state():
 func update_states(states):
 	var states_size = states.size()
 	for l in states_size:
-		var button = preload("res://UI/StateButton/state_button.tscn").instantiate()
+		var button = state_button.instantiate()
 		button.state = l 
 		button.text = str(l + 1)
 		%StateButtons.add_child(button)
@@ -120,3 +121,23 @@ func update_states(states):
 			if i.states.size() != state_count:
 				for h in abs(i.states.size() - state_count):
 					i.states.append({})
+
+func _on_duplicate_state_pressed() -> void:
+	var button = state_button.instantiate()
+	var state_count = Global.settings_dict.states.size()
+	button.state = state_count
+	button.text = str(state_count + 1) 
+	%StateButtons.add_child(button)
+	InputMap.add_action(button.input_key)
+	
+	Global.settings_dict.states.append(Global.settings_dict.states[Global.current_state].duplicate())
+	
+	Global.settings_dict.light_states.append(Global.settings_dict.light_states[Global.current_state].duplicate())
+	
+	state_count = get_tree().get_nodes_in_group("StateButtons").size()
+	for i in get_tree().get_nodes_in_group("Sprites"):
+		if i.states.size() != state_count:
+			for l in abs(i.states.size() - state_count):
+				i.states.append(i.states[Global.current_state].duplicate())
+	
+	Global.settings_dict.saved_inputs.resize(Global.settings_dict.states.size())

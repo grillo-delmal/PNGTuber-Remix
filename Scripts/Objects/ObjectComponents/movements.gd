@@ -8,7 +8,7 @@ var mouse : Vector2 = Vector2(0,0)
 
 func _process(delta: float) -> void:
 	if !Global.static_view:
-		if actor.dictmain.should_rotate:
+		if actor.sprite_data.should_rotate:
 			auto_rotate()
 		else:
 			%Wobble.rotation = 0
@@ -27,12 +27,12 @@ func movements(delta):
 		glob = %Dragger.global_position
 		drag(delta)
 		wobble()
-		if actor.dictmain.ignore_bounce:
+		if actor.sprite_data.ignore_bounce:
 			glob.y -= Global.sprite_container.bounceChange
 		
 		var length = (glob.y - %Dragger.global_position.y)
 		
-		if actor.dictmain.physics:
+		if actor.sprite_data.physics:
 			if (actor.get_parent() is Sprite2D && is_instance_valid(actor.get_parent())) or (actor.get_parent() is WigglyAppendage2D && is_instance_valid(actor.get_parent())):
 				var c_parent = actor.get_parent().owner
 				if c_parent != null && is_instance_valid(c_parent):
@@ -44,28 +44,28 @@ func movements(delta):
 		stretch(length, delta)
 
 func drag(_delta):
-	if actor.dictmain.dragSpeed == 0:
+	if actor.sprite_data.dragSpeed == 0:
 		%Dragger.global_position = %Wobble.global_position
 	else:
-		%Dragger.global_position = lerp(%Dragger.global_position,%Wobble.global_position,1/actor.dictmain.dragSpeed)
+		%Dragger.global_position = lerp(%Dragger.global_position,%Wobble.global_position,1/actor.sprite_data.dragSpeed)
 		%Drag.global_position = %Dragger.global_position
 
 func wobble():
-	%Wobble.position.x = lerp(%Wobble.position.x, sin(Global.tick*actor.dictmain.xFrq)*actor.dictmain.xAmp, 0.15)
-	%Wobble.position.y = lerp(%Wobble.position.y, sin(Global.tick*actor.dictmain.yFrq)*actor.dictmain.yAmp, 0.15)
+	%Wobble.position.x = lerp(%Wobble.position.x, sin(Global.tick*actor.sprite_data.xFrq)*actor.sprite_data.xAmp, 0.15)
+	%Wobble.position.y = lerp(%Wobble.position.y, sin(Global.tick*actor.sprite_data.yFrq)*actor.sprite_data.yAmp, 0.15)
 
 func rotationalDrag(length,_delta):
-	%Drag.rotation = sin(Global.tick*actor.dictmain.rot_frq)*deg_to_rad(actor.dictmain.rdragStr)
-	var yvel = ((length * actor.dictmain.rdragStr)* 0.5)
+	%Drag.rotation = sin(Global.tick*actor.sprite_data.rot_frq)*deg_to_rad(actor.sprite_data.rdragStr)
+	var yvel = ((length * actor.sprite_data.rdragStr)* 0.5)
 	
 	#Calculate Max angle
 	
-	yvel = clamp(yvel,actor.dictmain.rLimitMin,actor.dictmain.rLimitMax)
+	yvel = clamp(yvel,actor.sprite_data.rLimitMin,actor.sprite_data.rLimitMax)
 	
 	%Rotation.rotation = lerp_angle(%Rotation.rotation,deg_to_rad(yvel),0.15)
 
 func stretch(length,_delta):
-	var yvel = (length * actor.dictmain.stretchAmount * 0.01)
+	var yvel = (length * actor.sprite_data.stretchAmount * 0.01)
 	var target = Vector2(1.0-yvel,1.0+yvel)
 	
 	%Squish.scale = lerp(%Squish.scale,target,0.1)
@@ -73,7 +73,7 @@ func stretch(length,_delta):
 
 func static_prev():
 	%Pos.position = Vector2(0,0)
-	%Sprite2D.self_modulate = actor.dictmain.tint
+	%Sprite2D.self_modulate = actor.sprite_data.tint
 	%Pos.modulate.s = 0
 	%Wobble.rotation = 0
 	%Wobble.position = Vector2(0,0)
@@ -86,11 +86,11 @@ func static_prev():
 
 
 func follow_wiggle():
-	if actor.dictmain.follow_wa_tip:
+	if actor.sprite_data.follow_wa_tip:
 		if actor.get_parent() is WigglyAppendage2D && is_instance_valid(actor.get_parent()):
-			var pnt = actor.get_parent().points[clamp(actor.dictmain.tip_point,0, actor.get_parent().points.size() -1)]
+			var pnt = actor.get_parent().points[clamp(actor.sprite_data.tip_point,0, actor.get_parent().points.size() -1)]
 			actor.position = pnt
-			%Pos.rotation = clamp(pnt.y/80, deg_to_rad(actor.dictmain.follow_wa_mini), deg_to_rad(actor.dictmain.follow_wa_max))
+			%Pos.rotation = clamp(pnt.y/80, deg_to_rad(actor.sprite_data.follow_wa_mini), deg_to_rad(actor.sprite_data.follow_wa_max))
 		else:
 			%Pos.rotation = 0
 		
@@ -98,17 +98,17 @@ func follow_wiggle():
 		%Pos.rotation = 0
 
 func rainbow():
-	if actor.dictmain.rainbow:
-		if not actor.dictmain.rainbow_self:
+	if actor.sprite_data.rainbow:
+		if not actor.sprite_data.rainbow_self:
 			%Sprite2D.self_modulate.s = 0
 			%Pos.modulate.s = 1
-			%Pos.modulate.h = wrap(%Pos.modulate.h + actor.dictmain.rainbow_speed, 0, 1)
+			%Pos.modulate.h = wrap(%Pos.modulate.h + actor.sprite_data.rainbow_speed, 0, 1)
 		else:
 			%Pos.modulate.s = 0
 			%Sprite2D.self_modulate.s = 1
-			%Sprite2D.self_modulate.h = wrap(%Sprite2D.self_modulate.h + actor.dictmain.rainbow_speed, 0, 1)
+			%Sprite2D.self_modulate.h = wrap(%Sprite2D.self_modulate.h + actor.sprite_data.rainbow_speed, 0, 1)
 	else:
-		%Sprite2D.self_modulate = actor.dictmain.tint
+		%Sprite2D.self_modulate = actor.sprite_data.tint
 		%Pos.modulate.s = 0
 
 func follow_mouse(_delta):
@@ -127,38 +127,74 @@ func follow_mouse(_delta):
 			mouse = Vector2(mouse_pos - display_size) + offset 
 	else:
 		mouse = actor.get_local_mouse_position()
-	if actor.dictmain.follow_mouse_velocity:
+	if actor.sprite_data.follow_mouse_velocity:
 		var distance = last_mouse_position - mouse
 		if !distance.is_zero_approx():
 			var vel = -(distance/5)
 			var dir = Vector2.ZERO.direction_to(vel)
-			var dist = vel.limit_length(Vector2(actor.dictmain.look_at_mouse_pos,actor.dictmain.look_at_mouse_pos_y).length()).length()
+			var dist = vel.limit_length(Vector2(actor.sprite_data.look_at_mouse_pos,actor.sprite_data.look_at_mouse_pos_y).length()).length()
 			last_dist = Vector2(dir.x * (dist),dir.y * (dist))
 		%Pos.position.x = lerp(%Pos.position.x, last_dist.x, 0.1)
 		%Pos.position.y = lerp(%Pos.position.y, last_dist.y, 0.1)
-		var clamping = clamp(last_dist.angle()*actor.dictmain.mouse_rotation,deg_to_rad(actor.dictmain.rLimitMin),deg_to_rad(actor.dictmain.rLimitMax))
-		%Squish.rotation = lerp_angle(%Squish.rotation ,clamping,0.1)
+		
+		var mouse_x = mouse.x
+		var screen_width = get_viewport().size.x
+		# Calculate the normalized mouse position (-1 to 1, where 0 is center)
+		var normalized_mouse = (mouse_x - screen_width / 2) / (screen_width / 2)
+
+		# Map the normalized position to the rotation factor
+		var rotation_factor = lerp(actor.sprite_data.mouse_rotation_max, actor.sprite_data.mouse_rotation_min, (normalized_mouse + 1) / 2)
+
+		# Calculate the target rotation, scaled by the factor and clamped
+		var target_rotation = clamp(normalized_mouse * rotation_factor * deg_to_rad(90), deg_to_rad(actor.sprite_data.rLimitMin), deg_to_rad(actor.sprite_data.rLimitMax))
+
+		# Smoothly interpolate the sprite's rotation
+		%Squish.rotation = lerp_angle(%Squish.rotation, target_rotation, 0.1)
+		
+		'''
+		var clamping = clamp(last_dist.angle()*actor.sprite_data.mouse_rotation,deg_to_rad(actor.sprite_data.rLimitMin),deg_to_rad(actor.sprite_data.rLimitMax))
+		%Squish.rotation = lerp_angle(%Squish.rotation ,clamping,0.1)'''
 		var dire = Vector2.ZERO - (last_mouse_position - main_marker.coords)
-		var scl_x = abs(dire.x) *actor.dictmain.mouse_scale_x *0.005
-		var scl_y = abs(dire.y) *actor.dictmain.mouse_scale_y *0.005
+		var scl_x = abs(dire.x) *actor.sprite_data.mouse_scale_x *0.005
+		var scl_y = abs(dire.y) *actor.sprite_data.mouse_scale_y *0.005
 		%Drag.scale.x = lerp(%Drag.scale.x, float(clamp(1 - scl_x, 0.15 , 1)), 0.1)
 		%Drag.scale.y = lerp(%Drag.scale.y, float(clamp(1 - scl_y,  0.15 , 1)), 0.1)
 		last_mouse_position = mouse
 	else:
 		var dir = Vector2.ZERO.direction_to(mouse)
 		var dist = mouse.length()
-		%Pos.position.x = lerp(%Pos.position.x, dir.x * min(dist, actor.dictmain.look_at_mouse_pos), 0.1)
-		%Pos.position.y = lerp(%Pos.position.y, dir.y * min(dist, actor.dictmain.look_at_mouse_pos_y), 0.1)
-		var clamping = clamp(mouse.angle()*actor.dictmain.mouse_rotation,deg_to_rad(actor.dictmain.rLimitMin),deg_to_rad(actor.dictmain.rLimitMax))
-		%Squish.rotation = lerp_angle(%Squish.rotation ,clamping,0.1)
+		%Pos.position.x = lerp(%Pos.position.x, dir.x * min(dist, actor.sprite_data.look_at_mouse_pos), 0.1)
+		%Pos.position.y = lerp(%Pos.position.y, dir.y * min(dist, actor.sprite_data.look_at_mouse_pos_y), 0.1)
+		
+		# Get the mouse position and screen width
+		var mouse_x = mouse.x
+		var screen_width = get_viewport().size.x
+
+		# Calculate the normalized mouse position (-1 to 1, where 0 is center)
+		var normalized_mouse = (mouse_x - screen_width / 2) / (screen_width / 2)
+
+		# Map the normalized position to the rotation factor
+		var rotation_factor = lerp(actor.sprite_data.mouse_rotation_max, actor.sprite_data.mouse_rotation_min, (normalized_mouse + 1) / 2)
+
+		# Calculate the target rotation, scaled by the factor and clamped
+		var target_rotation = clamp(normalized_mouse * rotation_factor * deg_to_rad(90), deg_to_rad(actor.sprite_data.rLimitMin), deg_to_rad(actor.sprite_data.rLimitMax))
+
+		# Smoothly interpolate the sprite's rotation
+		%Squish.rotation = lerp_angle(%Squish.rotation, target_rotation, 0.1)
+				
+				
+		
+		'''
+		var clamping = clamp(atan2(mouse.y,mouse.x)*actor.sprite_data.mouse_rotation,deg_to_rad(actor.sprite_data.rLimitMin),deg_to_rad(actor.sprite_data.rLimitMax))
+		%Squish.rotation = lerp_angle(%Squish.rotation ,clamping,0.1)'''
 #		print(clamping)
 		var dire = Vector2.ZERO - main_marker.coords
-		var scl_x = (abs(dire.x) *actor.dictmain.mouse_scale_x *0.005) * Global.settings_dict.zoom.x
-		var scl_y = (abs(dire.y) *actor.dictmain.mouse_scale_y *0.005) * Global.settings_dict.zoom.y
+		var scl_x = (abs(dire.x) *actor.sprite_data.mouse_scale_x *0.005) * Global.settings_dict.zoom.x
+		var scl_y = (abs(dire.y) *actor.sprite_data.mouse_scale_y *0.005) * Global.settings_dict.zoom.y
 		%Drag.scale.x = lerp(%Drag.scale.x, float(clamp(1 - scl_x, 0.15 , 1)), 0.1)
 		%Drag.scale.y = lerp(%Drag.scale.y, float(clamp(1 - scl_y,  0.15 , 1)), 0.1)
 
 
 
 func auto_rotate():
-	%Wobble.rotate(actor.dictmain.should_rot_speed)
+	%Wobble.rotate(actor.sprite_data.should_rot_speed)

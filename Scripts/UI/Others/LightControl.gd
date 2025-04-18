@@ -3,6 +3,9 @@ extends Node
 
 func _ready():
 	Global.light_info.connect(get_info)
+	%LightColor.get_picker().picker_shape = 1
+	%LightColor.get_picker().presets_visible = false
+	%LightColor.get_picker().color_modes_visible = false
 	%LightEnergyBSlider.get_node("SliderValue").value_changed.connect(_on_light_energy_slider_value_changed)
 	%LightSizeBSlider.get_node("SliderValue").value_changed.connect(_on_light_size_slider_value_changed)
 

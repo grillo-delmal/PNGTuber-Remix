@@ -22,7 +22,10 @@ func import_appendage(path : String):
 	var spawn = appendage.instantiate()
 	var apng_test = AImgIOAPNGImporter.load_from_file(path)
 	var img_tex : CanvasTexture 
-	if apng_test != ["No frames", null]:
+	
+	if path.get_extension() == "gif":
+		img_tex = import_gif(path, spawn)
+	elif apng_test != ["No frames", null]:
 		img_tex = import_apng_sprite(path , spawn)
 	else:
 		img_tex = import_png_from_file(path, spawn)
@@ -96,7 +99,7 @@ func import_png(img: Image, spawn) -> CanvasTexture:
 		var center_shift_x = trim_info.min_x - ((original_width - trimmed_width) / 2.0)
 		var center_shift_y = trim_info.min_y - ((original_height - trimmed_height) / 2.0)
 		# Adjust position to keep image visually stable
-		spawn.dictmain.offset += Vector2(center_shift_x, center_shift_y)
+		spawn.sprite_data.offset += Vector2(center_shift_x, center_shift_y)
 		spawn.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
 
 	img.fix_alpha_edges()
@@ -208,20 +211,20 @@ func replace_texture(path : String):
 					if i is SpriteObject:
 						glob_pos.append({obj = i,
 						og_pos = i.global_position})
-				Global.held_sprite.dictmain.offset += Vector2(center_shift_x, center_shift_y)
+				Global.held_sprite.sprite_data.offset += Vector2(center_shift_x, center_shift_y)
 				Global.held_sprite.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
 				for i in glob_pos:
 					i.obj.global_position = i.og_pos
-					i.obj.dictmain.position = i.obj.position
+					i.obj.sprite_data.position = i.obj.position
 					i.obj.save_state(Global.current_state)
 					
 				Global.update_offset_spins.emit()
 			var buffer = FileAccess.get_file_as_bytes(path)
 			Global.held_sprite.image_data = buffer
 				
+			img.fix_alpha_edges()
 			var texture = ImageTexture.create_from_image(img)
 			var img_can = CanvasTexture.new()
-			img.fix_alpha_edges()
 			Global.held_sprite.img_animated = false
 			Global.held_sprite.is_apng = false
 			img_can.diffuse_texture = texture

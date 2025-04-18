@@ -1,0 +1,180 @@
+[gd_scene load_steps=4 format=3 uid="uid://bi0ts50s5a0m0"]
+
+[ext_resource type="Script" uid="uid://c8cslwt4pkj56" path="res://Scripts/UI/RightPanel/wiggle_sprite.gd" id="1_00ydi"]
+[ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="2_dcw28"]
+[ext_resource type="Script" uid="uid://dy1cd6xda1pu5" path="res://UI/BetterSlider/BetterToggles.gd" id="3_ru4gk"]
+
+[node name="WiggleSpritePanel" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="WiggleSprite" type="Node" parent="."]
+script = ExtResource("1_00ydi")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Follow Appendage Tip"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 2
+
+[node name="FollowWiggleAppTip" type="CheckBox" parent="Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 15
+text = "Follow Appendage"
+
+[node name="HBox34" type="HBoxContainer" parent="Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TipLabel" type="Label" parent="Grid/HBox34"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Point :  "
+
+[node name="TipSpin" type="SpinBox" parent="Grid/HBox34"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MiniFWBSlider" parent="." instance=ExtResource("2_dcw28")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+sp_type = ""
+label_text = "Mini Rotation : "
+mini_value = -180.0
+step = 0.5
+value_to_update = "follow_wa_mini"
+
+[node name="MaxFWBSlider" parent="." instance=ExtResource("2_dcw28")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+sp_type = ""
+label_text = "Max Rotation : "
+max_value = 180.0
+step = 0.5
+value_to_update = "follow_wa_max"
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="WiggleStuff" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 9
+
+[node name="Label2" type="Label" parent="WiggleStuff"]
+layout_mode = 2
+text = "Wiggle Sprite"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="WiggleStuff"]
+layout_mode = 2
+columns = 2
+
+[node name="WiggleCheck" type="CheckBox" parent="WiggleStuff/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Wiggle Sprite"
+
+[node name="WigglePhysicsCheck" type="CheckBox" parent="WiggleStuff/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Wiggle Physics"
+script = ExtResource("3_ru4gk")
+sp_type = "Sprite2D"
+value_to_update = "wiggle_physics"
+
+[node name="FollowParentEffect" type="CheckBox" parent="WiggleStuff/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Syncs the wiggle effect of the Sprite with the Parent's Wiggle effect (Both must be Sprite Objects)"
+theme_override_font_sizes/font_size = 16
+text = "Sync Effect"
+
+[node name="Grid2" type="GridContainer" parent="WiggleStuff"]
+layout_mode = 2
+columns = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="WiggleStuff/Grid2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="XoffsetLabel" type="Label" parent="WiggleStuff/Grid2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 16
+text = "X offset : "
+
+[node name="XoffsetSpinBox" type="SpinBox" parent="WiggleStuff/Grid2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -999999.0
+max_value = 999999.0
+step = 0.1
+
+[node name="HBox" type="HBoxContainer" parent="WiggleStuff/Grid2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="YoffsetLabel" type="Label" parent="WiggleStuff/Grid2/HBox"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 16
+text = "Y offset : "
+
+[node name="YoffsetSpinBox" type="SpinBox" parent="WiggleStuff/Grid2/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -999999.0
+max_value = 999999.0
+step = 0.1
+
+[node name="WiggleAmpBSlider" parent="WiggleStuff" instance=ExtResource("2_dcw28")]
+unique_name_in_owner = true
+layout_mode = 2
+sp_type = "Sprite2D"
+label_text = "Wiggle-Amp : "
+mini_value = -50.0
+max_value = 50.0
+step = 0.01
+value_to_update = "wiggle_amp"
+
+[node name="WiggleFreqBSlider" parent="WiggleStuff" instance=ExtResource("2_dcw28")]
+unique_name_in_owner = true
+layout_mode = 2
+sp_type = "Sprite2D"
+label_text = "Wiggle-Freq : "
+mini_value = -2.0
+max_value = 2.0
+step = 0.01
+value_to_update = "wiggle_freq"
+
+[connection signal="toggled" from="Grid/FollowWiggleAppTip" to="WiggleSprite" method="_on_follow_wiggle_app_tip_toggled"]
+[connection signal="value_changed" from="Grid/HBox34/TipSpin" to="WiggleSprite" method="_on_tip_spin_value_changed"]
+[connection signal="toggled" from="WiggleStuff/Grid/WiggleCheck" to="WiggleSprite" method="_on_wiggle_check_toggled"]
+[connection signal="toggled" from="WiggleStuff/Grid/FollowParentEffect" to="WiggleSprite" method="_on_follow_parent_effect_toggled"]
+[connection signal="value_changed" from="WiggleStuff/Grid2/HBoxContainer/XoffsetSpinBox" to="WiggleSprite" method="_on_xoffset_spin_box_value_changed"]
+[connection signal="value_changed" from="WiggleStuff/Grid2/HBox/YoffsetSpinBox" to="WiggleSprite" method="_on_yoffset_spin_box_value_changed"]

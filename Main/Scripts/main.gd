@@ -68,7 +68,7 @@ func load_append_sprites():
 
 func replacing_sprite():
 	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
-		if not Global.held_sprite.dictmain.folder:
+		if not Global.held_sprite.sprite_data.folder:
 			%FileDialog.filters = ["*.png, *.apng, *.gif", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
 			$FileDialog.file_mode = 0
 			current_state = State.ReplaceSprite
@@ -76,7 +76,7 @@ func replacing_sprite():
 
 func add_normal_sprite():
 	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
-		if not Global.held_sprite.dictmain.folder:
+		if not Global.held_sprite.sprite_data.folder:
 			if Global.held_sprite.img_animated:
 				%FileDialog.filters = ["*.gif"]
 			elif Global.held_sprite.is_apng:

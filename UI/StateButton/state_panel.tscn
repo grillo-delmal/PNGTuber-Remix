@@ -4,10 +4,15 @@
 
 [node name="StatePanel" type="VBoxContainer"]
 custom_minimum_size = Vector2(350, 107)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 20.0
 theme_override_constants/separation = 0
-metadata/_edit_use_anchors_ = true
 
 [node name="StatesStuff" type="Node" parent="."]
 script = ExtResource("1_j5jjx")
@@ -19,14 +24,23 @@ alignment = 1
 [node name="AddState" type="Button" parent="HBoxContainer"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
 text = "Add State"
+
+[node name="DuplicateState" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "Duplicate State"
+metadata/_edit_use_anchors_ = true
 
 [node name="DeleteState" type="Button" parent="HBoxContainer"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
-size_flags_horizontal = 0
-theme_override_font_sizes/font_size = 16
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
 text = "Delete State"
 metadata/_edit_use_anchors_ = true
 
@@ -53,4 +67,5 @@ theme_override_constants/v_separation = 5
 columns = 9
 
 [connection signal="pressed" from="HBoxContainer/AddState" to="StatesStuff" method="_on_add_state_pressed"]
+[connection signal="pressed" from="HBoxContainer/DuplicateState" to="StatesStuff" method="_on_duplicate_state_pressed"]
 [connection signal="pressed" from="HBoxContainer/DeleteState" to="StatesStuff" method="_on_delete_state_pressed"]

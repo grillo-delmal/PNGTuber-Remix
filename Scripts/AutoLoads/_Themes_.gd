@@ -190,6 +190,9 @@ func _on_ui_theme_button_item_selected(index):
 			current_theme = preload("res://Themes/GreenTheme/Green_theme.tres")
 		6:
 			current_theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
+		7:
+			current_theme = preload("res://Themes/FrutigerAeroTheme/FrutigerAero.tres")
+			
 	
 	popup.theme = current_theme
 	theme_settings.theme_id = index

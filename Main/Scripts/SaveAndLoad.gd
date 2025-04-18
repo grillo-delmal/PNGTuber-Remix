@@ -216,7 +216,7 @@ func load_file(path, should_load_path = false):
 		Global.slider_values.emit(Global.settings_dict)
 		Global.load_sprite_states(0)
 		if Global.main.has_node("%Control"):
-			Global.main.get_node("%Control/UIInput").reinfoanim()
+			Global.reinfoanim.emit()
 		Themes.save()
 		file.close()
 		
@@ -278,7 +278,7 @@ func load_trimmed_sprite(sprite_obj, sprite):
 	var img_can = Global.main.get_node("%FileImporter").import_png_from_buffer(img_data, "", sprite_obj)
 
 	# Adjust position to keep image visually stable
-	#sprite_obj.dictmain.offset += Vector2(center_shift_x, center_shift_y)
+	#sprite_obj.sprite_data.offset += Vector2(center_shift_x, center_shift_y)
 #	sprite_obj.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
 #	for i in sprite_obj.states:
 	#	i.offset += Vector2(center_shift_x, center_shift_y)
@@ -393,66 +393,66 @@ func load_pngplus_file(path):
 		sprite_obj.parent_id = load_dict[i]["parentId"]
 		sprite_obj.sprite_name = load_dict[i]["path"].get_file().trim_suffix(".png")
 		
-		sprite_obj.dictmain.xFrq = load_dict[i]["xFrq"]
-		sprite_obj.dictmain.xAmp = float(load_dict[i]["xAmp"])
-		sprite_obj.dictmain.yFrq = load_dict[i]["yFrq"]
-		sprite_obj.dictmain.yAmp = float(load_dict[i]["yAmp"])
-		sprite_obj.dictmain.dragSpeed = load_dict[i]["drag"]
-		sprite_obj.dictmain.rdragStr = load_dict[i]["rotDrag"]
-		sprite_obj.dictmain.stretchAmount = load_dict[i]["stretchAmount"]
-		sprite_obj.dictmain.ignore_bounce = load_dict[i]["ignoreBounce"]
-		sprite_obj.dictmain.hframes = load_dict[i]["frames"]
+		sprite_obj.sprite_data.xFrq = load_dict[i]["xFrq"]
+		sprite_obj.sprite_data.xAmp = float(load_dict[i]["xAmp"])
+		sprite_obj.sprite_data.yFrq = load_dict[i]["yFrq"]
+		sprite_obj.sprite_data.yAmp = float(load_dict[i]["yAmp"])
+		sprite_obj.sprite_data.dragSpeed = load_dict[i]["drag"]
+		sprite_obj.sprite_data.rdragStr = load_dict[i]["rotDrag"]
+		sprite_obj.sprite_data.stretchAmount = load_dict[i]["stretchAmount"]
+		sprite_obj.sprite_data.ignore_bounce = load_dict[i]["ignoreBounce"]
+		sprite_obj.sprite_data.hframes = load_dict[i]["frames"]
 
 		# convert PLUS animSpeed into Remix animation_speed (animation fps)
 		# This assumes PLUS was set to thhe default Engine.max_fps of 60.
 		var animSpeed = load_dict[i]["animSpeed"]
 		if (animSpeed != 0.0) :
-			sprite_obj.dictmain.animation_speed = 60 / int(360.0 / float(animSpeed))
+			sprite_obj.sprite_data.animation_speed = 60 / int(360.0 / float(animSpeed))
 		
 		if load_dict[i]["clipped"]:
-			sprite_obj.dictmain.clip = 2
+			sprite_obj.sprite_data.clip = 2
 		else:
-			sprite_obj.dictmain.clip = 0
+			sprite_obj.sprite_data.clip = 0
 		
-		sprite_obj.dictmain.rLimitMin = load_dict[i]["rLimitMin"]
-		sprite_obj.dictmain.rLimitMax = load_dict[i]["rLimitMax"]
-		sprite_obj.dictmain.z_index = load_dict[i]["zindex"]
-		sprite_obj.dictmain.position = str_to_var(load_dict[i]["pos"])
-		sprite_obj.dictmain.offset += str_to_var(load_dict[i]["offset"])
+		sprite_obj.sprite_data.rLimitMin = load_dict[i]["rLimitMin"]
+		sprite_obj.sprite_data.rLimitMax = load_dict[i]["rLimitMax"]
+		sprite_obj.sprite_data.z_index = load_dict[i]["zindex"]
+		sprite_obj.sprite_data.position = str_to_var(load_dict[i]["pos"])
+		sprite_obj.sprite_data.offset += str_to_var(load_dict[i]["offset"])
 
 		var test = load_dict[i]["showBlink"]
 		var test2 = load_dict[i]["showTalk"]
 		
 		if test == 0:
-			sprite_obj.dictmain.should_blink = false
-			sprite_obj.dictmain.open_eyes = false
+			sprite_obj.sprite_data.should_blink = false
+			sprite_obj.sprite_data.open_eyes = false
 		elif test == 1:
-			sprite_obj.dictmain.should_blink = true
-			sprite_obj.dictmain.open_eyes = true
+			sprite_obj.sprite_data.should_blink = true
+			sprite_obj.sprite_data.open_eyes = true
 		elif test == 2:
-			sprite_obj.dictmain.should_blink = true
-			sprite_obj.dictmain.open_eyes = false
+			sprite_obj.sprite_data.should_blink = true
+			sprite_obj.sprite_data.open_eyes = false
 		
 		if test2 == 0:
-			sprite_obj.dictmain.should_talk = false
-			sprite_obj.dictmain.open_mouth = false
+			sprite_obj.sprite_data.should_talk = false
+			sprite_obj.sprite_data.open_mouth = false
 		elif test2 == 1:
-			sprite_obj.dictmain.should_talk = true
-			sprite_obj.dictmain.open_mouth = false
+			sprite_obj.sprite_data.should_talk = true
+			sprite_obj.sprite_data.open_mouth = false
 		elif test2 == 2:
-			sprite_obj.dictmain.should_talk = true
-			sprite_obj.dictmain.open_mouth = true
+			sprite_obj.sprite_data.should_talk = true
+			sprite_obj.sprite_data.open_mouth = true
 			
 		
 		sprite_obj.states = [{}]
-		sprite_obj.states[0].merge(sprite_obj.dictmain, true)
+		sprite_obj.states[0].merge(sprite_obj.sprite_data, true)
 		
 		var costume = str_to_var(load_dict[i]["costumeLayers"])
 	#	print(costume)
 		
 		sprite_obj.states.resize(10)
 		for l in costume.size():
-			var ndict = sprite_obj.dictmain.duplicate()
+			var ndict = sprite_obj.sprite_data.duplicate()
 			if costume[l] == 0:
 				ndict.visible = false
 			else:
@@ -471,5 +471,5 @@ func load_pngplus_file(path):
 		i.zazaza(get_tree().get_nodes_in_group("Sprites"))
 	
 	Global.load_sprite_states(0)
-	get_tree().get_root().get_node("Main/%Control/UIInput").reinfoanim()
+	Global.reinfoanim.emit()
 	get_tree().get_root().get_node("Main/%Marker").current_screen = 9999

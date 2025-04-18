@@ -1,0 +1,143 @@
+[gd_scene load_steps=4 format=3 uid="uid://djud66j0a78qo"]
+
+[ext_resource type="Script" uid="uid://duusstqanilvd" path="res://Scripts/UI/RightPanel/assets_panel.gd" id="1_c51j7"]
+[ext_resource type="Script" uid="uid://cjsuqv0mug802" path="res://Scripts/UI/States/AssetStateButton.gd" id="2_dpute"]
+[ext_resource type="Texture2D" uid="uid://8rb6kumug0p5" path="res://UI/Assets/DeleteButton.png" id="3_tplhm"]
+
+[node name="AssetsBox" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+script = ExtResource("1_c51j7")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Assets"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Buttons" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 2
+
+[node name="IsAssetCheck" type="CheckBox" parent="Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "An Asset is a Sprite you can toggle at any time. I.e glasses, hats, etc.."
+text = "Is Asset"
+
+[node name="HBoxAsset" type="HBoxContainer" parent="Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VSeparator" type="VSeparator" parent="Buttons/HBoxAsset"]
+visible = false
+custom_minimum_size = Vector2(3, 0)
+layout_mode = 2
+
+[node name="IsAssetButton" type="Button" parent="Buttons/HBoxAsset"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Bind Key"
+script = ExtResource("2_dpute")
+
+[node name="RemoveAssetButton" type="Button" parent="Buttons/HBoxAsset"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+icon = ExtResource("3_tplhm")
+icon_alignment = 1
+expand_icon = true
+
+[node name="DontHideOnToggleCheck" type="CheckBox" parent="Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Shows the Asset only and doesn't hide it even when key is pressed again. "
+text = "Don't Hide"
+
+[node name="ShouldDisappearCheck" type="CheckBox" parent="Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Keys that makes your Sprite Disappear whenever toggled."
+text = "Disappear Key(s)"
+
+[node name="ShouldDisListContainer" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ShouldDisLabel" type="Label" parent="ShouldDisListContainer"]
+visible = false
+layout_mode = 2
+text = "List of Keys for Disappearence.
+(Key must correspond to existing asset's)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ShouldDisListContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ShouldDisAddButton" type="Button" parent="ShouldDisListContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+focus_mode = 0
+text = "Add Key"
+
+[node name="ShouldDisDelButton" type="Button" parent="ShouldDisListContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+focus_mode = 0
+disabled = true
+text = "Delete Key"
+
+[node name="ShouldDisRemapButton" type="Button" parent="ShouldDisListContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+focus_mode = 0
+disabled = true
+toggle_mode = true
+text = "Remap Key"
+
+[node name="ShouldDisList" type="ItemList" parent="ShouldDisListContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "List of Keys (Must correspond to another asset's Key) that makes The selected Asset disappear."
+focus_mode = 1
+allow_reselect = true
+auto_height = true
+text_overrun_behavior = 2
+max_columns = 3
+fixed_column_width = 122
+
+[connection signal="toggled" from="Buttons/IsAssetCheck" to="Buttons/HBoxAsset/IsAssetButton" method="_on_is_asset_check_toggled"]
+[connection signal="pressed" from="Buttons/HBoxAsset/RemoveAssetButton" to="Buttons/HBoxAsset/IsAssetButton" method="_on_remove_asset_button_pressed"]
+[connection signal="toggled" from="Buttons/DontHideOnToggleCheck" to="Buttons/HBoxAsset/IsAssetButton" method="_on_dont_hide_on_toggle_check_toggled"]
+[connection signal="toggled" from="Buttons/ShouldDisappearCheck" to="Buttons/HBoxAsset/IsAssetButton" method="_on_should_disappear_check_toggled"]
+[connection signal="pressed" from="ShouldDisListContainer/HBoxContainer/ShouldDisAddButton" to="Buttons/HBoxAsset/IsAssetButton" method="_on_should_dis_add_button_pressed"]
+[connection signal="pressed" from="ShouldDisListContainer/HBoxContainer/ShouldDisDelButton" to="Buttons/HBoxAsset/IsAssetButton" method="_on_should_dis_del_button_pressed"]
+[connection signal="toggled" from="ShouldDisListContainer/HBoxContainer/ShouldDisRemapButton" to="Buttons/HBoxAsset/IsAssetButton" method="_on_should_dis_remap_button_toggled"]
+[connection signal="empty_clicked" from="ShouldDisListContainer/ShouldDisList" to="Buttons/HBoxAsset/IsAssetButton" method="_on_should_dis_list_empty_clicked"]
+[connection signal="focus_exited" from="ShouldDisListContainer/ShouldDisList" to="Buttons/HBoxAsset/IsAssetButton" method="_on_should_dis_list_focus_exited"]
+[connection signal="item_selected" from="ShouldDisListContainer/ShouldDisList" to="Buttons/HBoxAsset/IsAssetButton" method="_on_should_dis_list_item_selected"]

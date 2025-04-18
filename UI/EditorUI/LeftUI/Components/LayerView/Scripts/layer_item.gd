@@ -210,10 +210,10 @@ func _on_move_down_pressed() -> void:
 
 func _on_visiblity_toggled(toggled_on: bool) -> void:
 	if toggled_on:
-		data.sprite_object.dictmain.visible = false
+		data.sprite_object.sprite_data.visible = false
 		data.sprite_object.visible = false
 	else:
-		data.sprite_object.dictmain.visible = true
+		data.sprite_object.sprite_data.visible = true
 		data.sprite_object.visible = true
 
 #	data.sprite_object.save_state(Global.current_state)
@@ -229,7 +229,7 @@ func check_indents():
 			%Intend2.show()
 
 func update_visib_buttons():
-	if Global.held_sprite.dictmain.visible:
+	if Global.held_sprite.sprite_data.visible:
 		%Visiblity.button_pressed = false
-	elif !Global.held_sprite.dictmain.visible:
+	elif !Global.held_sprite.sprite_data.visible:
 		%Visiblity.button_pressed = true

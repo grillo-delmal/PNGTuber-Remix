@@ -15,21 +15,21 @@ func _ready() -> void:
 func enable():
 	if sp_type == "Null":
 		disabled = true
-		#button_pressed = Global.held_sprite.dictmain[value_to_update]
+		#button_pressed = Global.held_sprite.sprite_data[value_to_update]
 	
 	else:
 		if sp_type == Global.held_sprite.sprite_type:
 			disabled = false
-			button_pressed = Global.held_sprite.dictmain[value_to_update]
+			button_pressed = Global.held_sprite.sprite_data[value_to_update]
 			
 		elif sp_type == "":
 			disabled = false
-			button_pressed = Global.held_sprite.dictmain[value_to_update]
+			button_pressed = Global.held_sprite.sprite_data[value_to_update]
 
 func nullfy():
 	disabled = true
 
 func on_toggle(toggle : bool):
 	if sp_type != "Null":
-		Global.held_sprite.dictmain[value_to_update] = toggle
+		Global.held_sprite.sprite_data[value_to_update] = toggle
 		Global.held_sprite.save_state(Global.current_state)

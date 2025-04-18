@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="239"
+   height="173"
+   viewBox="0 0 239 173"
+   version="1.1"
+   id="svg1"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="px"
+     showgrid="true">
+    <inkscape:grid
+       id="grid1"
+       units="px"
+       originx="-11"
+       originy="-231"
+       spacingx="1"
+       spacingy="1"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       dotted="false"
+       gridanglex="30"
+       gridanglez="30"
+       visible="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient24"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#aa24d9;stop-opacity:1;"
+         offset="0"
+         id="stop23" />
+      <stop
+         style="stop-color:#771798;stop-opacity:1;"
+         offset="1"
+         id="stop24" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient8"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#820ba0;stop-opacity:1;"
+         offset="0"
+         id="stop8" />
+      <stop
+         style="stop-color:#ad44d0;stop-opacity:1;"
+         offset="1"
+         id="stop9" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient6"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.57750762;"
+         offset="0"
+         id="stop6" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop7" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#9517bf;stop-opacity:1;"
+         offset="0"
+         id="stop3" />
+      <stop
+         style="stop-color:#d289ea;stop-opacity:1;"
+         offset="1"
+         id="stop4" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3"
+       id="linearGradient10"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.66414788,0,0,1.0087985,14.27412,234.27411)"
+       x1="245"
+       y1="170"
+       x2="245"
+       y2="0" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient24"
+       id="linearGradient11"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.66414788,0,0,1.0087985,14.27412,234.27411)"
+       x1="170"
+       y1="-5"
+       x2="170"
+       y2="170" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6"
+       id="linearGradient12"
+       gradientUnits="userSpaceOnUse"
+       x1="195"
+       y1="5"
+       x2="195"
+       y2="85"
+       gradientTransform="matrix(0.72641174,0,0,1.0760518,-3.8861735,218.13334)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient8"
+       id="linearGradient13"
+       gradientUnits="userSpaceOnUse"
+       x1="200"
+       y1="180"
+       x2="200"
+       y2="100"
+       gradientTransform="matrix(0.68397316,0,0,1.1096783,4.0145221,212.08054)" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-11,-231)">
+    <rect
+       style="fill:url(#linearGradient10);fill-rule:evenodd;stroke:url(#linearGradient11);stroke-width:6.54824;stroke-linejoin:round;stroke-opacity:1;paint-order:markers stroke fill"
+       id="rect1-8"
+       width="232.45177"
+       height="166.45177"
+       x="14.27412"
+       y="234.27412"
+       ry="5.0439925"
+       inkscape:export-filename="AeroPanel2.svg"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"
+       rx="0" />
+    <rect
+       style="fill:url(#linearGradient12);fill-rule:evenodd;stroke:none;stroke-width:7.0729;stroke-linejoin:round;stroke-opacity:1;paint-order:markers stroke fill"
+       id="rect6-3"
+       width="232.45177"
+       height="80.70388"
+       x="14.27412"
+       y="234.27412"
+       ry="5.380259" />
+    <rect
+       style="fill:url(#linearGradient13);fill-rule:evenodd;stroke:none;stroke-width:6.9696;stroke-linejoin:round;stroke-opacity:1;paint-order:markers stroke fill"
+       id="rect7-7"
+       width="229.13103"
+       height="55.483921"
+       x="14.27412"
+       y="345.24197"
+       ry="5.5483918" />
+  </g>
+</svg>

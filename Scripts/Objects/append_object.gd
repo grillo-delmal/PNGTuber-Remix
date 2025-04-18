@@ -28,7 +28,7 @@ var is_plus_first_import : bool = false
 var image_data : PackedByteArray = []
 var normal_data : PackedByteArray = []
 
-var dictmain : Dictionary = {
+var sprite_data : Dictionary = {
 	xFrq = 0,
 	xAmp = 0,
 	yFrq = 0,
@@ -134,8 +134,8 @@ func correct_sprite_size():
 	var w = %Sprite2D.texture.get_image().get_size().y / 0.98
 	var l = %Sprite2D.texture.get_image().get_size().x / 5
 	
-	dictmain.width = w
-	dictmain.segm_length = l
+	sprite_data.width = w
+	sprite_data.segm_length = l
 
 func _process(_delta):
 	if Global.held_sprite == self:
@@ -148,23 +148,23 @@ func _process(_delta):
 	if dragging:
 		var mpos = get_parent().to_local(get_global_mouse_position())
 		position = mpos - of
-		dictmain.position = position
+		sprite_data.position = position
 		save_state(Global.current_state)
 		Global.update_pos_spins.emit()
 	
 	
 	if !Global.static_view:
-		if dictmain.auto_wag:
-			%Sprite2D.curvature = clamp(sin(Global.tick*(dictmain.wag_freq))*dictmain.wag_speed, deg_to_rad(dictmain.wag_mini), deg_to_rad(dictmain.wag_max))
+		if sprite_data.auto_wag:
+			%Sprite2D.curvature = clamp(sin(Global.tick*(sprite_data.wag_freq))*sprite_data.wag_speed, deg_to_rad(sprite_data.wag_mini), deg_to_rad(sprite_data.wag_max))
 	else:
-		if dictmain.auto_wag:
+		if sprite_data.auto_wag:
 			%Sprite2D.curvature = 0.0
 		
 	%Grab.anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 
 func wiggle_sprite():
-	var wiggle_val = sin(Global.tick*dictmain.wiggle_freq)*dictmain.wiggle_amp
-	if dictmain.wiggle_physics:
+	var wiggle_val = sin(Global.tick*sprite_data.wiggle_freq)*sprite_data.wiggle_amp
+	if sprite_data.wiggle_physics:
 		if get_parent() is Sprite2D or get_parent() is WigglyAppendage2D:
 			var c_parent = get_parent().owner
 			var c_parrent_length = (c_parent.glob.y - c_parent.dragger.global_position.y)
@@ -174,71 +174,71 @@ func wiggle_sprite():
 	%Sprite2D.material.set_shader_parameter("rotation", wiggle_val )
 
 func save_state(id):
-	var dict : Dictionary = dictmain.duplicate()
+	var dict : Dictionary = sprite_data.duplicate()
 	states[id] = dict
 
 func get_state(id):
 	if not states[id].is_empty():
 		var dict = states[id]
-		dictmain.merge(dict, true)
+		sprite_data.merge(dict, true)
 		'''
-		if img_animated && dictmain.should_reset:
+		if img_animated && sprite_data.should_reset:
 			%Sprite2D.texture.diffuse_texture.current_frame = 0
 			if %Sprite2D.texture.normal_texture != null:
 				%Sprite2D.texture.normal_texture.current_frame = 0
 
-			%Sprite2D.texture.diffuse_texture.one_shot = dictmain.one_shot
+			%Sprite2D.texture.diffuse_texture.one_shot = sprite_data.one_shot
 			if %Sprite2D.texture.normal_texture != null:
-				%Sprite2D.texture.normal_texture.one_shot = dictmain.one_shot
+				%Sprite2D.texture.normal_texture.one_shot = sprite_data.one_shot
 		'''
-		%Wobble.z_index = dictmain.z_index
-		modulate = dictmain.colored
-		visible = dictmain.visible
-		scale = dictmain.scale
-	#	global_position = dictmain.global_position
-		position = dictmain.position
-		%Sprite2D.position = dictmain.offset 
+		%Wobble.z_index = sprite_data.z_index
+		modulate = sprite_data.colored
+		visible = sprite_data.visible
+		scale = sprite_data.scale
+	#	global_position = sprite_data.global_position
+		position = sprite_data.position
+		%Sprite2D.position = sprite_data.offset 
 		%Sprite2D.scale = Vector2(1,1)
 		
-		%Sprite2D.closed = dictmain.wiggle_closed_loop
-		%Sprite2D.gravity = dictmain.wiggle_gravity
+		%Sprite2D.closed = sprite_data.wiggle_closed_loop
+		%Sprite2D.gravity = sprite_data.wiggle_gravity
 		
-		if dictmain.look_at_mouse_pos == 0:
+		if sprite_data.look_at_mouse_pos == 0:
 			%Pos.position.x = 0
-		if dictmain.look_at_mouse_pos_y == 0:
+		if sprite_data.look_at_mouse_pos_y == 0:
 			%Pos.position.y = 0
 		
-		if %Sprite2D.segment_count != dictmain.wiggle_segm:
-			%Sprite2D.segment_count = dictmain.wiggle_segm
-		if %Sprite2D.curvature != dictmain.wiggle_curve:
-			%Sprite2D.curvature = dictmain.wiggle_curve
-		if %Sprite2D.stiffness != dictmain.wiggle_stiff:
-			%Sprite2D.stiffness = dictmain.wiggle_stiff
-		if %Sprite2D.max_angle != dictmain.wiggle_max_angle:
-			%Sprite2D.max_angle = dictmain.wiggle_max_angle
+		if %Sprite2D.segment_count != sprite_data.wiggle_segm:
+			%Sprite2D.segment_count = sprite_data.wiggle_segm
+		if %Sprite2D.curvature != sprite_data.wiggle_curve:
+			%Sprite2D.curvature = sprite_data.wiggle_curve
+		if %Sprite2D.stiffness != sprite_data.wiggle_stiff:
+			%Sprite2D.stiffness = sprite_data.wiggle_stiff
+		if %Sprite2D.max_angle != sprite_data.wiggle_max_angle:
+			%Sprite2D.max_angle = sprite_data.wiggle_max_angle
 		
-		if %Sprite2D.width != dictmain.width:
-			%Sprite2D.width = dictmain.width
-		if %Sprite2D.segment_length != dictmain.segm_length:
-			%Sprite2D.segment_length = dictmain.segm_length
-		if %Sprite2D.subdivision!= dictmain.subdivision:
-			%Sprite2D.subdivision = dictmain.subdivision
+		if %Sprite2D.width != sprite_data.width:
+			%Sprite2D.width = sprite_data.width
+		if %Sprite2D.segment_length != sprite_data.segm_length:
+			%Sprite2D.segment_length = sprite_data.segm_length
+		if %Sprite2D.subdivision!= sprite_data.subdivision:
+			%Sprite2D.subdivision = sprite_data.subdivision
 		
 
-		%Sprite2D.set_clip_children_mode(dictmain.clip)
-		rotation = dictmain.rotation
+		%Sprite2D.set_clip_children_mode(sprite_data.clip)
+		rotation = sprite_data.rotation
 
-		if dictmain.flip_h:
+		if sprite_data.flip_h:
 			%AppendageFlip.scale.x = -1
 		else:
 			%AppendageFlip.scale.x = 1
-		if dictmain.flip_v:
+		if sprite_data.flip_v:
 			%AppendageFlip.scale.y = -1
 		else:
 			%AppendageFlip.scale.y = 1
 		
-		if dictmain.should_blink:
-			if dictmain.open_eyes:
+		if sprite_data.should_blink:
+			if sprite_data.open_eyes:
 				
 				%Pos.show()
 			else:
@@ -246,41 +246,41 @@ func get_state(id):
 		%ReactionConfig.speaking()
 		%ReactionConfig.not_speaking()
 #		animation()
-		set_blend(dictmain.blend_mode)
-		if dictmain.one_shot:
+		set_blend(sprite_data.blend_mode)
+		if sprite_data.one_shot:
 			if is_apng:
 				%AnimatedSpriteTexture.index = 0
 				%AnimatedSpriteTexture.proper_apng_one_shot()
 
 func update_wiggle_parts():
-	if %Sprite2D.segment_count != dictmain.wiggle_segm:
-		%Sprite2D.segment_count = dictmain.wiggle_segm
-	if %Sprite2D.curvature != dictmain.wiggle_curve:
-		%Sprite2D.curvature = dictmain.wiggle_curve
-	if %Sprite2D.stiffness != dictmain.wiggle_stiff:
-		%Sprite2D.stiffness = dictmain.wiggle_stiff
-	if %Sprite2D.max_angle != dictmain.wiggle_max_angle:
-		%Sprite2D.max_angle = dictmain.wiggle_max_angle
+	if %Sprite2D.segment_count != sprite_data.wiggle_segm:
+		%Sprite2D.segment_count = sprite_data.wiggle_segm
+	if %Sprite2D.curvature != sprite_data.wiggle_curve:
+		%Sprite2D.curvature = sprite_data.wiggle_curve
+	if %Sprite2D.stiffness != sprite_data.wiggle_stiff:
+		%Sprite2D.stiffness = sprite_data.wiggle_stiff
+	if %Sprite2D.max_angle != sprite_data.wiggle_max_angle:
+		%Sprite2D.max_angle = sprite_data.wiggle_max_angle
 	
-	if %Sprite2D.width != dictmain.width:
-		%Sprite2D.width = dictmain.width
-	if %Sprite2D.segment_length != dictmain.segm_length:
-		%Sprite2D.segment_length = dictmain.segm_length
-	if %Sprite2D.subdivision!= dictmain.subdivision:
-		%Sprite2D.subdivision = dictmain.subdivision
+	if %Sprite2D.width != sprite_data.width:
+		%Sprite2D.width = sprite_data.width
+	if %Sprite2D.segment_length != sprite_data.segm_length:
+		%Sprite2D.segment_length = sprite_data.segm_length
+	if %Sprite2D.subdivision!= sprite_data.subdivision:
+		%Sprite2D.subdivision = sprite_data.subdivision
 		
-	if %Sprite2D.comeback_speed!= dictmain.comeback_speed:
-		%Sprite2D.comeback_speed = dictmain.comeback_speed
+	if %Sprite2D.comeback_speed!= sprite_data.comeback_speed:
+		%Sprite2D.comeback_speed = sprite_data.comeback_speed
 		
-	if %Sprite2D.max_angular_momentum!= dictmain.max_angular_momentum:
-		%Sprite2D.max_angular_momentum = dictmain.max_angular_momentum
+	if %Sprite2D.max_angular_momentum!= sprite_data.max_angular_momentum:
+		%Sprite2D.max_angular_momentum = sprite_data.max_angular_momentum
 		
-	if %Sprite2D.damping!= dictmain.damping:
-		%Sprite2D.damping = dictmain.damping
+	if %Sprite2D.damping!= sprite_data.damping:
+		%Sprite2D.damping = sprite_data.damping
 
 func check_talk():
-	if dictmain.should_talk:
-		if dictmain.open_mouth:
+	if sprite_data.should_talk:
+		if sprite_data.open_mouth:
 			%Rotation.hide()
 		else:
 			%Rotation.show()

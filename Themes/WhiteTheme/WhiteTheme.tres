@@ -1,7 +1,10 @@
-[gd_resource type="Theme" load_steps=32 format=4 uid="uid://c5v4ocnimqa4i"]
+[gd_resource type="Theme" load_steps=35 format=4 uid="uid://c5v4ocnimqa4i"]
 
 [ext_resource type="StyleBox" uid="uid://dt6ohhswi3vpx" path="res://Themes/WhiteTheme/ButtonPressed.tres" id="1_eajkr"]
 [ext_resource type="StyleBox" uid="uid://musbk38v1ou4" path="res://Themes/WhiteTheme/Buttonbase.tres" id="2_3ggix"]
+[ext_resource type="Texture2D" uid="uid://cs5x5k14vxaqv" path="res://Misc/TestAssets/SliderGrabber.png" id="3_ibm4p"]
+[ext_resource type="Texture2D" uid="uid://cd54dgvet0k2m" path="res://Misc/TestAssets/SliderGrabberDisabled.png" id="4_vhxpk"]
+[ext_resource type="Texture2D" uid="uid://dahd6x51nj0iv" path="res://Misc/TestAssets/SliderGrabberHeld.png" id="5_ey3cu"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_vn4vb"]
 color = Color(0.25098, 0.25098, 0.25098, 1)
@@ -3348,6 +3351,9 @@ Button/styles/normal = ExtResource("2_3ggix")
 Button/styles/pressed = ExtResource("1_eajkr")
 HSeparator/constants/separation = 6
 HSeparator/styles/separator = SubResource("StyleBoxLine_vn4vb")
+HSlider/icons/grabber = ExtResource("3_ibm4p")
+HSlider/icons/grabber_disabled = ExtResource("4_vhxpk")
+HSlider/icons/grabber_highlight = ExtResource("5_ey3cu")
 LineEdit/colors/caret_color = Color(0.95, 0.95, 0.95, 1)
 LineEdit/colors/clear_button_color = Color(0.875, 0.875, 0.875, 1)
 LineEdit/colors/clear_button_color_pressed = Color(1, 1, 1, 1)

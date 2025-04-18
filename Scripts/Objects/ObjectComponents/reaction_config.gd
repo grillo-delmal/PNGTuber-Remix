@@ -11,6 +11,7 @@ func _ready() -> void:
 	Global.key_pressed.connect(should_disappear)
 	Global.mode_changed.connect(update_to_mode_change)
 	Global.blink.connect(editor_blink)
+	Global.animation_state.connect(reset_animations)
 
 func asset(key):
 	if actor.is_asset && InputMap.action_get_events(str(actor.sprite_id)).size() > 0:
@@ -35,14 +36,14 @@ func update_to_mode_change(mode : int):
 		0:
 			editor_blink()
 			%Rotation.show()
-			if actor.dictmain.should_talk:
+			if actor.sprite_data.should_talk:
 				if actor.currently_speaking:
-					if actor.dictmain.open_mouth:
+					if actor.sprite_data.open_mouth:
 						%Rotation.modulate.a = 1
 					else:
 						%Rotation.modulate.a = 0.2
 				if !actor.currently_speaking:
-					if !actor.dictmain.open_mouth:
+					if !actor.sprite_data.open_mouth:
 						%Rotation.modulate.a = 0.2
 					else:
 						%Rotation.modulate.a = 1
@@ -52,14 +53,14 @@ func update_to_mode_change(mode : int):
 		1:
 			blink()
 			%Rotation.modulate.a = 1
-			if actor.dictmain.should_talk:
+			if actor.sprite_data.should_talk:
 				if actor.currently_speaking:
-					if actor.dictmain.open_mouth:
+					if actor.sprite_data.open_mouth:
 						%Rotation.show()
 					else:
 						%Rotation.hide()
 				elif !actor.currently_speaking:
-					if !actor.dictmain.open_mouth:
+					if !actor.sprite_data.open_mouth:
 						%Rotation.show()
 					else:
 						%Rotation.hide()
@@ -69,9 +70,9 @@ func update_to_mode_change(mode : int):
 
 func editor_blink():
 	if Global.mode == 0:
-		if actor.dictmain.should_blink:
+		if actor.sprite_data.should_blink:
 			%Pos.show()
-			if not actor.dictmain.open_eyes:
+			if not actor.sprite_data.open_eyes:
 				%Pos.modulate.a = 1
 				reset_animations()
 			else:
@@ -80,8 +81,8 @@ func editor_blink():
 		%Blink.wait_time = 0.2 * Global.settings_dict.blink_speed
 		%Blink.start()
 		await  %Blink.timeout
-		if actor.dictmain.should_blink:
-			if not actor.dictmain.open_eyes:
+		if actor.sprite_data.should_blink:
+			if not actor.sprite_data.open_eyes:
 				%Pos.modulate.a = 0.2
 			else:
 				%Pos.modulate.a = 1
@@ -91,9 +92,9 @@ func editor_blink():
 
 func blink():
 	if Global.mode != 0:
-		if actor.dictmain.should_blink:
+		if actor.sprite_data.should_blink:
 			%Pos.modulate.a = 1
-			if not actor.dictmain.open_eyes:
+			if not actor.sprite_data.open_eyes:
 				%Pos.show()
 				reset_animations()
 			else:
@@ -102,8 +103,8 @@ func blink():
 		%Blink.wait_time = 0.2 * Global.settings_dict.blink_speed
 		%Blink.start()
 		await  %Blink.timeout
-		if actor.dictmain.should_blink:
-			if not actor.dictmain.open_eyes:
+		if actor.sprite_data.should_blink:
+			if not actor.sprite_data.open_eyes:
 				%Pos.hide()
 			else:
 				%Pos.show()
@@ -114,8 +115,8 @@ func blink():
 func speaking():
 	if Global.mode != 0:
 		%Rotation.modulate.a = 1
-		if actor.dictmain.should_talk:
-			if actor.dictmain.open_mouth:
+		if actor.sprite_data.should_talk:
+			if actor.sprite_data.open_mouth:
 				reset_animations()
 				%Rotation.show()
 					
@@ -126,8 +127,8 @@ func speaking():
 			
 	elif Global.mode == 0:
 		%Rotation.show()
-		if actor.dictmain.should_talk:
-			if actor.dictmain.open_mouth:
+		if actor.sprite_data.should_talk:
+			if actor.sprite_data.open_mouth:
 				%Rotation.modulate.a = 1
 				reset_animations()
 			else:
@@ -136,20 +137,32 @@ func speaking():
 			%Rotation.modulate.a = 1
 	actor.currently_speaking = true
 
-func reset_animations():
-	if actor.is_apng:
-		animation_handler.index = 0
-		animation_handler.proper_apng_one_shot()
-	animation_handler.played_once = false
-	if actor.sprite_type == "Sprite2D":
-		%Sprite2D.frame = 0
-		actor.animation()
+func reset_animations(_place_holder : int = 0):
+	if actor.sprite_data.one_shot:
+		if actor.is_apng:
+			animation_handler.index = 0
+			animation_handler.proper_apng_one_shot()
+		animation_handler.played_once = false
+		if actor.sprite_type == "Sprite2D":
+			%Sprite2D.frame = 0
+			actor.animation()
+		reset_gif_anim()
+	
+	if actor.sprite_data.should_reset:
+		if actor.is_apng:
+			animation_handler.index = 0
+			animation_handler.proper_apng_one_shot()
+		animation_handler.played_once = false
+		if actor.sprite_type == "Sprite2D":
+			%Sprite2D.frame = 0
+			actor.animation()
+		reset_gif_anim()
 
 func not_speaking():
 	if Global.mode != 0:
 		%Rotation.modulate.a = 1
-		if actor.dictmain.should_talk:
-			if actor.dictmain.open_mouth:
+		if actor.sprite_data.should_talk:
+			if actor.sprite_data.open_mouth:
 				%Rotation.hide()
 			else:
 				reset_animations()
@@ -159,8 +172,8 @@ func not_speaking():
 			
 	elif Global.mode == 0:
 		%Rotation.show()
-		if actor.dictmain.should_talk:
-			if actor.dictmain.open_mouth:
+		if actor.sprite_data.should_talk:
+			if actor.sprite_data.open_mouth:
 				%Rotation.modulate.a = 0.2
 			else:
 				reset_animations()
@@ -169,3 +182,13 @@ func not_speaking():
 			%Rotation.modulate.a = 1
 			
 	actor.currently_speaking = false
+
+
+func reset_gif_anim():
+	if actor.img_animated:
+		%Sprite2D.texture.diffuse_texture.current_frame = 0
+		if %Sprite2D.texture.normal_texture != null:
+			%Sprite2D.texture.normal_texture.current_frame = 0
+		%Sprite2D.texture.diffuse_texture.one_shot = actor.sprite_data.one_shot
+		if %Sprite2D.texture.normal_texture != null:
+			%Sprite2D.texture.normal_texture.one_shot = actor.sprite_data.one_shot

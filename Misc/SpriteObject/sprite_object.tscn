@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://du5v1xpm5fjcm"]
+[gd_scene load_steps=15 format=3 uid="uid://du5v1xpm5fjcm"]
 
 [ext_resource type="Script" uid="uid://q3wblwc0jg28" path="res://Scripts/Objects/sprite_object.gd" id="1_i7wd5"]
 [ext_resource type="Texture2D" uid="uid://bt5ep2bnr2x76" path="res://Misc/SpriteObject/origin.png" id="2_1i6gu"]
@@ -43,8 +43,6 @@ colors = PackedColorArray(0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_5cd6y"]
 gradient = SubResource("Gradient_4xt5n")
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_2iktx"]
 
 [node name="SpriteObject" type="Node2D" groups=["Sprites"]]
 script = ExtResource("1_i7wd5")
@@ -116,7 +114,7 @@ visible = false
 self_modulate = Color(1, 0, 0, 1)
 z_index = 4096
 z_as_relative = false
-texture = SubResource("CompressedTexture2D_2iktx")
+texture = ExtResource("2_1i6gu")
 
 [node name="Blink" type="Timer" parent="."]
 unique_name_in_owner = true

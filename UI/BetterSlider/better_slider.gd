@@ -69,7 +69,7 @@ func _on_spin_box_value_value_changed(nvalue):
 	%SliderValue.value = nvalue
 	%SpinBoxValue.get_line_edit().release_focus()
 	if Global.held_sprite != null && is_instance_valid(Global.held_sprite) && sp_type != "Null":
-		Global.held_sprite.dictmain[value_to_update] = nvalue
+		Global.held_sprite.sprite_data[value_to_update] = nvalue
 		Global.held_sprite.save_state(Global.current_state)
 
 
@@ -78,7 +78,7 @@ func _on_spin_box_value_value_changed(nvalue):
 func _on_slider_value_value_changed(nvalue):
 	%SpinBoxValue.value = nvalue
 	if Global.held_sprite != null && is_instance_valid(Global.held_sprite) && sp_type != "Null":
-		Global.held_sprite.dictmain[value_to_update] = nvalue
+		Global.held_sprite.sprite_data[value_to_update] = nvalue
 		if sp_type == "WiggleApp":
 			Global.held_sprite.update_wiggle_parts()
 		Global.held_sprite.save_state(Global.current_state)
@@ -97,16 +97,16 @@ func enable():
 	if Global.held_sprite.sprite_type == sp_type:
 		%SpinBoxValue.editable = true
 		%SliderValue.editable = true
-		%SliderValue.value = Global.held_sprite.dictmain[value_to_update]
+		%SliderValue.value = Global.held_sprite.sprite_data[value_to_update]
 		
 	elif sp_type == "":
 		%SpinBoxValue.editable = true
 		%SliderValue.editable = true
-		%SliderValue.value = Global.held_sprite.dictmain[value_to_update]
+		%SliderValue.value = Global.held_sprite.sprite_data[value_to_update]
 
 func _on_slider_value_drag_ended(value_changed: bool) -> void:
 	if value_changed && sp_type != "Null":
-		Global.held_sprite.dictmain[value_to_update] = %SliderValue.value
+		Global.held_sprite.sprite_data[value_to_update] = %SliderValue.value
 		if sp_type == "WiggleApp":
 			Global.held_sprite.update_wiggle_parts()
 		Global.held_sprite.save_state(Global.current_state)

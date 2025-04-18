@@ -1,0 +1,271 @@
+[gd_scene load_steps=3 format=3 uid="uid://0pdcrfa5cxci"]
+
+[ext_resource type="Script" uid="uid://cfb1omm82mv67" path="res://Scripts/UI/RightPanel/wiggle_appendage.gd" id="1_txqgg"]
+[ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="2_cimjc"]
+
+[node name="WiggleAppendagePanel" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="WiggleAppendage" type="Node" parent="."]
+script = ExtResource("1_txqgg")
+
+[node name="WiggleAppStuff" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="WiggleAppStuff"]
+layout_mode = 2
+text = "Wiggle Appendage"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AutoWagCheck" type="CheckBox" parent="WiggleAppStuff"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 14
+text = "Auto Wag "
+
+[node name="AutoWagSettings" type="PanelContainer" parent="WiggleAppStuff"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="WiggleAppStuff/AutoWagSettings"]
+layout_mode = 2
+
+[node name="WagSpeedBSlider" parent="WiggleAppStuff/AutoWagSettings/VBox" instance=ExtResource("2_cimjc")]
+unique_name_in_owner = true
+layout_mode = 2
+sp_type = "WiggleApp"
+label_text = "Wag Speed : "
+mini_value = 0.1
+max_value = 50.0
+step = 0.01
+value_to_update = "wag_speed"
+
+[node name="WagFreqBSlider" parent="WiggleAppStuff/AutoWagSettings/VBox" instance=ExtResource("2_cimjc")]
+unique_name_in_owner = true
+layout_mode = 2
+sp_type = "WiggleApp"
+label_text = "Wag Freq : "
+mini_value = -50.0
+max_value = 50.0
+step = 0.01
+value_to_update = "wag_freq"
+
+[node name="MinimumCurve" parent="WiggleAppStuff/AutoWagSettings/VBox" instance=ExtResource("2_cimjc")]
+unique_name_in_owner = true
+layout_mode = 2
+sp_type = "WiggleApp"
+label_text = "Mini-Curve : "
+mini_value = -180.0
+step = 0.01
+value_to_update = "wag_mini"
+
+[node name="MaxmumCurve" parent="WiggleAppStuff/AutoWagSettings/VBox" instance=ExtResource("2_cimjc")]
+unique_name_in_owner = true
+layout_mode = 2
+sp_type = "WiggleApp"
+label_text = "Max-Curve : "
+max_value = 180.0
+step = 0.01
+value_to_update = "wag_max"
+
+[node name="WiggleAppsCurveBSlider" parent="WiggleAppStuff" instance=ExtResource("2_cimjc")]
+unique_name_in_owner = true
+layout_mode = 2
+sp_type = "WiggleApp"
+label_text = "Curvature : "
+mini_value = -10.0
+max_value = 10.0
+step = 0.01
+value_to_update = "wiggle_curve"
+
+[node name="WiggleAppSegmBSlider" parent="WiggleAppStuff" instance=ExtResource("2_cimjc")]
+unique_name_in_owner = true
+layout_mode = 2
+sp_type = "WiggleApp"
+label_text = "Segments : "
+mini_value = -3.0
+max_value = 15.0
+step = 1.0
+value_to_update = "wiggle_segm"
+
+[node name="WiggleAppsStiffBSlider" parent="WiggleAppStuff" instance=ExtResource("2_cimjc")]
+unique_name_in_owner = true
+layout_mode = 2
+sp_type = "WiggleApp"
+label_text = "Stiffness : "
+max_value = 50.0
+step = 1.0
+value_to_update = "wiggle_stiff"
+
+[node name="WiggleAppsMaxAngleBSlider" parent="WiggleAppStuff" instance=ExtResource("2_cimjc")]
+unique_name_in_owner = true
+layout_mode = 2
+sp_type = "WiggleApp"
+label_text = "Max Angle : "
+max_value = 180.0
+step = 0.1
+value_to_update = "wiggle_max_angle"
+
+[node name="WiggleAppsPhysStiffBSlider" parent="WiggleAppStuff" instance=ExtResource("2_cimjc")]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Physics/ Reaction to parent's movement stiffness."
+sp_type = "WiggleApp"
+label_text = "Phys-Stiff :"
+mini_value = 0.5
+max_value = 10.0
+step = 0.1
+value_to_update = "wiggle_physics_stiffness"
+
+[node name="ComeBackSpeedBSlider" parent="WiggleAppStuff" instance=ExtResource("2_cimjc")]
+layout_mode = 2
+sp_type = "WiggleApp"
+label_text = "Comeback : "
+max_value = 6.28
+step = 0.01
+value_to_update = "comeback_speed"
+
+[node name="MaxAngularMomentumBSlider" parent="WiggleAppStuff" instance=ExtResource("2_cimjc")]
+unique_name_in_owner = true
+layout_mode = 2
+sp_type = "WiggleApp"
+label_text = "Momentum : "
+max_value = 10000.0
+step = 0.01
+ui_type = 1
+value_to_update = "max_angular_momentum"
+
+[node name="DampBSlider" parent="WiggleAppStuff" instance=ExtResource("2_cimjc")]
+layout_mode = 2
+sp_type = "WiggleApp"
+label_text = "Damp : "
+max_value = 1000.0
+step = 0.01
+ui_type = 1
+value_to_update = "damping"
+
+[node name="Grid" type="GridContainer" parent="WiggleAppStuff"]
+layout_mode = 2
+theme_override_constants/v_separation = 6
+columns = 2
+
+[node name="HBox30" type="HBoxContainer" parent="WiggleAppStuff/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="WiggleWidthLabel" type="Label" parent="WiggleAppStuff/Grid/HBox30"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(93, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Width : "
+
+[node name="WiggleWidthSpin" type="SpinBox" parent="WiggleAppStuff/Grid/HBox30"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 10000.0
+
+[node name="HBox31" type="HBoxContainer" parent="WiggleAppStuff/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="WiggleLengthLabel" type="Label" parent="WiggleAppStuff/Grid/HBox31"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(93, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Length : "
+
+[node name="WiggleLengthSpin" type="SpinBox" parent="WiggleAppStuff/Grid/HBox31"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 10000.0
+
+[node name="HBox" type="HBoxContainer" parent="WiggleAppStuff/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="X" type="Label" parent="WiggleAppStuff/Grid/HBox"]
+custom_minimum_size = Vector2(93, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Gravity-X : "
+
+[node name="WAGravityX" type="SpinBox" parent="WiggleAppStuff/Grid/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -3000.0
+max_value = 3000.0
+step = 0.1
+
+[node name="HBox33" type="HBoxContainer" parent="WiggleAppStuff/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="Y" type="Label" parent="WiggleAppStuff/Grid/HBox33"]
+custom_minimum_size = Vector2(93, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Gravity-Y : "
+
+[node name="WAGravityY" type="SpinBox" parent="WiggleAppStuff/Grid/HBox33"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -3000.0
+max_value = 3000.0
+step = 0.1
+
+[node name="HBox32" type="HBoxContainer" parent="WiggleAppStuff/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="WiggleSubDLabel" type="Label" parent="WiggleAppStuff/Grid/HBox32"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(93, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Sub-Division :"
+
+[node name="WiggleSubDSpin" type="SpinBox" parent="WiggleAppStuff/Grid/HBox32"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+value = 1.0
+
+[node name="ClosedLoopCheck" type="CheckBox" parent="WiggleAppStuff/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Is a Closed Loop    "
+
+[connection signal="toggled" from="WiggleAppStuff/AutoWagCheck" to="WiggleAppendage" method="_on_auto_wag_check_toggled"]
+[connection signal="value_changed" from="WiggleAppStuff/Grid/HBox30/WiggleWidthSpin" to="WiggleAppendage" method="_on_wiggle_width_spin_value_changed"]
+[connection signal="value_changed" from="WiggleAppStuff/Grid/HBox31/WiggleLengthSpin" to="WiggleAppendage" method="_on_wiggle_length_spin_value_changed"]
+[connection signal="value_changed" from="WiggleAppStuff/Grid/HBox/WAGravityX" to="WiggleAppendage" method="_on_wa_gravity_x_value_changed"]
+[connection signal="value_changed" from="WiggleAppStuff/Grid/HBox33/WAGravityY" to="WiggleAppendage" method="_on_wa_gravity_y_value_changed"]
+[connection signal="value_changed" from="WiggleAppStuff/Grid/HBox32/WiggleSubDSpin" to="WiggleAppendage" method="_on_wiggle_sub_d_spin_value_changed"]
+[connection signal="toggled" from="WiggleAppStuff/Grid/ClosedLoopCheck" to="WiggleAppendage" method="_on_closed_loop_check_toggled"]

@@ -1,6 +1,8 @@
 class_name WebSocketServer
 extends Node
 
+signal port_state
+
 signal message_received(peer_id: int, message: String)
 signal client_connected(peer_id: int)
 signal client_disconnected(peer_id: int)
@@ -15,6 +17,7 @@ signal client_disconnected(peer_id: int)
 	set(refuse):
 		if refuse:
 			pending_peers.clear()
+@export var port : int = 9321
 
 
 class PendingPeer:
@@ -34,15 +37,16 @@ var pending_peers: Array[PendingPeer] = []
 var peers: Dictionary
 
 
-func listen(port: int) -> int:
+func listen(nport: int) -> int:
 	assert(not tcp_server.is_listening())
-	return tcp_server.listen(port)
+	return tcp_server.listen(nport)
 
 
 func stop() -> void:
 	tcp_server.stop()
 	pending_peers.clear()
 	peers.clear()
+	port_state.emit(false)
 
 
 func send(peer_id: int, message: String) -> int:
@@ -174,13 +178,15 @@ func _process(_delta: float) -> void:
 	
 func _ready() -> void:
 	message_received.connect(_on_message)
-	start_websocket_server(9321)
+#	start_websocket_server(9321)
 #Call this function to start the websocket server, either here or any other place, as long as you have the reference to this node
-func start_websocket_server(port:int):
-	var result = listen(9321) #Made port static just so the port setting feature can be integrated better.
+func start_websocket_server():
+	var result = listen(port) #Made port static just so the port setting feature can be integrated better.
 	if result == OK:
+		port_state.emit(true)
 		print("Server now listening on port", port)
 	else:
+		port_state.emit(false)
 		print("Failed to start server")
 func _on_message(peer_id: int, message: String):
 	print("Received message from peer %d: %s" % [peer_id, message])

@@ -139,17 +139,17 @@ func _input(_event : InputEvent):
 	if held_sprite != null && is_instance_valid(held_sprite):
 		if Input.is_action_pressed("ctrl"):
 			if Input.is_action_pressed("scrollup"):
-				held_sprite.dictmain.rotation -= 0.05
+				held_sprite.sprite_data.rotation -= 0.05
 				rot()
 
 			elif Input.is_action_pressed("scrolldown"):
-				held_sprite.dictmain.rotation += 0.05
+				held_sprite.sprite_data.rotation += 0.05
 				rot()
 
 func offset():
 	held_sprite.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
-	held_sprite.dictmain.position = held_sprite.position
-	held_sprite.dictmain.offset = held_sprite.get_node("%Sprite2D").position
+	held_sprite.sprite_data.position = held_sprite.position
+	held_sprite.sprite_data.offset = held_sprite.get_node("%Sprite2D").position
 	held_sprite.save_state(current_state)
 
 	update_offset_spins.emit()
@@ -195,7 +195,7 @@ func moving_origin(delta):
 					offset()
 
 func rot():
-	held_sprite.rotation = held_sprite.dictmain.rotation
+	held_sprite.rotation = held_sprite.sprite_data.rotation
 	held_sprite.save_state(current_state)
 	update_pos_spins.emit()
 
@@ -203,21 +203,21 @@ func moving_sprite(delta):
 	if held_sprite != null && is_instance_valid(held_sprite):
 		if Input.is_action_pressed("w"):
 			held_sprite.position.y -= 10 * delta
-			held_sprite.dictmain.position.y -= 10 * delta
+			held_sprite.sprite_data.position.y -= 10 * delta
 			update_spins()
 		elif Input.is_action_pressed("s"):
 			held_sprite.position.y += 10 * delta
-			held_sprite.dictmain.position.y += 10 * delta
+			held_sprite.sprite_data.position.y += 10 * delta
 			update_spins()
 			
 		if Input.is_action_pressed("a"):
 			held_sprite.position.x -= 10 * delta
-			held_sprite.dictmain.position.x -= 10 * delta
+			held_sprite.sprite_data.position.x -= 10 * delta
 			update_spins()
 			
 		elif Input.is_action_pressed("d"):
 			held_sprite.position.x += 10 * delta
-			held_sprite.dictmain.position.x += 10 * delta
+			held_sprite.sprite_data.position.x += 10 * delta
 			update_spins()
 
 func update_spins():

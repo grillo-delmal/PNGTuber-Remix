@@ -1,0 +1,151 @@
+[gd_scene load_steps=4 format=3 uid="uid://bfys3e12aapdo"]
+
+[ext_resource type="Script" uid="uid://1wvjbd0qwxir" path="res://Scripts/UI/Others/LightControl.gd" id="1_vb5lh"]
+[ext_resource type="Script" uid="uid://181yhrus3jhb" path="res://Scripts/UI/Others/Spinboxes.gd" id="2_fqqfc"]
+[ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="3_27oy3"]
+
+[node name="LightSettingsPanel" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="LightControl" type="Node" parent="."]
+script = ExtResource("1_vb5lh")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+text = "Light Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 2
+
+[node name="LightSourceVis" type="CheckBox" parent="Grid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Light Visible            "
+
+[node name="LSShapeVis" type="CheckBox" parent="Grid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Light Shape Visible"
+
+[node name="LSShapeVisLabel" type="Label" parent="Grid/LSShapeVis"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 1.0
+offset_top = 21.0
+offset_right = 150.0
+offset_bottom = 44.0
+theme_override_font_sizes/font_size = 12
+text = "For testing only"
+horizontal_alignment = 1
+
+[node name="HBox17" type="HBoxContainer" parent="Grid"]
+layout_mode = 2
+
+[node name="LightColorLabel" type="Label" parent="Grid/HBox17"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Light Color :"
+
+[node name="LightColor" type="ColorPickerButton" parent="Grid/HBox17"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(45, 27)
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(1, 1, 1, 1)
+
+[node name="HBox20" type="HBoxContainer" parent="Grid"]
+layout_mode = 2
+
+[node name="DarkenCheck" type="CheckBox" parent="Grid/HBox20"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(93, 0)
+layout_mode = 2
+tooltip_text = "Darkens Your model when not speaking."
+theme_override_font_sizes/font_size = 16
+text = "Darken"
+
+[node name="DarkenColor" type="ColorPickerButton" parent="Grid/HBox20"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(45, 27)
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(1, 1, 1, 1)
+
+[node name="HBox" type="HBoxContainer" parent="Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PosXLabel" type="Label" parent="Grid/HBox"]
+custom_minimum_size = Vector2(93, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Pos-X :  "
+
+[node name="LightPosXSpinBox" type="SpinBox" parent="Grid/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -9999.0
+max_value = 9999.0
+step = 0.1
+script = ExtResource("2_fqqfc")
+
+[node name="HBox25" type="HBoxContainer" parent="Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="PosYLabel" type="Label" parent="Grid/HBox25"]
+custom_minimum_size = Vector2(93, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 16
+text = "Pos-Y : "
+
+[node name="LightPosYSpinBox" type="SpinBox" parent="Grid/HBox25"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -9999.0
+max_value = 9999.0
+step = 0.1
+script = ExtResource("2_fqqfc")
+
+[node name="LightEnergyBSlider" parent="." instance=ExtResource("3_27oy3")]
+unique_name_in_owner = true
+layout_mode = 2
+label_text = "Light Energy :"
+max_value = 16.0
+step = 0.1
+
+[node name="LightSizeBSlider" parent="." instance=ExtResource("3_27oy3")]
+unique_name_in_owner = true
+layout_mode = 2
+label_text = "Light Size :"
+mini_value = 0.1
+max_value = 16.0
+step = 0.1
+
+[connection signal="toggled" from="Grid/LightSourceVis" to="LightControl" method="_on_light_source_vis_toggled"]
+[connection signal="toggled" from="Grid/LSShapeVis" to="LightControl" method="_on_ls_shape_vis_toggled"]
+[connection signal="color_changed" from="Grid/HBox17/LightColor" to="LightControl" method="_on_light_color_color_changed"]
+[connection signal="toggled" from="Grid/HBox20/DarkenCheck" to="LightControl" method="_on_darken_check_toggled"]
+[connection signal="color_changed" from="Grid/HBox20/DarkenColor" to="LightControl" method="_on_darken_color_color_changed"]
+[connection signal="value_changed" from="Grid/HBox/LightPosXSpinBox" to="LightControl" method="_on_light_pos_x_spin_box_value_changed"]
+[connection signal="value_changed" from="Grid/HBox25/LightPosYSpinBox" to="LightControl" method="_on_light_pos_y_spin_box_value_changed"]

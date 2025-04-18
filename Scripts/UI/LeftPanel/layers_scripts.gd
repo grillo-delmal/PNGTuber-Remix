@@ -55,7 +55,7 @@ func add_new_layer_item(new_item, type):
 	})
 	new_layer_item.set_icon_max_width(0,25)
 	if type == "Sprite2D":
-		if new_item.dictmain.folder:
+		if new_item.sprite_data.folder:
 			new_layer_item.set_icon(0,preload("res://UI/Assets/FolderButton.png"))
 		else:
 			ImageTrimmer.set_thumbnail(new_layer_item)
@@ -91,9 +91,9 @@ func correct_rearrange(sprites : Array = get_tree().get_nodes_in_group("Sprites"
 
 func update_visib_buttons():
 	for i in get_tree().get_nodes_in_group("Sprites"):
-		if i.dictmain.visible:
+		if i.sprite_data.visible:
 			i.treeitem.set_button(0,0, preload("res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/EyeButton.png"))
-		elif not i.dictmain.visible:
+		elif not i.sprite_data.visible:
 			i.treeitem.set_button(0,0, preload("res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/EyeButton2.png"))
 
 func collapsing(sprites):
@@ -133,8 +133,8 @@ func _on_layers_tree_item_selected() -> void:
 
 func _on_layers_tree_button_clicked(item: TreeItem, column: int, id: int, _mouse_button_index: int) -> void:
 	if id == 0 && column == 0:
-		item.get_metadata(0).sprite_object.dictmain.visible =! item.get_metadata(0).sprite_object.dictmain.visible 
-		item.get_metadata(0).sprite_object.visible = item.get_metadata(0).sprite_object.dictmain.visible 
+		item.get_metadata(0).sprite_object.sprite_data.visible =! item.get_metadata(0).sprite_object.sprite_data.visible 
+		item.get_metadata(0).sprite_object.visible = item.get_metadata(0).sprite_object.sprite_data.visible 
 		item.get_metadata(0).sprite_object.save_state(Global.current_state)
 		if item.get_metadata(0).sprite_object.visible:
 			item.set_button(column, id, preload("res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/EyeButton.png"))

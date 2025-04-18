@@ -267,7 +267,7 @@ func export_images(images = get_tree().get_nodes_in_group("Sprites")):
 		DirAccess.make_dir_absolute(dire)
 		
 	for sprite in images:
-		if !sprite.dictmain.folder:
+		if !sprite.sprite_data.folder:
 			if sprite.img_animated:
 				var file = FileAccess.open(dire +"/" + sprite.sprite_name + str(randi()) + ".gif", FileAccess.WRITE)
 				file.store_buffer(sprite.anim_texture)

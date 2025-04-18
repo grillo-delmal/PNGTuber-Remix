@@ -1,4 +1,8 @@
-[gd_resource type="Theme" load_steps=22 format=3 uid="uid://b3mqud7u0mbij"]
+[gd_resource type="Theme" load_steps=25 format=3 uid="uid://b3mqud7u0mbij"]
+
+[ext_resource type="Texture2D" uid="uid://cs5x5k14vxaqv" path="res://Misc/TestAssets/SliderGrabber.png" id="1_s06a1"]
+[ext_resource type="Texture2D" uid="uid://cd54dgvet0k2m" path="res://Misc/TestAssets/SliderGrabberDisabled.png" id="2_n8gdt"]
+[ext_resource type="Texture2D" uid="uid://dahd6x51nj0iv" path="res://Misc/TestAssets/SliderGrabberHeld.png" id="3_4oy0n"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r8m0v"]
 content_margin_left = 4.0
@@ -233,6 +237,9 @@ Button/styles/hover = SubResource("StyleBoxFlat_822ui")
 Button/styles/normal = SubResource("StyleBoxFlat_822ui")
 Button/styles/pressed = SubResource("StyleBoxFlat_r8m0v")
 HSeparator/styles/separator = SubResource("StyleBoxLine_2u7mq")
+HSlider/icons/grabber = ExtResource("1_s06a1")
+HSlider/icons/grabber_disabled = ExtResource("2_n8gdt")
+HSlider/icons/grabber_highlight = ExtResource("3_4oy0n")
 LineEdit/colors/font_color = Color(0.866667, 0.866667, 0.87451, 1)
 LineEdit/styles/focus = SubResource("StyleBoxFlat_oeybe")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_0iccf")
