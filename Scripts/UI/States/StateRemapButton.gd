@@ -11,9 +11,6 @@ func _init():
 	
 	
 func _ready():
-	if !get_parent().get_index() in range(Global.settings_dict.saved_inputs.size()):
-		Global.settings_dict.saved_inputs.append(null)
-
 	set_process_unhandled_input(false)
 	update_key_text()
 
@@ -31,30 +28,29 @@ func _toggled(_button_pressed):
 func _unhandled_input(event):
 	if not event is InputEventMouseMotion:
 		if event.is_released():
-			if !get_parent().get_index() in range(Global.settings_dict.saved_inputs.size()):
-				Global.settings_dict.saved_inputs.append(event)
-			else:
-				Global.settings_dict.saved_inputs[get_parent().get_index()] = event
-			InputMap.action_erase_events(action)
-			InputMap.action_add_event(action, event)
-			state_button.saved_event = event
-			
+			if StateButton.selected_state != null && is_instance_valid(StateButton.selected_state):
+				InputMap.action_erase_events(StateButton.selected_state.input_key)
+				InputMap.action_add_event(StateButton.selected_state.input_key, event)
+				StateButton.selected_state.saved_event = event
+				
 			button_pressed = false
 	
 
 func update_key_text():
-	if InputMap.action_get_events(action).size() != 0:
-		text = "%s" % InputMap.action_get_events(action)[0].as_text()
-	else:
-		text = "Null"
+	if StateButton.selected_state != null && is_instance_valid(StateButton.selected_state):
+		if InputMap.action_get_events(StateButton.selected_state.input_key).size() != 0:
+			text = "%s" % InputMap.action_get_events(StateButton.selected_state.input_key)[0].as_text()
+		else:
+			text = "Null"
 
 func update_stuff():
-	if state_button.saved_event != null:
-		InputMap.action_erase_events(action)
-		InputMap.action_add_event(action, state_button.saved_event)
+	if StateButton.selected_state != null && is_instance_valid(StateButton.selected_state):
+		InputMap.action_erase_events(StateButton.selected_state.input_key)
+		InputMap.action_add_event(StateButton.selected_state.input_key, state_button.saved_event)
 	update_key_text()
 
 func _on_remove_pressed():
-	if InputMap.action_get_events(action).size() != 0:
-		InputMap.action_erase_events(action)
-		update_key_text()
+	if StateButton.selected_state != null && is_instance_valid(StateButton.selected_state):
+		if InputMap.action_get_events(StateButton.selected_state.input_key).size() != 0:
+			InputMap.action_erase_events(StateButton.selected_state.input_key)
+			update_key_text()

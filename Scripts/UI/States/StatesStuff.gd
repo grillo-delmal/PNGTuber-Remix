@@ -36,6 +36,7 @@ func _on_delete_state_pressed():
 			i.states.remove_at(Global.current_state)
 		
 		Global.current_state = 0
+		get_tree().get_first_node_in_group("StateButtons").select_state()
 		Global.load_sprite_states(Global.current_state)
 		
 	update_state_numbering()
@@ -44,20 +45,8 @@ func update_state_numbering():
 	
 	await get_tree().create_timer(0.08).timeout
 	
-	var id = 0
-
-	id = 0
-	for i in get_tree().get_nodes_in_group("StateRemapButton"):
-		if is_instance_valid(i):
-			i.get_parent().get_node("State").text = "State " + str(id + 1)
-		#	print(i.action)
-			i.update_stuff()
-			id += 1
-			
-			
 	for i in get_tree().get_nodes_in_group("StateButtons"):
 		if is_instance_valid(i):
-			i.text = str(i.get_index() + 1)
 			i.state = i.get_index()
 		#	print(i.get_index())
 
@@ -68,13 +57,11 @@ func _on_add_state_pressed():
 
 func delete_all_states():
 	Global.settings_dict.saved_inputs.clear()
-	var state_remap = get_tree().get_nodes_in_group("StateRemapButton")
 	var state_btn  = get_tree().get_nodes_in_group("StateButtons")
 		
-	for i in state_remap:
-		if InputMap.has_action(i.action):
-			InputMap.erase_action(i.action)
-		i.get_parent().queue_free()
+	for i in state_btn:
+		if InputMap.has_action(i.input_key):
+			InputMap.erase_action(i.input_key)
 		
 	for i in state_btn:
 		i.queue_free()
@@ -141,3 +128,17 @@ func _on_duplicate_state_pressed() -> void:
 				i.states.append(i.states[Global.current_state].duplicate())
 	
 	Global.settings_dict.saved_inputs.resize(Global.settings_dict.states.size())
+
+func _on_state_remap_pressed() -> void:
+	if StateButton.selected_state != null && is_instance_valid(StateButton.selected_state):
+		%StateName.text = StateButton.selected_state.state_name
+	%StateButtonHbox.get_node("StateRemapButton").update_key_text()
+	%StateRemapPopup.popup()
+
+func _on_state_remap_popup_close_requested() -> void:
+	%StateRemapPopup.hide()
+
+func _on_state_name_text_submitted(new_text: String) -> void:
+	if StateButton.selected_state != null && is_instance_valid(StateButton.selected_state):
+		StateButton.selected_state.state_name = new_text
+		StateButton.selected_state.text = new_text

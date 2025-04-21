@@ -13,7 +13,10 @@ func save_file(path):
 	var sprites_array : Array = []
 	var input_array : Array = []
 	for input in inputs:
-		input_array.append(input.saved_event)
+		input_array.append({
+			state_name = input.state_name,
+			hot_key = input.saved_event,
+		})
 	for sprt in sprites:
 		sprt.save_state(Global.current_state)
 		var img
@@ -129,8 +132,6 @@ func load_file(path, should_load_path = false):
 		if !load_dict.has("sprites_array"):
 			return
 		Global.settings_dict.merge(load_dict.settings_dict, true)
-		if load_dict.settings_dict.has("saved_inputs"):
-			Global.settings_dict.saved_inputs = load_dict.settings_dict.saved_inputs
 		Global.remake_states.emit(load_dict.settings_dict.states)
 		
 		
@@ -194,17 +195,16 @@ func load_file(path, should_load_path = false):
 
 		if !load_dict.input_array.is_empty():
 			for input in len(load_dict.input_array):
-				get_tree().get_nodes_in_group("StateButtons")[input].saved_event = load_dict.input_array[input]
-				get_tree().get_nodes_in_group("StateButtons")[input].update_stuff()
-				Global.settings_dict.saved_inputs = load_dict.input_array
-			#	get_tree().get_nodes_in_group("StateRemapButton")[input].update_stuff()
-		else:
-			var idx = 0
-			Global.settings_dict.saved_inputs.resize(get_tree().get_nodes_in_group("StateButtons").size())
-			for input in Global.settings_dict.saved_inputs:
-				get_tree().get_nodes_in_group("StateButtons")[idx].saved_event = input
-				get_tree().get_nodes_in_group("StateButtons")[idx].update_stuff()
-				idx += 1
+				if load_dict.input_array[input] is Dictionary:
+					get_tree().get_nodes_in_group("StateButtons")[input].saved_event = load_dict.input_array[input].hot_key
+					get_tree().get_nodes_in_group("StateButtons")[input].state_name = load_dict.input_array[input].state_name
+					get_tree().get_nodes_in_group("StateButtons")[input].text = load_dict.input_array[input].state_name
+					get_tree().get_nodes_in_group("StateButtons")[input].update_stuff()
+				else:
+					get_tree().get_nodes_in_group("StateButtons")[input].saved_event = load_dict.input_array[input]
+					get_tree().get_nodes_in_group("StateButtons")[input].update_stuff()
+					
+
 		var state_count = get_tree().get_nodes_in_group("StateButtons").size()
 		for i in get_tree().get_nodes_in_group("Sprites"):
 			if i.states.size() != state_count:
@@ -232,7 +232,6 @@ func load_file(path, should_load_path = false):
 			Themes.save_timer.stop()
 	
 	Global.main.get_node("%Marker").current_screen = Global.settings_dict.monitor
-	
 
 func load_sprite(sprite_obj, sprite):
 	var img_data

@@ -328,76 +328,10 @@ icon = ExtResource("4_fsnh4")
 icon_alignment = 1
 expand_icon = true
 
-[node name="States Remap" type="ScrollContainer" parent="SettingVbox/SettingsTab"]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="SettingVbox/SettingsTab/States Remap"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="SettingVbox/SettingsTab/States Remap/MarginContainer"]
-custom_minimum_size = Vector2(420, 200)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-
-[node name="VBoxContainer2" type="Control" parent="SettingVbox/SettingsTab/States Remap/MarginContainer/VBoxContainer2"]
-custom_minimum_size = Vector2(415, 210)
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 20.0
-metadata/_edit_use_anchors_ = true
-
-[node name="Panel2" type="Panel" parent="SettingVbox/SettingsTab/States Remap/MarginContainer/VBoxContainer2/VBoxContainer2"]
-custom_minimum_size = Vector2(420, 210)
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="RemapLabel" type="Label" parent="SettingVbox/SettingsTab/States Remap/MarginContainer/VBoxContainer2/VBoxContainer2/Panel2"]
-layout_mode = 2
-anchor_right = 0.991
-offset_left = 2.0
-offset_right = -0.130035
-offset_bottom = 24.0
-theme_override_font_sizes/font_size = 17
-text = "Remap States Input :"
-
-[node name="ScrollContainer" type="ScrollContainer" parent="SettingVbox/SettingsTab/States Remap/MarginContainer/VBoxContainer2/VBoxContainer2/Panel2"]
-custom_minimum_size = Vector2(0, 180)
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 29.0
-offset_right = -4.0
-offset_bottom = -1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Grid" type="VBoxContainer" parent="SettingVbox/SettingsTab/States Remap/MarginContainer/VBoxContainer2/VBoxContainer2/Panel2/ScrollContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
 [node name="Import Settings" type="ScrollContainer" parent="SettingVbox/SettingsTab"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 3
+metadata/_tab_index = 2
 
 [node name="Margin" type="MarginContainer" parent="SettingVbox/SettingsTab/Import Settings"]
 layout_mode = 2

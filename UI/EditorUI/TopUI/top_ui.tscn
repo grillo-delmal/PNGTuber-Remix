@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="25_715by"]
 
 [node name="TopUI" type="Control"]
-custom_minimum_size = Vector2(0, 28)
+custom_minimum_size = Vector2(0, 35)
 layout_mode = 3
 anchors_preset = 10
 anchor_right = 1.0
@@ -34,9 +34,11 @@ script = ExtResource("4_r6evh")
 [node name="TopBar" type="Panel" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 15
 anchor_right = 1.0
-offset_bottom = 28.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="HBox" type="HBoxContainer" parent="TopBar"]
 custom_minimum_size = Vector2(0, 30)
@@ -52,7 +54,6 @@ theme_override_constants/separation = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = "   Files "
 item_count = 9
@@ -79,7 +80,6 @@ popup/item_8/id = 10
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = " Mode "
 item_count = 3
@@ -95,7 +95,6 @@ popup/item_2/disabled = true
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = " BG Color "
 item_count = 7
@@ -118,7 +117,6 @@ popup/item_6/id = 6
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = " Bounce "
 
@@ -126,7 +124,6 @@ text = " Bounce "
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = " Settings "
 
@@ -136,7 +133,6 @@ visible = false
 custom_minimum_size = Vector2(79, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 15
 text = "Collab
 "
@@ -145,7 +141,6 @@ text = "Collab
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = " Window "
 item_count = 4
@@ -163,7 +158,6 @@ popup/item_3/id = 3
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 16
 text = " About "
 item_count = 3

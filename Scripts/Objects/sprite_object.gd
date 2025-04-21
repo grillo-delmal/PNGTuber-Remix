@@ -65,7 +65,6 @@ var sprite_data : Dictionary = {
 	frame = 0,
 	}
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.reparent_objects.connect(reparent_obj)

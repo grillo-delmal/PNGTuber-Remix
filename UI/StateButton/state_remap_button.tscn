@@ -6,22 +6,24 @@
 [node name="StateButtonHbox" type="HBoxContainer"]
 offset_right = 258.0
 offset_bottom = 31.0
+size_flags_horizontal = 3
 
 [node name="State" type="Label" parent="."]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-text = "State 1"
+text = "Hotkey :"
 
 [node name="StateRemapButton" type="Button" parent="." groups=["StateRemapButton"]]
 custom_minimum_size = Vector2(120, 20)
 layout_mode = 2
+size_flags_horizontal = 3
 text = "kp 0"
 script = ExtResource("2_ih08l")
 
 [node name="Remove" type="Button" parent="."]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 0
 size_flags_vertical = 4
 icon = ExtResource("3_5sre3")
 icon_alignment = 1

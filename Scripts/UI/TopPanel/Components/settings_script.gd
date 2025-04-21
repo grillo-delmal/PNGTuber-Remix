@@ -16,15 +16,6 @@ func _ready() -> void:
 		if i == Themes.theme_settings.microphone:
 			%MicroPhoneMenu.select(devices.find(i))
 	
-	
-	for i in get_tree().get_nodes_in_group("StateButtons"):
-		var remap_btn = preload("res://UI/StateButton/state_remap_button.tscn").instantiate()
-		remap_btn.get_node("State").text = "State " + i.text
-		remap_btn.get_node("StateRemapButton").action = i.input_key
-		remap_btn.get_node("StateRemapButton").state_button = i
-		remap_btn.get_node("StateRemapButton").update_stuff()
-		%Grid.add_child(remap_btn)
-	
 	%SelectedScreen.add_item("All Screens")
 	for i in DisplayServer.get_screen_count():
 		%SelectedScreen.add_item("Screen " + str(i))

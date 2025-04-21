@@ -1,10 +1,10 @@
-[gd_resource type="Theme" load_steps=59 format=4 uid="uid://tnhi5mwski6n"]
+[gd_resource type="Theme" load_steps=63 format=4 uid="uid://tnhi5mwski6n"]
 
 [ext_resource type="Texture2D" uid="uid://diem26sgg42vr" path="res://Misc/TestAssets/Panels/AeroPanel2.svg" id="1_d35nj"]
 [ext_resource type="Texture2D" uid="uid://be04yv0nl81oc" path="res://Misc/TestAssets/Panels/AeroPanel4.svg" id="2_2bs7g"]
-[ext_resource type="Texture2D" uid="uid://cs5x5k14vxaqv" path="res://Misc/TestAssets/SliderGrabber.png" id="2_m24h7"]
-[ext_resource type="Texture2D" uid="uid://cd54dgvet0k2m" path="res://Misc/TestAssets/SliderGrabberDisabled.png" id="3_l18j1"]
-[ext_resource type="Texture2D" uid="uid://dahd6x51nj0iv" path="res://Misc/TestAssets/SliderGrabberHeld.png" id="4_np3lo"]
+[ext_resource type="Texture2D" uid="uid://cypjf5x3p6c0p" path="res://Misc/TestAssets/Panels/SliderGrabber.svg" id="2_m24h7"]
+[ext_resource type="Texture2D" uid="uid://dsqpbadb6ok7b" path="res://Misc/TestAssets/Panels/SliderGrabberDisabled.svg" id="3_l18j1"]
+[ext_resource type="Texture2D" uid="uid://ci40hsagjmqcd" path="res://Misc/TestAssets/Panels/SliderGrabberHighlight.svg" id="4_np3lo"]
 [ext_resource type="Texture2D" uid="uid://cdfqfckatoiyp" path="res://Misc/TestAssets/Panels/AeroPanel1.svg" id="5_np3lo"]
 [ext_resource type="Texture2D" uid="uid://crrhrokuy1mxt" path="res://Misc/TestAssets/Panels/AeroPanel3.svg" id="6_8bobq"]
 [ext_resource type="Texture2D" uid="uid://cy4xxakjg5ggq" path="res://Misc/TestAssets/Panels/AeroPanel5.svg" id="7_k16pw"]
@@ -50,6 +50,39 @@ modulate_color = Color(0.757613, 0.652265, 0.866882, 1)
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_vn4vb"]
 color = Color(0.25098, 0.25098, 0.25098, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2bs7g"]
+bg_color = Color(0.619316, 0.503597, 0.843095, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.249354, 0.405283, 0.860694, 1)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m24h7"]
+bg_color = Color(0.730044, 0.649598, 0.905916, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.249354, 0.405283, 0.860694, 1)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5r14c"]
+texture = ExtResource("7_k16pw")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
 
 [sub_resource type="Image" id="Image_tfwqg"]
 data = {
@@ -3311,7 +3344,6 @@ texture_margin_left = 10.0
 texture_margin_top = 10.0
 texture_margin_right = 10.0
 texture_margin_bottom = 10.0
-axis_stretch_horizontal = 2
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_f2x4u"]
 texture = ExtResource("6_8bobq")
@@ -3409,6 +3441,13 @@ texture_margin_right = 5.0
 texture_margin_bottom = 5.0
 modulate_color = Color(0.757613, 0.652265, 0.866882, 1)
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0lxvj"]
+texture = ExtResource("2_2bs7g")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mgdks"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jnojd"]
@@ -3468,7 +3507,7 @@ expand_margin_bottom = 10.0
 axis_stretch_horizontal = 2
 
 [resource]
-Button/colors/font_color = Color(0, 0, 0, 1)
+Button/colors/font_color = Color(1, 1, 1, 1)
 Button/constants/h_separation = 5
 Button/styles/disabled = SubResource("StyleBoxTexture_d1w6k")
 Button/styles/focus = SubResource("StyleBoxTexture_73ydv")
@@ -3480,6 +3519,9 @@ HSeparator/styles/separator = SubResource("StyleBoxLine_vn4vb")
 HSlider/icons/grabber = ExtResource("2_m24h7")
 HSlider/icons/grabber_disabled = ExtResource("3_l18j1")
 HSlider/icons/grabber_highlight = ExtResource("4_np3lo")
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_2bs7g")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_m24h7")
+HSlider/styles/slider = SubResource("StyleBoxTexture_5r14c")
 LineEdit/colors/caret_color = Color(0.95, 0.95, 0.95, 1)
 LineEdit/colors/clear_button_color = Color(0.875, 0.875, 0.875, 1)
 LineEdit/colors/clear_button_color_pressed = Color(1, 1, 1, 1)
@@ -3516,6 +3558,7 @@ TabContainer/styles/tab_focus = SubResource("StyleBoxTexture_o616k")
 TabContainer/styles/tab_hovered = SubResource("StyleBoxTexture_cc0un")
 TabContainer/styles/tab_selected = SubResource("StyleBoxTexture_l3pkh")
 TabContainer/styles/tab_unselected = SubResource("StyleBoxTexture_f4mku")
+TextEdit/styles/normal = SubResource("StyleBoxTexture_0lxvj")
 Tree/colors/drop_position_color = Color(0.20871, 0.20871, 0.20871, 1)
 Tree/colors/font_color = Color(0.105882, 0.105882, 0.105882, 1)
 Tree/icons/arrow = null

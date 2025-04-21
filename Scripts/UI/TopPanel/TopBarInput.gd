@@ -105,7 +105,7 @@ func choosing_mode(id):
 			is_editor = false
 			if Global.light != null && is_instance_valid(Global.light):
 				Global.light.get_node("Grab").hide()
-			Global.main.get_node("%Control/%LSShapeVis").button_pressed = false
+#			Global.main.get_node("%Control/%LSShapeVis").button_pressed = false
 			%HideUIButton.hide()
 			%HideUIButton.button_pressed = false
 			Global.deselect.emit()
