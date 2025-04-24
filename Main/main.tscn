@@ -28,6 +28,7 @@ script = ExtResource("2_j4lix")
 
 [node name="ConfirmTrim" type="ConfirmationDialog" parent="FileImporter"]
 unique_name_in_owner = true
+transparent_bg = true
 initial_position = 2
 size = Vector2i(375, 106)
 ok_button_text = "Yes"

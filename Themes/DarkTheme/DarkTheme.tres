@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=25 format=3 uid="uid://b3mqud7u0mbij"]
+[gd_resource type="Theme" load_steps=26 format=3 uid="uid://b3mqud7u0mbij"]
 
 [ext_resource type="Texture2D" uid="uid://cs5x5k14vxaqv" path="res://Misc/TestAssets/SliderGrabber.png" id="1_s06a1"]
 [ext_resource type="Texture2D" uid="uid://cd54dgvet0k2m" path="res://Misc/TestAssets/SliderGrabberDisabled.png" id="2_n8gdt"]
@@ -29,6 +29,21 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.160784, 0.160784, 0.160784, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s06a1"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+bg_color = Color(0.144063, 0.144063, 0.144062, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.0588235, 0.0588235, 0.0588235, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -234,6 +249,7 @@ Button/colors/font_color = Color(0.976471, 0.976471, 0.976471, 1)
 Button/styles/disabled = SubResource("StyleBoxFlat_r8m0v")
 Button/styles/focus = SubResource("StyleBoxFlat_r8m0v")
 Button/styles/hover = SubResource("StyleBoxFlat_822ui")
+Button/styles/hover_pressed = SubResource("StyleBoxFlat_s06a1")
 Button/styles/normal = SubResource("StyleBoxFlat_822ui")
 Button/styles/pressed = SubResource("StyleBoxFlat_r8m0v")
 HSeparator/styles/separator = SubResource("StyleBoxLine_2u7mq")

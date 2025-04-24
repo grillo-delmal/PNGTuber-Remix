@@ -62,7 +62,7 @@ func rotationalDrag(length,_delta):
 	
 	yvel = clamp(yvel,actor.sprite_data.rLimitMin,actor.sprite_data.rLimitMax)
 	
-	%Rotation.rotation = lerp_angle(%Rotation.rotation,deg_to_rad(yvel),0.15)
+	%Rotation.rotation = lerp_angle(%Rotation.rotation,deg_to_rad(yvel),0.08)
 
 func stretch(length,_delta):
 	var yvel = (length * actor.sprite_data.stretchAmount * 0.01)
@@ -89,8 +89,8 @@ func follow_wiggle():
 	if actor.sprite_data.follow_wa_tip:
 		if actor.get_parent() is WigglyAppendage2D && is_instance_valid(actor.get_parent()):
 			var pnt = actor.get_parent().points[clamp(actor.sprite_data.tip_point,0, actor.get_parent().points.size() -1)]
-			actor.position = pnt
-			%Pos.rotation = clamp(pnt.y/80, deg_to_rad(actor.sprite_data.follow_wa_mini), deg_to_rad(actor.sprite_data.follow_wa_max))
+			actor.position = actor.position.lerp(pnt, 0.6)
+			%Pos.rotation = lerp(%Pos.rotation, clamp(actor.position.angle(), deg_to_rad(actor.sprite_data.follow_wa_mini), deg_to_rad(actor.sprite_data.follow_wa_max)),0.08)
 		else:
 			%Pos.rotation = 0
 		

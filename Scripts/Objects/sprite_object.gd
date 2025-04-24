@@ -43,6 +43,7 @@ var sprite_data : Dictionary = {
 	should_rotate = false,
 	should_rot_speed = 0.01,
 	should_reset = false,
+	should_reset_state = false,
 	one_shot = false,
 	rainbow = false,
 	rainbow_self = false,
@@ -65,6 +66,7 @@ var sprite_data : Dictionary = {
 	frame = 0,
 	}
 
+var wiggle_val : float = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.reparent_objects.connect(reparent_obj)
@@ -111,6 +113,7 @@ func _process(_delta):
 			%WiggleOrigin.position = Vector2(pos.x, pos.y)
 			%Selection.material.set_shader_parameter("wiggle", true)
 			%Selection.material.set_shader_parameter("rotation_offset", %Sprite2D.material.get_shader_parameter("rotation_offset"))
+			%Selection.material.set_shader_parameter("rotation", %Sprite2D.material.get_shader_parameter("rotation"))
 		else:
 			%Selection.material.set_shader_parameter("wiggle", false)
 			%WiggleOrigin.hide()
@@ -137,14 +140,17 @@ func _process(_delta):
 	advanced_lipsyc()
 
 func wiggle_sprite():
-	var wiggle_val = sin(Global.tick*sprite_data.wiggle_freq)*sprite_data.wiggle_amp
+	var length : float = 0
 	if sprite_data.wiggle_physics:
-		if get_parent() is Sprite2D or get_parent() is WigglyAppendage2D && is_instance_valid(get_parent()):
+		if (get_parent() is Sprite2D  or get_parent() is WigglyAppendage2D) && is_instance_valid(get_parent()):
 			var c_parent = get_parent().owner
 			if c_parent != null && is_instance_valid(c_parent):
 				var c_parrent_length = (c_parent.get_node("Movements").glob.y - c_parent.get_node("%Drag").global_position.y)
-				wiggle_val = wiggle_val + (c_parrent_length/10)
-			
+				var c_parrent_length2 = (c_parent.get_node("%Movements").glob.x - c_parent.get_node("%Drag").global_position.x)
+				length +=((c_parrent_length + c_parrent_length2)/20)
+	
+	
+	wiggle_val = lerp(wiggle_val, sin((Global.tick*sprite_data.wiggle_freq)+length)*sprite_data.wiggle_amp, 0.05)
 	
 	if !get_parent() is Sprite2D:
 		%Sprite2D.material.set_shader_parameter("rotation", wiggle_val )
@@ -175,6 +181,10 @@ func get_state(id):
 	if not states[id].is_empty():
 		var dict = states[id]
 		sprite_data.merge(dict, true)
+		
+		
+		if sprite_data.should_reset_state:
+			%ReactionConfig.reset_anim()
 		
 		%Sprite2D.position = sprite_data.offset 
 		%Sprite2D.scale = Vector2(1,1)

@@ -11,6 +11,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 8
 
 [node name="WiggleSprite" type="Node" parent="."]
 script = ExtResource("1_00ydi")
@@ -53,7 +54,7 @@ visible = false
 layout_mode = 2
 sp_type = ""
 label_text = "Mini Rotation : "
-mini_value = -180.0
+mini_value = -360.0
 step = 0.5
 value_to_update = "follow_wa_mini"
 
@@ -63,7 +64,7 @@ visible = false
 layout_mode = 2
 sp_type = ""
 label_text = "Max Rotation : "
-max_value = 180.0
+max_value = 360.0
 step = 0.5
 value_to_update = "follow_wa_max"
 
@@ -119,6 +120,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="XoffsetLabel" type="Label" parent="WiggleStuff/Grid2/HBoxContainer"]
+custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 16
@@ -139,6 +141,7 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
 [node name="YoffsetLabel" type="Label" parent="WiggleStuff/Grid2/HBox"]
+custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 16

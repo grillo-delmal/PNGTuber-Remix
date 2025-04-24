@@ -370,15 +370,15 @@ animations = [{
 [node name="TutorialPopUp" type="PopupPanel"]
 auto_translate_mode = 1
 initial_position = 2
-size = Vector2i(600, 437)
+size = Vector2i(602, 448)
 visible = true
 script = ExtResource("1_si4kh")
 
 [node name="TabContainer" type="TabContainer" parent="."]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 596.0
-offset_bottom = 433.0
+offset_right = 598.0
+offset_bottom = 444.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/side_margin = 1
@@ -389,28 +389,32 @@ current_tab = 0
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Control" type="Control" parent="TabContainer/What is PNGTubing?"]
+[node name="MarginContainer" type="MarginContainer" parent="TabContainer/What is PNGTubing?"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Control" type="Control" parent="TabContainer/What is PNGTubing?/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="TabContainer/What is PNGTubing?/Control"]
-position = Vector2(480, 104)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="TabContainer/What is PNGTubing?/MarginContainer/Control"]
+position = Vector2(461, 109.5)
+scale = Vector2(0.945, 0.945)
 sprite_frames = SubResource("SpriteFrames_806ej")
 autoplay = "default"
 frame_progress = 0.317187
 
-[node name="Grid" type="GridContainer" parent="TabContainer/What is PNGTubing?/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-columns = 2
-
-[node name="Label" type="Label" parent="TabContainer/What is PNGTubing?/Control/Grid"]
+[node name="Label" type="Label" parent="TabContainer/What is PNGTubing?/MarginContainer/Control"]
 layout_mode = 2
+offset_top = -2.5
+offset_right = 571.0
+offset_bottom = 401.5
 theme_override_font_sizes/font_size = 24
 text = "PNGTubing is a form of Vtubing.
 However, unlike Vtubing, it is
@@ -419,7 +423,7 @@ This is why it gained popularity
 in recent years. There are some
 different types of PNGTubing, this
 includes Static (like the model shown), Toon and
-Rigged. In this software -PNGTube-Remix-, you 
+Rigged. In this software -PNGTube-Remix, you 
 can create both Static and Rigged! Even mix them
 up if needed. Hope you have fun!
 "
@@ -525,10 +529,46 @@ Mouse Controls :
 - Middle Mouse button to pan the camera."
 autowrap_mode = 2
 
-[node name="QNA" type="ScrollContainer" parent="TabContainer"]
+[node name="Shortcuts" type="ScrollContainer" parent="TabContainer"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Shortcuts"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="TabContainer/Shortcuts/VBoxContainer"]
+layout_mode = 2
+text = "* Mouse Controls
+- Rotation : Ctrl+MouseWheel (Up, Down)
+- Camera Zoom : MouseWheel (Up, Down)
+- Camera Drag : MouseWheel (Pressed)
+
+*Keyboard Controls 
+- Moving Sprite : 
+> Ctrl+W (Up)
+> Ctrl+S (Down)
+> Ctrl+A (Left)
+> Ctrl+D (Right)
+
+- Moving Offset : 
+> Arrow-Up (Up)
+> Arrow-Down (Down)
+> Arrow-Left (Left)
+> Arrow-Right (Right)
+
+- Quick Save : Ctrl+S
+- Quick Deselect : Alt+D
+- Quick Window Centering : Ctrl+ Kp -
+"
+autowrap_mode = 2
+
+[node name="QNA" type="ScrollContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/QNA"]
 layout_mode = 2
@@ -560,8 +600,8 @@ autowrap_mode = 2
 visible = false
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 596.0
-offset_bottom = 433.0
+offset_right = 598.0
+offset_bottom = 444.0
 
 [node name="TutorialLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2

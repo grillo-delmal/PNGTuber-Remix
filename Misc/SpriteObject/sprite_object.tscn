@@ -45,31 +45,38 @@ colors = PackedColorArray(0, 0, 0, 0)
 gradient = SubResource("Gradient_4xt5n")
 
 [node name="SpriteObject" type="Node2D" node_paths=PackedStringArray("sprite_object") groups=["Sprites"]]
+physics_interpolation_mode = 1
 script = ExtResource("1_i7wd5")
 sprite_object = NodePath("Pos/Wobble/Squish/Drag/Rotation/Sprite2D")
 sprite_type = "Sprite2D"
 
 [node name="Pos" type="Node2D" parent="."]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 use_parent_material = true
 
 [node name="Wobble" type="Node2D" parent="Pos"]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 use_parent_material = true
 
 [node name="Dragger" type="Node2D" parent="Pos/Wobble"]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 
 [node name="Squish" type="Node2D" parent="Pos/Wobble"]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 use_parent_material = true
 
 [node name="Drag" type="Node2D" parent="Pos/Wobble/Squish"]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 use_parent_material = true
 
 [node name="Rotation" type="Node2D" parent="Pos/Wobble/Squish/Drag"]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 use_parent_material = true
 
 [node name="Origin" type="Sprite2D" parent="Pos/Wobble/Squish/Drag/Rotation"]
@@ -81,6 +88,7 @@ texture = ExtResource("2_1i6gu")
 
 [node name="Sprite2D" type="Sprite2D" parent="Pos/Wobble/Squish/Drag/Rotation"]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 material = SubResource("ShaderMaterial_1tqhp")
 texture = SubResource("CanvasTexture_upggl")
 

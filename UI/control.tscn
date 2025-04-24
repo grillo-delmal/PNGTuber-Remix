@@ -55,7 +55,7 @@ mouse_filter = 2
 
 [node name="RightPanel" type="Panel" parent="HSplitContainer/HSplit"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(400, 0)
+custom_minimum_size = Vector2(410, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
@@ -138,9 +138,9 @@ horizontal_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/margin_left = 6
+theme_override_constants/margin_left = 2
 theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 6
+theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer"]

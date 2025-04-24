@@ -22,7 +22,7 @@ func _on_zoom_out_button_pressed():
 
 
 func _on_zoom_main_reset_button_pressed():
-	get_tree().get_root().get_node("Main/SubViewportContainer/%Camera2D").zoom = Vector2(1,1)
-	get_tree().get_root().get_node("Main/SubViewportContainer/%CamPos").global_position = Vector2(640, 360)
+	Global.camera.zoom = Vector2(1,1)
+	Global.camera.get_parent().global_position = Vector2(640, 360)
 	Global.settings_dict.zoom  = Vector2(1,1)
 	Global.settings_dict.pan = Vector2(640, 360)

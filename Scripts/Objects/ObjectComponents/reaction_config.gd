@@ -139,24 +139,21 @@ func speaking():
 
 func reset_animations(_place_holder : int = 0):
 	if actor.sprite_data.one_shot:
-		if actor.is_apng:
-			animation_handler.index = 0
-			animation_handler.proper_apng_one_shot()
-		animation_handler.played_once = false
-		if actor.sprite_type == "Sprite2D":
-			%Sprite2D.frame = 0
-			actor.animation()
-		reset_gif_anim()
+		reset_anim()
 	
 	if actor.sprite_data.should_reset:
-		if actor.is_apng:
-			animation_handler.index = 0
-			animation_handler.proper_apng_one_shot()
-		animation_handler.played_once = false
-		if actor.sprite_type == "Sprite2D":
-			%Sprite2D.frame = 0
-			actor.animation()
-		reset_gif_anim()
+		reset_anim()
+
+
+func reset_anim():
+	if actor.is_apng:
+		animation_handler.index = 0
+		animation_handler.proper_apng_one_shot()
+	animation_handler.played_once = false
+	if actor.sprite_type == "Sprite2D":
+		%Sprite2D.frame = 0
+		actor.animation()
+	reset_gif_anim()
 
 func not_speaking():
 	if Global.mode != 0:

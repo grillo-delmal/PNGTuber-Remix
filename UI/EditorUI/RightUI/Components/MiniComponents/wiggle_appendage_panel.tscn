@@ -170,7 +170,7 @@ theme_override_constants/separation = 4
 unique_name_in_owner = true
 custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 text = "Width : "
 
 [node name="WiggleWidthSpin" type="SpinBox" parent="WiggleAppStuff/Grid/HBox30"]
@@ -189,7 +189,7 @@ theme_override_constants/separation = 4
 unique_name_in_owner = true
 custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 text = "Length : "
 
 [node name="WiggleLengthSpin" type="SpinBox" parent="WiggleAppStuff/Grid/HBox31"]
@@ -205,7 +205,7 @@ size_flags_horizontal = 3
 [node name="X" type="Label" parent="WiggleAppStuff/Grid/HBox"]
 custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 text = "Gravity-X : "
 
 [node name="WAGravityX" type="SpinBox" parent="WiggleAppStuff/Grid/HBox"]
@@ -225,7 +225,7 @@ theme_override_constants/separation = 4
 [node name="Y" type="Label" parent="WiggleAppStuff/Grid/HBox33"]
 custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 15
 text = "Gravity-Y : "
 
 [node name="WAGravityY" type="SpinBox" parent="WiggleAppStuff/Grid/HBox33"]
@@ -260,7 +260,7 @@ value = 1.0
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Is a Closed Loop    "
+text = "Closed Loop    "
 
 [connection signal="toggled" from="WiggleAppStuff/AutoWagCheck" to="WiggleAppendage" method="_on_auto_wag_check_toggled"]
 [connection signal="value_changed" from="WiggleAppStuff/Grid/HBox30/WiggleWidthSpin" to="WiggleAppendage" method="_on_wiggle_width_spin_value_changed"]

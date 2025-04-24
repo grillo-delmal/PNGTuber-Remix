@@ -82,6 +82,9 @@ func _input(event: InputEvent) -> void:
 			SaveAndLoad.save_file(path)
 		else:
 			Global.main.save_as_file()
+	if event.is_action_pressed("desel"):
+		desel_everything()
+		Global.deselect.emit()
 
 func choosing_mode(id):
 	var saved_id = 0

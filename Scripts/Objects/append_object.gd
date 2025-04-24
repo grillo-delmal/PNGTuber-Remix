@@ -46,6 +46,7 @@ var sprite_data : Dictionary = {
 	segm_length = 30,
 	subdivision = 5,
 	should_reset = false,
+	should_reset_state = false,
 	one_shot = false,
 	rainbow = false,
 	rainbow_self = false,
@@ -141,6 +142,10 @@ func get_state(id):
 		visible = sprite_data.visible
 		scale = sprite_data.scale
 	#	global_position = sprite_data.global_position
+		if sprite_data.should_reset_state:
+			%ReactionConfig.reset_anim()
+	
+	
 		position = sprite_data.position
 		%Sprite2D.position = sprite_data.offset 
 		%Sprite2D.scale = Vector2(1,1)
@@ -153,23 +158,7 @@ func get_state(id):
 		if sprite_data.look_at_mouse_pos_y == 0:
 			%Pos.position.y = 0
 		
-		if %Sprite2D.segment_count != sprite_data.wiggle_segm:
-			%Sprite2D.segment_count = sprite_data.wiggle_segm
-		if %Sprite2D.curvature != sprite_data.wiggle_curve:
-			%Sprite2D.curvature = sprite_data.wiggle_curve
-		if %Sprite2D.stiffness != sprite_data.wiggle_stiff:
-			%Sprite2D.stiffness = sprite_data.wiggle_stiff
-		if %Sprite2D.max_angle != sprite_data.wiggle_max_angle:
-			%Sprite2D.max_angle = sprite_data.wiggle_max_angle
 		
-		if %Sprite2D.width != sprite_data.width:
-			%Sprite2D.width = sprite_data.width
-		if %Sprite2D.segment_length != sprite_data.segm_length:
-			%Sprite2D.segment_length = sprite_data.segm_length
-		if %Sprite2D.subdivision!= sprite_data.subdivision:
-			%Sprite2D.subdivision = sprite_data.subdivision
-		
-
 		%Sprite2D.set_clip_children_mode(sprite_data.clip)
 		rotation = sprite_data.rotation
 
@@ -190,6 +179,7 @@ func get_state(id):
 				%Pos.hide()
 		%ReactionConfig.speaking()
 		%ReactionConfig.not_speaking()
+		update_wiggle_parts()
 #		animation()
 		set_blend(sprite_data.blend_mode)
 		if sprite_data.one_shot:

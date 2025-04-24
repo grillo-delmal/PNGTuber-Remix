@@ -83,35 +83,38 @@ func _on_duplicate_button_pressed():
 		obj.sprite_id = Global.held_sprite.treeitem.get_instance_id()
 		obj.parent_id = Global.held_sprite.parent_id
 		sprites.append(obj)
+		if Global.held_sprite.get_parent() is Sprite2D or Global.held_sprite.get_parent() is WigglyAppendage2D:
+			sprites.append(Global.held_sprite.get_parent().owner)
 		
 		for i in layers_to_dup:
-			if Global.held_sprite.sprite_type == "WiggleApp":
-				obj = append_obj.instantiate()
-				
+			var obj_to_spawn : SpriteObject
+			if i.child.get_metadata(0).sprite_object.sprite_type == "WiggleApp":
+				obj_to_spawn = append_obj.instantiate()
 			else:
-				obj = sprite_obj.instantiate()
-			obj.scale = i.child.get_metadata(0).sprite_object.scale
-			obj.sprite_data.scale = i.child.get_metadata(0).sprite_object.scale
-			Global.sprite_container.add_child(obj)
-			if obj.sprite_type != "Folder":
-				obj.get_node("%Sprite2D").texture = i.child.get_metadata(0).sprite_object.get_node("%Sprite2D").texture
-			obj.sprite_name = "Duplicate" + i.child.get_metadata(0).sprite_object.sprite_name 
+				obj_to_spawn = sprite_obj.instantiate()
+				
+			obj_to_spawn.scale = i.child.get_metadata(0).sprite_object.scale
+			obj_to_spawn.sprite_data.scale = i.child.get_metadata(0).sprite_object.scale
+			Global.sprite_container.add_child(obj_to_spawn)
+			if obj_to_spawn.sprite_type != "Folder":
+				obj_to_spawn.get_node("%Sprite2D").texture = i.child.get_metadata(0).sprite_object.get_node("%Sprite2D").texture
+			obj_to_spawn.sprite_name = "Duplicate" + i.child.get_metadata(0).sprite_object.sprite_name 
 
 			if i.child.get_metadata(0).sprite_object.sprite_data.folder:
-				obj.sprite_data.folder = true
+				obj_to_spawn.sprite_data.folder = true
 			
 			if i.child.get_metadata(0).sprite_object.img_animated:
-				obj.img_animated = true
-				obj.anim_texture = i.child.get_metadata(0).sprite_object.anim_texture
-				obj.anim_texture_normal = i.child.get_metadata(0).sprite_object.anim_texture_normal 
+				obj_to_spawn.img_animated = true
+				obj_to_spawn.anim_texture = i.child.get_metadata(0).sprite_object.anim_texture
+				obj_to_spawn.anim_texture_normal = i.child.get_metadata(0).sprite_object.anim_texture_normal 
 			
-			obj.sprite_data = i.child.get_metadata(0).sprite_object.sprite_data.duplicate()
-			obj.states = i.child.get_metadata(0).sprite_object.states.duplicate()
-			obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
-			Global.update_layers.emit(0, obj, obj.sprite_type)
-			obj.sprite_id = i.child.get_instance_id()
-			obj.parent_id = i.parent.get_instance_id()
-			sprites.append(obj)
+			obj_to_spawn.sprite_data = i.child.get_metadata(0).sprite_object.sprite_data.duplicate()
+			obj_to_spawn.states = i.child.get_metadata(0).sprite_object.states.duplicate()
+			obj_to_spawn.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
+			Global.update_layers.emit(0, obj_to_spawn, obj_to_spawn.sprite_type)
+			obj_to_spawn.sprite_id = i.child.get_instance_id()
+			obj_to_spawn.parent_id = i.parent.get_instance_id()
+			sprites.append(obj_to_spawn)
 		
 		Global.remake_layers.emit()
 		Global.reparent_objects.emit(sprites)

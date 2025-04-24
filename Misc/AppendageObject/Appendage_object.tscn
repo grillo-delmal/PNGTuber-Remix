@@ -45,27 +45,34 @@ shader_parameter/ant_speed = 30.0
 gradient = SubResource("Gradient_uswo1")
 
 [node name="AppendageObject" type="Node2D" node_paths=PackedStringArray("sprite_object") groups=["Sprites"]]
+physics_interpolation_mode = 1
 script = ExtResource("1_yuqos")
 sprite_object = NodePath("Pos/Wobble/Squish/Drag/Rotation/AppendageFlip/Sprite2D")
 
 [node name="Pos" type="Node2D" parent="."]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 texture_repeat = 1
 
 [node name="Wobble" type="Node2D" parent="Pos"]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 
 [node name="Dragger" type="Node2D" parent="Pos/Wobble"]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 
 [node name="Squish" type="Node2D" parent="Pos/Wobble"]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 
 [node name="Drag" type="Node2D" parent="Pos/Wobble/Squish"]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 
 [node name="Rotation" type="Node2D" parent="Pos/Wobble/Squish/Drag"]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 
 [node name="Origin" type="Sprite2D" parent="Pos/Wobble/Squish/Drag/Rotation"]
 unique_name_in_owner = true
@@ -75,21 +82,22 @@ texture = ExtResource("2_rjec0")
 
 [node name="AppendageFlip" type="Node2D" parent="Pos/Wobble/Squish/Drag/Rotation"]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
 
 [node name="Sprite2D" type="Line2D" parent="Pos/Wobble/Squish/Drag/Rotation/AppendageFlip"]
 unique_name_in_owner = true
+physics_interpolation_mode = 1
+texture_repeat = 2
 material = SubResource("ShaderMaterial_1tqhp")
-points = PackedVector2Array(-10, 0, -4.96, -4.56399e-06, 2.16, -1.8256e-05, 11.36, -4.10759e-05, 22.64, -7.30239e-05, 36, -0.0001141, 50.4, -0.000210421, 64.8, -0.000408105, 79.2, -0.000707152, 93.6, -0.00110756, 108, -0.00160933, 122.4, -0.00264235, 136.8, -0.0046365, 151.2, -0.00759178, 165.6, -0.0115082, 180, -0.0163857, 194.4, -0.0218635, 208.8, -0.0275808, 223.2, -0.0335374, 237.6, -0.0397335, 252, -0.046169, 266.4, -0.0508349, 280.8, -0.0517222, 295.2, -0.0488308, 309.6, -0.0421609, 324, -0.0317123, 338.4, -0.0174852, 352.8, 0.000520602)
+points = PackedVector2Array(-5, 0, -1.76, 0, 3.96, 0, 12.16, 0, 22.84, 0, 36, 0, 50.4, -0.000119566, 64.8, -0.000478263, 79.2, -0.00107609, 93.6, -0.00191305, 108, -0.00298914, 122.4, -0.00408052, 136.8, -0.00496333, 151.2, -0.00563758, 165.6, -0.00610326, 180, -0.00636037, 194.4, -0.0064025, 208.8, -0.00622323, 223.2, -0.00582256, 237.6, -0.00520048, 252, -0.00435699, 266.4, -0.00305388, 280.8, -0.00105292, 295.2, 0.00164589, 309.6, 0.00504255, 360, 0.0202456)
 texture = SubResource("CanvasTexture_swft8")
 texture_mode = 2
-joint_mode = 2
 script = ExtResource("4_e6x1l")
 segment_length = 72.0
-curvature_exponent = -1.143
 max_angle = 0.523599
 comeback_speed = 0.419
-stiffness_decay_exponent = 10.0
-max_angular_momentum = 15.0
+stiffness_decay_exponent = 5.0
+max_angular_momentum = 20.0
 subdivision = 5
 additional_start_segment = true
 

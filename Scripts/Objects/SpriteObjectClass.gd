@@ -81,8 +81,6 @@ func set_blend(blend):
 			sprite_object.material.set_shader_parameter("Blend", preload("res://Misc/EasyBlend/Blends/test1.png"))
 
 
-
-
 func reparent_obj(parent):
 	for i in parent:
 		if i.sprite_id == parent_id:

@@ -42,6 +42,7 @@ func nullfy():
 	%FlipSpriteV.disabled = true
 	%AnimationReset.disabled = true
 	%AnimationOneShot.disabled = true
+	%ResetonStateChange.disabled = true
 	%RSSlider.editable = false
 
 func enable():
@@ -70,6 +71,7 @@ func enable():
 		%FlipSpriteV.disabled = false
 		%AnimationOneShot.disabled = false
 		%AnimationReset.disabled = false
+		%ResetonStateChange.disabled = false
 		%RSSlider.editable = true
 		
 		set_data()
@@ -127,6 +129,7 @@ func set_data():
 
 	%AnimationReset.button_pressed = Global.held_sprite.sprite_data.should_reset
 	%AnimationOneShot.button_pressed = Global.held_sprite.sprite_data.one_shot
+	%ResetonStateChange.button_pressed = Global.held_sprite.sprite_data.should_reset_state
 	
 
 func _on_blend_state_pressed(id):
@@ -324,4 +327,10 @@ func _on_rs_slider_value_changed(value):
 	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
 		%RSLabel.text = "Rainbow Speed : " + str(snapped(value, 0.001))
 		Global.held_sprite.sprite_data.rainbow_speed = value
+		Global.held_sprite.save_state(Global.current_state)
+
+
+func _on_reseton_state_change_toggled(toggled_on: bool) -> void:
+	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
+		Global.held_sprite.sprite_data.should_reset_state = toggled_on
 		Global.held_sprite.save_state(Global.current_state)

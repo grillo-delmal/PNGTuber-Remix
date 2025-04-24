@@ -36,7 +36,7 @@ enum {
 ## The maximum rotational speed for every segment in radians per seccond
 @export var max_angular_momentum: float = 25.13
 ## How much the line should be subdivided to achieve a smoother look. This value should not be 1
-@export_range(0, 10) var subdivision: int = 2
+@export var subdivision: int = 2
 ## Add an aditional segment before start of the appendage to prevent it form appearing disconnected
 @export var additional_start_segment := false
 ## Length of the additional start segment 
@@ -136,37 +136,35 @@ func _update_line():
 	new_line_points = _bezier_interpolate(new_line_points, subdivision)
 	if additional_start_segment and not subdivide_additional_start_segment:
 		new_line_points.insert(0, Vector2(-additional_start_segment_length, 0))
+	
 	points = new_line_points
 
 
 func _bezier_interpolate(line: PackedVector2Array, subdivision: int) -> PackedVector2Array:
-	if subdivision < 1: return line
-	if line.size() < 3: return line
+	if subdivision < 1 or line.size() < 3:
+		return line
+
 	var output := PackedVector2Array()
-	for i in range(line.size() - 1):
-		var a: Vector2
-		var b: Vector2
-		var c: Vector2
-		var actual_subdivisions: int
-		a = line[i]
-		b = line[i + 1]
-		var c_index := i + 2
-		if c_index > line.size() - 1:
-			var before_a := line[i - 1]
-			var angle := _angle_difference((b - a).angle(), (a - before_a).angle())
-			c = b + (b - a).rotated(angle)
-			actual_subdivisions = (subdivision) / 2 + 1
-		else:
-			c = line[c_index]
-			actual_subdivisions = subdivision
-		var true_a = lerp(a, b, 0.5) if i != 0 else a
-		var true_c = lerp(b, c, 0.5)
-		for o in range(actual_subdivisions):
-			var t: float = 1.0 / subdivision * o
-			var ab: Vector2 = lerp(true_a, b, t)
-			var bc: Vector2 = lerp(b, true_c, t)
-			output.append(lerp(ab, bc, t))
+	for i in range(line.size() - 2):
+		var p0 := line[i]
+		var p1 := line[i + 1]
+		var p2 := line[i + 2]
+
+		var mid1 := (p0 + p1) * 0.5
+		var mid2 := (p1 + p2) * 0.5
+
+		for t_idx in range(subdivision):
+			var t := float(t_idx) / float(subdivision)
+			var a := mid1.lerp(p1, t)
+			var b := p1.lerp(mid2, t)
+			var final := a.lerp(b, t)
+			output.append(final)
+
+	# Add the last original point to finish the curve
+	output.append(line[line.size() - 1])
+
 	return output
+
 
 
 func _angle_difference(angle_a: float, angle_b: float) -> float:

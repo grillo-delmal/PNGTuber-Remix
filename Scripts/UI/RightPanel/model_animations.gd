@@ -2,8 +2,8 @@ extends Node
 
 func _ready() -> void:
 	await get_tree().current_scene.ready
-	%MouthClosedAnim.get_popup().connect("id_pressed",_on_mo_anim_state_pressed)
-	%MouthOpenAnim.get_popup().connect("id_pressed",_on_mc_anim_state_pressed)
+	%MouthOpenAnim.get_popup().connect("id_pressed",_on_mo_anim_state_pressed)
+	%MouthClosedAnim.get_popup().connect("id_pressed",_on_mc_anim_state_pressed)
 	Global.connect("reinfoanim", reinfoanim)
 	%SquishAmount.get_node("%SliderValue").value_changed.connect(_on_squish_amount_changed)
 	%SquishAmount.get_node("%SpinBoxValue").value_changed.connect(_on_squish_amount_changed)
@@ -41,7 +41,7 @@ func _on_mo_anim_state_pressed(id):
 		6:
 			Global.sprite_container.current_mo_anim = "Float"
 			
-	%MouthClosedAnim.text = Global.sprite_container.current_mo_anim
+	%MouthOpenAnim.text = Global.sprite_container.current_mo_anim
 	
 	Global.sprite_container.save_state(Global.current_state)
 
@@ -67,7 +67,7 @@ func _on_mc_anim_state_pressed(id):
 		6:
 			Global.sprite_container.current_mc_anim = "Float"
 			
-	%MouthOpenAnim.text = Global.sprite_container.current_mc_anim
+	%MouthClosedAnim.text = Global.sprite_container.current_mc_anim
 	Global.sprite_container.save_state(Global.current_state)
 
 func _on_squish_amount_changed(value : float):
