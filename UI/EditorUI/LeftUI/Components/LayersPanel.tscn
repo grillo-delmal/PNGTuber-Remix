@@ -220,6 +220,8 @@ theme_override_constants/parent_hl_line_margin = 2
 theme_override_font_sizes/font_size = 14
 theme_override_font_sizes/title_button_font_size = 16
 allow_reselect = true
+allow_rmb_select = true
+select_mode = 2
 script = ExtResource("11_hewhr")
 
 [connection signal="pressed" from="ButtonsPanel/LayersButtons/AddSpriteButton" to="LayersPanelScripts" method="_on_add_sprite_button_pressed"]
@@ -234,4 +236,4 @@ script = ExtResource("11_hewhr")
 [connection signal="empty_clicked" from="Layers/LayersTree" to="Layers/LayersScripts" method="_on_layers_tree_empty_clicked"]
 [connection signal="gui_input" from="Layers/LayersTree" to="Layers/LayersScripts" method="_on_layers_tree_gui_input"]
 [connection signal="item_collapsed" from="Layers/LayersTree" to="Layers/LayersScripts" method="_on_layers_tree_item_collapsed"]
-[connection signal="item_selected" from="Layers/LayersTree" to="Layers/LayersScripts" method="_on_layers_tree_item_selected"]
+[connection signal="multi_selected" from="Layers/LayersTree" to="Layers/LayersScripts" method="_on_layers_tree_multi_selected"]

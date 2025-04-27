@@ -62,6 +62,7 @@ var sprite_data : Dictionary = {
 	mouse_scale_y = 0.0,
 	mouse_rotation_max = 0.0,
 	mouse_rotation_min = 0.0,
+	mouse_delay = 0.1,
 	non_animated_sheet = false,
 	frame = 0,
 	}
@@ -74,6 +75,19 @@ func _ready():
 	animation()
 	%Dragger.top_level = true
 	%Dragger.global_position = %Wobble.global_position
+	Global.reinfo.connect(sel)
+	Global.deselect.connect(desel)
+
+func sel():
+	if self in Global.held_sprites:
+		selected = true
+		%Origin.show()
+	else:
+		%Origin.hide()
+		desel()
+
+func desel():
+	selected = false
 
 func animation():
 	if not sprite_data.non_animated_sheet:
@@ -97,7 +111,7 @@ func animation():
 	$Animation.start()
 
 func _process(_delta):
-	if Global.held_sprite == self:
+	if selected:
 		%Grab.mouse_filter = Control.MouseFilter.MOUSE_FILTER_PASS
 		%Selection.texture = %Sprite2D.texture
 		%Selection.show()
@@ -239,19 +253,19 @@ func check_talk():
 		%Rotation.show()
 
 func _on_grab_button_down():
-	if Global.held_sprite == self:
+	if selected:
 		if not Input.is_action_pressed("ctrl"):
 			of = get_parent().to_local(get_global_mouse_position()) - position
 			dragging = true
 
 func _on_grab_button_up():
-	if Global.held_sprite == self && dragging:
+	if selected && dragging:
 		save_state(Global.current_state)
 		dragging = false
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_released("lmb"):
-		if Global.held_sprite == self && dragging:
+		if selected && dragging:
 			save_state(Global.current_state)
 			dragging = false
 

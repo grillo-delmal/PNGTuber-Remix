@@ -17,23 +17,26 @@ func nullfy():
 	%ShouldDisRemapButton.disabled = true
 
 func enable():
-	%IsAssetCheck.disabled = false
-	%IsAssetButton.disabled = false
-	%RemoveAssetButton.disabled = false
-	%ShouldDisappearCheck.disabled = false
-	%DontHideOnToggleCheck.disabled = false
+	if Global.held_sprites.size() <= 1:
+		%IsAssetCheck.disabled = false
+		%IsAssetButton.disabled = false
+		%RemoveAssetButton.disabled = false
+		%ShouldDisappearCheck.disabled = false
+		%DontHideOnToggleCheck.disabled = false
 
-	%IsAssetButton.text = "Null"
-	
-	set_data()
+		%IsAssetButton.text = "Null"
+		
+		set_data()
+	else:
+		nullfy()
 
 
 func set_data():
-	%IsAssetButton.action = str(Global.held_sprite.sprite_id)
-	%IsAssetCheck.button_pressed = Global.held_sprite.is_asset
-	%DontHideOnToggleCheck.button_pressed = Global.held_sprite.show_only
+	%IsAssetButton.action = str(Global.held_sprites[0].sprite_id)
+	%IsAssetCheck.button_pressed = Global.held_sprites[0].is_asset
+	%DontHideOnToggleCheck.button_pressed = Global.held_sprites[0].show_only
 	%ShouldDisList.clear()
-	for i in Global.held_sprite.saved_keys:
+	for i in Global.held_sprites[0].saved_keys:
 		%ShouldDisList.add_item(i)
-	%ShouldDisappearCheck.button_pressed = Global.held_sprite.should_disappear
+	%ShouldDisappearCheck.button_pressed = Global.held_sprites[0].should_disappear
 	%IsAssetButton.update_key_text()

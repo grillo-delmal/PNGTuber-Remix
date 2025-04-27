@@ -56,6 +56,8 @@ var last_mouse_position : Vector2 = Vector2(0,0)
 var last_dist : Vector2 = Vector2(0,0)
 var global
 
+var selected : bool = false
+
 
 func set_blend(blend):
 	match  blend:

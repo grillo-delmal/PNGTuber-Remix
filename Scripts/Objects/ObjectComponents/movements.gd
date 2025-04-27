@@ -134,8 +134,8 @@ func follow_mouse(_delta):
 			var dir = Vector2.ZERO.direction_to(vel)
 			var dist = vel.limit_length(Vector2(actor.sprite_data.look_at_mouse_pos,actor.sprite_data.look_at_mouse_pos_y).length()).length()
 			last_dist = Vector2(dir.x * (dist),dir.y * (dist))
-		%Pos.position.x = lerp(%Pos.position.x, last_dist.x, 0.1)
-		%Pos.position.y = lerp(%Pos.position.y, last_dist.y, 0.1)
+		%Pos.position.x = lerp(%Pos.position.x, last_dist.x, actor.sprite_data.mouse_delay)
+		%Pos.position.y = lerp(%Pos.position.y, last_dist.y, actor.sprite_data.mouse_delay)
 		
 		var mouse_x = mouse.x
 		var screen_width = get_viewport().size.x
@@ -149,7 +149,7 @@ func follow_mouse(_delta):
 		var target_rotation = clamp(normalized_mouse * rotation_factor * deg_to_rad(90), deg_to_rad(actor.sprite_data.rLimitMin), deg_to_rad(actor.sprite_data.rLimitMax))
 
 		# Smoothly interpolate the sprite's rotation
-		%Squish.rotation = lerp_angle(%Squish.rotation, target_rotation, 0.1)
+		%Squish.rotation = lerp_angle(%Squish.rotation, target_rotation, actor.sprite_data.mouse_delay)
 		
 		'''
 		var clamping = clamp(last_dist.angle()*actor.sprite_data.mouse_rotation,deg_to_rad(actor.sprite_data.rLimitMin),deg_to_rad(actor.sprite_data.rLimitMax))
@@ -157,14 +157,14 @@ func follow_mouse(_delta):
 		var dire = Vector2.ZERO - (last_mouse_position - main_marker.coords)
 		var scl_x = abs(dire.x) *actor.sprite_data.mouse_scale_x *0.005
 		var scl_y = abs(dire.y) *actor.sprite_data.mouse_scale_y *0.005
-		%Drag.scale.x = lerp(%Drag.scale.x, float(clamp(1 - scl_x, 0.15 , 1)), 0.1)
-		%Drag.scale.y = lerp(%Drag.scale.y, float(clamp(1 - scl_y,  0.15 , 1)), 0.1)
+		%Drag.scale.x = lerp(%Drag.scale.x, float(clamp(1 - scl_x, 0.15 , 1)), actor.sprite_data.mouse_delay)
+		%Drag.scale.y = lerp(%Drag.scale.y, float(clamp(1 - scl_y,  0.15 , 1)), actor.sprite_data.mouse_delay)
 		last_mouse_position = mouse
 	else:
 		var dir = Vector2.ZERO.direction_to(mouse)
 		var dist = mouse.length()
-		%Pos.position.x = lerp(%Pos.position.x, dir.x * min(dist, actor.sprite_data.look_at_mouse_pos), 0.1)
-		%Pos.position.y = lerp(%Pos.position.y, dir.y * min(dist, actor.sprite_data.look_at_mouse_pos_y), 0.1)
+		%Pos.position.x = lerp(%Pos.position.x, dir.x * min(dist, actor.sprite_data.look_at_mouse_pos), actor.sprite_data.mouse_delay)
+		%Pos.position.y = lerp(%Pos.position.y, dir.y * min(dist, actor.sprite_data.look_at_mouse_pos_y), actor.sprite_data.mouse_delay)
 		
 		# Get the mouse position and screen width
 		var mouse_x = mouse.x
@@ -180,7 +180,7 @@ func follow_mouse(_delta):
 		var target_rotation = clamp(normalized_mouse * rotation_factor * deg_to_rad(90), deg_to_rad(actor.sprite_data.rLimitMin), deg_to_rad(actor.sprite_data.rLimitMax))
 
 		# Smoothly interpolate the sprite's rotation
-		%Squish.rotation = lerp_angle(%Squish.rotation, target_rotation, 0.1)
+		%Squish.rotation = lerp_angle(%Squish.rotation, target_rotation, actor.sprite_data.mouse_delay)
 				
 				
 		
@@ -191,8 +191,8 @@ func follow_mouse(_delta):
 		var dire = Vector2.ZERO - main_marker.coords
 		var scl_x = (abs(dire.x) *actor.sprite_data.mouse_scale_x *0.005) * Global.settings_dict.zoom.x
 		var scl_y = (abs(dire.y) *actor.sprite_data.mouse_scale_y *0.005) * Global.settings_dict.zoom.y
-		%Drag.scale.x = lerp(%Drag.scale.x, float(clamp(1 - scl_x, 0.15 , 1)), 0.1)
-		%Drag.scale.y = lerp(%Drag.scale.y, float(clamp(1 - scl_y,  0.15 , 1)), 0.1)
+		%Drag.scale.x = lerp(%Drag.scale.x, float(clamp(1 - scl_x, 0.15 , 1)), actor.sprite_data.mouse_delay)
+		%Drag.scale.y = lerp(%Drag.scale.y, float(clamp(1 - scl_y,  0.15 , 1)), actor.sprite_data.mouse_delay)
 
 
 

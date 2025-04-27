@@ -1,6 +1,7 @@
 extends Button
 class_name BetterToggles
 
+var should_change : bool = false
 @export var sp_type : String = "Null"
 @export var value_to_update : String = "position"
 
@@ -13,23 +14,32 @@ func _ready() -> void:
 	toggled.connect(on_toggle)
 
 func enable():
+	should_change = false
 	if sp_type == "Null":
 		disabled = true
 		#button_pressed = Global.held_sprite.sprite_data[value_to_update]
 	
 	else:
-		if sp_type == Global.held_sprite.sprite_type:
-			disabled = false
-			button_pressed = Global.held_sprite.sprite_data[value_to_update]
-			
-		elif sp_type == "":
-			disabled = false
-			button_pressed = Global.held_sprite.sprite_data[value_to_update]
+		for i in Global.held_sprites:
+			if sp_type == i.sprite_type:
+				disabled = false
+				button_pressed = i.sprite_data[value_to_update]
+				
+			elif sp_type == "":
+				disabled = false
+				button_pressed = i.sprite_data[value_to_update]
+	should_change = true
 
 func nullfy():
 	disabled = true
 
 func on_toggle(toggle : bool):
-	if sp_type != "Null":
-		Global.held_sprite.sprite_data[value_to_update] = toggle
-		Global.held_sprite.save_state(Global.current_state)
+	if should_change:
+		if sp_type != "Null":
+			for i in Global.held_sprites:
+				if sp_type == i.sprite_type:
+					i.sprite_data[value_to_update] = toggle
+					i.save_state(Global.current_state)
+				elif sp_type == "":
+					i.sprite_data[value_to_update] = toggle
+					i.save_state(Global.current_state)

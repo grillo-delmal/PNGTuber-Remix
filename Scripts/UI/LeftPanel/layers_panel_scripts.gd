@@ -2,11 +2,13 @@ extends Node
 
 var sprite_obj = preload("res://Misc/SpriteObject/sprite_object.tscn")
 var append_obj = preload("res://Misc/AppendageObject/Appendage_object.tscn")
+var has_folder : bool = false
 
 func _ready() -> void:
 	Themes.theme_changed.connect(change_theme)
 	Global.deselect.connect(nullfy)
 	Global.reinfo.connect(enable)
+	nullfy()
 
 func change_theme(index):
 	match index:
@@ -35,14 +37,17 @@ func nullfy():
 func enable():
 	%DuplicateButton.disabled = false
 	%DeleteButton.disabled = false
-	if Global.held_sprite.sprite_data.folder:
-		%AddNormalButton.disabled = true
-		%DelNormalButton.disabled = true
-		%ReplaceButton.disabled = true
-	else:
-		%AddNormalButton.disabled = false
-		%DelNormalButton.disabled = false
-		%ReplaceButton.disabled = false
+	has_folder = false
+	for i in Global.held_sprites:
+		if i.sprite_data.folder:
+			%AddNormalButton.disabled = true
+			%DelNormalButton.disabled = true
+			%ReplaceButton.disabled = true
+			has_folder = true
+		elif !i.sprite_data.folder && !has_folder:
+			%AddNormalButton.disabled = false
+			%DelNormalButton.disabled = false
+			%ReplaceButton.disabled = false
 
 func _on_delete_button_pressed():
 	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):

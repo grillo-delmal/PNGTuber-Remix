@@ -73,6 +73,7 @@ var sprite_data : Dictionary = {
 	mouse_scale_y = 0.0,
 	mouse_rotation_max = 0.0,
 	mouse_rotation_min = 0.0,
+	mouse_delay = 0.1,
 	}
 
 var smooth_rot = 0.0
@@ -85,6 +86,20 @@ func _ready():
 	%Dragger.global_position = %Wobble.global_position
 	set_process(true)
 	update_wiggle_parts()
+	Global.reinfo.connect(sel)
+	Global.deselect.connect(desel)
+
+func sel():
+	if self in Global.held_sprites:
+		selected = true
+		%Origin.show()
+	else:
+		%Origin.hide()
+		desel()
+
+func desel():
+	selected = false
+
 
 func correct_sprite_size():
 	var w = %Sprite2D.texture.get_image().get_size().y / 0.98
@@ -94,7 +109,7 @@ func correct_sprite_size():
 	sprite_data.segm_length = l
 
 func _process(_delta):
-	if Global.held_sprite == self:
+	if selected:
 		%Grab.mouse_filter = Control.MouseFilter.MOUSE_FILTER_PASS
 		%Selection.show()
 	else:
@@ -221,17 +236,17 @@ func check_talk():
 			%Rotation.show()
 
 func _on_grab_button_down():
-	if Global.held_sprite == self:
+	if selected:
 		of = get_parent().to_local(get_global_mouse_position()) - position
 		dragging = true
 
 func _on_grab_button_up():
-	if Global.held_sprite == self:
+	if selected:
 		dragging = false
 		save_state(Global.current_state)
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_released("lmb"):
-		if Global.held_sprite == self && dragging:
+		if selected && dragging:
 			save_state(Global.current_state)
 			dragging = false

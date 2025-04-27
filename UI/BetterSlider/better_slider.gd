@@ -12,6 +12,7 @@ enum Type {
 
 }
 
+var should_change : bool = false
 @export var sp_type : String = "Null"
 @export var label_text : String = "placeholder"
 @export var mini_value : float
@@ -66,23 +67,25 @@ func f_entered():
 
 func _on_spin_box_value_value_changed(nvalue):
 	Global.spinbox_held = false
-	%SliderValue.value = nvalue
-	%SpinBoxValue.get_line_edit().release_focus()
-	if Global.held_sprite != null && is_instance_valid(Global.held_sprite) && sp_type != "Null":
-		Global.held_sprite.sprite_data[value_to_update] = nvalue
-		Global.held_sprite.save_state(Global.current_state)
-
-
+	if should_change:
+		%SliderValue.value = nvalue
+		%SpinBoxValue.get_line_edit().release_focus()
+		for i in Global.held_sprites:
+			if i != null && is_instance_valid(i) && sp_type != "Null":
+				i.sprite_data[value_to_update] = nvalue
+				i.save_state(Global.current_state)
 
 
 func _on_slider_value_value_changed(nvalue):
-	%SpinBoxValue.value = nvalue
-	if Global.held_sprite != null && is_instance_valid(Global.held_sprite) && sp_type != "Null":
-		Global.held_sprite.sprite_data[value_to_update] = nvalue
-		if sp_type == "WiggleApp":
-			Global.held_sprite.update_wiggle_parts()
-		Global.held_sprite.save_state(Global.current_state)
-	
+	if should_change:
+		%SpinBoxValue.value = nvalue
+		for i in Global.held_sprites:
+			if i != null && is_instance_valid(i) && sp_type != "Null":
+				i.sprite_data[value_to_update] = nvalue
+				if i.sprite_type == "WiggleApp" && sp_type == "WiggleApp":
+					i.update_wiggle_parts()
+				i.save_state(Global.current_state)
+			
 
 func _on_spin_box_value_focus_exited() -> void:
 	Global.spinbox_held = false
@@ -94,19 +97,24 @@ func nullfy():
 		%SliderValue.editable = false
 
 func enable():
-	if Global.held_sprite.sprite_type == sp_type:
-		%SpinBoxValue.editable = true
-		%SliderValue.editable = true
-		%SliderValue.value = Global.held_sprite.sprite_data[value_to_update]
-		
-	elif sp_type == "":
-		%SpinBoxValue.editable = true
-		%SliderValue.editable = true
-		%SliderValue.value = Global.held_sprite.sprite_data[value_to_update]
+	should_change = false
+	for i in Global.held_sprites:
+		if i.sprite_type == sp_type:
+			%SpinBoxValue.editable = true
+			%SliderValue.editable = true
+			%SliderValue.value = i.sprite_data[value_to_update]
+			
+		if sp_type == "":
+			%SpinBoxValue.editable = true
+			%SliderValue.editable = true
+			%SliderValue.value = i.sprite_data[value_to_update]
+	should_change = true
+
 
 func _on_slider_value_drag_ended(value_changed: bool) -> void:
 	if value_changed && sp_type != "Null":
-		Global.held_sprite.sprite_data[value_to_update] = %SliderValue.value
-		if sp_type == "WiggleApp":
-			Global.held_sprite.update_wiggle_parts()
-		Global.held_sprite.save_state(Global.current_state)
+		for i in Global.held_sprites:
+			i.sprite_data[value_to_update] = %SliderValue.value
+			if i.sprite_type == "WiggleApp" && sp_type == "WiggleApp":
+				i.update_wiggle_parts()
+			i.save_state(Global.current_state)

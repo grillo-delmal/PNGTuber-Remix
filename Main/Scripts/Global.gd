@@ -33,6 +33,7 @@ signal reset_states
 
 var blink_timer : Timer = Timer.new()
 var held_sprite = null
+var held_sprites : Array[SpriteObject] = []
 var tick = 0
 var current_state : int = 0
 
@@ -146,11 +147,11 @@ func _input(_event : InputEvent):
 				held_sprite.sprite_data.rotation += 0.05
 				rot()
 
-func offset():
-	held_sprite.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
-	held_sprite.sprite_data.position = held_sprite.position
-	held_sprite.sprite_data.offset = held_sprite.get_node("%Sprite2D").position
-	held_sprite.save_state(current_state)
+func offset(i):
+	i.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
+	i.sprite_data.position = i.position
+	i.sprite_data.offset = i.get_node("%Sprite2D").position
+	i.save_state(current_state)
 
 	update_offset_spins.emit()
 
@@ -165,34 +166,35 @@ func _process(delta):
 		moving_sprite(delta)
 
 func moving_origin(delta):
-	if held_sprite != null && is_instance_valid(held_sprite):
-		if Input.is_action_pressed("ui_up"):
-			held_sprite.get_node("%Sprite2D").global_position.y += 10 * delta
-			held_sprite.position.y -= 10 * delta
-			offset()
-		elif Input.is_action_pressed("ui_down"):
-			held_sprite.get_node("%Sprite2D").global_position.y -= 10 * delta
-			held_sprite.position.y += 10 * delta
-			offset()
-		if Input.is_action_pressed("ui_left"):
-			held_sprite.get_node("%Sprite2D").global_position.x += 10 * delta
-			held_sprite.position.x -= 10 * delta
-			offset()
-		elif Input.is_action_pressed("ui_right"):
-			held_sprite.get_node("%Sprite2D").global_position.x -= 10 * delta
-			held_sprite.position.x += 10 * delta
+	for i in held_sprites:
+		if i != null && is_instance_valid(i):
+			if Input.is_action_pressed("ui_up"):
+				i.get_node("%Sprite2D").global_position.y += 10 * delta
+				i.position.y -= 10 * delta
+				offset(i)
+			elif Input.is_action_pressed("ui_down"):
+				i.get_node("%Sprite2D").global_position.y -= 10 * delta
+				i.position.y += 10 * delta
+				offset(i)
+			if Input.is_action_pressed("ui_left"):
+				i.get_node("%Sprite2D").global_position.x += 10 * delta
+				i.position.x -= 10 * delta
+				offset(i)
+			elif Input.is_action_pressed("ui_right"):
+				i.get_node("%Sprite2D").global_position.x -= 10 * delta
+				i.position.x += 10 * delta
 
-			offset()
+				offset(i)
 			
 			
 		if main.can_scroll:
 			if Input.is_action_pressed("ctrl"):
 				if Input.is_action_just_pressed("lmb"):
-					var of = held_sprite.get_parent().to_local(held_sprite.get_parent().get_global_mouse_position()) - held_sprite.position
-					held_sprite.position += of
-					held_sprite.get_node("%Sprite2D").global_position -= of
+					var of = i.get_parent().to_local(i.get_parent().get_global_mouse_position()) - i.position
+					i.position += of
+					i.get_node("%Sprite2D").global_position -= of
 
-					offset()
+					offset(i)
 
 func rot():
 	held_sprite.rotation = held_sprite.sprite_data.rotation
@@ -200,26 +202,29 @@ func rot():
 	update_pos_spins.emit()
 
 func moving_sprite(delta):
-	if held_sprite != null && is_instance_valid(held_sprite):
-		if Input.is_action_pressed("w"):
-			held_sprite.position.y -= 10 * delta
-			held_sprite.sprite_data.position.y -= 10 * delta
-			update_spins()
-		elif Input.is_action_pressed("s"):
-			held_sprite.position.y += 10 * delta
-			held_sprite.sprite_data.position.y += 10 * delta
-			update_spins()
-			
-		if Input.is_action_pressed("a"):
-			held_sprite.position.x -= 10 * delta
-			held_sprite.sprite_data.position.x -= 10 * delta
-			update_spins()
-			
-		elif Input.is_action_pressed("d"):
-			held_sprite.position.x += 10 * delta
-			held_sprite.sprite_data.position.x += 10 * delta
-			update_spins()
+	for i in held_sprites:
+		if i != null && is_instance_valid(i):
+			if Input.is_action_pressed("w"):
+				i.position.y -= 10 * delta
+				i.sprite_data.position.y -= 10 * delta
+				update_spins()
+			elif Input.is_action_pressed("s"):
+				i.position.y += 10 * delta
+				i.sprite_data.position.y += 10 * delta
+				update_spins()
+				
+			if Input.is_action_pressed("a"):
+				i.position.x -= 10 * delta
+				i.sprite_data.position.x -= 10 * delta
+				update_spins()
+				
+			elif Input.is_action_pressed("d"):
+				i.position.x += 10 * delta
+				i.sprite_data.position.x += 10 * delta
+				update_spins()
 
 func update_spins():
-	held_sprite.save_state(current_state)
-	update_pos_spins.emit()
+	for i in held_sprites:
+		if i != null && is_instance_valid(i):
+			i.save_state(current_state)
+			update_pos_spins.emit()

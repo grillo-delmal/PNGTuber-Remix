@@ -18,7 +18,7 @@ func _ready() -> void:
 	Global.update_layer_visib.connect(update_visib_buttons)
 
 func deselect_all():
-	tree.deselect_all()
+	empty_sprites_array()
 
 func choosing_layers_popup(id):
 	var main = get_tree().get_root().get_node("Main")
@@ -113,6 +113,7 @@ func _on_layers_tree_empty_clicked(_click_position: Vector2, _mouse_button_index
 	tree.deselect_all()
 	Global.deselect.emit()
 
+'''
 func _on_layers_tree_item_selected() -> void:
 	if tree.get_selected() != tree.get_root():
 		if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
@@ -129,7 +130,7 @@ func _on_layers_tree_item_selected() -> void:
 		Global.held_sprite = null
 		Global.deselect.emit()
 		tree.deselect_all()
-
+'''
 
 func _on_layers_tree_button_clicked(item: TreeItem, column: int, id: int, _mouse_button_index: int) -> void:
 	if id == 0 && column == 0:
@@ -145,3 +146,34 @@ func _on_layers_tree_button_clicked(item: TreeItem, column: int, id: int, _mouse
 func _on_layers_tree_gui_input(event: InputEvent) -> void:
 	if event.is_action_pressed("rmb"):
 		layers_popup.popup(Rect2i(get_parent().get_global_mouse_position().x,get_parent().get_global_mouse_position().y, 100,100 ))
+
+
+func _on_layers_tree_multi_selected(item: TreeItem, _column: int, selected: bool) -> void:
+	if tree.get_selected() != tree.get_root():
+		if !selected:
+			
+			Global.held_sprites.erase(item.get_metadata(0).sprite_object)
+			
+		await get_tree().physics_frame
+		var cleaned_array : Array[SpriteObject] = []
+		for i in Global.held_sprites:
+			if i.treeitem.is_selected(0):
+				cleaned_array.append(i)
+		
+		Global.held_sprites = cleaned_array
+		if item.get_metadata(0).sprite_object not in Global.held_sprites && selected:
+			Global.held_sprites.append(item.get_metadata(0).sprite_object)
+			
+		if Global.held_sprites.size() > 0:
+		#	print(Global.held_sprites)
+			Global.reinfo.emit()
+		else:
+			Global.deselect.emit()
+	else:
+		Global.deselect.emit()
+	#	empty_sprites_array()
+
+func empty_sprites_array():
+	tree.deselect_all()
+	Global.held_sprites.clear()
+#	print(Global.held_sprites)
