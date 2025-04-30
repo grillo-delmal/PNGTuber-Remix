@@ -2,94 +2,30 @@
 
 [ext_resource type="Script" uid="uid://bpskqcxi1aufc" path="res://Scripts/UI/LeftPanel/animation_panel_scripts.gd" id="1_phr78"]
 
-[node name="AnimationPanel" type="Panel"]
-custom_minimum_size = Vector2(210, 259)
-offset_right = 210.0
-offset_bottom = 217.0
-size_flags_vertical = 3
+[node name="AnimationPanel" type="MarginContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 128.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 
 [node name="AnimationPanelScripts" type="Node" parent="."]
 script = ExtResource("1_phr78")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 12
-alignment = 1
-
-[node name="Preview" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(87, 87)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CurrentSelected" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer/Preview"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(79, 79)
-layout_mode = 2
-size_flags_horizontal = 6
-expand_mode = 1
-stretch_mode = 5
-metadata/_edit_use_anchors_ = true
-
-[node name="PreviewNormal" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(87, 87)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CurrentSelectedNormal" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer/PreviewNormal"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(79, 79)
-layout_mode = 2
-size_flags_horizontal = 6
-expand_mode = 1
-stretch_mode = 5
-metadata/_edit_use_anchors_ = true
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 12
-alignment = 1
-
-[node name="Imgprev" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(87, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 14
-text = "Image"
-horizontal_alignment = 1
-
-[node name="NormalMapPrev" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
-custom_minimum_size = Vector2(87, 0)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 14
-text = "NormalMap"
-horizontal_alignment = 1
-
-[node name="AnimationFramesLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="AnimationFramesLabel" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Animation frames H :"
 
-[node name="AnimationFramesSlider" type="HSlider" parent="MarginContainer/VBoxContainer"]
+[node name="AnimationFramesSlider" type="HSlider" parent="VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
@@ -98,13 +34,13 @@ max_value = 164.0
 value = 1.0
 rounded = true
 
-[node name="AnimationFramesLabel2" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="AnimationFramesLabel2" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Animation frames V :"
 
-[node name="AnimationFramesSlider2" type="HSlider" parent="MarginContainer/VBoxContainer"]
+[node name="AnimationFramesSlider2" type="HSlider" parent="VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
@@ -113,13 +49,13 @@ max_value = 164.0
 value = 1.0
 rounded = true
 
-[node name="AnimationSpeedLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="AnimationSpeedLabel" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "Animation Speed :"
 
-[node name="AnimationSpeedSlider" type="HSlider" parent="MarginContainer/VBoxContainer"]
+[node name="AnimationSpeedSlider" type="HSlider" parent="VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
@@ -127,6 +63,6 @@ min_value = 1.0
 max_value = 60.0
 value = 1.0
 
-[connection signal="value_changed" from="MarginContainer/VBoxContainer/AnimationFramesSlider" to="AnimationPanelScripts" method="_on_animation_frames_slider_value_changed"]
-[connection signal="value_changed" from="MarginContainer/VBoxContainer/AnimationFramesSlider2" to="AnimationPanelScripts" method="_on_animation_frames_slider_2_value_changed"]
-[connection signal="value_changed" from="MarginContainer/VBoxContainer/AnimationSpeedSlider" to="AnimationPanelScripts" method="_on_animation_speed_slider_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/AnimationFramesSlider" to="AnimationPanelScripts" method="_on_animation_frames_slider_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/AnimationFramesSlider2" to="AnimationPanelScripts" method="_on_animation_frames_slider_2_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/AnimationSpeedSlider" to="AnimationPanelScripts" method="_on_animation_speed_slider_value_changed"]

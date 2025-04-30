@@ -67,25 +67,27 @@ func load_append_sprites():
 	%FileDialog.show()
 
 func replacing_sprite():
-	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
-		if not Global.held_sprite.sprite_data.folder:
-			%FileDialog.filters = ["*.png, *.apng, *.gif", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
-			$FileDialog.file_mode = 0
-			current_state = State.ReplaceSprite
-			%FileDialog.show()
+	if Global.held_sprites.size() == 1:
+		if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
+			if not Global.held_sprites[0].sprite_data.folder:
+				%FileDialog.filters = ["*.png, *.apng, *.gif", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
+				$FileDialog.file_mode = 0
+				current_state = State.ReplaceSprite
+				%FileDialog.show()
 
 func add_normal_sprite():
-	if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
-		if not Global.held_sprite.sprite_data.folder:
-			if Global.held_sprite.img_animated:
-				%FileDialog.filters = ["*.gif"]
-			elif Global.held_sprite.is_apng:
-				%FileDialog.filters = ["*.png","*.apng"]
-			else:
-				%FileDialog.filters = ["*.png", "*.jpeg", "*.jpg", "*.svg"]
-			$FileDialog.file_mode = 0
-			current_state = State.AddNormal
-			%FileDialog.show()
+	if Global.held_sprites.size() == 1:
+		if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
+			if not Global.held_sprites[0].sprite_data.folder:
+				if Global.held_sprites[0].img_animated:
+					%FileDialog.filters = ["*.gif"]
+				elif Global.held_sprites[0].is_apng:
+					%FileDialog.filters = ["*.png","*.apng"]
+				else:
+					%FileDialog.filters = ["*.png", "*.jpeg", "*.jpg", "*.svg"]
+				$FileDialog.file_mode = 0
+				current_state = State.AddNormal
+				%FileDialog.show()
 
 func _on_file_dialog_file_selected(path): 
 	match current_state:

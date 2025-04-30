@@ -41,10 +41,6 @@ func nullfy():
 	%OffsetYSpinBox.editable = false
 	%FlipSpriteH.disabled = true
 	%FlipSpriteV.disabled = true
-	%AnimationReset.disabled = true
-	%AnimationOneShot.disabled = true
-	%ResetonStateChange.disabled = true
-	%RSSlider.editable = false
 
 func enable():
 	for i in Global.held_sprites:
@@ -71,17 +67,12 @@ func enable():
 			%OffsetYSpinBox.editable = true
 			%FlipSpriteH.disabled = false
 			%FlipSpriteV.disabled = false
-			%AnimationOneShot.disabled = false
-			%AnimationReset.disabled = false
-			%ResetonStateChange.disabled = false
-			%RSSlider.editable = true
 			
 			set_data()
 
 func set_data():
 	should_change = false
 	for i in Global.held_sprites:
-		%RSSlider.value = i.sprite_data.rainbow_speed
 		%ColorPickerButton.color = i.sprite_data.colored
 		%TintPickerButton.color = i.sprite_data.tint
 		%Visible.button_pressed = i.sprite_data.visible
@@ -131,9 +122,6 @@ func set_data():
 			%FlipSpriteH.button_pressed = i.sprite_data.flip_h
 			%FlipSpriteV.button_pressed = i.sprite_data.flip_v
 
-		%AnimationReset.button_pressed = i.sprite_data.should_reset
-		%AnimationOneShot.button_pressed = i.sprite_data.one_shot
-		%ResetonStateChange.button_pressed = i.sprite_data.should_reset_state
 		
 	should_change = true
 
@@ -346,38 +334,3 @@ func _on_mouth_option_item_selected(index: int) -> void:
 					i.sprite_data.should_talk = true
 					i.sprite_data.open_mouth = false
 		Global.not_speaking.emit()
-
-func _on_animation_reset_toggled(toggled_on):
-	if should_change:
-		for i in Global.held_sprites:
-			if i != null && is_instance_valid(i):
-				i.sprite_data.should_reset = toggled_on
-				i.save_state(Global.current_state)
-
-func _on_animation_one_shot_toggled(toggled_on):
-	if should_change:
-		for i in Global.held_sprites:
-			if i != null && is_instance_valid(i):
-				i.sprite_data.one_shot = toggled_on
-				i.get_node("%AnimatedSpriteTexture").played_once = false
-				if i.img_animated:
-					i.get_node("%Sprite2D").texture.diffuse_texture.one_shot = toggled_on
-					if i.get_node("%Sprite2D").texture.normal_texture != null:
-						i.get_node("%Sprite2D").texture.normal_texture.one_shot = toggled_on
-				i.save_state(Global.current_state)
-
-func _on_rs_slider_value_changed(value):
-	if should_change:
-		for i in Global.held_sprites:
-			if i != null && is_instance_valid(i):
-				%RSLabel.text = "Rainbow Speed : " + str(snapped(value, 0.001))
-				i.sprite_data.rainbow_speed = value
-				i.save_state(Global.current_state)
-
-
-func _on_reseton_state_change_toggled(toggled_on: bool) -> void:
-	if should_change:
-		for i in Global.held_sprites:
-			if i != null && is_instance_valid(i):
-				i.sprite_data.should_reset_state = toggled_on
-				i.save_state(Global.current_state)

@@ -17,6 +17,7 @@ signal remake_layers
 signal update_layers
 signal update_layer_visib
 signal reparent_objects
+signal reparent_layers
 
 signal new_file
 
@@ -46,19 +47,11 @@ var settings_dict : Dictionary = {
 	checkinput = true,
 	bg_color = Color.SLATE_GRAY,
 	is_transparent = false,
-	bounceGravity = 575,
-	bounceSlider = 250,
 	states = [{}],
 	light_states = [{}],
 	darken = false,
 	anti_alias = true,
-	bounce_state = false,
-	
-	xFrq = 0.3,
-	xAmp = 5,
-	yFrq = 0.4,
-	yAmp = 5,
-	
+
 	dim_color = Color.DIM_GRAY,
 	auto_save = false,
 	auto_save_timer = 1.0,

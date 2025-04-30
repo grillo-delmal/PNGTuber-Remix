@@ -9,6 +9,22 @@ var current_mc_anim = "Idle"
 var current_mo_anim = "Idle"
 var should_squish : bool = false
 var squish_amount : float = 1.0
+var bounce_state : bool = false
+
+var prev : int = 0
+
+var state_parameters_default : Dictionary = {
+	bounce_gravity = 575,
+	bounce_energy = 250,
+	xFrq = 0.3,
+	xAmp = 5,
+	yFrq = 0.4,
+	yAmp = 5,
+}
+
+var state_param_mc : Dictionary = state_parameters_default.duplicate()
+var state_param_mo : Dictionary = state_parameters_default.duplicate()
+
 var tween : Tween
 
 var bounce_amount = 50
@@ -53,8 +69,10 @@ func _process(delta):
 		bounceChange = hold - get_parent().position.y
 #	get_parent().position.y = lerp(get_parent().position.y, 0.0, 0.05)
 	
-	
-	yVel = clamp(yVel + Global.settings_dict.bounceGravity* delta,-90000000, 90000000)
+	if currenly_speaking:
+		yVel = clamp(yVel + state_param_mo.bounce_gravity* delta,-90000000, 90000000)
+	else:
+		yVel = clamp(yVel + state_param_mc.bounce_gravity* delta,-90000000, 90000000)
 	
 	
 	if currenly_speaking:
@@ -104,6 +122,9 @@ func save_state(id):
 		current_mo_anim = current_mo_anim,
 		should_squish = should_squish,
 		squish_amount = squish_amount,
+		bounce_state = bounce_state,
+		state_param_mo = state_param_mo.duplicate(),
+		state_param_mc = state_param_mc.duplicate(),
 	}
 	Global.settings_dict.states[id] = dict
 	
@@ -119,18 +140,23 @@ func get_state(state):
 		mouth_open = dict.mouth_open
 		current_mc_anim = dict.current_mc_anim
 		current_mo_anim = dict.current_mo_anim
+		if dict.has("state_param_mo"):
+			bounce_state = dict.bounce_state
+			state_param_mo.merge(dict.state_param_mo, true)
+			state_param_mc.merge(dict.state_param_mc, true)
+		
 		if dict.has("squish_amount"):
 			squish_amount = dict.squish_amount
 			should_squish = dict.should_squish
 		
-		if Global.settings_dict.bounce_state:
+		if bounce_state:
 			state_bounce()
 			
 		if GlobalMicAudio.has_spoken:
 			speaking()
 		else:
 			not_speaking()
-			
+	
 	reinfoanim.emit()
 
 func not_speaking():
@@ -171,11 +197,10 @@ func speaking():
 
 func state_bounce():
 	if get_parent().position.y > -16:
-		yVel = Global.settings_dict.bounceSlider * -1
-
+		yVel = ((state_param_mc.bounce_energy + state_param_mo.bounce_energy)/2) * -1
 
 func set_mc_float():
-	position.y = lerp(position.y, (sin(tick*Global.settings_dict.yFrq)*(Global.settings_dict.yAmp)), 0.08)
+	position.y = lerp(position.y, (sin(tick*state_param_mc.yFrq)*(state_param_mc.yAmp)), 0.08)
 #	yVel = (position.y * 0.08)
 	bounceChange = position.y /8
 
@@ -186,20 +211,20 @@ func set_mc_idle():
 
 func set_mc_bouncy():
 	if get_parent().position.y > -1:
-		yVel = Global.settings_dict.bounceSlider * -1
+		yVel = state_param_mc.bounce_energy * -1
 
 func set_mc_one_bounce():
 	if get_parent().position.y > -16:
-		yVel = Global.settings_dict.bounceSlider * -1
+		yVel = state_param_mo.bounce_energy * -1
 
 func set_mc_wobble():
-	position.x = lerp(position.x, sin(tick*Global.settings_dict.xFrq)*Global.settings_dict.xAmp, 0.08)
-	position.y = lerp(position.y, sin(tick*Global.settings_dict.yFrq)*Global.settings_dict.yAmp, 0.08)
+	position.x = lerp(position.x, sin(tick*state_param_mo.xFrq)*state_param_mo.xAmp, 0.08)
+	position.y = lerp(position.y, sin(tick*state_param_mo.yFrq)*state_param_mo.yAmp, 0.08)
 	bounceChange = position.y/10
 	
 
 func set_mc_squish():
-	position.y = lerp(position.y,sin(tick*Global.settings_dict.yFrq)*Global.settings_dict.yAmp, 0.08)
+	position.y = lerp(position.y,sin(tick*state_param_mc.yFrq)*state_param_mc.yAmp, 0.08)
 	
 	var yvel = (position.y * 0.01)
 	var target = Vector2(1.0-yvel,1.0+yvel)
@@ -209,7 +234,7 @@ func set_mc_squish():
 
 
 func set_mo_float():
-	position.y = lerp(position.y, (sin(tick*Global.settings_dict.yFrq)*(Global.settings_dict.yAmp)), 0.08)
+	position.y = lerp(position.y, (sin(tick*state_param_mo.yFrq)*(state_param_mo.yAmp)), 0.08)
 #	yVel = (position.y * 0.08)
 	bounceChange = position.y /8
 
@@ -219,21 +244,21 @@ func set_mo_idle():
 
 func set_mo_bouncy():
 	if get_parent().position.y > -1:
-		yVel = Global.settings_dict.bounceSlider * -1
+		yVel = state_param_mo.bounce_energy * -1
 
 func set_mo_one_bounce():
 	if get_parent().position.y > -16:
-		yVel = Global.settings_dict.bounceSlider * -1
+		yVel = state_param_mo.bounce_energy * -1
 
 func set_mo_wobble():
-	position.x = lerp(position.x, sin(tick*Global.settings_dict.xFrq)*Global.settings_dict.xAmp, 0.08)
-	position.y = lerp(position.y, sin(tick*Global.settings_dict.yFrq)*Global.settings_dict.yAmp, 0.08)
+	position.x = lerp(position.x, sin(tick*state_param_mo.xFrq)*state_param_mo.xAmp, 0.08)
+	position.y = lerp(position.y, sin(tick*state_param_mo.yFrq)*state_param_mo.yAmp, 0.08)
 	bounceChange = position.y/10
 	
 
 
 func set_mo_squish():
-	position.y = lerp(position.y,sin(tick*Global.settings_dict.yFrq)*Global.settings_dict.yAmp, 0.08)
+	position.y = lerp(position.y,sin(tick*state_param_mo.yFrq)*state_param_mo.yAmp, 0.08)
 	
 	var yvel = (position.y * 0.01)
 	var target = Vector2(1.0-yvel,1.0+yvel)

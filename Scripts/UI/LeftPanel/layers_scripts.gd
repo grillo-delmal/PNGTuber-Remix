@@ -16,6 +16,7 @@ func _ready() -> void:
 	layers_popup.connect("id_pressed",choosing_layers_popup)
 	Global.deselect.connect(deselect_all)
 	Global.update_layer_visib.connect(update_visib_buttons)
+	Global.reparent_layers.connect(correct_rearrange)
 
 func deselect_all():
 	empty_sprites_array()

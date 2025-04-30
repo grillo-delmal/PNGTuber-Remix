@@ -1,0 +1,123 @@
+[gd_scene load_steps=3 format=3 uid="uid://ddhwynf6o3br1"]
+
+[ext_resource type="Script" uid="uid://cplj1qo0nys4g" path="res://Scripts/UI/RightPanel/model_animation_parameters.gd" id="1_1lywl"]
+[ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="1_gkpfe"]
+
+[node name="AnimationParameters" type="GridContainer"]
+custom_minimum_size = Vector2(300, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_constants/v_separation = 6
+script = ExtResource("1_1lywl")
+
+[node name="BounceAmount" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Affects Model Bouncing"
+mouse_filter = 1
+text = "Bounce Amount : "
+
+[node name="BounceAmountSlider" parent="." instance=ExtResource("1_gkpfe")]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 3000.0
+step = 1.0
+ui_type = 3
+
+[node name="GravityAmount" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Bounce Gravity : "
+
+[node name="GravityAmountSlider" parent="." instance=ExtResource("1_gkpfe")]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 3000.0
+step = 1.0
+ui_type = 3
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="XFreqWobbleLabel" type="Label" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Affects the Wobbling"
+mouse_filter = 1
+text = "X-Frequency Wobble :"
+
+[node name="XFreqWobbleSlider" type="HSlider" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 10.0
+step = 0.01
+
+[node name="VBox2" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="XAmpWobbleLabel" type="Label" parent="VBox2"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Affects the Wobbling"
+mouse_filter = 1
+text = "X-Amplitude Wobble :"
+
+[node name="XAmpWobbleSlider" type="HSlider" parent="VBox2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 10.0
+step = 0.01
+
+[node name="HSeparator2" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="VBox3" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="YFreqWobbleLabel" type="Label" parent="VBox3"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Affects the Wobbling and Squishing"
+mouse_filter = 1
+text = "Y-Frequency Wobble :"
+
+[node name="YFreqWobbleSlider" type="HSlider" parent="VBox3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 10.0
+step = 0.01
+
+[node name="VBox4" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="YAmpWobbleLabel" type="Label" parent="VBox4"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Affects the Wobbling and Squishing"
+mouse_filter = 1
+text = "Y-Frequency Wobble :"
+
+[node name="YAmpWobbleSlider" type="HSlider" parent="VBox4"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 10.0
+step = 0.01

@@ -186,7 +186,8 @@ func load_file(path, should_load_path = false):
 				sprite_obj.normal_data = sprite.normal_data 
 				
 			sprite_obj.sprite_id = sprite.sprite_id
-			sprite_obj.parent_id = sprite.parent_id
+			if sprite.parent_id != null:
+				sprite_obj.parent_id = sprite.parent_id
 			sprite_obj.sprite_name = sprite.sprite_name
 			if sprite.has("is_collapsed"):
 				sprite_obj.is_collapsed = sprite.is_collapsed

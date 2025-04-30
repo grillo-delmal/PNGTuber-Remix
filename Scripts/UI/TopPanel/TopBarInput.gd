@@ -22,9 +22,6 @@ func _ready():
 	bgcolor.get_popup().connect("id_pressed",choosing_bg_color)
 	about.get_popup().connect("id_pressed",choosing_about)
 	%WindowButton.get_popup().connect("id_pressed",choosing_window)
-	
-	%BounceAmountSlider.get_node("%SliderValue").value_changed.connect(_on_bounce_amount_slider_value_changed)
-	%GravityAmountSlider.get_node("%SliderValue").value_changed.connect(_on_gravity_amount_slider_value_changed)
 
 	ProjectSettings.set("audio/driver/mix_rate", AudioServer.get_mix_rate())
 	
@@ -178,16 +175,6 @@ func _notification(what):
 func _on_inputs_button_pressed():
 	Global.top_ui.add_child(settings.instantiate())
 
-func _on_bounce_control_button_pressed():
-	%BounceControlPopup.popup()
-
-func _on_bounce_amount_slider_value_changed(value):
-	Global.settings_dict.bounceSlider = value
-#	%BounceAmount.text = "Bounce Amount : " + str(value)
-
-func _on_gravity_amount_slider_value_changed(value):
-	Global.settings_dict.bounceGravity = value
-#	%GravityAmount.text = "Bounce Gravity : " + str(value)
 
 func _on_color_picker_color_changed(color):
 	Global.settings_dict.bg_color = color
@@ -238,26 +225,6 @@ func desel_everything():
 		#	%LayersTree.get_selected().deselect(0)
 	Global.held_sprite = null
 	Global.deselect.emit()
-
-func _on_bounce_state_check_toggled(toggled_on):
-	Global.settings_dict.bounce_state = toggled_on
-	
-
-func _on_x_freq_wobble_slider_value_changed(value):
-	Global.settings_dict.xFrq = value
-	%XFreqWobbleLabel.text = "X-Frequency Wobble : " + str(value)
-
-func _on_x_amp_wobble_slider_value_changed(value):
-	Global.settings_dict.xAmp = value
-	%XAmpWobbleLabel.text = "X-Amplitude Wobble : " + str(value)
-
-func _on_y_freq_wobble_slider_value_changed(value):
-	Global.settings_dict.yFrq = value
-	%YFreqWobbleLabel.text = "Y-Frequency Wobble : " + str(value)
-
-func _on_y_amp_wobble_slider_value_changed(value):
-	Global.settings_dict.yAmp = value
-	%YAmpWobbleLabel.text = "Y-Amplitude Wobble : " + str(value)
 
 
 func _on_preview_mode_check_toggled(toggled_on: bool) -> void:

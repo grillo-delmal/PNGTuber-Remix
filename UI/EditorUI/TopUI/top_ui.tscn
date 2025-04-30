@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bpmlfhv30o08l"]
+[gd_scene load_steps=12 format=3 uid="uid://bpmlfhv30o08l"]
 
 [ext_resource type="Script" uid="uid://buog53mcsao0g" path="res://Scripts/UI/TopPanel/top_ui.gd" id="2_fpnkx"]
 [ext_resource type="Script" uid="uid://bafvsv0wf438w" path="res://Scripts/Misc/OnlineLinks.gd" id="3_tep3f"]
@@ -11,7 +11,6 @@
 [ext_resource type="Texture2D" uid="uid://fmhwpxa4hlo7" path="res://DemoModels/Icons/NormalIcon.png" id="11_bgxcq"]
 [ext_resource type="Texture2D" uid="uid://bjxmdyue5pp2x" path="res://DemoModels/Icons/FollowMouseIcon.png" id="12_bmktp"]
 [ext_resource type="Texture2D" uid="uid://dm7ppdlhye1ji" path="res://DemoModels/Icons/AssetIcon.png" id="13_f2y74"]
-[ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="25_715by"]
 
 [node name="TopUI" type="Control"]
 custom_minimum_size = Vector2(0, 35)
@@ -115,6 +114,7 @@ popup/item_6/id = 6
 
 [node name="BounceControlButton" type="MenuButton" parent="TopBar/HBox"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
@@ -373,138 +373,6 @@ This app is based off PNGTuber+.
 Main goal is to implement new features as fix bugs 
 from the original software and improve existing ones."
 
-[node name="BounceControlPopup" type="PopupPanel" parent="."]
-unique_name_in_owner = true
-auto_translate_mode = 1
-initial_position = 2
-size = Vector2i(320, 397)
-unresizable = false
-borderless = false
-
-[node name="GridContainer" type="GridContainer" parent="BounceControlPopup"]
-custom_minimum_size = Vector2(300, 0)
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 316.0
-offset_bottom = 393.0
-
-[node name="BounceAmount" type="Label" parent="BounceControlPopup/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-tooltip_text = "Affects Model Bouncing"
-mouse_filter = 1
-text = "Bounce Amount : "
-
-[node name="BounceAmountSlider" parent="BounceControlPopup/GridContainer" instance=ExtResource("25_715by")]
-unique_name_in_owner = true
-layout_mode = 2
-max_value = 3000.0
-step = 1.0
-ui_type = 3
-
-[node name="GravityAmount" type="Label" parent="BounceControlPopup/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Bounce Gravity : "
-
-[node name="GravityAmountSlider" parent="BounceControlPopup/GridContainer" instance=ExtResource("25_715by")]
-unique_name_in_owner = true
-layout_mode = 2
-max_value = 3000.0
-step = 1.0
-ui_type = 3
-
-[node name="HSeparator" type="HSeparator" parent="BounceControlPopup/GridContainer"]
-layout_mode = 2
-
-[node name="VBox" type="VBoxContainer" parent="BounceControlPopup/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="XFreqWobbleLabel" type="Label" parent="BounceControlPopup/GridContainer/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-tooltip_text = "Affects the Wobbling"
-mouse_filter = 1
-text = "X-Frequency Wobble :"
-
-[node name="XFreqWobbleSlider" type="HSlider" parent="BounceControlPopup/GridContainer/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-max_value = 10.0
-step = 0.01
-
-[node name="VBox2" type="VBoxContainer" parent="BounceControlPopup/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="XAmpWobbleLabel" type="Label" parent="BounceControlPopup/GridContainer/VBox2"]
-unique_name_in_owner = true
-layout_mode = 2
-tooltip_text = "Affects the Wobbling"
-mouse_filter = 1
-text = "X-Amplitude Wobble :"
-
-[node name="XAmpWobbleSlider" type="HSlider" parent="BounceControlPopup/GridContainer/VBox2"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-max_value = 10.0
-step = 0.01
-
-[node name="HSeparator2" type="HSeparator" parent="BounceControlPopup/GridContainer"]
-layout_mode = 2
-
-[node name="VBox3" type="VBoxContainer" parent="BounceControlPopup/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="YFreqWobbleLabel" type="Label" parent="BounceControlPopup/GridContainer/VBox3"]
-unique_name_in_owner = true
-layout_mode = 2
-tooltip_text = "Affects the Wobbling and Squishing"
-mouse_filter = 1
-text = "Y-Frequency Wobble :"
-
-[node name="YFreqWobbleSlider" type="HSlider" parent="BounceControlPopup/GridContainer/VBox3"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-max_value = 10.0
-step = 0.01
-
-[node name="VBox4" type="VBoxContainer" parent="BounceControlPopup/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="YAmpWobbleLabel" type="Label" parent="BounceControlPopup/GridContainer/VBox4"]
-unique_name_in_owner = true
-layout_mode = 2
-tooltip_text = "Affects the Wobbling and Squishing"
-mouse_filter = 1
-text = "Y-Frequency Wobble :"
-
-[node name="YAmpWobbleSlider" type="HSlider" parent="BounceControlPopup/GridContainer/VBox4"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-max_value = 10.0
-step = 0.01
-
-[node name="HSeparator3" type="HSeparator" parent="BounceControlPopup/GridContainer"]
-layout_mode = 2
-
-[node name="BounceStateCheck" type="CheckBox" parent="BounceControlPopup/GridContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Bounce when changing states    "
-
 [node name="Background" type="PopupPanel" parent="."]
 unique_name_in_owner = true
 auto_translate_mode = 1
@@ -526,7 +394,6 @@ sampler_visible = false
 color_modes_visible = false
 presets_visible = false
 
-[connection signal="pressed" from="TopBar/HBox/BounceControlButton" to="TopBarInput" method="_on_bounce_control_button_pressed"]
 [connection signal="pressed" from="TopBar/HBox/InputsButton" to="TopBarInput" method="_on_inputs_button_pressed"]
 [connection signal="toggled" from="TopBar/HBox/PreviewModeCheck" to="TopBarInput" method="_on_preview_mode_check_toggled"]
 [connection signal="toggled" from="TopBar/HBox/HideUIButton" to="TopBarInput" method="_on_hide_ui_button_toggled"]
@@ -539,11 +406,6 @@ presets_visible = false
 [connection signal="pressed" from="TempPopUp/VBoxContainer/GridContainer/NormalmTempButton" to="TopBarInput" method="_on_normalm_temp_button_pressed"]
 [connection signal="pressed" from="TempPopUp/VBoxContainer/GridContainer/FollowMouseTempButton" to="TopBarInput" method="_on_follow_mouse_temp_button_pressed"]
 [connection signal="pressed" from="TempPopUp/VBoxContainer/GridContainer/AssetTempButton" to="TopBarInput" method="_on_asset_temp_button_pressed"]
-[connection signal="value_changed" from="BounceControlPopup/GridContainer/VBox/XFreqWobbleSlider" to="TopBarInput" method="_on_x_freq_wobble_slider_value_changed"]
-[connection signal="value_changed" from="BounceControlPopup/GridContainer/VBox2/XAmpWobbleSlider" to="TopBarInput" method="_on_x_amp_wobble_slider_value_changed"]
-[connection signal="value_changed" from="BounceControlPopup/GridContainer/VBox3/YFreqWobbleSlider" to="TopBarInput" method="_on_y_freq_wobble_slider_value_changed"]
-[connection signal="value_changed" from="BounceControlPopup/GridContainer/VBox4/YAmpWobbleSlider" to="TopBarInput" method="_on_y_amp_wobble_slider_value_changed"]
-[connection signal="toggled" from="BounceControlPopup/GridContainer/BounceStateCheck" to="TopBarInput" method="_on_bounce_state_check_toggled"]
 [connection signal="focus_entered" from="Background" to="TopBarInput" method="_on_background_focus_entered"]
 [connection signal="focus_exited" from="Background" to="TopBarInput" method="_on_background_focus_exited"]
 [connection signal="color_changed" from="Background/BGColorPicker" to="TopBarInput" method="_on_color_picker_color_changed"]

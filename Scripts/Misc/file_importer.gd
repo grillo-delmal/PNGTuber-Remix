@@ -55,14 +55,7 @@ func import_apng_sprite(path : String , spawn) -> CanvasTexture:
 
 	
 	return img_can
-	
-func import_png_from_buffer(buffer: PackedByteArray, sprite_name: String, spawn) -> CanvasTexture:
-	var img = Image.new()
-	img.load_png_from_buffer(buffer)
-	var img_can = import_png(img, spawn)
-	spawn.image_data = buffer
-	spawn.sprite_name = sprite_name
-	return img_can
+
 
 func import_gif(path : String, spawn) -> CanvasTexture:
 	var g_file = FileAccess.get_file_as_bytes(path)
@@ -82,7 +75,10 @@ func import_png_from_file(path: String, spawn) -> CanvasTexture:
 	var img = Image.load_from_file(path)
 	var img_can = import_png(img, spawn)
 	var buffer = FileAccess.get_file_as_bytes(path)
-	spawn.image_data = buffer
+	if trim:
+		spawn.image_data = buffer
+	else:
+		spawn.image_data = []
 	spawn.sprite_name = path.get_file().get_basename()
 	return img_can
 	
@@ -116,39 +112,44 @@ func add_normal(path):
 		for n in gif_tex.frames:
 			gif_tex.get_frame_texture(n).get_image().fix_alpha_edges()
 
-		Global.held_sprite.anim_texture_normal = g_file
-		Global.held_sprite.get_node("%Sprite2D").texture.normal_texture = gif_tex
+		Global.held_sprites[0].anim_texture_normal = g_file
+		Global.held_sprites[0].get_node("%Sprite2D").texture.normal_texture = gif_tex
 	else:
 		var apng_test = AImgIOAPNGImporter.load_from_file(path)
 		if apng_test != ["No frames", null]:
 			var img = AImgIOAPNGImporter.load_from_file(path)
 			var tex = img[1] as Array[AImgIOFrame]
-			Global.held_sprite.frames2 = tex
+			Global.held_sprites[0].frames2 = tex
 			
-			for n in Global.held_sprite.frames2:
+			for n in Global.held_sprites[0].frames2:
 				n.content.fix_alpha_edges()
 			
-			var cframe: AImgIOFrame = Global.held_sprite.frames2[0]
+			var cframe: AImgIOFrame = Global.held_sprites[0].frames2[0]
 			var text = ImageTexture.create_from_image(cframe.content)
-			Global.held_sprite.get_node("%Sprite2D").texture.normal_texture = text
-			for i in Global.held_sprite.frames2:
+			Global.held_sprites[0].get_node("%Sprite2D").texture.normal_texture = text
+			for i in Global.held_sprites[0].frames2:
 				var new_frame : AnimatedFrame = AnimatedFrame.new()
 				new_frame.texture = ImageTexture.create_from_image(i.content)
 				new_frame.duration = i.duration
-				Global.held_sprite.get_node("%AnimatedSpriteTexture").frames2.append(new_frame)
+				Global.held_sprites[0].get_node("%AnimatedSpriteTexture").frames2.append(new_frame)
 
 
 		else:
 			var img = Image.load_from_file(path)
 			if trim:
-				if !Global.held_sprite.image_data.is_empty():
+				if !Global.held_sprites[0].image_data.is_empty():
 					var og_image = Image.new()
-					og_image.load_png_from_buffer(Global.held_sprite.image_data)
+					og_image.load_png_from_buffer(Global.held_sprites[0].image_data)
 					img = ImageTrimmer.trim_normal(og_image, img)
-			Global.held_sprite.normal_data = FileAccess.get_file_as_bytes(path)
+					
+			if trim:
+				var buffer = FileAccess.get_file_as_bytes(path)
+				Global.held_sprites[0].image_data = buffer
+			else:
+				Global.held_sprites[0].image_data = []
 			img.fix_alpha_edges()
 			var texture = ImageTexture.create_from_image(img)
-			Global.held_sprite.get_node("%Sprite2D").texture.normal_texture = texture
+			Global.held_sprites[0].get_node("%Sprite2D").texture.normal_texture = texture
 		Global.get_sprite_states(Global.current_state)
 
 func replace_texture(path : String):
@@ -161,36 +162,36 @@ func replace_texture(path : String):
 			gif_tex.get_frame_texture(n).get_image().fix_alpha_edges()
 		
 		img_can.diffuse_texture = gif_tex
-		Global.held_sprite.anim_texture = g_file
-		Global.held_sprite.anim_texture_normal = null
-	#	Global.held_sprite.texture = img_can
-		Global.held_sprite.get_node("%Sprite2D").texture = img_can
-		Global.held_sprite.img_animated = true
-		Global.held_sprite.is_apng = false
-		Global.held_sprite.save_state(Global.current_state)
-		ImageTrimmer.set_thumbnail(Global.held_sprite.treeitem)
+		Global.held_sprites[0].anim_texture = g_file
+		Global.held_sprites[0].anim_texture_normal = null
+	#	Global.held_sprites[0].texture = img_can
+		Global.held_sprites[0].get_node("%Sprite2D").texture = img_can
+		Global.held_sprites[0].img_animated = true
+		Global.held_sprites[0].is_apng = false
+		Global.held_sprites[0].save_state(Global.current_state)
+		ImageTrimmer.set_thumbnail(Global.held_sprites[0].treeitem)
 	else:
 		var apng_test = AImgIOAPNGImporter.load_from_file(path)
 		if apng_test != ["No frames", null]:
 			var img = AImgIOAPNGImporter.load_from_file(path)
 			var tex = img[1] as Array[AImgIOFrame]
-			Global.held_sprite.frames = tex
+			Global.held_sprites[0].frames = tex
 			
-			for n in Global.held_sprite.frames:
+			for n in Global.held_sprites[0].frames:
 				n.content.fix_alpha_edges()
 			
-			var cframe: AImgIOFrame = Global.held_sprite.frames[0]
+			var cframe: AImgIOFrame = Global.held_sprites[0].frames[0]
 			var text = ImageTexture.create_from_image(cframe.content)
 			var img_can = CanvasTexture.new()
 			img_can.diffuse_texture = text
-			ImageTrimmer.set_thumbnail(Global.held_sprite.treeitem)
-			Global.held_sprite.is_apng = true
-			Global.held_sprite.img_animated = false
-			for i in Global.held_sprite.frames:
+			ImageTrimmer.set_thumbnail(Global.held_sprites[0].treeitem)
+			Global.held_sprites[0].is_apng = true
+			Global.held_sprites[0].img_animated = false
+			for i in Global.held_sprites[0].frames:
 				var new_frame : AnimatedFrame = AnimatedFrame.new()
 				new_frame.texture = ImageTexture.create_from_image(i.content)
 				new_frame.duration = i.duration
-				Global.held_sprite.get_node("%AnimatedSpriteTexture").frames.append(new_frame)
+				Global.held_sprites[0].get_node("%AnimatedSpriteTexture").frames.append(new_frame)
 			
 		else:
 			var img = Image.load_from_file(path)
@@ -207,35 +208,38 @@ func replace_texture(path : String):
 				var center_shift_y = trim_info.min_y - ((original_height - trimmed_height) / 2.0)
 				# Adjust position to keep image visually stable
 				var glob_pos : Array = []
-				for i in Global.held_sprite.get_node("%Sprite2D").get_children():
+				for i in Global.held_sprites[0].get_node("%Sprite2D").get_children():
 					if i is SpriteObject:
 						glob_pos.append({obj = i,
 						og_pos = i.global_position})
-				Global.held_sprite.sprite_data.offset += Vector2(center_shift_x, center_shift_y)
-				Global.held_sprite.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
+				Global.held_sprites[0].sprite_data.offset += Vector2(center_shift_x, center_shift_y)
+				Global.held_sprites[0].get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
 				for i in glob_pos:
 					i.obj.global_position = i.og_pos
 					i.obj.sprite_data.position = i.obj.position
 					i.obj.save_state(Global.current_state)
 					
 				Global.update_offset_spins.emit()
-			var buffer = FileAccess.get_file_as_bytes(path)
-			Global.held_sprite.image_data = buffer
+			if trim:
+				var buffer = FileAccess.get_file_as_bytes(path)
+				Global.held_sprites[0].image_data = buffer
+			else:
+				Global.held_sprites[0].image_data = []
 				
 			img.fix_alpha_edges()
 			var texture = ImageTexture.create_from_image(img)
 			var img_can = CanvasTexture.new()
-			Global.held_sprite.img_animated = false
-			Global.held_sprite.is_apng = false
+			Global.held_sprites[0].img_animated = false
+			Global.held_sprites[0].is_apng = false
 			img_can.diffuse_texture = texture
-			Global.held_sprite.get_node("%Sprite2D").texture = img_can
-			Global.held_sprite.save_state(Global.current_state)
-			ImageTrimmer.set_thumbnail(Global.held_sprite.treeitem)
+			Global.held_sprites[0].get_node("%Sprite2D").texture = img_can
+			Global.held_sprites[0].save_state(Global.current_state)
+			ImageTrimmer.set_thumbnail(Global.held_sprites[0].treeitem)
 			
-		if Global.held_sprite.sprite_type == "WiggleApp":
-			Global.held_sprite.correct_sprite_size()
-			Global.held_sprite.update_wiggle_parts()
-		Global.held_sprite.get_node("%Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
+		if Global.held_sprites[0].sprite_type == "WiggleApp":
+			Global.held_sprites[0].correct_sprite_size()
+			Global.held_sprites[0].update_wiggle_parts()
+		Global.held_sprites[0].get_node("%Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 	Global.get_sprite_states(Global.current_state)
 	Global.reinfo.emit()
 

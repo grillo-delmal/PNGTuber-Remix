@@ -70,7 +70,6 @@ func stretch(length,_delta):
 	
 	%Squish.scale = lerp(%Squish.scale,target,0.1)
 
-
 func static_prev():
 	%Pos.position = Vector2(0,0)
 	%Sprite2D.self_modulate = actor.sprite_data.tint
@@ -83,7 +82,6 @@ func static_prev():
 	%Drag.rotation = 0.0
 	%Drag.scale = Vector2(1,1)
 	%Squish.rotation = 0.0
-
 
 func follow_wiggle():
 	if actor.sprite_data.follow_wa_tip:
@@ -193,8 +191,6 @@ func follow_mouse(_delta):
 		var scl_y = (abs(dire.y) *actor.sprite_data.mouse_scale_y *0.005) * Global.settings_dict.zoom.y
 		%Drag.scale.x = lerp(%Drag.scale.x, float(clamp(1 - scl_x, 0.15 , 1)), actor.sprite_data.mouse_delay)
 		%Drag.scale.y = lerp(%Drag.scale.y, float(clamp(1 - scl_y,  0.15 , 1)), actor.sprite_data.mouse_delay)
-
-
 
 func auto_rotate():
 	%Wobble.rotate(actor.sprite_data.should_rot_speed)

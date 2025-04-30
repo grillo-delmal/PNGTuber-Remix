@@ -14,9 +14,6 @@ func nullfy():
 	%AnimationFramesSlider.editable = false
 	%AnimationFramesSlider2.editable = false
 	%AnimationSpeedSlider.editable = false
-	%CurrentSelected.texture = null
-	%CurrentSelectedNormal.texture = null
-	
 
 func enable():
 	append_folder_selected = false
@@ -45,13 +42,6 @@ func enable():
 				%AnimationFramesSlider2.value = i.sprite_data.vframes
 				%AnimationSpeedSlider.value = i.sprite_data.animation_speed
 			
-		if not Global.held_sprites[0].sprite_data.folder:
-			%CurrentSelectedNormal.texture = Global.held_sprites[0].get_node("%Sprite2D").texture.normal_texture
-			%CurrentSelected.texture = Global.held_sprites[0].get_node("%Sprite2D").texture.diffuse_texture
-			append_folder_selected = true
-		else:
-			%CurrentSelected.texture = null
-			%CurrentSelectedNormal.texture = null
 	should_change = true
 
 func _on_animation_frames_slider_value_changed(value):

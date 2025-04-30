@@ -84,7 +84,7 @@ static func set_thumbnail(item : TreeItem):
 	var thumbnail_size = 32
 	
 	# Create a transparent square image
-	var square_img = Image.create(thumbnail_size, thumbnail_size, false, Image.FORMAT_RGBA8)
+	var square_img = Image.create(thumbnail_size, thumbnail_size, false, img.get_format())
 	square_img.fill(Color(0, 0, 0, 0))
 	
 	var scaled_img = img.duplicate()
@@ -100,6 +100,7 @@ static func set_thumbnail(item : TreeItem):
 	
 	var offset_x = (thumbnail_size - new_width) / 2
 	var offset_y = (thumbnail_size - new_height) / 2
+#	printt(offset_x, offset_y, new_width, new_height)
 	
 	square_img.blit_rect(scaled_img, Rect2(0, 0, new_width, new_height), Vector2(offset_x, offset_y))
 	

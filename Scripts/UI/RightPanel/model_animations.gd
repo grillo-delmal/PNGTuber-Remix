@@ -17,6 +17,7 @@ func set_slider_data(data):
 
 
 func reinfoanim():
+	%BounceStateCheck.button_pressed = Global.sprite_container.bounce_state
 	%MouthClosedAnim.text = Global.sprite_container.current_mc_anim
 	%MouthOpenAnim.text = Global.sprite_container.current_mo_anim
 	%ShouldSquish.button_pressed = Global.sprite_container.should_squish
@@ -93,3 +94,7 @@ func _on_should_squish_toggled(toggled_on: bool) -> void:
 func _on_blink_chance_slider_value_changed(value: float) -> void:
 	%BlinkChanceLabel.text = "Blink Chance : " + str(value)
 	Global.settings_dict.blink_chance = value
+
+
+func _on_bounce_state_check_toggled(toggled_on):
+	Global.sprite_container.state_param.bounce_state = toggled_on

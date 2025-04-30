@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://ngta1o5yiqxs"]
+[gd_scene load_steps=11 format=3 uid="uid://ngta1o5yiqxs"]
 
 [ext_resource type="Script" uid="uid://dvpyywoct4riy" path="res://Scripts/UI/control.gd" id="1_1r6xj"]
 [ext_resource type="Script" uid="uid://bpegrg5a15v2v" path="res://Scripts/UI/UIInput.gd" id="3_1eur5"]
 [ext_resource type="PackedScene" uid="uid://cpcj4o080w37m" path="res://UI/EditorUI/LeftUI/left_panel.tscn" id="5_0cvxm"]
 [ext_resource type="PackedScene" uid="uid://duk3smjtw111j" path="res://UI/EditorUI/RightUI/Components/wiggle.tscn" id="6_63lps"]
+[ext_resource type="PackedScene" uid="uid://w2l13b1625f6" path="res://UI/EditorUI/RightUI/Components/animation_tab.tscn" id="7_1r6xj"]
 [ext_resource type="PackedScene" uid="uid://cwtfmnxmnl7h3" path="res://UI/EditorUI/RightUI/Components/light.tscn" id="7_4jud0"]
 [ext_resource type="PackedScene" uid="uid://nh83ldjgbynt" path="res://UI/EditorUI/RightUI/Components/model_anim.tscn" id="8_1r6xj"]
 [ext_resource type="PackedScene" uid="uid://c3f86pv0can01" path="res://UI/EditorUI/RightUI/Components/properties.tscn" id="8_i4djb"]
@@ -91,7 +92,7 @@ custom_minimum_size = Vector2(350, 513)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/side_margin = 1
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 13
 current_tab = 0
 
 [node name="Properties" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer" instance=ExtResource("8_i4djb")]
@@ -104,20 +105,26 @@ layout_mode = 2
 [node name="Wiggle" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer" instance=ExtResource("6_63lps")]
 layout_mode = 2
 
+[node name="Animation" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer" instance=ExtResource("7_1r6xj")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
 [node name="Model" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer" instance=ExtResource("8_1r6xj")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 4
 
 [node name="Light" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer" instance=ExtResource("7_4jud0")]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 4
+metadata/_tab_index = 5
 
 [node name="Tests" type="Control" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer"]
 visible = false
 y_sort_enabled = true
 layout_mode = 2
-metadata/_tab_index = 5
+metadata/_tab_index = 6
 
 [node name="ScrollContainer6" type="ScrollContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests"]
 layout_mode = 1

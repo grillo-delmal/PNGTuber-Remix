@@ -1,12 +1,15 @@
 extends Tree
 
-var held_item : TreeItem = null
+var held_item : Array[TreeItem]
 
 
 func _get_drag_data(_at_position: Vector2) -> Variant:
 	drop_mode_flags = 3
-	if held_item == null:
-		held_item = get_selected()
+	if held_item.is_empty():
+		for items in Global.held_sprites:
+			held_item.append(items.treeitem)
+		
+	#	print(held_item)
 		return held_item
 	else:
 		return held_item
@@ -14,15 +17,17 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 	#	return null
 
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
-	return data is TreeItem
+	return data is Array[TreeItem]
 
 func _drop_data(at_position: Vector2, data: Variant) -> void:
-	if data != null && is_instance_valid(data):
-		if data is TreeItem:
-			var other = get_item_at_position(at_position)
-			if other != null && is_instance_valid(other):
-				if other is TreeItem:
-					move_stuff(data, other, at_position)
+	if !data.is_empty():
+		var other = get_item_at_position(at_position)
+		for item in data:
+			if item != null && is_instance_valid(item):
+				if other != null && is_instance_valid(other):
+					if other is TreeItem:
+						move_stuff(item, other, at_position)
+	held_item.clear()
 	drop_mode_flags = 3
 
 func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
@@ -31,12 +36,10 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 	
 	if other_item in items:
 		print("can't drop")
-		held_item = null
 		return
 	
 	if other_item == item:
 		print("can't drop")
-		held_item = null
 		return
 	
 	#print(true_pos)
@@ -110,7 +113,6 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 			item.move_after(other_item)
 			var count = item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1
 			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(other_item.get_metadata(0).sprite_object.get_index()+1, 0, count))
-	held_item = null
 
 func get_all_layeritems(layeritem, recursive) -> Array:
 	var children := []
