@@ -22,8 +22,15 @@ var state_parameters_default : Dictionary = {
 	yAmp = 5,
 }
 
+var default_model_effects : Dictionary = {
+	effect_type = 0,
+	effect_size = 1,
+	effect_color = Color.WHITE,
+}
+
 var state_param_mc : Dictionary = state_parameters_default.duplicate()
 var state_param_mo : Dictionary = state_parameters_default.duplicate()
+var model_effects : Dictionary = default_model_effects.duplicate()
 
 var tween : Tween
 
@@ -36,14 +43,12 @@ var bounceChange = 0.0
 var currenly_speaking : bool = false
 var tick = 0
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.animation_state.connect(get_state)
 	Global.speaking.connect(speaking)
 	Global.not_speaking.connect(not_speaking)
 	Global.blink.connect(_squish)
-
 
 func _squish():
 	if should_squish:
@@ -113,7 +118,6 @@ func _process(delta):
 	else:
 		modulate = Color.WHITE
 
-
 func save_state(id):
 	var dict = {
 		mouth_closed = mouth_closed,
@@ -125,6 +129,7 @@ func save_state(id):
 		bounce_state = bounce_state,
 		state_param_mo = state_param_mo.duplicate(),
 		state_param_mc = state_param_mc.duplicate(),
+		model_effects = model_effects.duplicate(),
 	}
 	Global.settings_dict.states[id] = dict
 	
@@ -144,6 +149,8 @@ func get_state(state):
 			bounce_state = dict.bounce_state
 			state_param_mo.merge(dict.state_param_mo, true)
 			state_param_mc.merge(dict.state_param_mc, true)
+			model_effects.merge(dict.model_effects, true)
+			set_effects()
 		
 		if dict.has("squish_amount"):
 			squish_amount = dict.squish_amount
@@ -194,7 +201,6 @@ func speaking():
 		5:
 			set_mo_squish()
 
-
 func state_bounce():
 	if get_parent().position.y > -16:
 		yVel = ((state_param_mc.bounce_energy + state_param_mo.bounce_energy)/2) * -1
@@ -204,10 +210,8 @@ func set_mc_float():
 #	yVel = (position.y * 0.08)
 	bounceChange = position.y /8
 
-
 func set_mc_idle():
 	pass
-#	position = pos
 
 func set_mc_bouncy():
 	if get_parent().position.y > -1:
@@ -221,7 +225,6 @@ func set_mc_wobble():
 	position.x = lerp(position.x, sin(tick*state_param_mo.xFrq)*state_param_mo.xAmp, 0.08)
 	position.y = lerp(position.y, sin(tick*state_param_mo.yFrq)*state_param_mo.yAmp, 0.08)
 	bounceChange = position.y/10
-	
 
 func set_mc_squish():
 	position.y = lerp(position.y,sin(tick*state_param_mc.yFrq)*state_param_mc.yAmp, 0.08)
@@ -230,8 +233,6 @@ func set_mc_squish():
 	var target = Vector2(1.0-yvel,1.0+yvel)
 
 	scale = lerp(scale,target,0.08)
-
-
 
 func set_mo_float():
 	position.y = lerp(position.y, (sin(tick*state_param_mo.yFrq)*(state_param_mo.yAmp)), 0.08)
@@ -254,8 +255,6 @@ func set_mo_wobble():
 	position.x = lerp(position.x, sin(tick*state_param_mo.xFrq)*state_param_mo.xAmp, 0.08)
 	position.y = lerp(position.y, sin(tick*state_param_mo.yFrq)*state_param_mo.yAmp, 0.08)
 	bounceChange = position.y/10
-	
-
 
 func set_mo_squish():
 	position.y = lerp(position.y,sin(tick*state_param_mo.yFrq)*state_param_mo.yAmp, 0.08)
@@ -264,3 +263,7 @@ func set_mo_squish():
 	var target = Vector2(1.0-yvel,1.0+yvel)
 
 	scale = lerp(scale,target,0.08)
+
+func set_effects():
+	if Global.viewer != null && is_instance_valid(Global.viewer):
+		Global.viewer.material.set_shader_parameter("effect", model_effects.effect_type)

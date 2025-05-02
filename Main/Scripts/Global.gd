@@ -77,6 +77,8 @@ var spinbox_held : bool = false
 
 var main = null
 var sprite_container = null
+var viewer = null
+var viewport = null
 var top_ui = null
 var file_dialog : FileDialog = null
 var light = null

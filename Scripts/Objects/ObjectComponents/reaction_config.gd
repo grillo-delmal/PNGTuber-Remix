@@ -144,7 +144,6 @@ func reset_animations(_place_holder : int = 0):
 	if actor.sprite_data.should_reset:
 		reset_anim()
 
-
 func reset_anim():
 	if actor.is_apng:
 		animation_handler.index = 0

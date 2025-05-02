@@ -39,9 +39,10 @@ func _unhandled_input(event):
 	if current_remap == Remap.Asset:
 		if not event is InputEventMouseMotion:
 			if event.is_pressed():
-				InputMap.action_erase_events(action)
-				InputMap.action_add_event(action, event)
-				Global.held_sprite.saved_event = event
+				if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
+					InputMap.action_erase_events(action)
+					InputMap.action_add_event(action, event)
+					Global.held_sprites[0].saved_event = event
 				update_other_assets()
 
 				
@@ -50,20 +51,21 @@ func _unhandled_input(event):
 	elif current_remap == Remap.Keys:
 		if not event is InputEventMouseMotion:
 			if event.is_pressed():
-				if id in range(Global.held_sprite.saved_keys.size() -1):
-					Global.held_sprite.saved_keys.remove_at(id)
-				Global.held_sprite.saved_keys.append(event.as_text())
+				if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
+					if id in range(Global.held_sprites[0].saved_keys.size() -1):
+						Global.held_sprites[0].saved_keys.remove_at(id)
+					Global.held_sprites[0].saved_keys.append(event.as_text())
 				%ShouldDisList.set_item_text(id, event.as_text())
 				
 				%ShouldDisRemapButton.button_pressed = false
 
 func update_other_assets():
 	for i in get_tree().get_nodes_in_group("Sprites"):
-		if i != Global.held_sprite:
+		if i != Global.held_sprites[0]:
 			if i.saved_event != null:
-				if Global.held_sprite.saved_event.as_text() == i.saved_event.as_text():
-					i.get_node("%Drag").visible = Global.held_sprite.get_node("%Drag").visible
-					i.was_active_before = Global.held_sprite.get_node("%Drag").visible
+				if Global.held_sprites[0].saved_event.as_text() == i.saved_event.as_text():
+					i.get_node("%Drag").visible = Global.held_sprites[0].get_node("%Drag").visible
+					i.was_active_before = Global.held_sprites[0].get_node("%Drag").visible
 
 
 func update_key_text():
@@ -73,11 +75,12 @@ func update_key_text():
 		text = "Bind Key"
 
 func update_stuff():
-	if Global.held_sprite.saved_event != null:
-		InputMap.action_erase_events(action)
-		InputMap.action_add_event(action, Global.held_sprite.saved_event)
-		
-		update_key_text()
+	if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
+		if Global.held_sprites[0].saved_event != null:
+			InputMap.action_erase_events(action)
+			InputMap.action_add_event(action, Global.held_sprites[0].saved_event)
+			
+			update_key_text()
 
 func _on_remove_asset_button_pressed():
 	if InputMap.action_get_events(action).size() != 0:
@@ -86,23 +89,24 @@ func _on_remove_asset_button_pressed():
 
 
 func _on_is_asset_check_toggled(toggled_on):
-	if toggled_on:
-		if !InputMap.has_action(action):
-			InputMap.add_action(action)
-			Global.held_sprite.get_node("%Drag").visible = true
-	else:
-		if InputMap.has_action(action):
-			InputMap.erase_action(action)
-			Global.held_sprite.saved_event = null
-			Global.held_sprite.get_node("%Drag").visible = true
-			update_key_text()
-	
-	Global.held_sprite.is_asset = toggled_on
+	if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
+		if toggled_on:
+			if !InputMap.has_action(action):
+				InputMap.add_action(action)
+				Global.held_sprites[0].get_node("%Drag").visible = true
+		else:
+			if InputMap.has_action(action):
+				InputMap.erase_action(action)
+				Global.held_sprites[0].saved_event = null
+				Global.held_sprites[0].get_node("%Drag").visible = true
+				update_key_text()
+		
+		Global.held_sprites[0].is_asset = toggled_on
 
 
 func _on_should_disappear_check_toggled(toggled_on):
-	
-	Global.held_sprite.should_disappear = toggled_on
+	if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
+		Global.held_sprites[0].should_disappear = toggled_on
 	if toggled_on:
 		%ShouldDisListContainer.show()
 	else:
@@ -116,12 +120,14 @@ func _on_should_dis_add_button_pressed():
 
 func _on_should_dis_del_button_pressed():
 	%ShouldDisList.remove_item(id)
-	Global.held_sprite.saved_keys.remove_at(id)
+	if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
+		Global.held_sprites[0].saved_keys.remove_at(id)
 	%ShouldDisRemapButton.disabled = false
 	%ShouldDisDelButton.disabled = false
 
 func _on_should_dis_list_item_selected(index):
 	id = index
+	
 	%ShouldDisRemapButton.disabled = false
 	%ShouldDisDelButton.disabled = false
 	
@@ -147,4 +153,5 @@ func _on_should_dis_list_focus_exited():
 
 
 func _on_dont_hide_on_toggle_check_toggled(toggled_on: bool) -> void:
-	Global.held_sprite.show_only = toggled_on
+	if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
+		Global.held_sprites[0].show_only = toggled_on

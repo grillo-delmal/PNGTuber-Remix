@@ -5,6 +5,11 @@ var glob : Vector2 = Vector2.ZERO
 var last_mouse_position : Vector2 = Vector2(0,0)
 var last_dist : Vector2 = Vector2(0,0)
 var mouse : Vector2 = Vector2(0,0)
+var vel = Vector2.ZERO
+var frame_counter := 0
+const FRAME_INTERVAL := 3  # Run every 5 frames
+var distance : Vector2 = Vector2.ZERO
+var mouse_moving
 
 func _process(delta: float) -> void:
 	if !Global.static_view:
@@ -109,6 +114,16 @@ func rainbow():
 		%Sprite2D.self_modulate = actor.sprite_data.tint
 		%Pos.modulate.s = 0
 
+func mouse_delay():
+	frame_counter += 1
+	if frame_counter >= FRAME_INTERVAL:
+		var mouse_delta = last_mouse_position - mouse
+		if !mouse_delta.is_zero_approx():
+			distance = Vector2(tanh(mouse_delta.x), tanh(mouse_delta.y))
+			last_mouse_position = mouse  # Only update when there's actual movement
+		frame_counter = 0
+
+
 func follow_mouse(_delta):
 	var main_marker = Global.main.get_node("%Marker")
 	if main_marker.current_screen != main_marker.ALL_SCREENS_ID:
@@ -126,12 +141,14 @@ func follow_mouse(_delta):
 	else:
 		mouse = actor.get_local_mouse_position()
 	if actor.sprite_data.follow_mouse_velocity:
-		var distance = last_mouse_position - mouse
-		if !distance.is_zero_approx():
-			var vel = -(distance/5)
-			var dir = Vector2.ZERO.direction_to(vel)
-			var dist = vel.limit_length(Vector2(actor.sprite_data.look_at_mouse_pos,actor.sprite_data.look_at_mouse_pos_y).length()).length()
-			last_dist = Vector2(dir.x * (dist),dir.y * (dist))
+		mouse_delay()
+		var mouse_delta = last_mouse_position - mouse
+		if !Vector2(tanh(mouse_delta.x), tanh(mouse_delta.y)).is_zero_approx():
+			vel = lerp(vel, -(Vector2(actor.sprite_data.look_at_mouse_pos,actor.sprite_data.look_at_mouse_pos_y)*distance), actor.sprite_data.mouse_delay+0.05)
+		var dir = Vector2.ZERO.direction_to(vel)
+		var dist = vel.limit_length(Vector2(actor.sprite_data.look_at_mouse_pos,actor.sprite_data.look_at_mouse_pos_y).length()).length()
+		last_dist = Vector2(dir.x * (dist),dir.y * (dist))
+				
 		%Pos.position.x = lerp(%Pos.position.x, last_dist.x, actor.sprite_data.mouse_delay)
 		%Pos.position.y = lerp(%Pos.position.y, last_dist.y, actor.sprite_data.mouse_delay)
 		
@@ -148,18 +165,14 @@ func follow_mouse(_delta):
 
 		# Smoothly interpolate the sprite's rotation
 		%Squish.rotation = lerp_angle(%Squish.rotation, target_rotation, actor.sprite_data.mouse_delay)
-		
-		'''
-		var clamping = clamp(last_dist.angle()*actor.sprite_data.mouse_rotation,deg_to_rad(actor.sprite_data.rLimitMin),deg_to_rad(actor.sprite_data.rLimitMax))
-		%Squish.rotation = lerp_angle(%Squish.rotation ,clamping,0.1)'''
 		var dire = Vector2.ZERO - (last_mouse_position - main_marker.coords)
 		var scl_x = abs(dire.x) *actor.sprite_data.mouse_scale_x *0.005
 		var scl_y = abs(dire.y) *actor.sprite_data.mouse_scale_y *0.005
 		%Drag.scale.x = lerp(%Drag.scale.x, float(clamp(1 - scl_x, 0.15 , 1)), actor.sprite_data.mouse_delay)
 		%Drag.scale.y = lerp(%Drag.scale.y, float(clamp(1 - scl_y,  0.15 , 1)), actor.sprite_data.mouse_delay)
-		last_mouse_position = mouse
+		
 	else:
-		var dir = Vector2.ZERO.direction_to(mouse)
+		var dir = distance.direction_to(mouse)
 		var dist = mouse.length()
 		%Pos.position.x = lerp(%Pos.position.x, dir.x * min(dist, actor.sprite_data.look_at_mouse_pos), actor.sprite_data.mouse_delay)
 		%Pos.position.y = lerp(%Pos.position.y, dir.y * min(dist, actor.sprite_data.look_at_mouse_pos_y), actor.sprite_data.mouse_delay)
@@ -179,18 +192,17 @@ func follow_mouse(_delta):
 
 		# Smoothly interpolate the sprite's rotation
 		%Squish.rotation = lerp_angle(%Squish.rotation, target_rotation, actor.sprite_data.mouse_delay)
-				
-				
-		
-		'''
-		var clamping = clamp(atan2(mouse.y,mouse.x)*actor.sprite_data.mouse_rotation,deg_to_rad(actor.sprite_data.rLimitMin),deg_to_rad(actor.sprite_data.rLimitMax))
-		%Squish.rotation = lerp_angle(%Squish.rotation ,clamping,0.1)'''
 #		print(clamping)
 		var dire = Vector2.ZERO - main_marker.coords
 		var scl_x = (abs(dire.x) *actor.sprite_data.mouse_scale_x *0.005) * Global.settings_dict.zoom.x
 		var scl_y = (abs(dire.y) *actor.sprite_data.mouse_scale_y *0.005) * Global.settings_dict.zoom.y
 		%Drag.scale.x = lerp(%Drag.scale.x, float(clamp(1 - scl_x, 0.15 , 1)), actor.sprite_data.mouse_delay)
 		%Drag.scale.y = lerp(%Drag.scale.y, float(clamp(1 - scl_y,  0.15 , 1)), actor.sprite_data.mouse_delay)
+
+
+
+		
+
 
 func auto_rotate():
 	%Wobble.rotate(actor.sprite_data.should_rot_speed)

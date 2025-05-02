@@ -67,9 +67,9 @@ func f_entered():
 
 func _on_spin_box_value_value_changed(nvalue):
 	Global.spinbox_held = false
+	%SliderValue.value = nvalue
+	%SpinBoxValue.get_line_edit().release_focus()
 	if should_change:
-		%SliderValue.value = nvalue
-		%SpinBoxValue.get_line_edit().release_focus()
 		for i in Global.held_sprites:
 			if i != null && is_instance_valid(i) && sp_type != "Null":
 				i.sprite_data[value_to_update] = nvalue
@@ -108,6 +108,7 @@ func enable():
 			%SpinBoxValue.editable = true
 			%SliderValue.editable = true
 			%SliderValue.value = i.sprite_data[value_to_update]
+			%SpinBoxValue.value =  i.sprite_data[value_to_update]
 	should_change = true
 
 

@@ -23,6 +23,8 @@ var rec_inp : bool = false
 var of
 
 func _ready():
+	Global.viewport = %SubViewportContainer
+	Global.viewer = %Effects
 	Global.main = self
 	Global.sprite_container = %SpritesContainer
 	Global.top_ui = %TopUI

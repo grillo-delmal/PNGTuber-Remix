@@ -1,0 +1,130 @@
+[gd_scene load_steps=2 format=3 uid="uid://ckidjwx5bqwbj"]
+
+[ext_resource type="Script" uid="uid://bsg261xpkttel" path="res://Scripts/UI/RightPanel/model_effects.gd" id="1_1lmbe"]
+
+[node name="ModelEffects" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+script = ExtResource("1_1lmbe")
+
+[node name="Label" type="Label" parent="."]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+text = "Effects"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="."]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="Grid"]
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "An Accessibility feature aimed at helping users and viewers with Color-blindness with viewing the Model."
+theme_override_font_sizes/font_size = 14
+text = "Color-Blindness Helper : "
+vertical_alignment = 1
+
+[node name="ColorBlindnessHelperOptions" type="OptionButton" parent="Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "An Accessibility feature aimed at helping users and viewers with Color-blindness with viewing the Model."
+focus_mode = 0
+selected = 0
+item_count = 5
+popup/item_0/text = "None"
+popup/item_0/id = 0
+popup/item_1/text = "Achromatopsia"
+popup/item_1/id = 1
+popup/item_2/text = "Deuteranopia"
+popup/item_2/id = 2
+popup/item_3/text = "Protanopia"
+popup/item_3/id = 3
+popup/item_4/text = "Tritanopia"
+popup/item_4/id = 4
+
+[node name="Label2" type="Label" parent="Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Model Effect :"
+
+[node name="EffectType" type="OptionButton" parent="Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+selected = 0
+item_count = 4
+popup/item_0/text = "None"
+popup/item_0/id = 0
+popup/item_1/text = "Outline"
+popup/item_1/id = 1
+popup/item_2/text = "Aura"
+popup/item_2/id = 2
+popup/item_3/text = "Screen CRT"
+popup/item_3/id = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Margin" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 3
+
+[node name="Grid2" type="GridContainer" parent="PanelContainer/Margin"]
+layout_mode = 2
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="Label" type="Label" parent="PanelContainer/Margin/Grid2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Effect Color : "
+
+[node name="EffectColor" type="ColorPickerButton" parent="PanelContainer/Margin/Grid2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="PanelContainer/Margin/Grid2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Effect size : "
+
+[node name="SizeSlider" type="HSlider" parent="PanelContainer/Margin/Grid2"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.5
+max_value = 20.0
+step = 0.1
+value = 1.0
+
+[node name="RainbowCheck" type="CheckBox" parent="PanelContainer/Margin/Grid2"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = " Rainbow Effect"
+
+[node name="Control" type="Control" parent="PanelContainer/Margin/Grid2"]
+visible = false
+layout_mode = 2
+
+[connection signal="item_selected" from="Grid/ColorBlindnessHelperOptions" to="." method="_on_color_blindness_helper_options_item_selected"]
+[connection signal="item_selected" from="Grid/EffectType" to="." method="_on_option_button_item_selected"]
+[connection signal="color_changed" from="PanelContainer/Margin/Grid2/EffectColor" to="." method="_on_effect_color_color_changed"]
+[connection signal="value_changed" from="PanelContainer/Margin/Grid2/SizeSlider" to="." method="_on_size_slider_value_changed"]
+[connection signal="toggled" from="PanelContainer/Margin/Grid2/RainbowCheck" to="." method="_on_rainbow_check_toggled"]

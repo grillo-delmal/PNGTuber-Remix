@@ -1,16 +1,69 @@
-[gd_scene load_steps=10 format=3 uid="uid://b28gjkefgi5bs"]
+[gd_scene load_steps=16 format=3 uid="uid://b28gjkefgi5bs"]
 
 [ext_resource type="Script" uid="uid://bn6wdd2hwqxfp" path="res://Main/Scripts/main.gd" id="1_6pthk"]
 [ext_resource type="Script" uid="uid://u4rstm0uk8wb" path="res://Scripts/Misc/file_importer.gd" id="2_j4lix"]
 [ext_resource type="Script" uid="uid://b6atx7ybrp5sq" path="res://Main/Scripts/SpritesContainer.gd" id="2_lv028"]
 [ext_resource type="PackedScene" uid="uid://ngta1o5yiqxs" path="res://UI/control.tscn" id="2_micm1"]
 [ext_resource type="PackedScene" uid="uid://dw4brgrpdpurf" path="res://Misc/LightSource/light_source.tscn" id="3_eo07p"]
+[ext_resource type="Shader" uid="uid://brpv37x267rmr" path="res://Scripts/Shaders/ColorBlindness.gdshader" id="3_o60nc"]
+[ext_resource type="Shader" uid="uid://bc5tbhguskdv2" path="res://Scripts/Shaders/ModelEffects.gdshader" id="3_rj11h"]
 [ext_resource type="Theme" uid="uid://c5v4ocnimqa4i" path="res://Themes/WhiteTheme/WhiteTheme.tres" id="5_4hh1t"]
 [ext_resource type="Script" uid="uid://by4pbr6yeut1c" path="res://Main/Scripts/monitor_tracking.gd" id="5_rj11h"]
 [ext_resource type="PackedScene" uid="uid://bpmlfhv30o08l" path="res://UI/EditorUI/TopUI/top_ui.tscn" id="7_qwnpc"]
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_f6fdm"]
-blend_mode = 4
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f3gf5"]
+shader = ExtResource("3_o60nc")
+shader_parameter/severity = 0.5
+shader_parameter/effect = 0
+
+[sub_resource type="Gradient" id="Gradient_qac2q"]
+offsets = PackedFloat32Array(0, 0.192982, 0.554386, 0.803509, 0.978947)
+colors = PackedColorArray(0.709965, 0.196036, 0.771008, 1, 1, 1, 0, 1, 0.630854, 0.955883, 1, 1, 0, 1, 1, 1, 0.709804, 0.196078, 0.772549, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_o60nc"]
+gradient = SubResource("Gradient_qac2q")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qac2q"]
+shader = ExtResource("3_rj11h")
+shader_parameter/effect = 0
+shader_parameter/ScaleMult = Vector2(1, 1)
+shader_parameter/AuraProgres = 0.4
+shader_parameter/TextureLaodMult = 8.0
+shader_parameter/Tilling = 52.12
+shader_parameter/MovementDirSpeed = Vector2(-0.8, 1)
+shader_parameter/MovementDirSpeed2 = Vector2(0.6, 2)
+shader_parameter/color_gradiant = SubResource("GradientTexture1D_o60nc")
+shader_parameter/Noise_Seed = Vector2(5, 1)
+shader_parameter/rainbow = false
+shader_parameter/line_color = Color(1, 1, 1, 1)
+shader_parameter/line_scale = 3.648
+shader_parameter/frequency = 0.806
+shader_parameter/light_offset = 0.48101
+shader_parameter/alpha = 1.0
+shader_parameter/overlay = true
+shader_parameter/resolution = Vector2(640, 480)
+shader_parameter/brightness = 1.4
+shader_parameter/scanlines_opacity = 0.312
+shader_parameter/scanlines_width = 0.176
+shader_parameter/grille_opacity = 0.194
+shader_parameter/roll = true
+shader_parameter/roll_speed = 8.0
+shader_parameter/roll_size = 23.824
+shader_parameter/roll_variation = 2.405
+shader_parameter/distort_intensity = 0.05
+shader_parameter/aberration = -0.029
+shader_parameter/noise_opacity = 0.2
+shader_parameter/noise_speed = 5.0
+shader_parameter/static_noise_intensity = 0.154
+shader_parameter/pixelate = false
+shader_parameter/discolor = true
+shader_parameter/warp_amount = 1.5
+shader_parameter/clip_warp = true
+shader_parameter/vignette_intensity = 0.5
+shader_parameter/vignette_opacity = 0.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_rj11h"]
+viewport_path = NodePath("SubViewportContainer/SubViewport")
 
 [node name="Main" type="Control"]
 process_mode = 3
@@ -38,7 +91,7 @@ cancel_button_text = "No"
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 unique_name_in_owner = true
-material = SubResource("CanvasItemMaterial_f6fdm")
+material = SubResource("ShaderMaterial_f3gf5")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -84,6 +137,18 @@ z_index = 4096
 z_as_relative = false
 shadow_enabled = true
 shadow_color = Color(0, 0, 0, 0.92549)
+
+[node name="Effects" type="TextureRect" parent="."]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_qac2q")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("ViewportTexture_rj11h")
 
 [node name="UICanvas" type="CanvasLayer" parent="."]
 layer = 2

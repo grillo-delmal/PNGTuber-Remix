@@ -87,6 +87,7 @@ func sel():
 		desel()
 
 func desel():
+	%Origin.hide()
 	selected = false
 
 func animation():

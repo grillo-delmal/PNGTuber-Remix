@@ -15,6 +15,10 @@ func nullfy():
 	%DontHideOnToggleCheck.disabled = true
 	%ShouldDisDelButton.disabled = true
 	%ShouldDisRemapButton.disabled = true
+	%ShouldDisAddButton.disabled = true
+	%ShouldDisDelButton.disabled = true
+	%ShouldDisRemapButton.disabled = true
+	%ShouldDisListContainer.hide()
 
 func enable():
 	if Global.held_sprites.size() <= 1:
@@ -23,6 +27,9 @@ func enable():
 		%RemoveAssetButton.disabled = false
 		%ShouldDisappearCheck.disabled = false
 		%DontHideOnToggleCheck.disabled = false
+		%ShouldDisAddButton.disabled = false
+		%ShouldDisDelButton.disabled = false
+		%ShouldDisRemapButton.disabled = false
 
 		%IsAssetButton.text = "Null"
 		

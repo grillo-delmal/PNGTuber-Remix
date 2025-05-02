@@ -18,6 +18,8 @@ func _on_background_input_capture_bg_key_pressed(_node, keys_pressed : Dictionar
 		for l in get_tree().get_nodes_in_group("Sprites"):
 			if InputMap.action_get_events(str(l.sprite_id)).size() > 0:
 				costumeKeys.append(InputMap.action_get_events(str(l.sprite_id))[0].as_text())
+			for j in l.saved_keys:
+				costumeKeys.append(j)
 		
 		for i in keys_pressed:
 			if keys_pressed[i]:

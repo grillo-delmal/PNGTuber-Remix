@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dk4y4x3f5jmri"]
+[gd_scene load_steps=5 format=3 uid="uid://dk4y4x3f5jmri"]
 
 [ext_resource type="Script" uid="uid://bimhkpsielfws" path="res://Scripts/UI/RightPanel/model_animations.gd" id="1_xngbb"]
 [ext_resource type="PackedScene" uid="uid://ddhwynf6o3br1" path="res://UI/EditorUI/RightUI/Components/MiniComponents/animation_parameters.tscn" id="2_k2y8f"]
 [ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="2_wkbb7"]
+[ext_resource type="PackedScene" uid="uid://ckidjwx5bqwbj" path="res://UI/EditorUI/RightUI/Components/model_effects.tscn" id="4_nllqn"]
 
 [node name="ModelAnimationsPanel" type="VBoxContainer"]
 anchors_preset = 15
@@ -184,6 +185,12 @@ mini_value = 1.001
 max_value = 10.0
 step = 0.001
 value_to_update = ""
+
+[node name="HSeparator3" type="HSeparator" parent="."]
+layout_mode = 2
+
+[node name="ModelEffects" parent="." instance=ExtResource("4_nllqn")]
+layout_mode = 2
 
 [connection signal="toggled" from="BounceStateCheck" to="ModelAnimations" method="_on_bounce_state_check_toggled"]
 [connection signal="value_changed" from="Grid/BlinkSpeedSlider" to="ModelAnimations" method="_on_blink_speed_slider_value_changed"]
