@@ -61,7 +61,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 selected = 0
-item_count = 4
+item_count = 6
 popup/item_0/text = "None"
 popup/item_0/id = 0
 popup/item_1/text = "Outline"
@@ -70,6 +70,10 @@ popup/item_2/text = "Aura"
 popup/item_2/id = 2
 popup/item_3/text = "Screen CRT"
 popup/item_3/id = 3
+popup/item_4/text = "Hatches"
+popup/item_4/id = 4
+popup/item_5/text = "Hyper"
+popup/item_5/id = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2

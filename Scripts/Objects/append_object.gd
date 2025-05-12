@@ -72,7 +72,6 @@ var sprite_data : Dictionary = {
 	mouse_scale_x = 0.0,
 	mouse_scale_y = 0.0,
 	mouse_rotation_max = 0.0,
-	mouse_rotation_min = 0.0,
 	mouse_delay = 0.1,
 	}
 
@@ -187,14 +186,9 @@ func get_state(id):
 		else:
 			%AppendageFlip.scale.y = 1
 		
-		if sprite_data.should_blink:
-			if sprite_data.open_eyes:
-				
-				%Pos.show()
-			else:
-				%Pos.hide()
-		%ReactionConfig.speaking()
-		%ReactionConfig.not_speaking()
+		if !sprite_data.should_blink:
+			%Pos.show()
+			
 		update_wiggle_parts()
 #		animation()
 		set_blend(sprite_data.blend_mode)

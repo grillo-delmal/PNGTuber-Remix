@@ -48,10 +48,6 @@ func _on_animation_one_shot_toggled(toggled_on):
 			if i != null && is_instance_valid(i):
 				i.sprite_data.one_shot = toggled_on
 				i.get_node("%AnimatedSpriteTexture").played_once = false
-				if i.img_animated:
-					i.get_node("%Sprite2D").texture.diffuse_texture.one_shot = toggled_on
-					if i.get_node("%Sprite2D").texture.normal_texture != null:
-						i.get_node("%Sprite2D").texture.normal_texture.one_shot = toggled_on
 				i.save_state(Global.current_state)
 
 

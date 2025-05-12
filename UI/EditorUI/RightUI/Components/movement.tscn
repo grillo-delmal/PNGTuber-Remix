@@ -241,7 +241,7 @@ label_text = "Min-Rot : "
 mini_value = -1.0
 max_value = 1.0
 step = 0.001
-value_to_update = "mouse_rotation_min"
+value_to_update = "mouse_rotation"
 
 [node name="RMBSliderMax" parent="ScrollContainer3/MarginContainer/VBoxContainer" instance=ExtResource("1_h5u6y")]
 unique_name_in_owner = true

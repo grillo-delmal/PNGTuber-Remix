@@ -8,7 +8,6 @@ class_name SpriteObject
 var heldTicks = 0
 #Wobble
 var squish = 1
-var currently_speaking : bool = false
 # Misc
 var treeitem = null
 var visb

@@ -11,7 +11,7 @@ var played_once : bool = false
 
 func _physics_process(delta):
 	var cframe2
-	if actor.is_apng:
+	if actor.is_apng or actor.img_animated:
 		if !played_once:
 			if len(frames) == 0:
 				return
@@ -23,7 +23,8 @@ func _physics_process(delta):
 			dt += delta
 			var cframe = frames[index]
 			if sprite_node.texture.normal_texture:
-				cframe2 = frames2[index]
+				if index in range(frames2.size()):
+					cframe2 = frames2[index]
 			if dt >= cframe.duration:
 				dt -= cframe.duration
 				index += 1

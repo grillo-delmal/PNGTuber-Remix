@@ -152,6 +152,11 @@ func load_file(path, should_load_path = false):
 				if !st.is_empty():
 					cleaned_array.append(st)
 					
+			for st in cleaned_array:
+				var new_dict = sprite_obj.sprite_data.duplicate()
+				new_dict.merge(st, true)
+				st = new_dict
+				
 			sprite_obj.states.clear()
 			sprite_obj.states = cleaned_array
 			
@@ -161,11 +166,11 @@ func load_file(path, should_load_path = false):
 				sprite_obj.should_disappear = sprite.should_disappear
 				if sprite.has("show_only"):
 					sprite_obj.show_only = sprite.show_only
-				if sprite_obj.is_asset:
-					sprite_obj.get_node("%Drag").visible = sprite.was_active_before
-					sprite_obj.was_active_before = sprite.was_active_before
-					sprite_obj.saved_keys = sprite.saved_keys
-					InputMap.add_action(str(sprite.sprite_id))
+				sprite_obj.get_node("%Drag").visible = sprite.was_active_before
+				sprite_obj.was_active_before = sprite.was_active_before
+				sprite_obj.saved_keys = sprite.saved_keys
+				InputMap.add_action(str(sprite.sprite_id))
+				if sprite_obj.saved_event != null:
 					InputMap.action_add_event(str(sprite.sprite_id), sprite_obj.saved_event)
 					
 			if sprite.has("is_apng"):
@@ -326,23 +331,40 @@ func load_apng(sprite_obj, sprite):
 	sprite_obj.get_node("%Sprite2D").texture = img_can
 
 func load_gif(sprite_obj, sprite):
-	var gif_texture : AnimatedTexture = GifManager.animated_texture_from_buffer(sprite.img)
-	sprite_obj.anim_texture = sprite.img
+	var gif_tex : SpriteFrames = GifManager.sprite_frames_from_buffer(sprite.img)
 	var img_can = CanvasTexture.new()
-	if sprite.has("is_premultiplied") == false:
-		for n in gif_texture.frames:
-			gif_texture.get_frame_texture(n).get_image().fix_alpha_edges()
-			
-	img_can.diffuse_texture = gif_texture
+	for n in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
+		gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], n).get_image().fix_alpha_edges()
+		
+	var text = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], 0).get_image())
+	img_can.diffuse_texture = text
+	sprite_obj.get_node("%AnimatedSpriteTexture").frames.clear()
+	for i in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
+		var new_frame : AnimatedFrame = AnimatedFrame.new()
+		new_frame.texture = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], i).get_image())
+		new_frame.duration = gif_tex.get_frame_duration(gif_tex.get_animation_names()[0], i)/24
+		sprite_obj.get_node("%AnimatedSpriteTexture").frames.append(new_frame)
+	sprite_obj.anim_texture = sprite.img
+	sprite_obj.img_animated = true
+	sprite_obj.is_apng = false
+	
+	
 	if sprite.has("normal"):
-		if sprite.normal != null:
-			var gif_normal = GifManager.animated_texture_from_buffer(sprite.normal)
+		var gif_normal : SpriteFrames = GifManager.sprite_frames_from_buffer(sprite.normal)
+		
+		for n in gif_normal.get_frame_count(gif_normal.get_animation_names()[0]):
+			gif_normal.get_frame_texture(gif_normal.get_animation_names()[0], n).get_image().fix_alpha_edges()
+		
+		sprite_obj.anim_texture_normal = sprite.normal
+		var text_normal = ImageTexture.create_from_image(gif_normal.get_frame_texture(gif_normal.get_animation_names()[0], 0).get_image())
+		img_can.normal_texture = text_normal
+		sprite_obj.get_node("%AnimatedSpriteTexture").frames2.clear()
+		for i in gif_normal.get_frame_count(gif_normal.get_animation_names()[0]):
+			var new_frame : AnimatedFrame = AnimatedFrame.new()
+			new_frame.texture = ImageTexture.create_from_image(gif_normal.get_frame_texture(gif_normal.get_animation_names()[0], i).get_image())
+			new_frame.duration = gif_normal.get_frame_duration(gif_normal.get_animation_names()[0], i)/24
+			sprite_obj.get_node("%AnimatedSpriteTexture").frames2.append(new_frame)
 			
-			for n in gif_normal.frames:
-				gif_normal.get_frame_texture(n).get_image().fix_alpha_edges()
-			
-			img_can.normal_texture = gif_normal
-			sprite_obj.anim_texture_normal = sprite.normal
 	sprite_obj.get_node("%Sprite2D").texture = img_can
 
 func load_pngplus_file(path):

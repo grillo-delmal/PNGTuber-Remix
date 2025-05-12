@@ -2,6 +2,9 @@ extends Node
 
 @export var actor : Node
 @export var animation_handler : Node
+var currently_speaking : bool = false
+var blinking : bool = false
+
 
 func _ready() -> void:
 	Global.speaking.connect(speaking)
@@ -12,6 +15,9 @@ func _ready() -> void:
 	Global.mode_changed.connect(update_to_mode_change)
 	Global.blink.connect(editor_blink)
 	Global.animation_state.connect(reset_animations)
+	await  get_tree().physics_frame
+	not_speaking()
+	
 
 func asset(key):
 	if actor.is_asset && InputMap.action_get_events(str(actor.sprite_id)).size() > 0:
@@ -34,33 +40,62 @@ func should_disappear(key):
 func update_to_mode_change(mode : int):
 	match mode:
 		0:
-			editor_blink()
+			%Pos.show()
+			if actor.sprite_data.should_blink:
+				if actor.sprite_data.open_eyes:
+					if blinking:
+						%Pos.modulate.a = 1
+					else:
+						%Pos.modulate.a = 0.2
+
+				elif !actor.sprite_data.open_eyes:
+					if !blinking:
+						%Pos.modulate.a = 1
+					else:
+						%Pos.modulate.a = 0.2
+
+			
 			%Rotation.show()
 			if actor.sprite_data.should_talk:
-				if actor.currently_speaking:
-					if actor.sprite_data.open_mouth:
+				if actor.sprite_data.open_mouth:
+					if currently_speaking:
 						%Rotation.modulate.a = 1
 					else:
 						%Rotation.modulate.a = 0.2
-				if !actor.currently_speaking:
-					if !actor.sprite_data.open_mouth:
-						%Rotation.modulate.a = 0.2
-					else:
+
+				elif !actor.sprite_data.open_mouth:
+					if !currently_speaking:
 						%Rotation.modulate.a = 1
+					else:
+						%Rotation.modulate.a = 0.2
 			else:
 				%Rotation.show()
 				%Rotation.modulate.a = 1
 		1:
-			blink()
+			%Pos.modulate.a = 1
+			if actor.sprite_data.should_blink:
+				if actor.sprite_data.open_eyes:
+					if blinking:
+						%Pos.show()
+					else:
+						%Pos.hide()
+
+				elif !actor.sprite_data.open_eyes:
+					if !blinking:
+						%Pos.show()
+					else:
+						%Pos.hide()
+
 			%Rotation.modulate.a = 1
 			if actor.sprite_data.should_talk:
-				if actor.currently_speaking:
-					if actor.sprite_data.open_mouth:
+				if actor.sprite_data.open_mouth:
+					if currently_speaking:
 						%Rotation.show()
 					else:
 						%Rotation.hide()
-				elif !actor.currently_speaking:
-					if !actor.sprite_data.open_mouth:
+
+				elif !actor.sprite_data.open_mouth:
+					if !currently_speaking:
 						%Rotation.show()
 					else:
 						%Rotation.hide()
@@ -80,6 +115,7 @@ func editor_blink():
 		
 		%Blink.wait_time = 0.2 * Global.settings_dict.blink_speed
 		%Blink.start()
+		blinking = true
 		await  %Blink.timeout
 		if actor.sprite_data.should_blink:
 			if not actor.sprite_data.open_eyes:
@@ -89,6 +125,7 @@ func editor_blink():
 				reset_animations()
 		else:
 			%Pos.modulate.a = 1
+		blinking = false
 
 func blink():
 	if Global.mode != 0:
@@ -102,6 +139,7 @@ func blink():
 		
 		%Blink.wait_time = 0.2 * Global.settings_dict.blink_speed
 		%Blink.start()
+		blinking = true
 		await  %Blink.timeout
 		if actor.sprite_data.should_blink:
 			if not actor.sprite_data.open_eyes:
@@ -111,6 +149,7 @@ func blink():
 				reset_animations()
 		else:
 			%Pos.show()
+		blinking = false
 
 func speaking():
 	if Global.mode != 0:
@@ -135,7 +174,7 @@ func speaking():
 				%Rotation.modulate.a = 0.2
 		else:
 			%Rotation.modulate.a = 1
-	actor.currently_speaking = true
+	currently_speaking = true
 
 func reset_animations(_place_holder : int = 0):
 	if actor.sprite_data.one_shot:
@@ -145,14 +184,13 @@ func reset_animations(_place_holder : int = 0):
 		reset_anim()
 
 func reset_anim():
-	if actor.is_apng:
+	if actor.is_apng or actor.img_animated:
 		animation_handler.index = 0
 		animation_handler.proper_apng_one_shot()
 	animation_handler.played_once = false
 	if actor.sprite_type == "Sprite2D":
 		%Sprite2D.frame = 0
 		actor.animation()
-	reset_gif_anim()
 
 func not_speaking():
 	if Global.mode != 0:
@@ -177,13 +215,4 @@ func not_speaking():
 		else:
 			%Rotation.modulate.a = 1
 			
-	actor.currently_speaking = false
-
-func reset_gif_anim():
-	if actor.img_animated:
-		%Sprite2D.texture.diffuse_texture.current_frame = 0
-		if %Sprite2D.texture.normal_texture != null:
-			%Sprite2D.texture.normal_texture.current_frame = 0
-		%Sprite2D.texture.diffuse_texture.one_shot = actor.sprite_data.one_shot
-		if %Sprite2D.texture.normal_texture != null:
-			%Sprite2D.texture.normal_texture.one_shot = actor.sprite_data.one_shot
+	currently_speaking = false

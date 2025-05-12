@@ -40,6 +40,7 @@ func reinfo():
 				%AdvancedLipSync.button_pressed = i.sprite_data.advanced_lipsync
 				%NonAnimatedSheetCheck.button_pressed = i.sprite_data.non_animated_sheet
 				%FrameSpinbox.value = i.sprite_data.frame
+				%FrameSpinbox.max_value = (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1
 	should_change = true
 
 func _on_name_text_submitted(new_text):
@@ -92,7 +93,7 @@ func _on_non_animated_sheet_check_toggled(toggled_on: bool) -> void:
 		for i in Global.held_sprites:
 			if i != null && is_instance_valid(i):
 				if i.sprite_type == "Sprite2D":
-					%FrameSpinbox.max_value = i.get_node("%Sprite2D").hframes - 1
+					%FrameSpinbox.max_value = (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1
 					i.sprite_data.non_animated_sheet = toggled_on
 					i.animation()
 					if toggled_on:
@@ -107,6 +108,6 @@ func _on_frame_spinbox_value_changed(value: float) -> void:
 		for i in Global.held_sprites:
 			if i != null && is_instance_valid(i):
 				if i.sprite_type == "Sprite2D":
-					%FrameSpinbox.max_value = i.get_node("%Sprite2D").hframes - 1
-					i.sprite_data.frame = clamp(value, 0, i.get_node("%Sprite2D").hframes - 1)
-					i.get_node("%Sprite2D").frame = clamp(value, 0, i.get_node("%Sprite2D").hframes - 1)
+					%FrameSpinbox.max_value = (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1
+					i.sprite_data.frame = clamp(value, 0, (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1)
+					i.get_node("%Sprite2D").frame = clamp(value, 0, (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1)

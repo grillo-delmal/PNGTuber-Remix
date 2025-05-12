@@ -46,7 +46,8 @@ func import_apng_sprite(path : String , spawn) -> CanvasTexture:
 	var img_can = CanvasTexture.new()
 	img_can.diffuse_texture = text
 	spawn.is_apng = true
-	spawn.sprite_name = "(Apng) " + path.get_file().get_basename() 
+	spawn.sprite_name = "(Apng) " + path.get_file().get_basename()
+	spawn.get_node("%AnimatedSpriteTexture").frames = []
 	for i in spawn.frames:
 		var new_frame : AnimatedFrame = AnimatedFrame.new()
 		new_frame.texture = ImageTexture.create_from_image(i.content)
@@ -59,13 +60,21 @@ func import_apng_sprite(path : String , spawn) -> CanvasTexture:
 
 func import_gif(path : String, spawn) -> CanvasTexture:
 	var g_file = FileAccess.get_file_as_bytes(path)
-	var gif_tex = GifManager.animated_texture_from_buffer(g_file)
+	var gif_tex : SpriteFrames = GifManager.sprite_frames_from_buffer(g_file)
 	var img_can = CanvasTexture.new()
-	for n in gif_tex.frames:
-		gif_tex.get_frame_texture(n).get_image().fix_alpha_edges()
-	img_can.diffuse_texture = gif_tex
+	for n in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
+		gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], n).get_image().fix_alpha_edges()
+		
+	var text = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], 0).get_image())
+	img_can.diffuse_texture = text
+	spawn.get_node("%Sprite2D").texture = img_can
+	spawn.get_node("%AnimatedSpriteTexture").frames.clear()
+	for i in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
+		var new_frame : AnimatedFrame = AnimatedFrame.new()
+		new_frame.texture = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], i).get_image())
+		new_frame.duration = (gif_tex.get_frame_duration(gif_tex.get_animation_names()[0], i))/24
+		spawn.get_node("%AnimatedSpriteTexture").frames.append(new_frame)
 	spawn.anim_texture = g_file
-	spawn.anim_texture_normal = null
 	spawn.img_animated = true
 	spawn.is_apng = false
 	spawn.sprite_name = "(Gif)" + path.get_file().get_basename() 
@@ -107,13 +116,21 @@ func import_png(img: Image, spawn) -> CanvasTexture:
 func add_normal(path):
 	if path.get_extension() == "gif":
 		var g_file = FileAccess.get_file_as_bytes(path)
-		var gif_tex = GifManager.animated_texture_from_buffer(g_file)
+		var gif_tex : SpriteFrames = GifManager.sprite_frames_from_buffer(g_file)
 		
-		for n in gif_tex.frames:
-			gif_tex.get_frame_texture(n).get_image().fix_alpha_edges()
-
+		for n in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
+			gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], n).get_image().fix_alpha_edges()
+		
 		Global.held_sprites[0].anim_texture_normal = g_file
-		Global.held_sprites[0].get_node("%Sprite2D").texture.normal_texture = gif_tex
+		var text = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], 0).get_image())
+		Global.held_sprites[0].get_node("%Sprite2D").texture.normal_texture = text
+		Global.held_sprites[0].get_node("%AnimatedSpriteTexture").frames2.clear()
+		for i in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
+			var new_frame : AnimatedFrame = AnimatedFrame.new()
+			new_frame.texture = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], i).get_image())
+			new_frame.duration = gif_tex.get_frame_duration(gif_tex.get_animation_names()[0], i)/24
+			Global.held_sprites[0].get_node("%AnimatedSpriteTexture").frames2.append(new_frame)
+			
 	else:
 		var apng_test = AImgIOAPNGImporter.load_from_file(path)
 		if apng_test != ["No frames", null]:
@@ -155,16 +172,24 @@ func add_normal(path):
 func replace_texture(path : String):
 	if path.get_extension().to_lower() == "gif":
 		var g_file = FileAccess.get_file_as_bytes(path)
-		var gif_tex = GifManager.animated_texture_from_buffer(g_file)
+		var gif_tex : SpriteFrames = GifManager.sprite_frames_from_buffer(g_file)
 		var img_can = CanvasTexture.new()
-		
-		for n in gif_tex.frames:
-			gif_tex.get_frame_texture(n).get_image().fix_alpha_edges()
-		
+		for n in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
+			gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], n).get_image().fix_alpha_edges()
+			
+		var text = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], 0).get_image())
+		img_can.diffuse_texture = text
+		Global.held_sprites[0].get_node("%Sprite2D").texture = img_can
+		Global.held_sprites[0].get_node("%AnimatedSpriteTexture").frames.clear()
+		for i in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
+			var new_frame : AnimatedFrame = AnimatedFrame.new()
+			new_frame.texture = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], i).get_image())
+			new_frame.duration = gif_tex.get_frame_duration(gif_tex.get_animation_names()[0], i)/24
+			Global.held_sprites[0].get_node("%AnimatedSpriteTexture").frames.append(new_frame)
+
 		img_can.diffuse_texture = gif_tex
 		Global.held_sprites[0].anim_texture = g_file
 		Global.held_sprites[0].anim_texture_normal = null
-	#	Global.held_sprites[0].texture = img_can
 		Global.held_sprites[0].get_node("%Sprite2D").texture = img_can
 		Global.held_sprites[0].img_animated = true
 		Global.held_sprites[0].is_apng = false
@@ -187,6 +212,7 @@ func replace_texture(path : String):
 			ImageTrimmer.set_thumbnail(Global.held_sprites[0].treeitem)
 			Global.held_sprites[0].is_apng = true
 			Global.held_sprites[0].img_animated = false
+			Global.held_sprites[0].get_node("%AnimatedSpriteTexture").frames = []
 			for i in Global.held_sprites[0].frames:
 				var new_frame : AnimatedFrame = AnimatedFrame.new()
 				new_frame.texture = ImageTexture.create_from_image(i.content)

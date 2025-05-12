@@ -46,4 +46,8 @@ func set_data():
 	for i in Global.held_sprites[0].saved_keys:
 		%ShouldDisList.add_item(i)
 	%ShouldDisappearCheck.button_pressed = Global.held_sprites[0].should_disappear
+	if %ShouldDisappearCheck.button_pressed:
+		%ShouldDisListContainer.show()
+	else:
+		%ShouldDisListContainer.hide()
 	%IsAssetButton.update_key_text()

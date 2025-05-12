@@ -32,6 +32,8 @@ signal delete_states
 signal remake_states
 signal reset_states
 
+signal update_mouse_vel_pos
+
 var blink_timer : Timer = Timer.new()
 var held_sprite = null
 var held_sprites : Array[SpriteObject] = []
@@ -84,6 +86,8 @@ var file_dialog : FileDialog = null
 var light = null
 var camera : Camera2D = null
 
+var frame_counter := 0
+const FRAME_INTERVAL := 3  # Run every 5 frames
 
 
 # Called when the node enters the scene tree for the first time.
@@ -223,3 +227,13 @@ func update_spins():
 		if i != null && is_instance_valid(i):
 			i.save_state(current_state)
 			update_pos_spins.emit()
+
+func _physics_process(_delta: float) -> void:
+	mouse_delay()
+
+
+func mouse_delay():
+	frame_counter += 1
+	if frame_counter >= FRAME_INTERVAL:
+		update_mouse_vel_pos.emit()
+		frame_counter = 0

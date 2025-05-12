@@ -61,7 +61,6 @@ var sprite_data : Dictionary = {
 	mouse_scale_x = 0.0,
 	mouse_scale_y = 0.0,
 	mouse_rotation_max = 0.0,
-	mouse_rotation_min = 0.0,
 	mouse_delay = 0.1,
 	non_animated_sheet = false,
 	frame = 0,
@@ -104,8 +103,8 @@ func animation():
 
 	elif sprite_data.non_animated_sheet:
 		%Sprite2D.hframes = sprite_data.hframes
-		%Sprite2D.vframes = 1
-		if sprite_data.hframes > 1:
+		%Sprite2D.vframes = sprite_data.vframes
+		if (sprite_data.hframes*sprite_data.vframes) - 1 > 1:
 			%Sprite2D.frame = sprite_data.frame
 	
 	$Animation.wait_time = 1.0/sprite_data.animation_speed 
@@ -180,7 +179,7 @@ func advanced_lipsyc():
 	if sprite_data.advanced_lipsync:
 		if %Sprite2D.hframes != 14:
 			%Sprite2D.hframes = 14
-		if currently_speaking:
+		if %ReactionConfig.currently_speaking:
 			if GlobalAudioStreamPlayer.t.value == 0:
 				%Sprite2D.frame_coords.x = 13
 			else:
@@ -222,17 +221,10 @@ func get_state(id):
 		if sprite_data.advanced_lipsync:
 			%Sprite2D.hframes = 6
 		
-		if sprite_data.should_blink:
-			if sprite_data.open_eyes:
-				%Pos.show()
-			else:
-				%Pos.hide()
-		else:
+		if !sprite_data.should_blink:
 			%Pos.show()
 
 		visible = sprite_data.visible
-		%ReactionConfig.speaking()
-		%ReactionConfig.not_speaking()
 		
 		animation()
 		set_blend(sprite_data.blend_mode)
