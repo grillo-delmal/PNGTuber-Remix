@@ -73,6 +73,8 @@ var sprite_data : Dictionary = {
 	mouse_scale_y = 0.0,
 	mouse_rotation_max = 0.0,
 	mouse_delay = 0.1,
+	
+	tile = 2,
 	}
 
 var smooth_rot = 0.0
@@ -173,6 +175,7 @@ func get_state(id):
 		if sprite_data.look_at_mouse_pos_y == 0:
 			%Pos.position.y = 0
 		
+		%Sprite2D.texture_mode = sprite_data.tile
 		
 		%Sprite2D.set_clip_children_mode(sprite_data.clip)
 		rotation = sprite_data.rotation
@@ -188,6 +191,8 @@ func get_state(id):
 		
 		if !sprite_data.should_blink:
 			%Pos.show()
+		else:
+			%ReactionConfig.update_to_mode_change(Global.mode)
 			
 		update_wiggle_parts()
 #		animation()
@@ -196,6 +201,9 @@ func get_state(id):
 			if is_apng:
 				%AnimatedSpriteTexture.index = 0
 				%AnimatedSpriteTexture.proper_apng_one_shot()
+	elif states[id].is_empty():
+		states[id] = sprite_data.duplicate(true)
+
 
 func update_wiggle_parts():
 	if %Sprite2D.segment_count != sprite_data.wiggle_segm:

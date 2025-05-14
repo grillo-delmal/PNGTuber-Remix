@@ -1,11 +1,11 @@
 shader_type canvas_item;
 render_mode blend_premul_alpha;
- 
+
 // Color Vision Deficiency (CVD) Simulation Shader
 // ------------------------------------------------
 // This shader simulates different types of color blindness:
 // Protanopia, Deuteranopia, Tritanopia and Achromatopsia.
-// 
+//
 // It supports two scientific models:
 // - Brettel et al. (1997): Generally good implementation.
 // - Viénot et al. (1999): Faster and behaves a bit better with extreme values.
@@ -132,9 +132,9 @@ vec3 apply_vienot_filter(vec3 color, mat3 m) {
 
 void fragment() {
 	if (effect == 0){
-		
+
 		COLOR = texture(TEXTURE, UV);
-		
+
 	}
 	else if (effect == 1){
 		COLOR.rgb = vec3(0.299 * COLOR.r + 0.587 * COLOR.g + 0.114 * COLOR.b);
@@ -151,11 +151,11 @@ void fragment() {
 	}
 	else if (effect == 4){
 		vec3 lin_rgb = srgb_to_linear(COLOR.rgb);
-	
+
 		float d = dot(lin_rgb, brettel_tritan_plane_normal);
 		mat3 m = d >= 0.0 ? brettel_tritan_1 : brettel_tritan_2;
 		vec3 rgb_cvd = clamp(m * lin_rgb, 0.0, 1.0);
-	
+
 		COLOR.rgb = linear_to_srgb(rgb_cvd);
 	}
 }

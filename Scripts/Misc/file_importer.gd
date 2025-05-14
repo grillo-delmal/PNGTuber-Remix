@@ -177,7 +177,7 @@ func replace_texture(path : String):
 		for n in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
 			gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], n).get_image().fix_alpha_edges()
 			
-		var text = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], 0).get_image())
+		var text = gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], 0)
 		img_can.diffuse_texture = text
 		Global.held_sprites[0].get_node("%Sprite2D").texture = img_can
 		Global.held_sprites[0].get_node("%AnimatedSpriteTexture").frames.clear()
@@ -187,10 +187,8 @@ func replace_texture(path : String):
 			new_frame.duration = gif_tex.get_frame_duration(gif_tex.get_animation_names()[0], i)/24
 			Global.held_sprites[0].get_node("%AnimatedSpriteTexture").frames.append(new_frame)
 
-		img_can.diffuse_texture = gif_tex
 		Global.held_sprites[0].anim_texture = g_file
 		Global.held_sprites[0].anim_texture_normal = null
-		Global.held_sprites[0].get_node("%Sprite2D").texture = img_can
 		Global.held_sprites[0].img_animated = true
 		Global.held_sprites[0].is_apng = false
 		Global.held_sprites[0].save_state(Global.current_state)

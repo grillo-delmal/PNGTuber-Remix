@@ -192,7 +192,7 @@ func save_state(id):
 	states[id] = dict
 
 func get_state(id):
-	if not states[id].is_empty():
+	if !states[id].is_empty():
 		var dict = states[id]
 		sprite_data.merge(dict, true)
 		
@@ -223,6 +223,8 @@ func get_state(id):
 		
 		if !sprite_data.should_blink:
 			%Pos.show()
+		else:
+			%ReactionConfig.update_to_mode_change(Global.mode)
 
 		visible = sprite_data.visible
 		
@@ -235,6 +237,9 @@ func get_state(id):
 			%Pos.position.x = 0
 		if sprite_data.look_at_mouse_pos_y == 0:
 			%Pos.position.y = 0
+	elif states[id].is_empty():
+		states[id] = sprite_data.duplicate(true)
+		
 
 func check_talk():
 	if sprite_data.should_talk:

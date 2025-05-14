@@ -22,6 +22,7 @@ func enable():
 				%WAGravityY.editable = true
 				%ClosedLoopCheck.disabled = false
 				%AutoWagCheck.disabled = false
+				%TextureModeOption.disabled = false
 			else:
 				sprite_selected = true
 				nullfy()
@@ -36,6 +37,7 @@ func nullfy():
 	%WAGravityX.editable = false
 	%WAGravityY.editable = false
 	%ClosedLoopCheck.disabled = true
+	%TextureModeOption.disabled = true
 
 func set_data():
 	should_change = false
@@ -51,6 +53,11 @@ func set_data():
 					%WAGravityY.value = i.sprite_data.wiggle_gravity.y
 					%ClosedLoopCheck.button_pressed = i.sprite_data.wiggle_closed_loop
 					%AutoWagCheck.button_pressed = i.sprite_data.auto_wag
+					match i.sprite_data.tile:
+						1:
+							%TextureModeOption.select(1)
+						2:
+							%TextureModeOption.select(0)
 	else:
 		%WiggleAppStuff.hide()
 	
@@ -121,3 +128,21 @@ func _on_wiggle_sub_d_spin_value_changed(value):
 				i.sprite_data.subdivision = value
 				i.get_node("%Sprite2D").subdivision = value
 				i.save_state(Global.current_state)
+
+
+func _on_texture_mode_option_item_selected(index: int) -> void:
+	match index:
+		0:
+			if should_change:
+				for i in Global.held_sprites:
+					if i != null && is_instance_valid(i):
+						i.sprite_data.tile = 2
+						i.get_node("%Sprite2D").texture_mode = 2
+						i.save_state(Global.current_state)
+		1:
+			if should_change:
+				for i in Global.held_sprites:
+					if i != null && is_instance_valid(i):
+						i.sprite_data.tile = 1
+						i.get_node("%Sprite2D").texture_mode = 1
+						i.save_state(Global.current_state)

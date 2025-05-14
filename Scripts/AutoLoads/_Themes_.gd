@@ -43,7 +43,7 @@ func _notification(what: int) -> void:
 
 func save_before_closing():
 	if theme_settings.save_on_exit:
-		if FileAccess.file_exists(theme_settings.path) && get_tree().get_root().get_node("Main/%TopUI/TopBarInput").path == theme_settings.path:
+		if FileAccess.file_exists(theme_settings.path) && Global.top_ui.get_node("%TopBarInput").path == theme_settings.path:
 			SaveAndLoad.save_file(theme_settings.path)
 		else:
 			DirAccess.make_dir_absolute(os_path + "/AutoSaves")
@@ -61,7 +61,7 @@ func save():
 	save_file.close()
 
 func auto_save():
-	if FileAccess.file_exists(theme_settings.path) && get_tree().get_root().get_node("Main/%TopUI/TopBarInput").path == theme_settings.path:
+	if FileAccess.file_exists(theme_settings.path) && Global.top_ui.get_node("%TopBarInput").path == theme_settings.path:
 		SaveAndLoad.save_file(theme_settings.path)
 	else:
 		DirAccess.make_dir_absolute(os_path + "/AutoSaves")

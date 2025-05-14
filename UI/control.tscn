@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ngta1o5yiqxs"]
+[gd_scene load_steps=12 format=3 uid="uid://ngta1o5yiqxs"]
 
 [ext_resource type="Script" uid="uid://dvpyywoct4riy" path="res://Scripts/UI/control.gd" id="1_1r6xj"]
 [ext_resource type="Script" uid="uid://bpegrg5a15v2v" path="res://Scripts/UI/UIInput.gd" id="3_1eur5"]
@@ -10,6 +10,9 @@
 [ext_resource type="PackedScene" uid="uid://c3f86pv0can01" path="res://UI/EditorUI/RightUI/Components/properties.tscn" id="8_i4djb"]
 [ext_resource type="PackedScene" uid="uid://ccvo3k5t6lis6" path="res://UI/EditorUI/RightUI/Components/movement.tscn" id="9_fwbkq"]
 [ext_resource type="PackedScene" uid="uid://bk2xbsvlmq0or" path="res://UI/StateButton/state_panel.tscn" id="10_1r6xj"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1r6xj"]
+blend_mode = 1
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -79,6 +82,15 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 placeholder_text = "Name"
 alignment = 1
+
+[node name="MultistateEditingCue" type="Label" parent="HSplitContainer/HSplit/RightPanel/Properties"]
+unique_name_in_owner = true
+visible = false
+self_modulate = Color(1, 1, 1, 0.686275)
+material = SubResource("CanvasItemMaterial_1r6xj")
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "*Multi-State Editing On"
 
 [node name="VSplitContainer" type="VSplitContainer" parent="HSplitContainer/HSplit/RightPanel/Properties"]
 unique_name_in_owner = true
@@ -228,4 +240,5 @@ layout_mode = 2
 [connection signal="mouse_exited" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/HBox22/AdvancedLipSync" to="UIInput" method="_on_advanced_lip_sync_mouse_exited"]
 [connection signal="toggled" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/HBox22/AdvancedLipSync" to="UIInput" method="_on_advanced_lip_sync_toggled"]
 [connection signal="toggled" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/NonAnimatedSheetCheck" to="UIInput" method="_on_non_animated_sheet_check_toggled"]
+[connection signal="mouse_entered" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox/FrameSpinbox" to="UIInput" method="_on_frame_spinbox_mouse_entered"]
 [connection signal="value_changed" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox/FrameSpinbox" to="UIInput" method="_on_frame_spinbox_value_changed"]
