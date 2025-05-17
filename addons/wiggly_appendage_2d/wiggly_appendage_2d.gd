@@ -11,12 +11,13 @@ enum {
 }
 
 
+@export var anchor_target: Node2D
 ## Amout of segments
 @export_range(1, 10) var segment_count: int = 5 :set = _set_segment_count
 ## Length of segments
 @export var segment_length: float = 30.0
 ## How much the appendge should curve
-@export_range(-10.0, 10.0) var curvature: float = 0.0
+@export_range(-1.57, 1.57) var curvature: float = 0.0
 ## How much more the later parts of the appendge should curve
 @export_range(-3.0, 3.0) var curvature_exponent: float = 0.0
 ## Max angle for every segment. This is the actual value used in calculations
@@ -36,7 +37,7 @@ enum {
 ## The maximum rotational speed for every segment in radians per seccond
 @export var max_angular_momentum: float = 25.13
 ## How much the line should be subdivided to achieve a smoother look. This value should not be 1
-@export var subdivision: int = 2
+@export_range(0, 10) var subdivision: int = 2
 ## Add an aditional segment before start of the appendage to prevent it form appearing disconnected
 @export var additional_start_segment := false
 ## Length of the additional start segment 
@@ -45,45 +46,147 @@ enum {
 @export var subdivide_additional_start_segment := true
 ## If true, only process when this node and all parents aren't hidden
 @export var only_process_when_visible := true
-
-
+var current_segment_length: float = 1.0
+const PREVIOUS_POSITION = 1
 var physics_points: Array
 
 
 func _ready():
 	reset()
 
-
 func _physics_process(delta):
 	if only_process_when_visible and not is_visible_in_tree():
 		return
+
+	if anchor_target != null && is_instance_valid(anchor_target):
+		var root_pos = get_global_position()
+		var anchor_pos = anchor_target.global_position
+		var total_length = root_pos.distance_to(anchor_pos)
+	current_segment_length = _get_true_segment_length()
+	# Physics pass
 	for i in range(physics_points.size()):
 		if i == 0:
 			_process_root_point(physics_points[i], delta)
 		else:
 			_process_point(physics_points[i], delta, i)
+
+	# Stick constraints
+	if anchor_target != null && is_instance_valid(anchor_target):
+		_apply_verlet_anchor(delta)
+		#_apply_constraints()
+
 	_update_line()
 
 
+func _verlet_integration(delta):
+	var gravity = Vector2(0, 1960)  # stronger gravity
+	
+	for i in range(physics_points.size()):
+		if i == 0:
+			continue
+		
+		var point = physics_points[i]
+		var current_pos = point[POSITION]
+		var prev_pos = point[PREVIOUS_POSITION] if point.size() > 4 else current_pos
+		
+		var velocity = current_pos - prev_pos
+		var new_pos = current_pos + velocity + gravity * delta * delta + velocity * 5.0 * delta * delta
+		
+		point[PREVIOUS_POSITION] = current_pos
+		point[POSITION] = new_pos
+		
+		physics_points[i] = point
+
+func _apply_verlet_anchor(delta):
+	_verlet_integration(delta)
+
+	# Hard anchor the root to global_position (not soft)
+	var root = physics_points[0]
+	root[POSITION] = global_position
+	physics_points[0] = root
+
+	# Hard anchor the tail to anchor_target
+	if anchor_target != null and is_instance_valid(anchor_target):
+		physics_points[-1][POSITION] = anchor_target.global_position
+
+	# Then apply constraints as usual...
+	# (rest of the function)
+
+
+	# Enforce distance constraints between points
+	for l in range(5):
+		for i in range(physics_points.size() - 1):
+			var p1 = physics_points[i]
+			var p2 = physics_points[i + 1]
+
+			var delta_vec = p2[POSITION] - p1[POSITION]
+			var dist = delta_vec.length()
+
+			if dist < current_segment_length:
+				# Fold by pushing points perpendicular to the segment
+				var perp = Vector2(-delta_vec.y, delta_vec.x).normalized()
+				var fold_strength = 0.5  # tune this for folding effect strength
+
+				if i != 0:
+					p1[POSITION] += perp * fold_strength
+				if i + 1 != physics_points.size() - 1:
+					p2[POSITION] -= perp * fold_strength
+			else:
+				var diff = ((dist - segment_length) / dist)
+				var correction = delta_vec * 0.5 * diff
+
+				if i != 0:
+					p1[POSITION] += correction
+				if i + 1 != physics_points.size() - 1:
+					p2[POSITION] -= correction
+
+			physics_points[i] = p1
+			physics_points[i + 1] = p2
+
+
+
+func _apply_constraints():
+	for l in range(5): # Run multiple times for stability
+		for i in range(physics_points.size() - 1):
+			var p1 = physics_points[i]
+			var p2 = physics_points[i + 1]
+
+			var delta = p2[POSITION] - p1[POSITION]
+			var dist = delta.length()
+			var diff = (dist - current_segment_length) / dist
+			var correction = delta * 0.5 * diff
+
+			if i != 0:
+				p1[POSITION] += correction
+			p2[POSITION] -= correction
+
+			physics_points[i] = p1
+			physics_points[i + 1] = p2
 
 ## Deletes all existing physics points and add the specified amount of new ones
 func reset(point_count: int = segment_count + 1) -> void:
 	physics_points = []
 	var starting_pos := get_global_position()
-	var current_pos := starting_pos
-	var offset_vector := Vector2(_get_true_segment_length(), 0).rotated(get_global_rotation())
+	var direction := Vector2(1, 0)
+	
+	if anchor_target != null and is_instance_valid(anchor_target):
+		var total_length = starting_pos.distance_to(anchor_target.global_position)
+		current_segment_length = total_length / segment_count
+	else:
+		current_segment_length = segment_length
+
 	for i in range(point_count):
-		offset_vector = offset_vector.rotated(_get_true_curvature())
-		current_pos += offset_vector
+		var pos = starting_pos + direction * current_segment_length * i
 		var new_point := [
 			null,
-			current_pos,
-			offset_vector.angle(),
+			pos,
+			direction.angle(),
 			0.0,
 		]
 		if i != 0:
 			new_point[PREVIOUS_POINT] = physics_points[-1]
 		physics_points.append(new_point)
+
 
 
 ## Returns the global positions of all points in the appendage
@@ -92,7 +195,6 @@ func get_global_point_positions() -> PackedVector2Array:
 	for point in physics_points:
 		output.append(point[POSITION])
 	return output
-
 
 func _process_point(point: Array, delta: float, index: int):
 	# Calculate the desired direction and rotation.
@@ -119,12 +221,13 @@ func _process_point(point: Array, delta: float, index: int):
 			point[ANGULAR_MOMENTUM] = comeback_speed * sign(rotation_diff)
 	# Write what we calculated back to the point.
 	point[ROTATION] = point_rotation
-	point[POSITION] = point[PREVIOUS_POINT][POSITION] + Vector2(_get_true_segment_length(), 0).rotated(point_rotation)
+	point[POSITION] = point[PREVIOUS_POINT][POSITION] + Vector2(current_segment_length, 0).rotated(point_rotation)
 
 
 func _process_root_point(point: Array, delta: float):
 	point[POSITION] = get_global_position()
 	point[ROTATION] = get_global_rotation()
+
 
 
 func _update_line():
@@ -136,35 +239,37 @@ func _update_line():
 	new_line_points = _bezier_interpolate(new_line_points, subdivision)
 	if additional_start_segment and not subdivide_additional_start_segment:
 		new_line_points.insert(0, Vector2(-additional_start_segment_length, 0))
-	
 	points = new_line_points
 
 
 func _bezier_interpolate(line: PackedVector2Array, subdivision: int) -> PackedVector2Array:
-	if subdivision < 1 or line.size() < 3:
-		return line
-
+	if subdivision < 1: return line
+	if line.size() < 3: return line
 	var output := PackedVector2Array()
-	for i in range(line.size() - 2):
-		var p0 := line[i]
-		var p1 := line[i + 1]
-		var p2 := line[i + 2]
-
-		var mid1 := (p0 + p1) * 0.5
-		var mid2 := (p1 + p2) * 0.5
-
-		for t_idx in range(subdivision):
-			var t := float(t_idx) / float(subdivision)
-			var a := mid1.lerp(p1, t)
-			var b := p1.lerp(mid2, t)
-			var final := a.lerp(b, t)
-			output.append(final)
-
-	# Add the last original point to finish the curve
-	output.append(line[line.size() - 1])
-
+	for i in range(line.size() - 1):
+		var a: Vector2
+		var b: Vector2
+		var c: Vector2
+		var actual_subdivisions: int
+		a = line[i]
+		b = line[i + 1]
+		var c_index := i + 2
+		if c_index > line.size() - 1:
+			var before_a := line[i - 1]
+			var angle := _angle_difference((b - a).angle(), (a - before_a).angle())
+			c = b + (b - a).rotated(angle)
+			actual_subdivisions = (subdivision) / 2 + 1
+		else:
+			c = line[c_index]
+			actual_subdivisions = subdivision
+		var true_a = lerp(a, b, 0.5) if i != 0 else a
+		var true_c = lerp(b, c, 0.5)
+		for o in range(actual_subdivisions):
+			var t: float = 1.0 / subdivision * o
+			var ab: Vector2 = lerp(true_a, b, t)
+			var bc: Vector2 = lerp(b, true_c, t)
+			output.append(lerp(ab, bc, t))
 	return output
-
 
 
 func _angle_difference(angle_a: float, angle_b: float) -> float:

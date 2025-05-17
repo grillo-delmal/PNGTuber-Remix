@@ -102,6 +102,7 @@ func enable():
 		if i.sprite_type == sp_type:
 			%SpinBoxValue.editable = true
 			%SliderValue.editable = true
+			%SpinBoxValue.value =  i.sprite_data[value_to_update]
 			%SliderValue.value = i.sprite_data[value_to_update]
 			
 		if sp_type == "":

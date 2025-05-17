@@ -71,6 +71,8 @@ func _on_duplicate_button_pressed():
 				
 			else:
 				obj = sprite_obj.instantiate()
+			
+			obj.position = sprite.position
 			obj.scale = sprite.scale
 			obj.sprite_data.scale = sprite.scale
 			Global.sprite_container.add_child(obj)
@@ -94,8 +96,13 @@ func _on_duplicate_button_pressed():
 			obj.parent_id = sprite.parent_id
 			sprites.append(obj)
 			Global.update_layers.emit(0, obj, obj.sprite_type)
+			obj.get_state(Global.current_state)
+			if sprite.sprite_type == "WiggleApp":
+				obj.global_position = sprite.global_position
+				
 			if sprite.get_parent() is Sprite2D or sprite.get_parent() is WigglyAppendage2D:
 				sprites.append(sprite.get_parent().owner)
+			
 			
 			for i in layers_to_dup:
 				var obj_to_spawn : SpriteObject
@@ -104,6 +111,7 @@ func _on_duplicate_button_pressed():
 				else:
 					obj_to_spawn = sprite_obj.instantiate()
 					
+				obj_to_spawn.position = i.position
 				obj_to_spawn.scale = i.child.get_metadata(0).sprite_object.scale
 				obj_to_spawn.sprite_data.scale = i.child.get_metadata(0).sprite_object.scale
 				Global.sprite_container.add_child(obj_to_spawn)
@@ -126,7 +134,9 @@ func _on_duplicate_button_pressed():
 				obj_to_spawn.parent_id = i.parent.get_instance_id()
 				sprites.append(obj_to_spawn)
 				Global.update_layers.emit(0, obj_to_spawn, obj_to_spawn.sprite_type)
-				obj.get_state(Global.current_state)
+				obj_to_spawn.get_state(Global.current_state)
+				if sprite.sprite_type == "WiggleApp":
+					obj_to_spawn.global_position = i.global_position
 		
 	if sprites.is_empty():
 		return

@@ -23,6 +23,7 @@ func enable():
 				%ClosedLoopCheck.disabled = false
 				%AutoWagCheck.disabled = false
 				%TextureModeOption.disabled = false
+				%AnchorSprite.disabled = false
 			else:
 				sprite_selected = true
 				nullfy()
@@ -38,6 +39,7 @@ func nullfy():
 	%WAGravityY.editable = false
 	%ClosedLoopCheck.disabled = true
 	%TextureModeOption.disabled = true
+	%AnchorSprite.disabled = true
 
 func set_data():
 	should_change = false
@@ -53,6 +55,7 @@ func set_data():
 					%WAGravityY.value = i.sprite_data.wiggle_gravity.y
 					%ClosedLoopCheck.button_pressed = i.sprite_data.wiggle_closed_loop
 					%AutoWagCheck.button_pressed = i.sprite_data.auto_wag
+					populate_anchor_data()
 					match i.sprite_data.tile:
 						1:
 							%TextureModeOption.select(1)
@@ -146,3 +149,33 @@ func _on_texture_mode_option_item_selected(index: int) -> void:
 						i.sprite_data.tile = 1
 						i.get_node("%Sprite2D").texture_mode = 1
 						i.save_state(Global.current_state)
+
+func populate_anchor_data():
+	%AnchorSprite.clear()
+	%AnchorSprite.add_item("None")
+	
+	var ind = 1
+	for i in get_tree().get_nodes_in_group("Sprites"):
+		if i.sprite_name != Global.held_sprites[0].sprite_name:
+			%AnchorSprite.add_item(i.sprite_name)
+			%AnchorSprite.set_item_metadata(ind, i)
+			if Global.held_sprites[0].sprite_data.anchor_id == i.sprite_id:
+				%AnchorSprite.select(ind)
+				
+			ind += 1
+
+func _on_anchor_sprite_item_selected(index: int) -> void:
+	if index == 0:
+		if should_change:
+			for i in Global.held_sprites:
+				if i != null && is_instance_valid(i):
+					i.sprite_data.anchor_id = null
+					i.get_node("%Sprite2D").anchor_target = null
+					i.save_state(Global.current_state)
+	else:
+		if should_change:
+			for i in Global.held_sprites:
+				if i != null && is_instance_valid(i):
+					i.sprite_data.anchor_id = %AnchorSprite.get_item_metadata(index).sprite_id
+					i.get_node("%Sprite2D").anchor_target = %AnchorSprite.get_item_metadata(index).get_node("%Sprite2D")
+					i.save_state(Global.current_state)

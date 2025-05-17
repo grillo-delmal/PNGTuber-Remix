@@ -75,6 +75,7 @@ var sprite_data : Dictionary = {
 	mouse_delay = 0.1,
 	
 	tile = 2,
+	anchor_id = null,
 	}
 
 var smooth_rot = 0.0
@@ -83,6 +84,7 @@ var smooth_glob = Vector2(0.0,0.0)
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.reparent_objects.connect(reparent_obj)
+	Global.reparent_objects.connect(set_anchor_sprite)
 	%Dragger.top_level = true
 	%Dragger.global_position = %Wobble.global_position
 	set_process(true)
@@ -162,7 +164,6 @@ func get_state(id):
 		if sprite_data.should_reset_state:
 			%ReactionConfig.reset_anim()
 	
-	
 		position = sprite_data.position
 		%Sprite2D.position = sprite_data.offset 
 		%Sprite2D.scale = Vector2(1,1)
@@ -195,6 +196,7 @@ func get_state(id):
 			%ReactionConfig.update_to_mode_change(Global.mode)
 			
 		update_wiggle_parts()
+		set_anchor_sprite()
 #		animation()
 		set_blend(sprite_data.blend_mode)
 		if sprite_data.one_shot:
@@ -203,6 +205,18 @@ func get_state(id):
 				%AnimatedSpriteTexture.proper_apng_one_shot()
 	elif states[id].is_empty():
 		states[id] = sprite_data.duplicate(true)
+
+func set_anchor_sprite(placeholder = null):
+	if sprite_data.anchor_id == null:
+		%Sprite2D.anchor_target = null
+	else:
+		for i in get_tree().get_nodes_in_group("Sprites"):
+			if i.sprite_id == sprite_data.anchor_id:
+				%Sprite2D.anchor_target = i.get_node("%Sprite2D")
+				return
+			else:
+				%Sprite2D.anchor_target = null
+
 
 
 func update_wiggle_parts():
