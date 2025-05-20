@@ -148,6 +148,7 @@ actor = NodePath("..")
 animation_handler = NodePath("../AnimatedSpriteTexture")
 
 [node name="AnimatedSpriteTexture" type="Node" parent="." node_paths=PackedStringArray("actor", "sprite_node")]
+unique_name_in_owner = true
 script = ExtResource("10_wmc63")
 actor = NodePath("..")
 sprite_node = NodePath("../Pos/Wobble/Squish/Drag/Rotation/AppendageFlip/Sprite2D")

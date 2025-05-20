@@ -173,6 +173,12 @@ func _on_del_normal_button_pressed():
 			if !sprite.is_apng:
 				if not sprite.sprite_data.folder:
 					sprite.get_node("%Sprite2D").texture.normal_texture = null
+					Global.reinfo.emit()
+			elif sprite.is_apng or sprite.img_animated:
+				if not sprite.sprite_data.folder:
+					sprite.get_node("%AnimatedSpriteTexture").frames2.clear()
+					sprite.get_node("%Sprite2D").texture.normal_texture = null
+					Global.reinfo.emit()
 
 func _on_add_appendage_pressed() -> void:
 	Global.main.load_append_sprites()

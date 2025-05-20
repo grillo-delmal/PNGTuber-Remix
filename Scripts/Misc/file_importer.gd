@@ -47,7 +47,7 @@ func import_apng_sprite(path : String , spawn) -> CanvasTexture:
 	img_can.diffuse_texture = text
 	spawn.is_apng = true
 	spawn.sprite_name = "(Apng) " + path.get_file().get_basename()
-	spawn.get_node("%AnimatedSpriteTexture").frames = []
+	spawn.get_node("%AnimatedSpriteTexture").frames.clear()
 	for i in spawn.frames:
 		var new_frame : AnimatedFrame = AnimatedFrame.new()
 		new_frame.texture = ImageTexture.create_from_image(i.content)
@@ -210,7 +210,7 @@ func replace_texture(path : String):
 			ImageTrimmer.set_thumbnail(Global.held_sprites[0].treeitem)
 			Global.held_sprites[0].is_apng = true
 			Global.held_sprites[0].img_animated = false
-			Global.held_sprites[0].get_node("%AnimatedSpriteTexture").frames = []
+			Global.held_sprites[0].get_node("%AnimatedSpriteTexture").frames.clear()
 			for i in Global.held_sprites[0].frames:
 				var new_frame : AnimatedFrame = AnimatedFrame.new()
 				new_frame.texture = ImageTexture.create_from_image(i.content)

@@ -33,7 +33,8 @@ func _physics_process(delta):
 			if sprite_node.texture.normal_texture:
 				if frames2.size() != frames.size():
 					frames2.resize(frames.size())
-				sprite_node.texture.normal_texture = cframe2.texture
+				if cframe2 != null:
+					sprite_node.texture.normal_texture = cframe2.texture
 
 
 func proper_apng_one_shot():

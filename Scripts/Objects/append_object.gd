@@ -206,7 +206,7 @@ func get_state(id):
 	elif states[id].is_empty():
 		states[id] = sprite_data.duplicate(true)
 
-func set_anchor_sprite(placeholder = null):
+func set_anchor_sprite(_placeholder = null):
 	if sprite_data.anchor_id == null:
 		%Sprite2D.anchor_target = null
 	else:

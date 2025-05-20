@@ -326,7 +326,7 @@ func load_apng(sprite_obj, sprite):
 		new_frame.duration = i.duration
 		sprite_obj.get_node("%AnimatedSpriteTexture").frames2.append(new_frame)
 
-	sprite_obj.texture = img_can
+	sprite_obj.get_node("%Sprite2D").texture = img_can
 	sprite_obj.is_apng = true
 	sprite_obj.get_node("%Sprite2D").texture = img_can
 
