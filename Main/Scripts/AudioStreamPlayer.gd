@@ -28,7 +28,7 @@ func _ready():
 	record_bus_index = AudioServer.get_bus_index("Mic")
 	record_effect = AudioServer.get_bus_effect(record_bus_index, 0)
 	await get_tree().current_scene.ready
-	mic_restart_timer.wait_time = 10.0
+	mic_restart_timer.wait_time = 2700
 	mic_restart_timer.start()
 	global_lipsync()
 

@@ -207,7 +207,7 @@ func moving_sprite(delta):
 				i.position.y -= 10 * delta
 				i.sprite_data.position.y -= 10 * delta
 				update_spins()
-			elif Input.is_action_pressed("s"):
+			elif Input.is_action_pressed("s_move"):
 				i.position.y += 10 * delta
 				i.sprite_data.position.y += 10 * delta
 				update_spins()

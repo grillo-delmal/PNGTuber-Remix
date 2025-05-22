@@ -75,7 +75,7 @@ func choosing_files(id):
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("save"):
-		if path != null:
+		if path != null && path != "":
 			SaveAndLoad.save_file(path)
 		else:
 			Global.main.save_as_file()

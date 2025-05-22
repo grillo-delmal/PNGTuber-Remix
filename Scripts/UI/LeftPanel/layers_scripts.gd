@@ -150,27 +150,23 @@ func _on_layers_tree_gui_input(event: InputEvent) -> void:
 
 
 func _on_layers_tree_multi_selected(item: TreeItem, _column: int, selected: bool) -> void:
-	if tree.get_selected() != tree.get_root():
-		var cleaned_array : Array[SpriteObject] = []
-		for i in Global.held_sprites:
-			if i.treeitem.is_selected(0):
-				cleaned_array.append(i)
-		if !selected:
-			if cleaned_array.find(item.get_metadata(0).sprite_object):
-				cleaned_array.erase(item.get_metadata(0).sprite_object)
+	call_deferred("select_items", item, _column, selected)
+
+
+func select_items(item: TreeItem, _column: int, selected: bool):
+	var cleaned_array : Array[SpriteObject] = []
+	for i in get_tree().get_nodes_in_group("Sprites"):
+		if i.treeitem.is_selected(0):
+			cleaned_array.append(i)
 		
-		Global.held_sprites = cleaned_array
-		if item.get_metadata(0).sprite_object not in Global.held_sprites && selected:
-			Global.held_sprites.append(item.get_metadata(0).sprite_object)
-			
-		if Global.held_sprites.size() > 0:
-		#	print(Global.held_sprites)
-			Global.reinfo.emit()
-		else:
-			Global.deselect.emit()
+	Global.held_sprites = cleaned_array
+	
+	if Global.held_sprites.size() > 0:
+		Global.reinfo.emit()
 	else:
 		Global.deselect.emit()
-	#	empty_sprites_array()
+
+
 
 func empty_sprites_array():
 	tree.deselect_all()
