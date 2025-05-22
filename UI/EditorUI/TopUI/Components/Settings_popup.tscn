@@ -352,6 +352,52 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "Trim Import"
 
+[node name="Remix Settings" type="ScrollContainer" parent="SettingVbox/SettingsTab"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="Margin" type="MarginContainer" parent="SettingVbox/SettingsTab/Remix Settings"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBox" type="VBoxContainer" parent="SettingVbox/SettingsTab/Remix Settings/Margin"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "UI Scale : "
+
+[node name="UIScalingSpinBox" type="SpinBox" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.5
+max_value = 2.0
+step = 0.001
+value = 1.0
+
+[node name="UIScalingSlider" type="HSlider" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 0.5
+max_value = 2.0
+step = 0.001
+value = 1.0
+
 [node name="Grid2" type="GridContainer" parent="SettingVbox"]
 layout_mode = 2
 size_flags_horizontal = 0
@@ -403,3 +449,5 @@ popup/item_7/id = 7
 [connection signal="value_changed" from="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/GridContainer2/SensitivityBar/SensitivitySlider" to="SettingsScript" method="_on_sensitivity_slider_value_changed"]
 [connection signal="pressed" from="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/HBoxContainer/ResetMicButton" to="SettingsScript" method="_on_reset_mic_button_pressed"]
 [connection signal="toggled" from="SettingVbox/SettingsTab/Import Settings/Margin/VBox/ImportTrim" to="SettingsScript" method="_on_import_trim_toggled"]
+[connection signal="value_changed" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/HBoxContainer/UIScalingSpinBox" to="SettingsScript" method="_on_ui_scaling_spin_box_value_changed"]
+[connection signal="value_changed" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/HBoxContainer/UIScalingSlider" to="SettingsScript" method="_on_ui_scaling_slider_value_changed"]

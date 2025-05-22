@@ -151,11 +151,6 @@ func _on_layers_tree_gui_input(event: InputEvent) -> void:
 
 func _on_layers_tree_multi_selected(item: TreeItem, _column: int, selected: bool) -> void:
 	if tree.get_selected() != tree.get_root():
-		if !selected:
-			
-			Global.held_sprites.erase(item.get_metadata(0).sprite_object)
-			
-		await get_tree().physics_frame
 		var cleaned_array : Array[SpriteObject] = []
 		for i in Global.held_sprites:
 			if i.treeitem.is_selected(0):

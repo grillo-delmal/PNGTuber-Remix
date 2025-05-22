@@ -68,7 +68,10 @@ func _process(delta):
 	tick +=1
 	var hold = get_parent().position.y
 	
-	get_parent().position.y = clamp(get_parent().position.y + (yVel * delta),-90000000, 0)
+	if !Global.static_view:
+		get_parent().position.y = clamp(get_parent().position.y + (yVel * delta),-90000000, 0)
+	else:
+		get_parent().position.y = 0
 	
 	if get_parent().position.y < 16:
 		bounceChange = hold - get_parent().position.y
@@ -80,37 +83,40 @@ func _process(delta):
 		yVel = clamp(yVel + state_param_mc.bounce_gravity* delta,-90000000, 90000000)
 	
 	
-	if currenly_speaking:
-		if current_mo_anim == "Bouncy":
-			set_mo_bouncy()
+	if !Global.static_view:
+		if currenly_speaking:
+			if current_mo_anim == "Bouncy":
+				set_mo_bouncy()
+				
+			elif current_mo_anim == "Wobble":
+				set_mo_wobble()
+				
+			elif current_mo_anim == "Squish":
+				set_mo_squish()
+			elif current_mo_anim == "Float":
+				set_mo_float()
+			else:
+				position = lerp(position, pos, 0.05)
+			if current_mo_anim != "Squish":
+				scale = lerp(scale, Vector2(1.0,1.0), 0.08)
+				
+		elif not currenly_speaking:
+			if current_mc_anim == "Bouncy":
+				set_mc_bouncy()
+			elif current_mc_anim == "Wobble":
+				set_mc_wobble()
+			elif current_mc_anim == "Squish":
+				set_mc_squish()
+			elif current_mc_anim == "Float":
+				set_mc_float()
+			else:
+				position = lerp(position, pos, 0.05)
 			
-		elif current_mo_anim == "Wobble":
-			set_mo_wobble()
-			
-		elif current_mo_anim == "Squish":
-			set_mo_squish()
-		elif current_mo_anim == "Float":
-			set_mo_float()
+			if current_mc_anim != "Squish":
+				scale = lerp(scale, Vector2(1.0,1.0), 0.08)
 		else:
-			position = lerp(position, pos, 0.05)
-		if current_mo_anim != "Squish":
-			scale = lerp(scale, Vector2(1.0,1.0), 0.08)
-			
-	elif not currenly_speaking:
-		if current_mc_anim == "Bouncy":
-			set_mc_bouncy()
-		elif current_mc_anim == "Wobble":
-			set_mc_wobble()
-		elif current_mc_anim == "Squish":
-			set_mc_squish()
-		elif current_mc_anim == "Float":
-			set_mc_float()
-		else:
-			position = lerp(position, pos, 0.05)
-		
-		if current_mc_anim != "Squish":
-			scale = lerp(scale, Vector2(1.0,1.0), 0.08)
-
+			position = pos
+			scale = Vector2(1.0,1.0)
 
 
 	if Global.settings_dict.darken && !currenly_speaking:
@@ -157,7 +163,8 @@ func get_state(state):
 			should_squish = dict.should_squish
 		
 		if bounce_state:
-			state_bounce()
+			if !Global.static_view:
+				state_bounce()
 			
 		if GlobalMicAudio.has_spoken:
 			speaking()
@@ -168,38 +175,39 @@ func get_state(state):
 
 func not_speaking():
 	currenly_speaking = false
-	match mouth_closed:
-		0:
-			set_mc_idle()
-		1:
-		#	position = pos
-			set_mc_bouncy()
-		3:
-		#	position = pos
-			set_mc_one_bounce()
-		4:
-			set_mc_wobble()
-		5:
-			set_mc_squish()
+	if !Global.static_view:
+		match mouth_closed:
+			0:
+				set_mc_idle()
+			1:
+			#	position = pos
+				set_mc_bouncy()
+			3:
+			#	position = pos
+				set_mc_one_bounce()
+			4:
+				set_mc_wobble()
+			5:
+				set_mc_squish()
 
 func speaking():
 #	modulate = Color.WHITE
 	currenly_speaking = true
-	
-	match mouth_open:
-		0:
-			set_mo_idle()
-		1:
-		#	position = pos
-			set_mo_bouncy()
-		3:
-		#	position = pos
-			set_mo_one_bounce()
-		4:
-			set_mo_wobble()
-			
-		5:
-			set_mo_squish()
+	if !Global.static_view:
+		match mouth_open:
+			0:
+				set_mo_idle()
+			1:
+			#	position = pos
+				set_mo_bouncy()
+			3:
+			#	position = pos
+				set_mo_one_bounce()
+			4:
+				set_mo_wobble()
+				
+			5:
+				set_mo_squish()
 
 func state_bounce():
 	if get_parent().position.y > -16:

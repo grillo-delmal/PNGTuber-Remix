@@ -73,7 +73,6 @@ func _physics_process(delta):
 	# Stick constraints
 	if anchor_target != null && is_instance_valid(anchor_target):
 		_apply_verlet_anchor(delta)
-		#_apply_constraints()
 
 	_update_line()
 

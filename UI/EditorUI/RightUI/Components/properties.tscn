@@ -394,6 +394,14 @@ script = ExtResource("2_7ymxr")
 sp_type = ""
 value_to_update = "physics"
 
+[node name="StaticObjectToggle" type="CheckBox" parent="Scroll/MarginContainer/VBoxContainer/Reactions"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Static Object"
+script = ExtResource("2_7ymxr")
+sp_type = ""
+value_to_update = "static_obj"
+
 [node name="UseMouseVel" type="CheckBox" parent="Scroll/MarginContainer/VBoxContainer/Reactions"]
 layout_mode = 2
 size_flags_horizontal = 3

@@ -1,6 +1,7 @@
 extends Node
 
 var devices : Array = []
+var change_setting : bool = false
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	%UIThemeButton.item_selected.connect(Themes._on_ui_theme_button_item_selected)
@@ -33,10 +34,15 @@ func close():
 	get_parent().queue_free()
 
 func check_data():
+	change_setting = false
 	%AutoLoadCheck.button_pressed = Themes.theme_settings.auto_load
 	%SaveOnExitCheck.button_pressed = Themes.theme_settings.save_on_exit
 	%AutoSaveCheck.button_pressed = Global.settings_dict.auto_save
 	%ImportTrim.button_pressed = Themes.theme_settings.enable_trimmer
+	
+	%UIScalingSpinBox.value = Themes.theme_settings.ui_scaling
+	%UIScalingSlider.value = Themes.theme_settings.ui_scaling
+	change_setting = true
 
 func _physics_process(_delta):
 	%VolumeBar.value = GlobalMicAudio.volume
@@ -53,6 +59,7 @@ func sliders_revalue(settings_dict):
 	%DelaySlider.value = settings_dict.volume_delay
 	%DeltaTimeCheck.button_pressed = settings_dict.should_delta
 	%MaxFPSlider.value = settings_dict.max_fps
+
 
 func _on_volume_slider_drag_ended(value_changed: bool) -> void:
 	if value_changed:
@@ -154,3 +161,21 @@ func _on_selected_screen_item_selected(index: int) -> void:
 		get_tree().get_root().get_node("Main/%Marker").current_screen = index - 1
 	
 	Global.settings_dict.monitor = get_tree().get_root().get_node("Main/%Marker").current_screen
+
+
+func _on_ui_scaling_slider_value_changed(value: float) -> void:
+	if change_setting:
+		Themes.theme_settings.ui_scaling = value
+		Themes.scale_window()
+		Themes.save()
+		%UIScalingSpinBox.value = value
+		get_parent().move_to_center()
+
+
+func _on_ui_scaling_spin_box_value_changed(value: float) -> void:
+	if change_setting:
+		Themes.theme_settings.ui_scaling = value
+		Themes.scale_window()
+		Themes.save()
+		%UIScalingSlider.value = value
+		get_parent().move_to_center()

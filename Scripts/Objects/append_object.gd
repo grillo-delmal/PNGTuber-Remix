@@ -76,6 +76,7 @@ var sprite_data : Dictionary = {
 	
 	tile = 2,
 	anchor_id = null,
+	static_obj = false,
 	}
 
 var smooth_rot = 0.0

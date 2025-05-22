@@ -64,6 +64,7 @@ var sprite_data : Dictionary = {
 	mouse_delay = 0.1,
 	non_animated_sheet = false,
 	frame = 0,
+	static_obj = false,
 	}
 
 var wiggle_val : float = 0

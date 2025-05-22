@@ -32,6 +32,7 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	always_on_top = false,
 	menu_popup = true,
 	software_mode = 0,
+	ui_scaling = 1.0,
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
@@ -138,16 +139,18 @@ func _ready():
 	get_window().size = theme_settings.screen_size
 	check_ui()
 #	top_bar.check_data()
+
 	if top_bar != null && is_instance_valid(top_bar):
 		top_bar.sliders_revalue(Global.settings_dict)
 	add_child(popup)
 	popup.hide()
-	
+	scale_window()
 	if theme_settings.microphone != null:
 		if AudioServer.get_input_device_list().has(theme_settings.microphone):
 			AudioServer.input_device = theme_settings.microphone
-			
-	
+
+func scale_window():
+	get_window().content_scale_factor = theme_settings.ui_scaling
 
 func window_size_changed():
 	theme_settings.screen_size = get_window().size

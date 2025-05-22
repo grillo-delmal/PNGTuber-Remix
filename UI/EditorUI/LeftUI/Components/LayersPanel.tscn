@@ -219,8 +219,6 @@ theme_override_constants/children_hl_line_width = 2
 theme_override_constants/parent_hl_line_margin = 2
 theme_override_font_sizes/font_size = 14
 theme_override_font_sizes/title_button_font_size = 16
-allow_reselect = true
-allow_rmb_select = true
 select_mode = 2
 script = ExtResource("11_hewhr")
 

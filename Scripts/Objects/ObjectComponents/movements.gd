@@ -1,6 +1,6 @@
 extends Node
 
-@export var actor : Node
+@export var actor : Node2D
 var glob : Vector2 = Vector2.ZERO
 var last_mouse_position : Vector2 = Vector2(0,0)
 var last_dist : Vector2 = Vector2(0,0)
@@ -31,7 +31,14 @@ func _process(delta: float) -> void:
 func movements(delta):
 	if !Global.static_view:
 		glob = %Dragger.global_position
-		drag(delta)
+		if actor.sprite_data.static_obj:
+			var static_pos = Global.sprite_container.get_parent().get_parent().to_global(actor.sprite_data.position)
+			%Dragger.global_position = static_pos
+			%Drag.global_position = %Dragger.global_position
+		else:
+			drag(delta)
+		
+		
 		wobble()
 		if actor.sprite_data.ignore_bounce:
 			glob.y -= Global.sprite_container.bounceChange

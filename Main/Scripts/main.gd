@@ -35,11 +35,14 @@ func _ready():
 	Global.file_dialog = %FileDialog
 	%FileDialog.use_native_dialog = true
 	update_theme(Themes.current_theme)
+	
+	
 
 func update_theme(new_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")):
 	%UIHolder.theme = new_theme
 	%ConfirmTrim.theme = new_theme
 	%ConfirmationDialog.theme = new_theme
+	%Control.set_values()
 
 func new_file():
 	%ConfirmationDialog.popup()

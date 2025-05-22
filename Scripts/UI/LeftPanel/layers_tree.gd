@@ -43,7 +43,8 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 		return
 	
 	#print(true_pos)
-	var og_pos = item.get_metadata(0).sprite_object.global_position
+	
+	var og_pos = Global.sprite_container.get_parent().get_parent().to_global(item.get_metadata(0).sprite_object.position)
 	print(true_pos)
 	if true_pos == 0:
 		item.get_parent().remove_child(item)
@@ -81,7 +82,10 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 				
 			item.get_metadata(0).sprite_object.global_position = og_pos
 			item.get_metadata(0).sprite_object.sprite_data.position = item.get_metadata(0).sprite_object.position
+			
 			item.get_metadata(0).sprite_object.save_state(Global.current_state)
+			await get_tree().physics_frame
+			item.get_metadata(0).sprite_object.get_node("%Dragger").global_position = og_pos
 		else:
 			item.move_before(other_item)
 			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object,item.get_index())
@@ -108,6 +112,9 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 			item.get_metadata(0).sprite_object.global_position = og_pos
 			item.get_metadata(0).sprite_object.sprite_data.position = item.get_metadata(0).sprite_object.position
 			item.get_metadata(0).sprite_object.save_state(Global.current_state)
+			await get_tree().physics_frame
+			item.get_metadata(0).sprite_object.get_node("%Dragger").global_position = og_pos
+			
 				
 		else:
 			item.move_after(other_item)
