@@ -43,15 +43,15 @@ func update_to_mode_change(mode : int):
 			%Pos.show()
 			if actor.sprite_data.should_blink:
 				if actor.sprite_data.open_eyes:
-					if blinking:
+					if !blinking:
 						%Pos.modulate.a = 1
-					else:
+					elif blinking:
 						%Pos.modulate.a = 0.2
 
 				elif !actor.sprite_data.open_eyes:
-					if !blinking:
+					if blinking:
 						%Pos.modulate.a = 1
-					else:
+					elif !blinking:
 						%Pos.modulate.a = 0.2
 
 			
@@ -75,15 +75,15 @@ func update_to_mode_change(mode : int):
 			%Pos.modulate.a = 1
 			if actor.sprite_data.should_blink:
 				if actor.sprite_data.open_eyes:
-					if blinking:
+					if !blinking:
 						%Pos.show()
-					else:
+					elif blinking:
 						%Pos.hide()
 
 				elif !actor.sprite_data.open_eyes:
-					if !blinking:
+					if blinking:
 						%Pos.show()
-					else:
+					elif !blinking:
 						%Pos.hide()
 
 			%Rotation.modulate.a = 1

@@ -13,5 +13,3 @@ script = ExtResource("1_1tutj")
 [node name="MicTimer" type="Timer" parent="."]
 wait_time = 30.0
 autostart = true
-
-[connection signal="timeout" from="MicTimer" to="." method="_on_mic_timer_timeout"]

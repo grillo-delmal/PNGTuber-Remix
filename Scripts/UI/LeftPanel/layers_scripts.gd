@@ -155,6 +155,9 @@ func _on_layers_tree_multi_selected(item: TreeItem, _column: int, selected: bool
 		for i in Global.held_sprites:
 			if i.treeitem.is_selected(0):
 				cleaned_array.append(i)
+		if !selected:
+			if cleaned_array.find(item.get_metadata(0).sprite_object):
+				cleaned_array.erase(item.get_metadata(0).sprite_object)
 		
 		Global.held_sprites = cleaned_array
 		if item.get_metadata(0).sprite_object not in Global.held_sprites && selected:
