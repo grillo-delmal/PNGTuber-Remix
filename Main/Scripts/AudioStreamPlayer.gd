@@ -37,7 +37,7 @@ func mic_restart_timer_timeout():
 	stop()
 	await  get_tree().physics_frame
 	play()
-	mic_restart_timer.start()
+	mic_restart_timer.call_deferred("start")
 
 func global_lipsync():
 	_fingerprint.populate(LipSyncGlobals.speech_spectrum)

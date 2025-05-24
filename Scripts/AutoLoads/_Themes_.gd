@@ -80,9 +80,6 @@ func _ready():
 	save_timer.timeout.connect(auto_save)
 	save_timer.one_shot = true
 	add_child(save_timer)
-	if !FileAccess.file_exists(OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres"):
-		ResourceSaver.save(preload("res://UI/Lipsync stuff/PrebuildFile/DefaultTraining.tres"),OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres")
-		LipSyncGlobals.file_data = ResourceLoader.load(OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres")
 	await  get_tree().create_timer(0.1).timeout
 	if get_tree().get_root().has_node("Main/%TopUI"):
 		top_bar = get_tree().get_root().get_node("Main/%TopUI")
@@ -119,11 +116,6 @@ func _ready():
 				if FileAccess.file_exists(theme_settings.path):
 					await get_tree().create_timer(0.1).timeout
 					SaveAndLoad.load_file(theme_settings.path, true)
-					
-			if FileAccess.file_exists(theme_settings.lipsync_file_path):
-				LipSyncGlobals.file_data = ResourceLoader.load(theme_settings.lipsync_file_path)
-			else:
-				LipSyncGlobals.file_data = ResourceLoader.load(OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres")
 			
 		load_file.close()
 		
@@ -133,7 +125,6 @@ func _ready():
 		create_file.store_var(theme_settings)
 		create_file.close()
 	get_window().size_changed.connect(window_size_changed)
-	
 	
 	await get_tree().create_timer(0.05).timeout
 	get_window().size = theme_settings.screen_size
@@ -145,9 +136,21 @@ func _ready():
 	add_child(popup)
 	popup.hide()
 	scale_window()
+	lipsync_set_up()
 	if theme_settings.microphone != null:
 		if AudioServer.get_input_device_list().has(theme_settings.microphone):
 			AudioServer.input_device = theme_settings.microphone
+
+
+func lipsync_set_up():
+	if !FileAccess.file_exists(theme_settings.lipsync_file_path):
+		ResourceSaver.save(preload("res://UI/Lipsync stuff/PrebuildFile/DefaultTraining.tres") ,OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres")
+		LipSyncGlobals.file_data = ResourceLoader.load(OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres")
+		theme_settings.lipsync_file_path = OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres"
+		save()
+	else:
+		LipSyncGlobals.file_data = ResourceLoader.load(theme_settings.lipsync_file_path)
+
 
 func scale_window():
 	get_window().content_scale_factor = theme_settings.ui_scaling

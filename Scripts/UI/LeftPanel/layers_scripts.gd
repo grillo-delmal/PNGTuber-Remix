@@ -153,7 +153,7 @@ func _on_layers_tree_multi_selected(item: TreeItem, _column: int, selected: bool
 	call_deferred("select_items", item, _column, selected)
 
 
-func select_items(item: TreeItem, _column: int, selected: bool):
+func select_items(_item: TreeItem, _column: int, _selected: bool):
 	var cleaned_array : Array[SpriteObject] = []
 	for i in get_tree().get_nodes_in_group("Sprites"):
 		if i.treeitem.is_selected(0):

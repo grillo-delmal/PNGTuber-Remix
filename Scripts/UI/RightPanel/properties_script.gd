@@ -185,29 +185,67 @@ func _on_tint_picker_button_color_changed(ncolor: Color) -> void:
 func _on_pos_x_spin_box_value_changed(value):
 	if %PosXSpinBox.get_line_edit().has_focus():
 		if should_change:
+			
+			var undo_redo_data : Array = []
+			
 			for i in Global.held_sprites:
+				
+				var og_val = i.sprite_data.duplicate()
+				
 				i.sprite_data.position.x = value
 				i.position.x = value
 				i.save_state(Global.current_state)
+				
+				undo_redo_data.append({sprite_object = i, 
+				data = i.sprite_data.duplicate(), 
+				og_data = og_val,
+				data_type = "sprite_data", 
+				state = Global.current_state})
+				
+			UndoRedoManager.add_data_to_manager(undo_redo_data)
+
 
 func _on_pos_y_spin_box_value_changed(value):
 	if %PosYSpinBox.get_line_edit().has_focus():
 		if should_change:
+			var undo_redo_data : Array = []
 			for i in Global.held_sprites:
+				var og_val = i.sprite_data.duplicate()
 				i.sprite_data.position.y = value
 				i.position.y = value
 				i.save_state(Global.current_state)
+				undo_redo_data.append({sprite_object = i, 
+				data = i.sprite_data.duplicate(), 
+				og_data = og_val,
+				data_type = "sprite_data", 
+				state = Global.current_state})
+				
+			UndoRedoManager.add_data_to_manager(undo_redo_data)
+
 
 func _on_rot_spin_box_value_changed(value):
-	if should_change:
-		for i in Global.held_sprites:
-			i.rotation = value * 0.01745
-			i.sprite_data.rotation = value * 0.01745
-			i.save_state(Global.current_state)
+	if %RotSpinBox.get_line_edit().has_focus():
+		if should_change:
+			var undo_redo_data : Array = []
+			for i in Global.held_sprites:
+				var og_val = i.sprite_data.duplicate()
+				i.rotation = value * 0.01745
+				i.sprite_data.rotation = value * 0.01745
+				i.save_state(Global.current_state)
+				undo_redo_data.append({sprite_object = i, 
+				data = i.sprite_data.duplicate(), 
+				og_data = og_val,
+				data_type = "sprite_data", 
+				state = Global.current_state})
+				
+			UndoRedoManager.add_data_to_manager(undo_redo_data)
+
 
 func _on_visible_toggled(toggled_on):
 	if should_change:
+		var undo_redo_data : Array = []
 		for i in Global.held_sprites:
+			var og_val = i.sprite_data.duplicate()
 			if toggled_on:
 				i.sprite_data.visible = true
 				i.visible = true
@@ -217,32 +255,76 @@ func _on_visible_toggled(toggled_on):
 				i.visible = false
 				i.treeitem.set_button(0, 0, preload("res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/EyeButton2.png"))
 			i.save_state(Global.current_state)
+			undo_redo_data.append({sprite_object = i, 
+			data = i.sprite_data.duplicate(), 
+			og_data = og_val,
+			data_type = "sprite_data", 
+			state = Global.current_state})
+			
+		UndoRedoManager.add_data_to_manager(undo_redo_data)
+
 
 func _on_z_order_spinbox_value_changed(value):
-	if should_change:
-		for i in Global.held_sprites:
-			i.sprite_data.z_index = value
-			i.get_node("%Wobble").z_index = value
-			i.save_state(Global.current_state)
+	if %ZOrderSpinbox.get_line_edit().has_focus():
+		if should_change:
+			var undo_redo_data : Array = []
+			for i in Global.held_sprites:
+				var og_val = i.sprite_data.duplicate()
+				i.sprite_data.z_index = value
+				i.get_node("%Wobble").z_index = value
+				i.save_state(Global.current_state)
+				undo_redo_data.append({sprite_object = i, 
+				data = i.sprite_data.duplicate(), 
+				og_data = og_val,
+				data_type = "sprite_data", 
+				state = Global.current_state})
+				
+			UndoRedoManager.add_data_to_manager(undo_redo_data)
+
+
 
 func _on_size_spin_y_box_value_changed(value):
-	if should_change:
-		for i in Global.held_sprites:
-			i.sprite_data.scale.y = value
-			i.scale.y = value
-			i.save_state(Global.current_state)
+	if %SizeSpinYBox.get_line_edit().has_focus():
+		if should_change:
+			var undo_redo_data : Array = []
+			for i in Global.held_sprites:
+				var og_val = i.sprite_data.duplicate()
+				i.sprite_data.scale.y = value
+				i.scale.y = value
+				i.save_state(Global.current_state)
+				undo_redo_data.append({sprite_object = i, 
+				data = i.sprite_data.duplicate(), 
+				og_data = og_val,
+				data_type = "sprite_data", 
+				state = Global.current_state})
+				
+			UndoRedoManager.add_data_to_manager(undo_redo_data)
+
 
 func _on_size_spin_box_value_changed(value):
-	if should_change:
-		for i in Global.held_sprites:
-			i.sprite_data.scale.x = value
-			i.scale.x = value
-			i.save_state(Global.current_state)
+	if %SizeSpinBox.get_line_edit().has_focus():
+		if should_change:
+			var undo_redo_data : Array = []
+			for i in Global.held_sprites:
+				var og_val = i.sprite_data.duplicate()
+				i.sprite_data.scale.x = value
+				i.scale.x = value
+				i.save_state(Global.current_state)
+				undo_redo_data.append({sprite_object = i, 
+				data = i.sprite_data.duplicate(), 
+				og_data = og_val,
+				data_type = "sprite_data", 
+				state = Global.current_state})
+				
+			UndoRedoManager.add_data_to_manager(undo_redo_data)
+
 
 func _on_offset_y_spin_box_value_changed(value):
 	if %OffsetYSpinBox.get_line_edit().has_focus():
 		if should_change:
+			var undo_redo_data : Array = []
 			for i in Global.held_sprites:
+				var og_val = i.sprite_data.duplicate()
 				var of = i.sprite_data.offset.y - value
 				i.sprite_data.position.y += of
 				i.position.y = i.sprite_data.position.y
@@ -251,11 +333,21 @@ func _on_offset_y_spin_box_value_changed(value):
 				i.get_node("%Sprite2D").position.y = i.sprite_data.offset.y
 				i.save_state(Global.current_state)
 				update_pos_spins()
+				undo_redo_data.append({sprite_object = i, 
+				data = i.sprite_data.duplicate(), 
+				og_data = og_val,
+				data_type = "sprite_data", 
+				state = Global.current_state})
+				
+			UndoRedoManager.add_data_to_manager(undo_redo_data)
+
 
 func _on_offset_x_spin_box_value_changed(value):
 	if %OffsetXSpinBox.get_line_edit().has_focus():
 		if should_change:
+			var undo_redo_data : Array = []
 			for i in Global.held_sprites:
+				var og_val = i.sprite_data.duplicate()
 				var of = i.sprite_data.offset.x - value
 				i.sprite_data.position.x += of
 				i.position.x = i.sprite_data.position.x
@@ -263,14 +355,28 @@ func _on_offset_x_spin_box_value_changed(value):
 				i.sprite_data.offset.x = value
 				i.get_node("%Sprite2D").position.x = i.sprite_data.offset.x
 				i.save_state(Global.current_state)
-			update_pos_spins()
+				undo_redo_data.append({sprite_object = i, 
+				data = i.sprite_data.duplicate(), 
+				og_data = og_val,
+				data_type = "sprite_data", 
+				state = Global.current_state})
+				
+			UndoRedoManager.add_data_to_manager(undo_redo_data)
+		update_pos_spins()
+
 
 func _on_flip_sprite_h_toggled(toggled_on: bool) -> void:
 	if should_change:
+		var undo_redo_data : Array = []
 		for i in Global.held_sprites:
+			var og_val = i.sprite_data.duplicate()
 			if i.sprite_type == "Sprite2D":
 				i.sprite_data.flip_sprite_h = toggled_on
-				i.get_node("%Sprite2D").flip_h = toggled_on
+				if i.sprite_data.flip_sprite_h:
+					i.get_node("%AppendageFlip").scale.x = -1
+				else:
+					i.get_node("%AppendageFlip").scale.x = 1
+				
 				i.save_state(Global.current_state)
 			elif i.sprite_type == "WiggleApp":
 				i.sprite_data.flip_h = toggled_on
@@ -279,13 +385,26 @@ func _on_flip_sprite_h_toggled(toggled_on: bool) -> void:
 				else:
 					i.get_node("%AppendageFlip").scale.x = 1
 				i.save_state(Global.current_state)
+			undo_redo_data.append({sprite_object = i, 
+			data = i.sprite_data.duplicate(), 
+			og_data = og_val,
+			data_type = "sprite_data", 
+			state = Global.current_state})
+			
+		UndoRedoManager.add_data_to_manager(undo_redo_data)
+
 
 func _on_flip_sprite_v_toggled(toggled_on: bool) -> void:
 	if should_change:
+		var undo_redo_data : Array = []
 		for i in Global.held_sprites:
+			var og_val = i.sprite_data.duplicate()
 			if i.sprite_type == "Sprite2D":
 				i.sprite_data.flip_sprite_v = toggled_on
-				i.get_node("%Sprite2D").flip_v = toggled_on
+				if i.sprite_data.flip_sprite_v:
+					i.get_node("%Sprite2D").scale.y = -1
+				else:
+					i.get_node("%Sprite2D").scale.y = 1
 				i.save_state(Global.current_state)
 				
 			elif i.sprite_type == "WiggleApp":
@@ -295,10 +414,20 @@ func _on_flip_sprite_v_toggled(toggled_on: bool) -> void:
 				else:
 					i.get_node("%AppendageFlip").scale.y = 1
 				i.save_state(Global.current_state)
+			undo_redo_data.append({sprite_object = i, 
+			data = i.sprite_data.duplicate(), 
+			og_data = og_val,
+			data_type = "sprite_data", 
+			state = Global.current_state})
+			
+		UndoRedoManager.add_data_to_manager(undo_redo_data)
+
 
 func _on_clip_children_toggled(toggled_on: bool) -> void:
 	if should_change:
+		var undo_redo_data : Array = []
 		for i in Global.held_sprites:
+			var og_val = i.sprite_data.duplicate()
 			if toggled_on:
 				i.get_node("%Sprite2D").set_clip_children_mode(2)
 				i.sprite_data.clip = 2
@@ -306,10 +435,21 @@ func _on_clip_children_toggled(toggled_on: bool) -> void:
 				i.get_node("%Sprite2D").set_clip_children_mode(0)
 				i.sprite_data.clip = 0
 			i.save_state(Global.current_state)
+			undo_redo_data.append({sprite_object = i, 
+			data = i.sprite_data.duplicate(), 
+			og_data = og_val,
+			data_type = "sprite_data", 
+			state = Global.current_state})
+			
+		UndoRedoManager.add_data_to_manager(undo_redo_data)
+
+
 
 func _on_eye_option_item_selected(index: int) -> void:
 	if should_change:
+		var undo_redo_data : Array = []
 		for i in Global.held_sprites:
+			var og_val = i.sprite_data.duplicate()
 			match index:
 				0:
 					i.sprite_data.should_blink = false
@@ -319,11 +459,21 @@ func _on_eye_option_item_selected(index: int) -> void:
 				2:
 					i.sprite_data.should_blink = true
 					i.sprite_data.open_eyes = false
+				
+			undo_redo_data.append({sprite_object = i, 
+			data = i.sprite_data.duplicate(), 
+			og_data = og_val,
+			data_type = "sprite_data", 
+			state = Global.current_state})
+			
+		UndoRedoManager.add_data_to_manager(undo_redo_data)
 		Global.blink.emit()
 
 func _on_mouth_option_item_selected(index: int) -> void:
 	if should_change:
+		var undo_redo_data : Array = []
 		for i in Global.held_sprites:
+			var og_val = i.sprite_data.duplicate()
 			match index:
 				0:
 					i.sprite_data.should_talk = false
@@ -333,4 +483,11 @@ func _on_mouth_option_item_selected(index: int) -> void:
 				2:
 					i.sprite_data.should_talk = true
 					i.sprite_data.open_mouth = false
+			undo_redo_data.append({sprite_object = i, 
+			data = i.sprite_data.duplicate(), 
+			og_data = og_val,
+			data_type = "sprite_data", 
+			state = Global.current_state})
+			
+		UndoRedoManager.add_data_to_manager(undo_redo_data)
 		Global.not_speaking.emit()

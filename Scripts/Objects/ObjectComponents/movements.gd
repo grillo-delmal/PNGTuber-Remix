@@ -178,6 +178,8 @@ func follow_mouse(_delta):
 	else:
 		var dir = distance.direction_to(mouse)
 		var dist = mouse.length()
+		
+		#var test = tanh((dist - actor.sprite_data.look_at_mouse_pos))
 		%Pos.position.x = lerp(%Pos.position.x, dir.x * min(dist, actor.sprite_data.look_at_mouse_pos), actor.sprite_data.mouse_delay)
 		%Pos.position.y = lerp(%Pos.position.y, dir.y * min(dist, actor.sprite_data.look_at_mouse_pos_y), actor.sprite_data.mouse_delay)
 		

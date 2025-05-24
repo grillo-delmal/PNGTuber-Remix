@@ -215,9 +215,15 @@ func get_state(id):
 		%Sprite2D.material.set_shader_parameter("wiggle", sprite_data.wiggle)
 		%Sprite2D.material.set_shader_parameter("rotation_offset", sprite_data.wiggle_rot_offset)
 		
+		if sprite_data.flip_sprite_h:
+			%Sprite2D.scale.x = -1
+		else:
+			%Sprite2D.scale.x = 1
 		
-		%Sprite2D.flip_h = sprite_data.flip_sprite_h
-		%Sprite2D.flip_v = sprite_data.flip_sprite_v
+		if sprite_data.flip_sprite_v:
+			%Sprite2D.scale.y = -1
+		else:
+			%Sprite2D.scale.y = 1
 
 		if sprite_data.advanced_lipsync:
 			%Sprite2D.hframes = 6
@@ -241,6 +247,7 @@ func get_state(id):
 	elif states[id].is_empty():
 		states[id] = sprite_data.duplicate(true)
 		
+
 
 func check_talk():
 	if sprite_data.should_talk:

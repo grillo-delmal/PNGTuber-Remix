@@ -21,7 +21,7 @@ func nullfy():
 	%ShouldDisListContainer.hide()
 
 func enable():
-	if Global.held_sprites.size() <= 1:
+	if Global.held_sprites.size() == 1:
 		%IsAssetCheck.disabled = false
 		%IsAssetButton.disabled = false
 		%RemoveAssetButton.disabled = false

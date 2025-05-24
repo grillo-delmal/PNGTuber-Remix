@@ -43,11 +43,17 @@ func close():
 func _on_file_dialog_file_selected(path: String) -> void:
 	if current == FileType.Load:
 		LipSyncGlobals.load_file(path)
+		Themes.theme_settings.lipsync_file_path = path
+		Themes.save()
 	elif current == FileType.Save:
 		LipSyncGlobals.save_file_as(path)
+		Themes.theme_settings.lipsync_file_path = path
+		Themes.save()
 
 
 func _on_file_dialog_confirmed() -> void:
 	if current == FileType.Save:
 		LipSyncGlobals.save_file_as(%FileDialog.current_path)
+		Themes.theme_settings.lipsync_file_path = %FileDialog.current_path
+		Themes.save()
 	

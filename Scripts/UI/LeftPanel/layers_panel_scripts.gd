@@ -111,7 +111,7 @@ func _on_duplicate_button_pressed():
 				else:
 					obj_to_spawn = sprite_obj.instantiate()
 					
-				obj_to_spawn.position = i.position
+				obj_to_spawn.position = i.child.get_metadata(0).sprite_object.position
 				obj_to_spawn.scale = i.child.get_metadata(0).sprite_object.scale
 				obj_to_spawn.sprite_data.scale = i.child.get_metadata(0).sprite_object.scale
 				Global.sprite_container.add_child(obj_to_spawn)

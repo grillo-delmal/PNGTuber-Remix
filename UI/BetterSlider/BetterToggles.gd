@@ -36,10 +36,19 @@ func nullfy():
 func on_toggle(toggle : bool):
 	if should_change:
 		if sp_type != "Null":
+			var undo_redo_data : Array = []
 			for i in Global.held_sprites:
+				var og_val = i.sprite_data.duplicate()
 				if sp_type == i.sprite_type:
 					i.sprite_data[value_to_update] = toggle
 					i.save_state(Global.current_state)
 				elif sp_type == "":
 					i.sprite_data[value_to_update] = toggle
 					i.save_state(Global.current_state)
+				undo_redo_data.append({sprite_object = i, 
+				data = i.sprite_data.duplicate(), 
+				og_data = og_val,
+				data_type = "sprite_data", 
+				state = Global.current_state})
+				
+			UndoRedoManager.add_data_to_manager(undo_redo_data)
