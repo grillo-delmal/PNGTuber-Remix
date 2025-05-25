@@ -63,6 +63,7 @@ var sprite_data : Dictionary = {
 	mouse_rotation_max = 0.0,
 	mouse_delay = 0.1,
 	non_animated_sheet = false,
+	animate_to_mouse = false,
 	frame = 0,
 	static_obj = false,
 	}
@@ -106,7 +107,8 @@ func animation():
 		%Sprite2D.hframes = sprite_data.hframes
 		%Sprite2D.vframes = sprite_data.vframes
 		if (sprite_data.hframes*sprite_data.vframes) - 1 > 1:
-			%Sprite2D.frame = sprite_data.frame
+			if !sprite_data.animate_to_mouse:
+				%Sprite2D.frame = sprite_data.frame
 	
 	$Animation.wait_time = 1.0/sprite_data.animation_speed 
 	$Animation.start()
