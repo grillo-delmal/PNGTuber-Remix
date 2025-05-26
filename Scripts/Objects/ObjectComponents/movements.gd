@@ -9,6 +9,9 @@ var vel = Vector2.ZERO
 var distance : Vector2 = Vector2.ZERO
 var mouse_moving
 var frame = 0
+var frame2 = 0
+
+
 
 func _ready() -> void:
 	Global.update_mouse_vel_pos.connect(mouse_delay)
@@ -207,10 +210,14 @@ func follow_mouse(_delta):
 		%Drag.scale.y = lerp(%Drag.scale.y, float(clamp(1 - scl_y,  0.15 , 1)), actor.sprite_data.mouse_delay)
 		if actor.sprite_type == "Sprite2D":
 			if actor.sprite_data.non_animated_sheet && actor.sprite_data.animate_to_mouse:
-				var t = Vector2(dire.x * min(dist, actor.sprite_data.look_at_mouse_pos), dire.y* min(dist, actor.sprite_data.look_at_mouse_pos_y))
-				frame = clamp(roundi(((%Sprite2D.hframes) - ((%Sprite2D.hframes * (t.x/actor.sprite_data.look_at_mouse_pos))* sign(actor.sprite_data.look_at_mouse_pos))))- 1 , 0, %Sprite2D.hframes -1)
-				if frame != NAN or frame != null: 
-					%Sprite2D.frame_coords.x = round(move_toward(%Sprite2D.frame_coords.x, frame, 100*actor.sprite_data.mouse_delay))
+				var t = Vector2(dir.x * min(dist, actor.sprite_data.look_at_mouse_pos), dir.y* min(dist, actor.sprite_data.look_at_mouse_pos_y))
+				var l = Vector2((%Sprite2D.hframes * (t.x/actor.sprite_data.look_at_mouse_pos)), (%Sprite2D.vframes * (t.y/actor.sprite_data.look_at_mouse_pos_y)))
+				frame = clamp((((%Sprite2D.hframes) -   l.x * sign(-actor.sprite_data.look_at_mouse_pos))) - 1 , 0, %Sprite2D.hframes -1)
+				frame2 = clamp((((%Sprite2D.vframes) -  l.y * sign(-actor.sprite_data.look_at_mouse_pos_y)) ) - 1 , 0, %Sprite2D.vframes -1)
+				if frame != NAN: 
+					%Sprite2D.frame_coords.x = floor(move_toward(float(%Sprite2D.frame_coords.x), float(frame), actor.sprite_data.animate_to_mouse_speed))
+				if frame2 != NAN: 
+					%Sprite2D.frame_coords.y = floor(move_toward(float(%Sprite2D.frame_coords.y), float(frame2), actor.sprite_data.animate_to_mouse_speed))
 
 
 func auto_rotate():

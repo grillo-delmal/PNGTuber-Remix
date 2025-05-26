@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ngta1o5yiqxs"]
+[gd_scene load_steps=14 format=3 uid="uid://ngta1o5yiqxs"]
 
 [ext_resource type="Script" uid="uid://dvpyywoct4riy" path="res://Scripts/UI/control.gd" id="1_1r6xj"]
 [ext_resource type="Script" uid="uid://bpegrg5a15v2v" path="res://Scripts/UI/UIInput.gd" id="3_1eur5"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://ccvo3k5t6lis6" path="res://UI/EditorUI/RightUI/Components/movement.tscn" id="9_fwbkq"]
 [ext_resource type="PackedScene" uid="uid://bk2xbsvlmq0or" path="res://UI/StateButton/state_panel.tscn" id="10_1r6xj"]
 [ext_resource type="Script" uid="uid://dy1cd6xda1pu5" path="res://UI/BetterSlider/BetterToggles.gd" id="10_ncust"]
+[ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="11_ejqfc"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1r6xj"]
 blend_mode = 1
@@ -231,14 +232,23 @@ unique_name_in_owner = true
 layout_mode = 2
 max_value = 12.0
 
-[node name="AnimateFramesToMouse" type="Button" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
+[node name="AnimateToMouse" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 layout_mode = 2
-tooltip_text = "You must have None-Animated sheet on to be able to use this feature."
-text = "Animate Sprite Sheet to Mouse"
+tooltip_text = "Animates SpriteSheet depending on mouse position (Horizontally and Vertically)"
+text = "Animate to Mouse"
 script = ExtResource("10_ncust")
 sp_type = "Sprite2D"
 value_to_update = "animate_to_mouse"
-metadata/_custom_type_script = "uid://dy1cd6xda1pu5"
+
+[node name="BetterSlider" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer" instance=ExtResource("11_ejqfc")]
+layout_mode = 2
+sp_type = "Sprite2D"
+label_text = "Anim-Speed : "
+mini_value = 1.0
+max_value = 250.0
+step = 0.01
+value = 10.0
+value_to_update = "animate_to_mouse_speed"
 
 [node name="StatePanel" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer" instance=ExtResource("10_1r6xj")]
 layout_mode = 2
