@@ -219,19 +219,22 @@ func follow_mouse(_delta):
 				
 				var dist_x = dir.x * min(dist, actor.sprite_data.look_at_mouse_pos)
 				var dist_y = dir.y * min(dist, actor.sprite_data.look_at_mouse_pos_y)
-
 				var max_dist_x = actor.sprite_data.look_at_mouse_pos
 				var max_dist_y = actor.sprite_data.look_at_mouse_pos_y
-
 				var hframes = %Sprite2D.hframes
 				var vframes = %Sprite2D.vframes
-
 				var normalized_x = (dist_x / (2.0 * max_dist_x)) + 0.5
 				var normalized_y = (dist_y / (2.0 * max_dist_y)) + 0.5
-
-				var frame_x = clamp(floor(normalized_x * hframes), 0, hframes - 1)
-				var frame_y = clamp(floor(normalized_y * vframes), 0, vframes - 1)
-
+				
+				var raw_frame_x = (normalized_x * hframes)
+				var raw_frame_y = (normalized_y * vframes)
+				
+				if sign(actor.sprite_data.look_at_mouse_pos) == -1:
+					raw_frame_x = hframes - (normalized_x * hframes)
+				if sign(actor.sprite_data.look_at_mouse_pos_y) == -1:
+					raw_frame_y = vframes - (normalized_y * vframes)
+				var frame_x = clamp(floor(raw_frame_x), 0, hframes - 1)
+				var frame_y = clamp(floor(raw_frame_y), 0, vframes - 1)
 				%Sprite2D.frame_coords.x = floor(move_toward(%Sprite2D.frame_coords.x, float(frame_x), actor.sprite_data.animate_to_mouse_speed))
 				%Sprite2D.frame_coords.y = floor(move_toward(%Sprite2D.frame_coords.y, float(frame_y), actor.sprite_data.animate_to_mouse_speed))
 
