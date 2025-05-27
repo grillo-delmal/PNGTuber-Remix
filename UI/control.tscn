@@ -250,6 +250,14 @@ step = 0.01
 value = 10.0
 value_to_update = "animate_to_mouse_speed"
 
+[node name="AnimateToMouse2" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
+layout_mode = 2
+tooltip_text = "Animate to Mouse must be turned on in order for this feature to work when toggled off, it stops the sprite from moving on the x and y axis, but keeps the Animate to Mouse working."
+text = "Move with Mouse"
+script = ExtResource("10_ncust")
+sp_type = "Sprite2D"
+value_to_update = "animate_to_mouse_track_pos"
+
 [node name="StatePanel" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer" instance=ExtResource("10_1r6xj")]
 layout_mode = 2
 

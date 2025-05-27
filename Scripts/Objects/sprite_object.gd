@@ -65,6 +65,7 @@ var sprite_data : Dictionary = {
 	non_animated_sheet = false,
 	animate_to_mouse = false,
 	animate_to_mouse_speed = 10,
+	animate_to_mouse_track_pos = true,
 	frame = 0,
 	static_obj = false,
 	}
