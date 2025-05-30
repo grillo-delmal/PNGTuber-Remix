@@ -19,6 +19,7 @@ config/quit_on_go_back=false
 config/features=PackedStringArray("4.4")
 boot_splash/bg_color=Color(0.1118, 0.135361, 0.218212, 1)
 boot_splash/fullsize=false
+boot_splash/use_filter=false
 boot_splash/image="res://SplashImage.png"
 config/icon="res://PicklesSurprised.png"
 
@@ -41,6 +42,7 @@ UndoRedoManager="*res://Scripts/AutoLoads/UndoRedoManager.gd"
 
 [debug]
 
+settings/crash_handler/message="Please include this when reporting the bug on:https://github.com/MudkipWorld/PNGTuber-Remix/issues"
 settings/crash_handler/message.editor="Please include this when reporting the bug on:https://github.com/MudkipWorld/PNGTuber-Remix/issues"
 gdscript/warnings/unused_signal=0
 gdscript/warnings/integer_division=0
@@ -51,7 +53,9 @@ window/size/viewport_width=1280
 window/size/viewport_height=720
 window/size/transparent=true
 window/energy_saving/keep_screen_on=false
+window/dpi/allow_hidpi=false
 window/per_pixel_transparency/allowed=true
+window/vsync/vsync_mode=2
 mouse_cursor/custom_image="uid://ba5cbuwdsxpl7"
 
 [editor_plugins]

@@ -173,11 +173,21 @@ func follow_mouse(_delta):
 
 		# Smoothly interpolate the sprite's rotation
 		%Squish.rotation = lerp_angle(%Squish.rotation, target_rotation, actor.sprite_data.mouse_delay)
-		var dire = Vector2.ZERO - (last_mouse_position - main_marker.coords)
-		var scl_x = abs(dire.x) *actor.sprite_data.mouse_scale_x *0.005
-		var scl_y = abs(dire.y) *actor.sprite_data.mouse_scale_y *0.005
-		%Drag.scale.x = lerp(%Drag.scale.x, float(clamp(1 - scl_x, 0.15 , 1)), actor.sprite_data.mouse_delay)
-		%Drag.scale.y = lerp(%Drag.scale.y, float(clamp(1 - scl_y,  0.15 , 1)), actor.sprite_data.mouse_delay)
+		
+		var screen_size = DisplayServer.screen_get_size(-1)
+		if main_marker.current_screen == main_marker.ALL_SCREENS_ID:
+			screen_size = DisplayServer.screen_get_size(1)
+		else:
+			screen_size = DisplayServer.screen_get_size(main_marker.current_screen)
+			
+		var center = screen_size * 0.5
+		var dist_from_center = last_dist - main_marker.coords
+		var norm_x = clamp(abs(dist_from_center.x) / center.x, 0.0, 1.0)
+		var norm_y = clamp(abs(dist_from_center.y) / center.y, 0.0, 1.0)
+		var target_scale_x = lerp(1.0, 1.0 - actor.sprite_data.mouse_scale_x , norm_x)
+		var target_scale_y = lerp(1.0, 1.0 - actor.sprite_data.mouse_scale_y, norm_y)
+		%Drag.scale.x = lerp(%Drag.scale.x, target_scale_x, actor.sprite_data.mouse_delay)
+		%Drag.scale.y = lerp(%Drag.scale.y, target_scale_y, actor.sprite_data.mouse_delay)
 		
 	else:
 		var dir = distance.direction_to(mouse)
@@ -208,12 +218,22 @@ func follow_mouse(_delta):
 
 		# Smoothly interpolate the sprite's rotation
 		%Squish.rotation = lerp_angle(%Squish.rotation, target_rotation, actor.sprite_data.mouse_delay)
-#		print(clamping)
-		var dire = Vector2.ZERO - main_marker.coords
-		var scl_x = (abs(dire.x) *actor.sprite_data.mouse_scale_x *0.005) * Global.settings_dict.zoom.x
-		var scl_y = (abs(dire.y) *actor.sprite_data.mouse_scale_y *0.005) * Global.settings_dict.zoom.y
-		%Drag.scale.x = lerp(%Drag.scale.x, float(clamp(1 - scl_x, 0.15 , 1)), actor.sprite_data.mouse_delay)
-		%Drag.scale.y = lerp(%Drag.scale.y, float(clamp(1 - scl_y,  0.15 , 1)), actor.sprite_data.mouse_delay)
+		
+		var screen_size = DisplayServer.screen_get_size(-1)
+		if main_marker.current_screen == main_marker.ALL_SCREENS_ID:
+			screen_size = DisplayServer.screen_get_size(1)
+		else:
+			screen_size = DisplayServer.screen_get_size(main_marker.current_screen)
+			
+		var center = screen_size * 0.5
+		var dist_from_center = mouse
+		var norm_x = clamp(abs(dist_from_center.x) / center.x, 0.0, 1.0)
+		var norm_y = clamp(abs(dist_from_center.y) / center.y, 0.0, 1.0)
+		var target_scale_x = lerp(1.0, 1.0 - actor.sprite_data.mouse_scale_x , norm_x)
+		var target_scale_y = lerp(1.0, 1.0 - actor.sprite_data.mouse_scale_y, norm_y)
+		%Drag.scale.x = lerp(%Drag.scale.x, target_scale_x, actor.sprite_data.mouse_delay)
+		%Drag.scale.y = lerp(%Drag.scale.y, target_scale_y, actor.sprite_data.mouse_delay)
+		
 		if actor.sprite_type == "Sprite2D":
 			if actor.sprite_data.non_animated_sheet && actor.sprite_data.animate_to_mouse:
 				
