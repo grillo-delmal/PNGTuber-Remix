@@ -44,6 +44,7 @@ TR_CLOSED,Closed
 TR_COLOR_BLINDNESS_HELPER_TOOLTIP,An Accessibility feature aimed at helping users and viewers with Color-blindness with viewing the Model.
 TR_COLOR_BLINDNESS_HELPER,Color-Blindness Helper :
 TR_COLOR,Color :
+TR_DARKEN,Darken
 TR_DEUTERANOPIA,Deuteranopia
 TR_DISABLED,Disabled
 TR_DISAPPEAR_KEYS,Disappear Key(s)
@@ -78,6 +79,13 @@ TR_IGNORE_BOUNCE,Ignore Bound
 TR_IMAGE,Image
 TR_IS_ASSET,Is Asset
 TR_LAYOUT,Layout
+TR_LIGHT_COLOR,Light Color :
+TR_LIGHT_ENERGY,Light Energy :
+TR_LIGHT_SETTINGS,Light Settings
+TR_LIGHT_SHAPE_VISIBLE,Light Shape Visible
+TR_LIGHT_SIZE,Light Size :
+TR_LIGHT_VISIBLE,Light Visible
+TR_LS_DARKEN_TOOLTIP,Darkens Your model when not speaking.
 TR_MODEL_ANIMATIONS,Model Animations
 TR_MODEL_EFFECT,Model Effect :
 TR_MOUSE_VELOCITY,Mouse Velocity
