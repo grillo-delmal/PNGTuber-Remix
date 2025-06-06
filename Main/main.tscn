@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://bpmlfhv30o08l" path="res://UI/EditorUI/TopUI/top_ui.tscn" id="7_qwnpc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_f3gf5"]
+resource_local_to_scene = true
 shader = ExtResource("3_o60nc")
 shader_parameter/severity = 0.5
 shader_parameter/effect = 0
@@ -35,7 +36,7 @@ shader_parameter/MovementDirSpeed2 = Vector2(0.6, 2)
 shader_parameter/color_gradiant = SubResource("GradientTexture1D_o60nc")
 shader_parameter/Noise_Seed = Vector2(5, 1)
 shader_parameter/rainbow = false
-shader_parameter/line_color = Color(1, 1, 1, 1)
+shader_parameter/line_color = Color(0, 0, 0, 1)
 shader_parameter/line_scale = 3.648
 shader_parameter/frequency = 0.806
 shader_parameter/light_offset = 0.48101

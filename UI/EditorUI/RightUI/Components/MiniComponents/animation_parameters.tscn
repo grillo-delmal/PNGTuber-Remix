@@ -53,7 +53,7 @@ unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Affects the Wobbling"
 mouse_filter = 1
-text = "X-Frequency Wobble :"
+text = "X-Freq Wobble :"
 
 [node name="XFreqWobbleSlider" type="HSlider" parent="VBox"]
 unique_name_in_owner = true
@@ -72,7 +72,7 @@ unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Affects the Wobbling"
 mouse_filter = 1
-text = "X-Amplitude Wobble :"
+text = "X-Amp Wobble :"
 
 [node name="XAmpWobbleSlider" type="HSlider" parent="VBox2"]
 unique_name_in_owner = true
@@ -94,7 +94,7 @@ unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Affects the Wobbling and Squishing"
 mouse_filter = 1
-text = "Y-Frequency Wobble :"
+text = "Y-Freq Wobble :"
 
 [node name="YFreqWobbleSlider" type="HSlider" parent="VBox3"]
 unique_name_in_owner = true
@@ -113,7 +113,7 @@ unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Affects the Wobbling and Squishing"
 mouse_filter = 1
-text = "Y-Frequency Wobble :"
+text = "Y-Amp Wobble :"
 
 [node name="YAmpWobbleSlider" type="HSlider" parent="VBox4"]
 unique_name_in_owner = true

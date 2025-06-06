@@ -33,6 +33,7 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	menu_popup = true,
 	software_mode = 0,
 	ui_scaling = 1.0,
+	session = 0,
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
@@ -153,7 +154,8 @@ func lipsync_set_up():
 
 
 func scale_window():
-	get_window().content_scale_factor = theme_settings.ui_scaling
+	get_tree().root.content_scale_factor = theme_settings.ui_scaling
+	
 
 func window_size_changed():
 	theme_settings.screen_size = get_window().size

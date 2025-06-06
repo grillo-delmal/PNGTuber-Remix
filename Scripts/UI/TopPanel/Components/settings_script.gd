@@ -156,11 +156,11 @@ func _on_import_trim_toggled(toggled_on: bool) -> void:
 
 func _on_selected_screen_item_selected(index: int) -> void:
 	if index == 0:
-		get_tree().get_root().get_node("Main/%Marker").current_screen = 9999
+		Global.main.get_node("%Marker").current_screen = 9999
 	else:
-		get_tree().get_root().get_node("Main/%Marker").current_screen = index - 1
+		Global.main.get_node("%Marker").current_screen = index - 1
 	
-	Global.settings_dict.monitor = get_tree().get_root().get_node("Main/%Marker").current_screen
+	Global.settings_dict.monitor = Global.main.get_node("%Marker").current_screen
 
 
 func _on_ui_scaling_slider_value_changed(value: float) -> void:

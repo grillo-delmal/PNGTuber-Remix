@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://ckidjwx5bqwbj"]
+[gd_scene load_steps=3 format=3 uid="uid://ckidjwx5bqwbj"]
 
 [ext_resource type="Script" uid="uid://bsg261xpkttel" path="res://Scripts/UI/RightPanel/model_effects.gd" id="1_1lmbe"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1lmbe"]
 
 [node name="ModelEffects" type="VBoxContainer"]
 anchors_preset = 15
@@ -28,6 +30,7 @@ columns = 2
 layout_mode = 2
 size_flags_vertical = 3
 tooltip_text = "An Accessibility feature aimed at helping users and viewers with Color-blindness with viewing the Model."
+mouse_filter = 1
 theme_override_font_sizes/font_size = 14
 text = "Color-Blindness Helper : "
 vertical_alignment = 1
@@ -79,6 +82,8 @@ popup/item_5/id = 5
 layout_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -89,46 +94,96 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 3
 
-[node name="Grid2" type="GridContainer" parent="PanelContainer/Margin"]
+[node name="TabContainer" type="TabContainer" parent="PanelContainer/Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_1lmbe")
+current_tab = 0
+tabs_visible = false
+
+[node name="Grid2" type="GridContainer" parent="PanelContainer/Margin/TabContainer"]
 layout_mode = 2
 theme_override_constants/v_separation = 8
 columns = 2
+metadata/_tab_index = 0
 
-[node name="Label" type="Label" parent="PanelContainer/Margin/Grid2"]
+[node name="Label" type="Label" parent="PanelContainer/Margin/TabContainer/Grid2"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Effect Color : "
 
-[node name="EffectColor" type="ColorPickerButton" parent="PanelContainer/Margin/Grid2"]
+[node name="EffectColor" type="ColorPickerButton" parent="PanelContainer/Margin/TabContainer/Grid2"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label2" type="Label" parent="PanelContainer/Margin/Grid2"]
+[node name="Label2" type="Label" parent="PanelContainer/Margin/TabContainer/Grid2"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Effect size : "
 
-[node name="SizeSlider" type="HSlider" parent="PanelContainer/Margin/Grid2"]
+[node name="SizeSlider" type="HSlider" parent="PanelContainer/Margin/TabContainer/Grid2"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 min_value = 0.5
 max_value = 20.0
 step = 0.1
 value = 1.0
 
-[node name="RainbowCheck" type="CheckBox" parent="PanelContainer/Margin/Grid2"]
+[node name="RainbowCheck" type="CheckBox" parent="PanelContainer/Margin/TabContainer/Grid2"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+focus_mode = 0
 text = " Rainbow Effect"
 
-[node name="Control" type="Control" parent="PanelContainer/Margin/Grid2"]
+[node name="Control" type="Control" parent="PanelContainer/Margin/TabContainer/Grid2"]
 visible = false
 layout_mode = 2
 
+[node name="Grid3" type="GridContainer" parent="PanelContainer/Margin/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/v_separation = 8
+columns = 2
+metadata/_tab_index = 1
+
+[node name="Label2" type="Label" parent="PanelContainer/Margin/TabContainer/Grid3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Effect size : "
+
+[node name="SizeSlider2" type="HSlider" parent="PanelContainer/Margin/TabContainer/Grid3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.5
+max_value = 20.0
+step = 0.1
+value = 1.0
+
+[node name="Grid4" type="GridContainer" parent="PanelContainer/Margin/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/v_separation = 8
+columns = 2
+metadata/_tab_index = 2
+
+[node name="Label" type="Label" parent="PanelContainer/Margin/TabContainer/Grid4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Effect Color : "
+
+[node name="EffectColor2" type="ColorPickerButton" parent="PanelContainer/Margin/TabContainer/Grid4"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
 [connection signal="item_selected" from="Grid/ColorBlindnessHelperOptions" to="." method="_on_color_blindness_helper_options_item_selected"]
 [connection signal="item_selected" from="Grid/EffectType" to="." method="_on_option_button_item_selected"]
-[connection signal="color_changed" from="PanelContainer/Margin/Grid2/EffectColor" to="." method="_on_effect_color_color_changed"]
-[connection signal="value_changed" from="PanelContainer/Margin/Grid2/SizeSlider" to="." method="_on_size_slider_value_changed"]
-[connection signal="toggled" from="PanelContainer/Margin/Grid2/RainbowCheck" to="." method="_on_rainbow_check_toggled"]
+[connection signal="color_changed" from="PanelContainer/Margin/TabContainer/Grid2/EffectColor" to="." method="_on_effect_color_color_changed"]
+[connection signal="value_changed" from="PanelContainer/Margin/TabContainer/Grid2/SizeSlider" to="." method="_on_size_slider_value_changed"]
+[connection signal="toggled" from="PanelContainer/Margin/TabContainer/Grid2/RainbowCheck" to="." method="_on_rainbow_check_toggled"]
+[connection signal="value_changed" from="PanelContainer/Margin/TabContainer/Grid3/SizeSlider2" to="." method="_on_size_slider_2_value_changed"]
+[connection signal="color_changed" from="PanelContainer/Margin/TabContainer/Grid4/EffectColor2" to="." method="_on_effect_color_2_color_changed"]

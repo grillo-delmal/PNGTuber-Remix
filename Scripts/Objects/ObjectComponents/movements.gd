@@ -89,6 +89,7 @@ func stretch(length,_delta):
 
 func static_prev():
 	%Pos.position = Vector2(0,0)
+	%Drag.rotation = 0.0
 	%Sprite2D.self_modulate = actor.sprite_data.tint
 	%Pos.modulate.s = 0
 	%Wobble.rotation = 0
@@ -170,7 +171,7 @@ func follow_mouse(_delta):
 		var target_rotation = clamp(normalized_mouse * rotation_factor * deg_to_rad(90), deg_to_rad(actor.sprite_data.rLimitMin), deg_to_rad(actor.sprite_data.rLimitMax))
 
 		# Smoothly interpolate the sprite's rotation
-		%Pos.rotation = lerp_angle(%Pos.rotation, target_rotation, actor.sprite_data.mouse_delay)
+		%Drag.rotation = lerp_angle(%Drag.rotation, target_rotation, actor.sprite_data.mouse_delay)
 		
 		var screen_size = DisplayServer.screen_get_size(-1)
 		if main_marker.current_screen == main_marker.ALL_SCREENS_ID:
@@ -204,27 +205,29 @@ func follow_mouse(_delta):
 			%Pos.position.x = lerp(%Pos.position.x, dir.x * min(dist, actor.sprite_data.look_at_mouse_pos), actor.sprite_data.mouse_delay)
 			%Pos.position.y = lerp(%Pos.position.y, dir.y * min(dist, actor.sprite_data.look_at_mouse_pos_y), actor.sprite_data.mouse_delay)
 		
-		# Get the mouse position and screen width
-		var mouse_x = mouse.x
-		var screen_width = get_viewport().size.x
-
-		# Calculate the normalized mouse position (-1 to 1, where 0 is center)
-		var normalized_mouse = (mouse_x - screen_width / 2) / (screen_width / 2)
-
-		# Map the normalized position to the rotation factor
-		var rotation_factor = lerp(actor.sprite_data.mouse_rotation_max, actor.sprite_data.mouse_rotation, (normalized_mouse + 1) / 2)
-
-		# Calculate the target rotation, scaled by the factor and clamped
-		var target_rotation = clamp(normalized_mouse * rotation_factor * deg_to_rad(90), deg_to_rad(actor.sprite_data.rLimitMin), deg_to_rad(actor.sprite_data.rLimitMax))
-
-		# Smoothly interpolate the sprite's rotation
-		%Pos.rotation = lerp_angle(%Pos.rotation, target_rotation, actor.sprite_data.mouse_delay)
-		
 		var screen_size = DisplayServer.screen_get_size(-1)
 		if main_marker.current_screen == main_marker.ALL_SCREENS_ID:
 			screen_size = DisplayServer.screen_get_size(1)
 		else:
 			screen_size = DisplayServer.screen_get_size(main_marker.current_screen)
+		
+		
+		var mouse_x = mouse.x
+		var screen_width = screen_size.x
+
+		# Calculate the normalized mouse position (-1 to 1, where 0 is center)
+		var normalized_mouse = (mouse_x - screen_width / 2) / (screen_width / 2)
+
+		# Map the normalized position to the rotation factor
+		var rotation_factor = lerp(actor.sprite_data.mouse_rotation, actor.sprite_data.mouse_rotation_max, (normalized_mouse + 1) / 2)
+
+		# Calculate the target rotation, scaled by the factor and clamped
+		var target_rotation = clamp(rotation_factor, deg_to_rad(actor.sprite_data.rLimitMin), deg_to_rad(actor.sprite_data.rLimitMax))
+
+		# Smoothly interpolate the sprite's rotation
+		%Drag.rotation = lerp_angle(%Drag.rotation, target_rotation, actor.sprite_data.mouse_delay)
+		
+
 			
 		var center = screen_size * 0.5
 		var dist_from_center = mouse

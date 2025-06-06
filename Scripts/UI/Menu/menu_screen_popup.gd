@@ -10,6 +10,8 @@ func _ready() -> void:
 	Global.theme_update.connect(update_theme)
 	close_requested.connect(close)
 	confirmed.connect(close)
+	await get_tree().current_scene.ready
+	switch_sessions()
 	
 
 func _on_editor_mode_pressed() -> void:
@@ -19,6 +21,7 @@ func _on_editor_mode_pressed() -> void:
 			i.queue_free()
 		
 		container.add_child(editor_mode.instantiate())
+		Themes.theme_settings.session = 0
 		current_mode = 0
 
 
@@ -28,7 +31,28 @@ func _on_steamer_mode_pressed() -> void:
 		for i in container.get_children():
 			i.queue_free()
 		container.add_child(streamer_mode.instantiate())
+		Themes.theme_settings.session = 1
 		current_mode = 1
+
+
+func switch_sessions():
+	if Themes.theme_settings.session != current_mode:
+		if Themes.theme_settings.session == 0:
+			Global.delete_states.emit()
+			for i in container.get_children():
+				i.queue_free()
+			
+			container.add_child(editor_mode.instantiate())
+			current_mode = 0
+			
+		elif Themes.theme_settings.session == 1:
+			Global.delete_states.emit()
+			for i in container.get_children():
+				i.queue_free()
+			container.add_child(streamer_mode.instantiate())
+			current_mode = 1
+		
+
 
 
 func update_theme(new_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")):

@@ -23,6 +23,7 @@ var state_parameters_default : Dictionary = {
 }
 
 var default_model_effects : Dictionary = {
+	color_blindness_effect = 0,
 	effect_type = 0,
 	effect_size = 1,
 	effect_color = Color.WHITE,
@@ -274,4 +275,5 @@ func set_mo_squish():
 
 func set_effects():
 	if Global.viewer != null && is_instance_valid(Global.viewer):
+		Global.viewport.material.set_shader_parameter("effect", model_effects.color_blindness_effect)
 		Global.viewer.material.set_shader_parameter("effect", model_effects.effect_type)
