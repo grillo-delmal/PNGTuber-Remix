@@ -16,7 +16,7 @@ theme_override_constants/separation = 8
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
-text = "Model Animations"
+text = "TR_MODEL_ANIMATIONS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -30,7 +30,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(116, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Mouth Closed :"
+text = "TR_MOUTH_CLOSED"
 
 [node name="MouthClosedAnim" type="MenuButton" parent="MC"]
 unique_name_in_owner = true
@@ -42,17 +42,17 @@ text = "Idle"
 flat = false
 alignment = 0
 item_count = 6
-popup/item_0/text = "Idle"
+popup/item_0/text = "TR_IDLE"
 popup/item_0/id = 0
-popup/item_1/text = "Bouncy"
+popup/item_1/text = "TR_ANIMATION_BOUNCY"
 popup/item_1/id = 1
-popup/item_2/text = "One Bounce"
+popup/item_2/text = "TR_ANIMATION_ONE_BOUNCE"
 popup/item_2/id = 3
-popup/item_3/text = "Wobble"
+popup/item_3/text = "TR_ANIMATION_WOBBLE"
 popup/item_3/id = 4
-popup/item_4/text = "Squish"
+popup/item_4/text = "TR_ANIMATION_SQUISH"
 popup/item_4/id = 5
-popup/item_5/text = "Float"
+popup/item_5/text = "TR_FLOAT"
 popup/item_5/id = 6
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
@@ -90,17 +90,17 @@ text = "Idle"
 flat = false
 alignment = 0
 item_count = 6
-popup/item_0/text = "Idle"
+popup/item_0/text = "TR_IDLE"
 popup/item_0/id = 0
-popup/item_1/text = "Bouncy"
+popup/item_1/text = "TR_ANIMATION_BOUNCY"
 popup/item_1/id = 1
-popup/item_2/text = "One Bounce"
+popup/item_2/text = "TR_ANIMATION_ONE_BOUNCE"
 popup/item_2/id = 3
-popup/item_3/text = "Wobble"
+popup/item_3/text = "TR_ANIMATION_WOBBLE"
 popup/item_3/id = 4
-popup/item_4/text = "Squish"
+popup/item_4/text = "TR_ANIMATION_SQUISH"
 popup/item_4/id = 5
-popup/item_5/text = "Float"
+popup/item_5/text = "TR_FLOAT"
 popup/item_5/id = 6
 
 [node name="PanelContainer2" type="PanelContainer" parent="."]
@@ -128,7 +128,7 @@ layout_mode = 2
 
 [node name="Label2" type="Label" parent="."]
 layout_mode = 2
-text = "Eye Animations"
+text = "TR_EYE_ANIMATIONS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -142,7 +142,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(116, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Blink Speed : "
+text = "TR_BLINK_SPEED"
 
 [node name="BlinkSpeedSlider" type="HSlider" parent="Grid"]
 unique_name_in_owner = true
@@ -159,7 +159,7 @@ value = 1.0
 unique_name_in_owner = true
 custom_minimum_size = Vector2(116, 0)
 layout_mode = 2
-text = "Blink Chance : "
+text = "TR_BLINK_CHANCE"
 
 [node name="BlinkChanceSlider" type="HSlider" parent="Grid"]
 unique_name_in_owner = true
@@ -175,12 +175,12 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(116, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
-text = "Squish on Blink"
+text = "TR_SQUISH_ON_BLINK"
 
 [node name="SquishAmount" parent="." instance=ExtResource("2_wkbb7")]
 unique_name_in_owner = true
 layout_mode = 2
-label_text = "Squish Amount"
+label_text = "TR_SQUISH_AMOUNT"
 mini_value = 1.001
 max_value = 10.0
 step = 0.001

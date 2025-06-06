@@ -18,7 +18,7 @@ script = ExtResource("1_1lmbe")
 [node name="Label" type="Label" parent="."]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
-text = "Effects"
+text = "TR_EFFECTS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -32,31 +32,31 @@ size_flags_vertical = 3
 tooltip_text = "An Accessibility feature aimed at helping users and viewers with Color-blindness with viewing the Model."
 mouse_filter = 1
 theme_override_font_sizes/font_size = 14
-text = "Color-Blindness Helper : "
+text = "TR_COLOR_BLINDNESS_HELPER"
 vertical_alignment = 1
 
 [node name="ColorBlindnessHelperOptions" type="OptionButton" parent="Grid"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "An Accessibility feature aimed at helping users and viewers with Color-blindness with viewing the Model."
+tooltip_text = "TR_COLOR_BLINDNESS_HELPER_TOOLTIP"
 focus_mode = 0
 selected = 0
 item_count = 5
-popup/item_0/text = "None"
+popup/item_0/text = "TR_NONE"
 popup/item_0/id = 0
-popup/item_1/text = "Achromatopsia"
+popup/item_1/text = "TR_ACHROMATOPSIA"
 popup/item_1/id = 1
-popup/item_2/text = "Deuteranopia"
+popup/item_2/text = "TR_DEUTERANOPIA"
 popup/item_2/id = 2
-popup/item_3/text = "Protanopia"
+popup/item_3/text = "TR_PROTANOPIA"
 popup/item_3/id = 3
-popup/item_4/text = "Tritanopia"
+popup/item_4/text = "TR_TRITANOPIA"
 popup/item_4/id = 4
 
 [node name="Label2" type="Label" parent="Grid"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Model Effect :"
+text = "TR_MODEL_EFFECT"
 
 [node name="EffectType" type="OptionButton" parent="Grid"]
 unique_name_in_owner = true
@@ -65,17 +65,17 @@ size_flags_horizontal = 3
 focus_mode = 0
 selected = 0
 item_count = 6
-popup/item_0/text = "None"
+popup/item_0/text = "TR_NONE"
 popup/item_0/id = 0
-popup/item_1/text = "Outline"
+popup/item_1/text = "TR_OUTLINE"
 popup/item_1/id = 1
-popup/item_2/text = "Aura"
+popup/item_2/text = "TR_AURA"
 popup/item_2/id = 2
-popup/item_3/text = "Screen CRT"
+popup/item_3/text = "TR_SCREEN_CRT"
 popup/item_3/id = 3
-popup/item_4/text = "Hatches"
+popup/item_4/text = "TR_HATCHES"
 popup/item_4/id = 4
-popup/item_5/text = "Hyper"
+popup/item_5/text = "TR_EFFECT_HYPER"
 popup/item_5/id = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -110,7 +110,7 @@ metadata/_tab_index = 0
 [node name="Label" type="Label" parent="PanelContainer/Margin/TabContainer/Grid2"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Effect Color : "
+text = "TR_EFFECT_COLOR"
 
 [node name="EffectColor" type="ColorPickerButton" parent="PanelContainer/Margin/TabContainer/Grid2"]
 unique_name_in_owner = true
@@ -120,7 +120,7 @@ size_flags_horizontal = 3
 [node name="Label2" type="Label" parent="PanelContainer/Margin/TabContainer/Grid2"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Effect size : "
+text = "TR_EFFECT_SIZE"
 
 [node name="SizeSlider" type="HSlider" parent="PanelContainer/Margin/TabContainer/Grid2"]
 unique_name_in_owner = true

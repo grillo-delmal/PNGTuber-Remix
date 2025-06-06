@@ -9,14 +9,21 @@ Mode,Mode
 Movement,Movement
 Properties,Properties
 Settings,Settings
+TR_ACHROMATOPSIA,Achromatopsia
+TR_AMOUNT,Amount
+TR_ANIMATION_BOUNCY,Bouncy
 TR_ANIMATION_FRAMES_H,Horizontal Animation Frames
 TR_ANIMATION_FRAMES_V,Vertical Animation Frames
+TR_ANIMATION_ONE_BOUNCE,One Bounce
 TR_ANIMATION_ONE_SHOT_TOOLTIP,"Sets any animation type (APNG, GIF or SpriteSheet) to only play once."
 TR_ANIMATION_ONE_SHOT,One Shot
 TR_ANIMATION_RESET,Animation Reset
 TR_ANIMATION_SPEED,Animation Speed
+TR_ANIMATION_SQUISH,Squish
+TR_ANIMATION_WOBBLE,Wobble
 TR_ANIMATION,Animation
 TR_ASSETS,Assets
+TR_AURA,Aura
 TR_AUTO_ROTATION,Auto Rotation
 TR_BLEND_ADD,Add
 TR_BLEND_BURN,Burn
@@ -27,18 +34,31 @@ TR_BLEND_NORMAL,Normal
 TR_BLEND_SUBTRACT,Subtract
 TR_BLEND,Blend :
 TR_BLIND_KEY,Blind Key
+TR_BLINK_CHANCE,Blink Chance :
+TR_BLINK_SPEED,Blink Speed :
+TR_BOUNCE_AMOUNT_TOOLTIP,Affects Model Bouncing
+TR_BOUNCE_AMOUNT,Bounce Amount
+TR_BOUNCE_GRAVITY,Bounce Gravity
 TR_CLIP_CHILDREN,Clip Children
 TR_CLOSED,Closed
+TR_COLOR_BLINDNESS_HELPER_TOOLTIP,An Accessibility feature aimed at helping users and viewers with Color-blindness with viewing the Model.
+TR_COLOR_BLINDNESS_HELPER,Color-Blindness Helper :
 TR_COLOR,Color :
+TR_DEUTERANOPIA,Deuteranopia
 TR_DISABLED,Disabled
 TR_DISAPPEAR_KEYS,Disappear Key(s)
 TR_DONT_HIDE,Don't Hide
+TR_EFFECT_COLOR,Effect Color :
+TR_EFFECT_HYPER,Hyper
 TR_EFFECT_RAINBOW_SPEED,Rainbow Speed :
 TR_EFFECT_SELF_RAINBOW,Self-Rainbow
+TR_EFFECT_SIZE,Effect Size :
 TR_EFFECTS,Effects
+TR_EYE_ANIMATIONS,Eye Animations
 TR_FAT_POINT,Point :
 TR_FLIP_H,Flip Horizontally
 TR_FLIP_V,Flip Vertically
+TR_FLOAT,Float
 TR_FM_DELAY,Delay :
 TR_FM_MAX_ROT, Max-Rot :
 TR_FM_MAX_SQUISH_X,Squish X :
@@ -52,18 +72,26 @@ TR_FOLLOW_MOUSE,Follow Mouse
 TR_FOLLOW_THROUGH,Follow Through
 TR_FT_DRAG,Drag :
 TR_FT_STRETCH,Stretch :
+TR_HATCHES,Hatches
+TR_IDLE,Idle
 TR_IGNORE_BOUNCE,Ignore Bound
 TR_IMAGE,Image
 TR_IS_ASSET,Is Asset
 TR_LAYOUT,Layout
+TR_MODEL_ANIMATIONS,Model Animations
+TR_MODEL_EFFECT,Model Effect :
 TR_MOUSE_VELOCITY,Mouse Velocity
+TR_MOUTH_CLOSED,Mouth Closed :
+TR_NONE,None
 TR_NORMAL_MAP,Normal Map
 TR_OFFSET_X,Offset-X :
 TR_OFFSET_Y,Offset-Y :
 TR_OPEN,Open
+TR_OUTLINE,Outline
 TR_PHYSICS,Enable Physics
 TR_POS_X,Pos-X :
 TR_POS_Y,Pos-Y :
+TR_PROTANOPIA,Protanopia
 TR_RAINBOW,Rainbow
 TR_REACTION,Reaction
 TR_RESET_ANIMATION_TOOLTIP,Resets animation on changing the current State.
@@ -76,11 +104,14 @@ TR_ROT_MAX_ROT,Max-Rot :
 TR_ROT_MIN_ROT,Min-Rot :
 TR_ROT_SPEED,Rot-Speed :
 TR_ROTATION,Rotation :
+TR_SCREEN_CRT,Screen CRT
 TR_SHOULD_BLINK,Should Blink :
 TR_SHOULD_TALK,Should Talk :
 TR_SIZE_X,Size-X :
 TR_SIZE_Y,Size-Y :
 TR_SPRITES,Sprites
+TR_SQUISH_AMOUNT,Squish Amount
+TR_SQUISH_ON_BLINK,Squish on Blink
 TR_STATIC_OBJECT,Static Object
 TR_SYNC_EFFECT,Sync Effect
 TR_TINT,Tint :
@@ -97,6 +128,7 @@ TR_TOOLTIP_MINI_VIEW_ZOOM_IN,Mini-View Zoom In
 TR_TOOLTIP_MINI_VIEW_ZOOM_OUT,Mini-View Zoom Out
 TR_TOOLTIP_MINI_VIEW_ZOOM_RESET,Mini-View Zoom Reset
 TR_TOOLTIP_REPLACE_SPRITE,Replace Sprite
+TR_TRITANOPIA,Tritanopia
 TR_VISIBILITY,Visibility
 TR_VISIBLE,Visible :
 TR_WIGGLE_PHYSICS,Wiggle Physics
@@ -104,12 +136,16 @@ TR_WIGGLE_SPRITE,Wiggle Sprite
 TR_WS_SYNC_EFFECT_TOOLTIP,Syncs the wiggle effect of the Sprite with the Parent's Wiggle effect (Both must be Sprite Objects)
 TR_WS_WIGGLE_AMP,Wiggle-Amp :
 TR_WS_WIGGLE_FREQUENCY,Wiggle-Freq :
+TR_X_AMPLITUDE_WOBBLE,X-Amp Wobble :
+TR_X_FREQUENCY_WOBBLE,X-Freq Wobble :
 TR_X_OFFSET,X-Offset :
 TR_XY_MOVEMENTS_X_AMP,X-Amp :
 TR_XY_MOVEMENTS_X_FREQUENCY,X-Freq :
 TR_XY_MOVEMENTS_Y_AMP,Y-Amp :
 TR_XY_MOVEMENTS_Y_FREQUENCY,Y-Freq :
 TR_XY_MOVEMENTS,X-Y Movements
+TR_Y_AMPLITUDE_WOBBLE,Y-Amp Wobble :
+TR_Y_FREQUENCY_WOBBLE,Y-Freq Wobble :
 TR_Y_OFFSET,Y-Offset :
 TR_Z_ORDER,Z Order :
 Wiggle,Wiggle

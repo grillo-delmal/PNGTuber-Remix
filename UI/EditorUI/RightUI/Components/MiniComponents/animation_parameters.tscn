@@ -17,9 +17,9 @@ script = ExtResource("1_1lywl")
 [node name="BounceAmount" type="Label" parent="."]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Affects Model Bouncing"
+tooltip_text = "TR_BOUNCE_AMOUNT_TOOLTIP"
 mouse_filter = 1
-text = "Bounce Amount : "
+text = "TR_BOUNCE_AMOUNT"
 
 [node name="BounceAmountSlider" parent="." instance=ExtResource("1_gkpfe")]
 unique_name_in_owner = true
@@ -31,7 +31,7 @@ ui_type = 3
 [node name="GravityAmount" type="Label" parent="."]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Bounce Gravity : "
+text = "TR_BOUNCE_GRAVITY"
 
 [node name="GravityAmountSlider" parent="." instance=ExtResource("1_gkpfe")]
 unique_name_in_owner = true
@@ -54,7 +54,7 @@ unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Affects the Wobbling"
 mouse_filter = 1
-text = "X-Freq Wobble :"
+text = "TR_X_FREQUENCY_WOBBLE"
 
 [node name="XFreqWobbleSlider" type="HSlider" parent="VBox"]
 unique_name_in_owner = true
@@ -73,7 +73,7 @@ unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Affects the Wobbling"
 mouse_filter = 1
-text = "X-Amp Wobble :"
+text = "TR_X_AMPLITUDE_WOBBLE"
 
 [node name="XAmpWobbleSlider" type="HSlider" parent="VBox2"]
 unique_name_in_owner = true
@@ -94,7 +94,7 @@ unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Affects the Wobbling and Squishing"
 mouse_filter = 1
-text = "Y-Freq Wobble :"
+text = "TR_Y_FREQUENCY_WOBBLE"
 
 [node name="YFreqWobbleSlider" type="HSlider" parent="VBox3"]
 unique_name_in_owner = true
@@ -113,7 +113,7 @@ unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Affects the Wobbling and Squishing"
 mouse_filter = 1
-text = "Y-Amp Wobble :"
+text = "TR_Y_AMPLITUDE_WOBBLE"
 
 [node name="YAmpWobbleSlider" type="HSlider" parent="VBox4"]
 unique_name_in_owner = true
