@@ -266,7 +266,7 @@ pen_tablet/driver.windows="auto"
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://Localization/en.en.translation")
+locale/translations=PackedStringArray("res://Localization/en_us.en.translation")
 
 [rendering]
 
