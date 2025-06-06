@@ -10,6 +10,7 @@ Movement,Movement
 Properties,Properties
 Settings,Settings
 TR_ASSETS,Assets
+TR_AUTO_ROTATION,Auto Rotation
 TR_BLEND_ADD,Add
 TR_BLEND_BURN,Burn
 TR_BLEND_CURSED,Cursed
@@ -27,6 +28,17 @@ TR_DISAPPEAR_KEYS,Disappear Key(s)
 TR_DONT_HIDE,Don't Hide
 TR_FLIP_H,Flip Horizontally
 TR_FLIP_V,Flip Vertically
+TR_FM_DELAY,Delay :
+TR_FM_MAX_ROT, Max-Rot :
+TR_FM_MAX_SQUISH_X,Squish X :
+TR_FM_MAX_SQUISH_Y,Squish Y :
+TR_FM_MIN_ROT,Min-Rot :
+TR_FM_RANGE_X,Range X :
+TR_FM_RANGE_Y,Range Y :
+TR_FOLLOW_MOUSE,Follow Mouse
+TR_FOLLOW_THROUGH,Follow Through
+TR_FT_DRAG,Drag :
+TR_FT_STRETCH,Stretch :
 TR_IGNORE_BOUNCE,Ignore Bound
 TR_IMAGE,Image
 TR_IS_ASSET,Is Asset
@@ -40,6 +52,11 @@ TR_PHYSICS,Enable Physics
 TR_POS_X,Pos-X :
 TR_POS_Y,Pos-Y :
 TR_REACTION,Reaction
+TR_ROT_DEGREE,Rot-Degree :
+TR_ROT_FREQUENCY,Rot-Freq :
+TR_ROT_MAX_ROT,Max-Rot :
+TR_ROT_MIN_ROT,Min-Rot :
+TR_ROT_SPEED,Rot-Speed :
 TR_ROTATION,Rotation :
 TR_SHOULD_BLINK,Should Blink :
 TR_SHOULD_TALK,Should Talk :
@@ -52,6 +69,7 @@ TR_TOOLTIP_ADD_APPENDAGE,Add Appendage
 TR_TOOLTIP_ADD_FOLDER,Add Folder
 TR_TOOLTIP_ADD_NORMAL_MAP,Add Normal Map
 TR_TOOLTIP_ADD_SPRITE,Add Sprite
+TR_TOOLTIP_AUTO_ROTATION,Auto Rotates your Sprite. The speed can be changed from the Rot-Speed.
 TR_TOOLTIP_DELETE_NORMAL_MAP,Delete Normal Map
 TR_TOOLTIP_DELETE_SPRITE,Delete Sprite
 TR_TOOLTIP_DUPLICATE_SPRITE,Duplicate Sprite
@@ -62,6 +80,11 @@ TR_TOOLTIP_MINI_VIEW_ZOOM_RESET,Mini-View Zoom Reset
 TR_TOOLTIP_REPLACE_SPRITE,Replace Sprite
 TR_VISIBILITY,Visibility
 TR_VISIBLE,Visible :
+TR_XY_MOVEMENTS_X_AMP,X-Amp :
+TR_XY_MOVEMENTS_X_FREQUENCY,X-Freq :
+TR_XY_MOVEMENTS_Y_AMP,Y-Amp :
+TR_XY_MOVEMENTS_Y_FREQUENCY,Y-Freq :
+TR_XY_MOVEMENTS,X-Y Movements
 TR_Z_ORDER,Z Order :
 Wiggle,Wiggle
 Window,Window
