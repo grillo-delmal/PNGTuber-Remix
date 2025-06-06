@@ -9,6 +9,7 @@ Mode,Mode
 Movement,Movement
 Properties,Properties
 Settings,Settings
+TR_ABOUT,About
 TR_ACHROMATOPSIA,Achromatopsia
 TR_ADVANCED_LIP_SYNC_TOOLTIP,Only works if your mouth shapes are in a sprite-sheet. 14 frames\n(Check the Lipsync configuration)
 TR_ADVANCED_LIP_SYNC,Advanced Lipsync
@@ -29,6 +30,7 @@ TR_ANIMATION,Animation
 TR_ASSETS,Assets
 TR_AURA,Aura
 TR_AUTO_ROTATION,Auto Rotation
+TR_BG_COLOR,BG Color
 TR_BLEND_ADD,Add
 TR_BLEND_BURN,Burn
 TR_BLEND_CURSED,Cursed
@@ -61,6 +63,7 @@ TR_EFFECT_SIZE,Effect Size :
 TR_EFFECTS,Effects
 TR_EYE_ANIMATIONS,Eye Animations
 TR_FAT_POINT,Point :
+TR_FILES,Files
 TR_FLIP_H,Flip Horizontally
 TR_FLIP_V,Flip Vertically
 TR_FLOAT,Float
@@ -90,6 +93,7 @@ TR_LIGHT_SHAPE_VISIBLE,Light Shape Visible
 TR_LIGHT_SIZE,Light Size :
 TR_LIGHT_VISIBLE,Light Visible
 TR_LS_DARKEN_TOOLTIP,Darkens Your model when not speaking.
+TR_MODE,Mode
 TR_MODEL_ANIMATIONS,Model Animations
 TR_MODEL_EFFECT,Model Effect :
 TR_MOUSE_VELOCITY,Mouse Velocity
@@ -104,6 +108,8 @@ TR_OFFSET_X,Offset-X :
 TR_OFFSET_Y,Offset-Y :
 TR_OPEN,Open
 TR_OUTLINE,Outline
+TR_PAUSE_MOVEMENT_TOOLTIP,Turns your model Static.\nUncheck to preview your model's movement.\nThis automatically gets unchecked when changing modes.
+TR_PAUSE_MOVEMENT,Pause Movement
 TR_PHYSICS,Enable Physics
 TR_POS_X,Pos-X :
 TR_POS_Y,Pos-Y :
@@ -121,8 +127,10 @@ TR_ROT_MIN_ROT,Min-Rot :
 TR_ROT_SPEED,Rot-Speed :
 TR_ROTATION,Rotation :
 TR_SCREEN_CRT,Screen CRT
+TR_SETTINGS,Settings
 TR_SHOULD_BLINK,Should Blink :
 TR_SHOULD_TALK,Should Talk :
+TR_SHOW_UI,Show UI
 TR_SIZE_X,Size-X :
 TR_SIZE_Y,Size-Y :
 TR_SPRITES,Sprites
@@ -150,6 +158,8 @@ TR_VISIBILITY,Visibility
 TR_VISIBLE,Visible :
 TR_WIGGLE_PHYSICS,Wiggle Physics
 TR_WIGGLE_SPRITE,Wiggle Sprite
+TR_WINDOW_SIZE,Window Size
+TR_WINDOW,Window
 TR_WS_SYNC_EFFECT_TOOLTIP,Syncs the wiggle effect of the Sprite with the Parent's Wiggle effect (Both must be Sprite Objects)
 TR_WS_WIGGLE_AMP,Wiggle-Amp :
 TR_WS_WIGGLE_FREQUENCY,Wiggle-Freq :

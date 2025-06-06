@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://bpmlfhv30o08l"]
+[gd_scene load_steps=13 format=3 uid="uid://bpmlfhv30o08l"]
 
 [ext_resource type="Script" uid="uid://buog53mcsao0g" path="res://Scripts/UI/TopPanel/top_ui.gd" id="2_fpnkx"]
 [ext_resource type="Script" uid="uid://bafvsv0wf438w" path="res://Scripts/Misc/OnlineLinks.gd" id="3_tep3f"]
+[ext_resource type="Script" uid="uid://caf875hofgogu" path="res://Scripts/UI/FormattedLocalizedLabel.gd" id="4_mle18"]
 [ext_resource type="Script" uid="uid://qy3riyrj7tll" path="res://Scripts/UI/TopPanel/TopBarInput.gd" id="4_r6evh"]
 [ext_resource type="Texture2D" uid="uid://bq4tg8ia2crwh" path="res://UI/Assets/LinksButtonImages/GithubLogo.png" id="6_0f73e"]
 [ext_resource type="Texture2D" uid="uid://whhnbdvw3i1j" path="res://UI/Assets/LinksButtonImages/TumblrLogo.png" id="7_ja8k8"]
@@ -39,7 +40,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBox" type="HBoxContainer" parent="TopBar"]
+[node name="MarginContainer" type="MarginContainer" parent="TopBar"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 1
 anchors_preset = 15
@@ -47,14 +48,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 2
+theme_override_constants/margin_left = 10
 
-[node name="FilesButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="HBox" type="HBoxContainer" parent="TopBar/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="FilesButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
-text = "   Files "
+text = "TR_FILES"
 item_count = 10
 popup/item_0/text = "New"
 popup/item_0/id = 0
@@ -77,24 +82,24 @@ popup/item_8/id = 10
 popup/item_9/text = "Switch Session"
 popup/item_9/id = 11
 
-[node name="ModeButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="ModeButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
-text = " Mode "
+text = "TR_MODE"
 item_count = 2
 popup/item_0/text = "Editor"
 popup/item_0/id = 0
 popup/item_1/text = "Preview"
 popup/item_1/id = 1
 
-[node name="BGButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="BGButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
-text = " BG Color "
+text = "TR_BG_COLOR"
 item_count = 7
 popup/item_0/text = "Red"
 popup/item_0/id = 0
@@ -111,7 +116,7 @@ popup/item_5/id = 5
 popup/item_6/text = "Custom"
 popup/item_6/id = 6
 
-[node name="BounceControlButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="BounceControlButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -119,14 +124,14 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
 text = " Bounce "
 
-[node name="InputsButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="InputsButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
-text = " Settings "
+text = "TR_SETTINGS"
 
-[node name="CollabButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="CollabButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(79, 0)
@@ -136,12 +141,12 @@ theme_override_font_sizes/font_size = 15
 text = "Collab
 "
 
-[node name="WindowButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="WindowButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
-text = " Window "
+text = "TR_WINDOW"
 item_count = 7
 popup/item_0/text = "Toggle Borders"
 popup/item_0/id = 0
@@ -163,12 +168,12 @@ popup/item_6/checkable = 1
 popup/item_6/checked = true
 popup/item_6/id = 6
 
-[node name="AboutButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="AboutButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
-text = " About "
+text = "TR_ABOUT"
 item_count = 3
 popup/item_0/text = "Credits"
 popup/item_0/id = 0
@@ -177,7 +182,7 @@ popup/item_1/id = 1
 popup/item_2/text = "Mini Tutorial (Wip)"
 popup/item_2/id = 2
 
-[node name="PreviewModeCheck" type="CheckBox" parent="TopBar/HBox"]
+[node name="PreviewModeCheck" type="CheckBox" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(79, 0)
 layout_mode = 2
@@ -188,20 +193,20 @@ This automatically gets unchecked when changing modes.
 "
 focus_mode = 0
 theme_override_font_sizes/font_size = 14
-text = "Pause Movement   "
+text = "TR_PAUSE_MOVEMENT"
 flat = true
 
-[node name="HideUIButton" type="CheckBox" parent="TopBar/HBox"]
+[node name="HideUIButton" type="CheckBox" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(79, 0)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 14
 button_pressed = true
-text = "Show UI"
+text = "TR_SHOW_UI"
 flat = true
 
-[node name="DeselectButton" type="Button" parent="TopBar/HBox"]
+[node name="DeselectButton" type="Button" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(79, 0)
@@ -217,16 +222,18 @@ text = "Deselect"
 flat = true
 icon_alignment = 1
 
-[node name="WindowSize" type="Label" parent="TopBar/HBox"]
+[node name="WindowSize" type="Label" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 1
 theme_override_font_sizes/font_size = 11
-text = "Window Size (0,0)"
+text = "{0} (0,0)"
 horizontal_alignment = 1
 vertical_alignment = 1
+script = ExtResource("4_mle18")
+localizations = Array[String](["TR_WINDOW_SIZE"])
 
 [node name="AboutPopUp" type="PopupPanel" parent="."]
 unique_name_in_owner = true
@@ -239,7 +246,7 @@ wrap_controls = false
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 396.0
-offset_bottom = 525.0
+offset_bottom = 247.0
 
 [node name="CreditLabel" type="Label" parent="AboutPopUp/VBoxContainer"]
 unique_name_in_owner = true
@@ -368,7 +375,7 @@ size = Vector2i(435, 207)
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 431.0
-offset_bottom = 222.0
+offset_bottom = 203.0
 
 [node name="AboutLabel" type="Label" parent="CreditPopUp/VBoxContainer"]
 layout_mode = 2
@@ -406,11 +413,11 @@ sampler_visible = false
 color_modes_visible = false
 presets_visible = false
 
-[connection signal="pressed" from="TopBar/HBox/InputsButton" to="TopBarInput" method="_on_inputs_button_pressed"]
-[connection signal="about_to_popup" from="TopBar/HBox/WindowButton" to="TopBarInput" method="_on_window_button_about_to_popup"]
-[connection signal="toggled" from="TopBar/HBox/PreviewModeCheck" to="TopBarInput" method="_on_preview_mode_check_toggled"]
-[connection signal="toggled" from="TopBar/HBox/HideUIButton" to="TopBarInput" method="_on_hide_ui_button_toggled"]
-[connection signal="pressed" from="TopBar/HBox/DeselectButton" to="TopBarInput" method="_on_deselect_button_pressed"]
+[connection signal="pressed" from="TopBar/MarginContainer/HBox/InputsButton" to="TopBarInput" method="_on_inputs_button_pressed"]
+[connection signal="about_to_popup" from="TopBar/MarginContainer/HBox/WindowButton" to="TopBarInput" method="_on_window_button_about_to_popup"]
+[connection signal="toggled" from="TopBar/MarginContainer/HBox/PreviewModeCheck" to="TopBarInput" method="_on_preview_mode_check_toggled"]
+[connection signal="toggled" from="TopBar/MarginContainer/HBox/HideUIButton" to="TopBarInput" method="_on_hide_ui_button_toggled"]
+[connection signal="pressed" from="TopBar/MarginContainer/HBox/DeselectButton" to="TopBarInput" method="_on_deselect_button_pressed"]
 [connection signal="pressed" from="AboutPopUp/VBoxContainer/GridContainer/GitHubButton" to="OnlineLinks" method="_on_git_hub_button_pressed"]
 [connection signal="pressed" from="AboutPopUp/VBoxContainer/GridContainer/TumblrButton" to="OnlineLinks" method="_on_tumblr_button_pressed"]
 [connection signal="pressed" from="AboutPopUp/VBoxContainer/GridContainer/RedditButton" to="OnlineLinks" method="_on_reddit_button_pressed"]
