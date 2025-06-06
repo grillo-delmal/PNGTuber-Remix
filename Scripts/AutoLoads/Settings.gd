@@ -125,7 +125,7 @@ func _ready():
 		load_file.close()
 		
 	else:
-		var create_file = file.open(OS.get_executable_path().get_base_dir() + "/Preferences.pRDat", FileAccess.WRITE)
+		var create_file = file.open("user://Preferences.pRDat", FileAccess.WRITE)
 		theme_settings.theme_id = 0
 		create_file.store_var(theme_settings)
 		create_file.close()
