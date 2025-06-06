@@ -26,6 +26,7 @@ TR_COLOR,Color :
 TR_DISABLED,Disabled
 TR_DISAPPEAR_KEYS,Disappear Key(s)
 TR_DONT_HIDE,Don't Hide
+TR_FAT_POINT,Point :
 TR_FLIP_H,Flip Horizontally
 TR_FLIP_V,Flip Vertically
 TR_FM_DELAY,Delay :
@@ -35,6 +36,8 @@ TR_FM_MAX_SQUISH_Y,Squish Y :
 TR_FM_MIN_ROT,Min-Rot :
 TR_FM_RANGE_X,Range X :
 TR_FM_RANGE_Y,Range Y :
+TR_FOLLOW_APPENDAGE_TIP,Follow Appendage Tip
+TR_FOLLOW_APPENDAGE,Follow Appendage
 TR_FOLLOW_MOUSE,Follow Mouse
 TR_FOLLOW_THROUGH,Follow Through
 TR_FT_DRAG,Drag :
@@ -64,6 +67,7 @@ TR_SIZE_X,Size-X :
 TR_SIZE_Y,Size-Y :
 TR_SPRITES,Sprites
 TR_STATIC_OBJECT,Static Object
+TR_SYNC_EFFECT,Sync Effect
 TR_TINT,Tint :
 TR_TOOLTIP_ADD_APPENDAGE,Add Appendage
 TR_TOOLTIP_ADD_FOLDER,Add Folder
@@ -80,11 +84,18 @@ TR_TOOLTIP_MINI_VIEW_ZOOM_RESET,Mini-View Zoom Reset
 TR_TOOLTIP_REPLACE_SPRITE,Replace Sprite
 TR_VISIBILITY,Visibility
 TR_VISIBLE,Visible :
+TR_WIGGLE_PHYSICS,Wiggle Physics
+TR_WIGGLE_SPRITE,Wiggle Sprite
+TR_WS_SYNC_EFFECT_TOOLTIP,Syncs the wiggle effect of the Sprite with the Parent's Wiggle effect (Both must be Sprite Objects)
+TR_WS_WIGGLE_AMP,Wiggle-Amp :
+TR_WS_WIGGLE_FREQUENCY,Wiggle-Freq :
+TR_X_OFFSET,X-Offset :
 TR_XY_MOVEMENTS_X_AMP,X-Amp :
 TR_XY_MOVEMENTS_X_FREQUENCY,X-Freq :
 TR_XY_MOVEMENTS_Y_AMP,Y-Amp :
 TR_XY_MOVEMENTS_Y_FREQUENCY,Y-Freq :
 TR_XY_MOVEMENTS,X-Y Movements
+TR_Y_OFFSET,Y-Offset :
 TR_Z_ORDER,Z Order :
 Wiggle,Wiggle
 Window,Window
