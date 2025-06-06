@@ -74,7 +74,7 @@ custom_minimum_size = Vector2(87, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 14
-text = "Image"
+text = "TR_IMAGE"
 horizontal_alignment = 1
 
 [node name="NormalMapPrev" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
@@ -82,5 +82,5 @@ custom_minimum_size = Vector2(87, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 14
-text = "NormalMap"
+text = "TR_NORMAL_MAP"
 horizontal_alignment = 1
