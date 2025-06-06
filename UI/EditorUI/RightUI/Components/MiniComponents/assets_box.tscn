@@ -22,7 +22,7 @@ script = ExtResource("1_c51j7")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
-text = "Assets"
+text = "TRANSLATION_ASSETS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -35,7 +35,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "An Asset is a Sprite you can toggle at any time. I.e glasses, hats, etc.."
-text = "Is Asset"
+text = "TRANSLATION_IS_ASSET"
 
 [node name="HBoxAsset" type="HBoxContainer" parent="Buttons"]
 layout_mode = 2
@@ -51,7 +51,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Bind Key"
+text = "TRANSLATION_BLIND_KEY"
 script = ExtResource("2_dpute")
 
 [node name="RemoveAssetButton" type="Button" parent="Buttons/HBoxAsset"]
@@ -70,7 +70,7 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Shows the Asset only and doesn't hide it even when key is pressed again. "
-text = "Don't Hide"
+text = "TRANSLATION_DONT_HIDE"
 
 [node name="ShouldDisappearCheck" type="CheckBox" parent="Buttons"]
 unique_name_in_owner = true
@@ -78,7 +78,7 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Keys that makes your Sprite Disappear whenever toggled."
-text = "Disappear Key(s)"
+text = "TRANSLATION_DISAPPEAR_KEYS"
 
 [node name="ShouldDisListContainer" type="VBoxContainer" parent="."]
 unique_name_in_owner = true

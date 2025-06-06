@@ -90,6 +90,9 @@ var settings_dict : Dictionary = {
 	max_fps = 241,
 	monitor = Monitor.ALL_SCREENS,
 	cycles = [],
+
+	language = "automatic",
+	preferred_language = null,
 }
 
 var mode: int = 0: set = set_mode
@@ -130,7 +133,11 @@ func _ready():
 	get_window().title = "PNGTuber-Remix V" + version
 	current_state = 0
 	key_pressed.connect(update_cycles)
-
+	if settings_dict.language == "automatic":
+		settings_dict.preferred_language = OS.get_locale_language()
+		TranslationServer.set_locale(settings_dict.preferred_language)
+	else:
+		TranslationServer.set_locale(settings_dict.language)
 func set_mode(new_mode) -> void:
 	if new_mode == mode: return
 	mode = new_mode
