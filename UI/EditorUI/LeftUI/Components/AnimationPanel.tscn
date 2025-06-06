@@ -23,7 +23,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "Animation frames H :"
+text = "TR_ANIMATION_FRAMES_H"
 
 [node name="AnimationFramesSlider" type="HSlider" parent="VBoxContainer"]
 unique_name_in_owner = true
@@ -38,7 +38,7 @@ rounded = true
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "Animation frames V :"
+text = "TR_ANIMATION_FRAMES_V"
 
 [node name="AnimationFramesSlider2" type="HSlider" parent="VBoxContainer"]
 unique_name_in_owner = true
@@ -53,7 +53,7 @@ rounded = true
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "Animation Speed :"
+text = "TR_ANIMATION_SPEED"
 
 [node name="AnimationSpeedSlider" type="HSlider" parent="VBoxContainer"]
 unique_name_in_owner = true

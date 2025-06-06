@@ -9,6 +9,13 @@ Mode,Mode
 Movement,Movement
 Properties,Properties
 Settings,Settings
+TR_ANIMATION_FRAMES_H,Horizontal Animation Frames
+TR_ANIMATION_FRAMES_V,Vertical Animation Frames
+TR_ANIMATION_ONE_SHOT_TOOLTIP,"Sets any animation type (APNG, GIF or SpriteSheet) to only play once."
+TR_ANIMATION_ONE_SHOT,One Shot
+TR_ANIMATION_RESET,Animation Reset
+TR_ANIMATION_SPEED,Animation Speed
+TR_ANIMATION,Animation
 TR_ASSETS,Assets
 TR_AUTO_ROTATION,Auto Rotation
 TR_BLEND_ADD,Add
@@ -26,6 +33,9 @@ TR_COLOR,Color :
 TR_DISABLED,Disabled
 TR_DISAPPEAR_KEYS,Disappear Key(s)
 TR_DONT_HIDE,Don't Hide
+TR_EFFECT_RAINBOW_SPEED,Rainbow Speed :
+TR_EFFECT_SELF_RAINBOW,Self-Rainbow
+TR_EFFECTS,Effects
 TR_FAT_POINT,Point :
 TR_FLIP_H,Flip Horizontally
 TR_FLIP_V,Flip Vertically
@@ -54,7 +64,12 @@ TR_OPEN,Open
 TR_PHYSICS,Enable Physics
 TR_POS_X,Pos-X :
 TR_POS_Y,Pos-Y :
+TR_RAINBOW,Rainbow
 TR_REACTION,Reaction
+TR_RESET_ANIMATION_TOOLTIP,Resets animation on changing the current State.
+TR_RESET_ANIMATION,Reset Animation
+TR_RESET_ON_STATE_CHANGE_TOOLTIP,"Resets the animaton of (APNG, GIF or SpriteSheet) when changing States."
+TR_RESET_ON_STATE_CHANGE,Reset on State Change
 TR_ROT_DEGREE,Rot-Degree :
 TR_ROT_FREQUENCY,Rot-Freq :
 TR_ROT_MAX_ROT,Max-Rot :
