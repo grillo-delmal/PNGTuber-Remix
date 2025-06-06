@@ -10,7 +10,11 @@ Movement,Movement
 Properties,Properties
 Settings,Settings
 TR_ACHROMATOPSIA,Achromatopsia
+TR_ADVANCED_LIP_SYNC_TOOLTIP,Only works if your mouth shapes are in a sprite-sheet. 14 frames\n(Check the Lipsync configuration)
+TR_ADVANCED_LIP_SYNC,Advanced Lipsync
 TR_AMOUNT,Amount
+TR_ANIMATE_TO_MOUSE_TOOLTIP,Animates SpriteSheet depending on mouse position (Horizontally and Vertically)
+TR_ANIMATE_TO_MOUSE,Animate to Mouse
 TR_ANIMATION_BOUNCY,Bouncy
 TR_ANIMATION_FRAMES_H,Horizontal Animation Frames
 TR_ANIMATION_FRAMES_V,Vertical Animation Frames
@@ -90,6 +94,10 @@ TR_MODEL_ANIMATIONS,Model Animations
 TR_MODEL_EFFECT,Model Effect :
 TR_MOUSE_VELOCITY,Mouse Velocity
 TR_MOUTH_CLOSED,Mouth Closed :
+TR_MOVE_WITH_MOUSE_TOOLTIP,"Animate to Mouse must be turned on in order for this feature to work when toggled off, it stops the sprite from moving on the x and y axis, but keeps the Animate to Mouse working."
+TR_MOVE_WITH_MOUSE,Move with Mouse
+TR_NONE_ANIMATED_SHEET_TOOLTIP,Turns a SpriteSheet into Static Frames that you can choose from.
+TR_NONE_ANIMATED_SHEET,None Animated Sheet
 TR_NONE,None
 TR_NORMAL_MAP,Normal Map
 TR_OFFSET_X,Offset-X :
@@ -122,6 +130,7 @@ TR_SQUISH_AMOUNT,Squish Amount
 TR_SQUISH_ON_BLINK,Squish on Blink
 TR_STATIC_OBJECT,Static Object
 TR_SYNC_EFFECT,Sync Effect
+TR_TEST_FRAME,Frame :
 TR_TINT,Tint :
 TR_TOOLTIP_ADD_APPENDAGE,Add Appendage
 TR_TOOLTIP_ADD_FOLDER,Add Folder

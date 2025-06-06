@@ -309,7 +309,7 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 2
 theme_override_font_sizes/font_size = 16
-text = "Advanced Lipsync"
+text = "TR_ADVANCED_LIP_SYNC"
 
 [node name="AdvancedLipSyncLabel" type="Label" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -319,8 +319,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 1
 theme_override_font_sizes/font_size = 14
-text = "Only works if your mouth shapes are in a sprite-sheet. 14 frames
-(Check the Lipsync configuration)"
+text = "TR_ADVANCED_LIP_SYNC_TOOLTIP"
 autowrap_mode = 3
 justification_flags = 169
 max_lines_visible = 3
@@ -344,9 +343,9 @@ theme_override_constants/separation = -10
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
-tooltip_text = "Turns a SpriteSheet into Static Frames that you can choose from."
+tooltip_text = "TR_NONE_ANIMATED_SHEET_TOOLTIP"
 theme_override_font_sizes/font_size = 16
-text = "None Animated Sheet"
+text = "TR_NONE_ANIMATED_SHEET"
 
 [node name="FrameHBox" type="HBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -364,7 +363,7 @@ max_value = 12.0
 [node name="AnimateToMouse" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 layout_mode = 2
 tooltip_text = "Animates SpriteSheet depending on mouse position (Horizontally and Vertically)"
-text = "Animate to Mouse"
+text = "TR_ANIMATE_TO_MOUSE"
 script = ExtResource("10_ncust")
 sp_type = "Sprite2D"
 value_to_update = "animate_to_mouse"
@@ -372,7 +371,7 @@ value_to_update = "animate_to_mouse"
 [node name="BetterSlider" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer" instance=ExtResource("11_ejqfc")]
 layout_mode = 2
 sp_type = "Sprite2D"
-label_text = "Anim-Speed : "
+label_text = "TR_ANIMATION_SPEED"
 mini_value = 0.01
 max_value = 250.0
 step = 0.01
@@ -381,8 +380,8 @@ value_to_update = "animate_to_mouse_speed"
 
 [node name="AnimateToMouse2" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 layout_mode = 2
-tooltip_text = "Animate to Mouse must be turned on in order for this feature to work when toggled off, it stops the sprite from moving on the x and y axis, but keeps the Animate to Mouse working."
-text = "Move with Mouse"
+tooltip_text = "TR_MOVE_WITH_MOUSE_TOOLTIP"
+text = "TR_MOVE_WITH_MOUSE"
 script = ExtResource("10_ncust")
 sp_type = "Sprite2D"
 value_to_update = "animate_to_mouse_track_pos"
