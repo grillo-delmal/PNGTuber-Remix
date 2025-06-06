@@ -1,4 +1,4 @@
-extends Window
+extends AcceptDialog
 
 @export var container : Node
 
@@ -9,9 +9,12 @@ var current_mode : int = 0
 func _ready() -> void:
 	Global.theme_update.connect(update_theme)
 	close_requested.connect(close)
+	confirmed.connect(close)
+	
 
 func _on_editor_mode_pressed() -> void:
 	if current_mode != 0:
+		Global.delete_states.emit()
 		for i in container.get_children():
 			i.queue_free()
 		
@@ -21,6 +24,7 @@ func _on_editor_mode_pressed() -> void:
 
 func _on_steamer_mode_pressed() -> void:
 	if current_mode != 1:
+		Global.delete_states.emit()
 		for i in container.get_children():
 			i.queue_free()
 		container.add_child(streamer_mode.instantiate())

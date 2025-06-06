@@ -238,6 +238,7 @@ func load_file(path, should_load_path = false):
 			Themes.save_timer.stop()
 	
 	Global.main.get_node("%Marker").current_screen = Global.settings_dict.monitor
+	Global.load_model.emit()
 
 func load_sprite(sprite_obj, sprite):
 	var img_data
@@ -495,3 +496,4 @@ func load_pngplus_file(path):
 	Global.load_sprite_states(0)
 	Global.reinfoanim.emit()
 	get_tree().get_root().get_node("Main/%Marker").current_screen = 9999
+	Global.load_model.emit()

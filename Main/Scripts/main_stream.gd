@@ -3,11 +3,24 @@ extends Control
 var can_scroll : bool = true
 var of
 
+enum State {
+	LoadFile,
+	SaveSettings,
+	LoadSettings,
+}
+var current_state : State
+
+func load_file():
+	%FileDialog.filters = ["*.pngRemix, *.save"]
+	$FileDialog.file_mode = 0
+	current_state = State.LoadFile
+	%FileDialog.show()
+
+
 func _ready() -> void:
 	Global.mode = 1
 	Global.main = self
 	Global.sprite_container = %SpritesContainer
-	Global.top_ui = %STopUI
 	Global.light = %LightSource
 	Global.camera = %Camera2D
 	Global.theme_update.connect(update_theme)
@@ -55,3 +68,9 @@ func _input(event):
 		elif Input.is_action_pressed("pan"):
 			%CamPos.global_position = -get_global_mouse_position() + of
 			Global.settings_dict.pan = %CamPos.global_position
+
+
+func _on_file_dialog_file_selected(path: String) -> void:
+	match current_state:
+		State.LoadFile:
+			SaveAndLoad.load_file(path)

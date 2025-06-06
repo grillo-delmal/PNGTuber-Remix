@@ -77,6 +77,8 @@ var sprite_data : Dictionary = {
 	tile = 2,
 	anchor_id = null,
 	static_obj = false,
+	is_cycle = false,
+	cycle = 0,
 	}
 
 var smooth_rot = 0.0
@@ -183,13 +185,13 @@ func get_state(id):
 		rotation = sprite_data.rotation
 
 		if sprite_data.flip_h:
-			%AppendageFlip.scale.x = -1
+			%Sprite2D.scale.x = -1
 		else:
-			%AppendageFlip.scale.x = 1
+			%Sprite2D.scale.x = 1
 		if sprite_data.flip_v:
-			%AppendageFlip.scale.y = -1
+			%Sprite2D.scale.y = -1
 		else:
-			%AppendageFlip.scale.y = 1
+			%Sprite2D.scale.y = 1
 		
 		if !sprite_data.should_blink:
 			%Pos.show()
@@ -204,6 +206,10 @@ func get_state(id):
 			if is_apng:
 				%AnimatedSpriteTexture.index = 0
 				%AnimatedSpriteTexture.proper_apng_one_shot()
+				
+		if !sprite_data.cycle in range(Global.settings_dict.cycles.size()):
+			sprite_data.cycle = 0
+				
 	elif states[id].is_empty():
 		states[id] = sprite_data.duplicate(true)
 

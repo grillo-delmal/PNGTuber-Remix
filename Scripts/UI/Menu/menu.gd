@@ -1,5 +1,5 @@
 extends Control
 
 
-func _on_open_popup_pressed() -> void:
-	%MenuScreenPopup.popup()
+func _ready() -> void:
+	Global.swtich_session_popup = %MenuScreenPopup

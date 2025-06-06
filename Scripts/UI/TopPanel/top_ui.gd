@@ -10,6 +10,7 @@ func _ready():
 	%CreditLabel.text = "PNGTuber Remix by TheMime (MudkipWorld)
 	Original PNGTuber+ Code by kaiakairos. Better UI by LeoRson.
 	V" + str(ProjectSettings.get_setting("application/config/version"))
+	get_window().size_changed.connect(update_size_label)
 
 func info_held():
 	%DeselectButton.show()
@@ -34,3 +35,9 @@ func update_fps(value):
 		return
 	
 	Engine.max_fps = value
+
+
+
+
+func update_size_label():
+	%WindowSize.text = "Window Size " + str(get_window().size)

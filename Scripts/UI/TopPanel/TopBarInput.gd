@@ -72,6 +72,9 @@ func choosing_files(id):
 			
 		10:
 			add_a_lipsync_config()
+		11:
+			if Global.swtich_session_popup != null && is_instance_valid(Global.swtich_session_popup):
+				Global.swtich_session_popup.popup()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("save"):

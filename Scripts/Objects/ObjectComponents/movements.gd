@@ -72,7 +72,7 @@ func wobble():
 	%Wobble.position.y = lerp(%Wobble.position.y, sin(Global.tick*actor.sprite_data.yFrq)*actor.sprite_data.yAmp, 0.15)
 
 func rotationalDrag(length,_delta):
-	%Drag.rotation = sin(Global.tick*actor.sprite_data.rot_frq)*deg_to_rad(actor.sprite_data.rdragStr)
+	%Wobble.rotation = sin(Global.tick*actor.sprite_data.rot_frq)*deg_to_rad(actor.sprite_data.rdragStr)
 	var yvel = ((length * actor.sprite_data.rdragStr)* 0.5)
 	
 	#Calculate Max angle
@@ -85,7 +85,7 @@ func stretch(length,_delta):
 	var yvel = (length * actor.sprite_data.stretchAmount * 0.01)
 	var target = Vector2(1.0-yvel,1.0+yvel)
 	
-	%Squish.scale = lerp(%Squish.scale,target,0.1)
+	%Rotation.scale = lerp(%Rotation.scale,target,0.1)
 
 func static_prev():
 	%Pos.position = Vector2(0,0)
@@ -93,12 +93,10 @@ func static_prev():
 	%Pos.modulate.s = 0
 	%Wobble.rotation = 0
 	%Wobble.position = Vector2(0,0)
-	%Squish.scale = Vector2(1,1)
 	%Dragger.global_position = %Wobble.global_position
 	%Rotation.rotation = 0.0
-	%Drag.rotation = 0.0
+	%Rotation.scale = Vector2(1,1)
 	%Drag.scale = Vector2(1,1)
-	%Squish.rotation = 0.0
 
 func follow_wiggle():
 	if actor.sprite_data.follow_wa_tip:
@@ -172,7 +170,7 @@ func follow_mouse(_delta):
 		var target_rotation = clamp(normalized_mouse * rotation_factor * deg_to_rad(90), deg_to_rad(actor.sprite_data.rLimitMin), deg_to_rad(actor.sprite_data.rLimitMax))
 
 		# Smoothly interpolate the sprite's rotation
-		%Squish.rotation = lerp_angle(%Squish.rotation, target_rotation, actor.sprite_data.mouse_delay)
+		%Pos.rotation = lerp_angle(%Pos.rotation, target_rotation, actor.sprite_data.mouse_delay)
 		
 		var screen_size = DisplayServer.screen_get_size(-1)
 		if main_marker.current_screen == main_marker.ALL_SCREENS_ID:
@@ -195,10 +193,13 @@ func follow_mouse(_delta):
 		
 		#var test = tanh((dist - actor.sprite_data.look_at_mouse_pos))
 		
-		if actor.sprite_data.non_animated_sheet && actor.sprite_data.animate_to_mouse && !actor.sprite_data.animate_to_mouse_track_pos:
-			%Pos.position.x = lerp(%Pos.position.x, 0.0, actor.sprite_data.mouse_delay)
-			%Pos.position.y = lerp(%Pos.position.y, 0.0, actor.sprite_data.mouse_delay)
-			
+		if actor.sprite_type == "Sprite2D":
+			if actor.sprite_data.non_animated_sheet && actor.sprite_data.animate_to_mouse && !actor.sprite_data.animate_to_mouse_track_pos:
+				%Pos.position.x = lerp(%Pos.position.x, 0.0, actor.sprite_data.mouse_delay)
+				%Pos.position.y = lerp(%Pos.position.y, 0.0, actor.sprite_data.mouse_delay)
+			else:
+				%Pos.position.x = lerp(%Pos.position.x, dir.x * min(dist, actor.sprite_data.look_at_mouse_pos), actor.sprite_data.mouse_delay)
+				%Pos.position.y = lerp(%Pos.position.y, dir.y * min(dist, actor.sprite_data.look_at_mouse_pos_y), actor.sprite_data.mouse_delay)
 		else:
 			%Pos.position.x = lerp(%Pos.position.x, dir.x * min(dist, actor.sprite_data.look_at_mouse_pos), actor.sprite_data.mouse_delay)
 			%Pos.position.y = lerp(%Pos.position.y, dir.y * min(dist, actor.sprite_data.look_at_mouse_pos_y), actor.sprite_data.mouse_delay)
@@ -217,7 +218,7 @@ func follow_mouse(_delta):
 		var target_rotation = clamp(normalized_mouse * rotation_factor * deg_to_rad(90), deg_to_rad(actor.sprite_data.rLimitMin), deg_to_rad(actor.sprite_data.rLimitMax))
 
 		# Smoothly interpolate the sprite's rotation
-		%Squish.rotation = lerp_angle(%Squish.rotation, target_rotation, actor.sprite_data.mouse_delay)
+		%Pos.rotation = lerp_angle(%Pos.rotation, target_rotation, actor.sprite_data.mouse_delay)
 		
 		var screen_size = DisplayServer.screen_get_size(-1)
 		if main_marker.current_screen == main_marker.ALL_SCREENS_ID:

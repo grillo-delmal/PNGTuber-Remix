@@ -373,17 +373,17 @@ func _on_flip_sprite_h_toggled(toggled_on: bool) -> void:
 			if i.sprite_type == "Sprite2D":
 				i.sprite_data.flip_sprite_h = toggled_on
 				if i.sprite_data.flip_sprite_h:
-					i.get_node("%AppendageFlip").scale.x = -1
+					i.get_node("%Sprite2D").scale.x = -1
 				else:
-					i.get_node("%AppendageFlip").scale.x = 1
+					i.get_node("%Sprite2D").scale.x = 1
 				
 				i.save_state(Global.current_state)
 			elif i.sprite_type == "WiggleApp":
 				i.sprite_data.flip_h = toggled_on
 				if i.sprite_data.flip_h:
-					i.get_node("%AppendageFlip").scale.x = -1
+					i.get_node("%Sprite2D").scale.x = -1
 				else:
-					i.get_node("%AppendageFlip").scale.x = 1
+					i.get_node("%Sprite2D").scale.x = 1
 				i.save_state(Global.current_state)
 			undo_redo_data.append({sprite_object = i, 
 			data = i.sprite_data.duplicate(), 
@@ -410,9 +410,9 @@ func _on_flip_sprite_v_toggled(toggled_on: bool) -> void:
 			elif i.sprite_type == "WiggleApp":
 				i.sprite_data.flip_v = toggled_on
 				if i.sprite_data.flip_v:
-					i.get_node("%AppendageFlip").scale.y = -1
+					i.get_node("%Sprite2D").scale.y = -1
 				else:
-					i.get_node("%AppendageFlip").scale.y = 1
+					i.get_node("%Sprite2D").scale.y = 1
 				i.save_state(Global.current_state)
 			undo_redo_data.append({sprite_object = i, 
 			data = i.sprite_data.duplicate(), 

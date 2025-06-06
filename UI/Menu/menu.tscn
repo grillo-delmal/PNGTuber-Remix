@@ -21,19 +21,3 @@ script = ExtResource("1_orlfr")
 unique_name_in_owner = true
 visible = false
 container = NodePath("../Scene")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-layer = 2
-
-[node name="OpenPopup" type="Button" parent="CanvasLayer"]
-visible = false
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -30.0
-offset_bottom = 29.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 14
-text = "!"
-
-[connection signal="pressed" from="CanvasLayer/OpenPopup" to="." method="_on_open_popup_pressed"]

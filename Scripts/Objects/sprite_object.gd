@@ -68,6 +68,8 @@ var sprite_data : Dictionary = {
 	animate_to_mouse_track_pos = true,
 	frame = 0,
 	static_obj = false,
+	is_cycle = false,
+	cycle = 0,
 	}
 
 var wiggle_val : float = 0
@@ -243,11 +245,14 @@ func get_state(id):
 		set_blend(sprite_data.blend_mode)
 		advanced_lipsyc()
 
-		%Squish.scale = Vector2(1,1)
 		if sprite_data.look_at_mouse_pos == 0:
 			%Pos.position.x = 0
 		if sprite_data.look_at_mouse_pos_y == 0:
 			%Pos.position.y = 0
+			
+		if !sprite_data.cycle in range(Global.settings_dict.cycles.size()):
+			sprite_data.cycle = 0
+		
 	elif states[id].is_empty():
 		states[id] = sprite_data.duplicate(true)
 		

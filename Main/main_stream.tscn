@@ -1,13 +1,14 @@
-[gd_scene load_steps=10 format=3 uid="uid://c1ekr4qs5l516"]
+[gd_scene load_steps=9 format=3 uid="uid://c1ekr4qs5l516"]
 
 [ext_resource type="Script" uid="uid://bdn6kp0ldq1ck" path="res://Main/Scripts/main_stream.gd" id="1_sw3on"]
 [ext_resource type="Script" uid="uid://b6atx7ybrp5sq" path="res://Main/Scripts/SpritesContainer.gd" id="1_u32ad"]
 [ext_resource type="PackedScene" uid="uid://dw4brgrpdpurf" path="res://Misc/LightSource/light_source.tscn" id="2_cj4vf"]
-[ext_resource type="PackedScene" uid="uid://bdsqs0utx8bji" path="res://UI/StreamUI/StreamTopUI.tscn" id="4_cj4vf"]
-[ext_resource type="PackedScene" uid="uid://daboy6vehn665" path="res://UI/StreamUI/stream_right_panel.tscn" id="5_h43to"]
+[ext_resource type="Texture2D" uid="uid://c23flfaie3uxb" path="res://Misc/TestAssets/32x32grid.png" id="2_sw3on"]
+[ext_resource type="PackedScene" uid="uid://cnq8tddqwvy07" path="res://UI/StreamUI/stream_ui.tscn" id="5_h43to"]
 [ext_resource type="Script" uid="uid://by4pbr6yeut1c" path="res://Main/Scripts/monitor_tracking.gd" id="5_me1oy"]
-[ext_resource type="PackedScene" uid="uid://cfuiw0rtt54fn" path="res://UI/StreamUI/web_socket_config.tscn" id="7_me1oy"]
-[ext_resource type="PackedScene" uid="uid://bk2xbsvlmq0or" path="res://UI/StateButton/state_panel.tscn" id="7_xfo8l"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_xfo8l"]
+blend_mode = 1
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_sw3on"]
 blend_mode = 4
@@ -20,6 +21,23 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_sw3on")
+
+[node name="BG" type="TextureRect" parent="."]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0.0980392)
+z_index = -999
+z_as_relative = false
+material = SubResource("CanvasItemMaterial_xfo8l")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_sw3on")
+expand_mode = 1
+stretch_mode = 1
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 unique_name_in_owner = true
@@ -89,69 +107,25 @@ size_flags_vertical = 3
 mouse_filter = 2
 script = ExtResource("5_me1oy")
 
-[node name="UI" type="VBoxContainer" parent="UICanvas"]
+[node name="UI" parent="UICanvas" instance=ExtResource("5_h43to")]
 unique_name_in_owner = true
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-mouse_filter = 2
-theme_override_constants/separation = 0
 
-[node name="STopUI" parent="UICanvas/UI" instance=ExtResource("4_cj4vf")]
+[node name="FileDialog" type="FileDialog" parent="."]
 unique_name_in_owner = true
-layout_mode = 2
-
-[node name="HSplitContainer" type="HSplitContainer" parent="UICanvas/UI"]
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-
-[node name="Empty" type="AspectRatioContainer" parent="UICanvas/UI/HSplitContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 2
-
-[node name="StreamRightPanel" parent="UICanvas/UI/HSplitContainer" instance=ExtResource("5_h43to")]
-layout_mode = 2
-
-[node name="VSplitContainer" type="VSplitContainer" parent="UICanvas/UI/HSplitContainer/StreamRightPanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="SetupMargin" type="MarginContainer" parent="UICanvas/UI/HSplitContainer/StreamRightPanel/VSplitContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 5
-
-[node name="SetupPanel" type="ScrollContainer" parent="UICanvas/UI/HSplitContainer/StreamRightPanel/VSplitContainer/SetupMargin"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="VBox" type="VBoxContainer" parent="UICanvas/UI/HSplitContainer/StreamRightPanel/VSplitContainer/SetupMargin/SetupPanel"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="WebSocketConfig" parent="UICanvas/UI/HSplitContainer/StreamRightPanel/VSplitContainer/SetupMargin/SetupPanel/VBox" instance=ExtResource("7_me1oy")]
-layout_mode = 2
-
-[node name="StatePanel" parent="UICanvas/UI/HSplitContainer/StreamRightPanel/VSplitContainer" instance=ExtResource("7_xfo8l")]
-layout_mode = 2
-size_flags_vertical = 1
+auto_translate_mode = 1
+title = "Open File(s)"
+initial_position = 2
+size = Vector2i(800, 500)
+force_native = true
+ok_button_text = "Open"
+file_mode = 1
+access = 2
+filters = PackedStringArray("*.png", "*.jpeg", "*.jpg", "*.svg")
+use_native_dialog = true
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.05
 
 [connection signal="mouse_entered" from="SubViewportContainer" to="." method="_on_sub_viewport_container_mouse_entered"]
 [connection signal="mouse_exited" from="SubViewportContainer" to="." method="_on_sub_viewport_container_mouse_exited"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

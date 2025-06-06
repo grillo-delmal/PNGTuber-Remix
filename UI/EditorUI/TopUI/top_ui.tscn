@@ -55,7 +55,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
 text = "   Files "
-item_count = 9
+item_count = 10
 popup/item_0/text = "New"
 popup/item_0/id = 0
 popup/item_1/text = "Open"
@@ -74,6 +74,8 @@ popup/item_7/text = "Demo Model"
 popup/item_7/id = 5
 popup/item_8/text = "LipSync Configuration"
 popup/item_8/id = 10
+popup/item_9/text = "Switch Session"
+popup/item_9/id = 11
 
 [node name="ModeButton" type="MenuButton" parent="TopBar/HBox"]
 unique_name_in_owner = true
@@ -81,14 +83,11 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
 text = " Mode "
-item_count = 3
+item_count = 2
 popup/item_0/text = "Editor"
 popup/item_0/id = 0
-popup/item_1/text = "PNGTube"
+popup/item_1/text = "Preview"
 popup/item_1/id = 1
-popup/item_2/text = "Script"
-popup/item_2/id = 2
-popup/item_2/disabled = true
 
 [node name="BGButton" type="MenuButton" parent="TopBar/HBox"]
 unique_name_in_owner = true

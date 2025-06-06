@@ -20,6 +20,7 @@ signal reparent_objects
 signal reparent_layers
 
 signal new_file
+signal load_model
 
 signal mode_changed
 signal deselect
@@ -65,6 +66,7 @@ var settings_dict : Dictionary = {
 	should_delta = false,
 	max_fps = 241,
 	monitor = 9999,
+	cycles = [],
 }
 
 var mode : int = 0 : 
@@ -88,6 +90,7 @@ var camera : Camera2D = null
 
 var frame_counter := 0
 const FRAME_INTERVAL := 3  # Run every 5 frames
+var swtich_session_popup : Node = null
 
 
 # Called when the node enters the scene tree for the first time.
@@ -97,6 +100,7 @@ func _ready():
 	blinking()
 	get_window().title = "PNGTube-Remix V" + str(ProjectSettings.get_setting("application/config/version"))
 	current_state = 0
+	key_pressed.connect(update_cycles)
 
 
 func blinking():
@@ -136,15 +140,16 @@ func get_sprite_states(state):
 	reinfoanim.emit()
 
 func _input(_event : InputEvent):
-	if held_sprite != null && is_instance_valid(held_sprite):
-		if Input.is_action_pressed("ctrl"):
-			if Input.is_action_pressed("scrollup"):
-				held_sprite.sprite_data.rotation -= 0.05
-				rot()
+	for i in held_sprites:
+		if i != null && is_instance_valid(i):
+			if Input.is_action_pressed("ctrl"):
+				if Input.is_action_pressed("scrollup"):
+					i.sprite_data.rotation -= 0.05
+					rot(i)
 
-			elif Input.is_action_pressed("scrolldown"):
-				held_sprite.sprite_data.rotation += 0.05
-				rot()
+				elif Input.is_action_pressed("scrolldown"):
+					i.sprite_data.rotation += 0.05
+					rot(i)
 
 func offset(i):
 	i.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
@@ -163,6 +168,7 @@ func _process(delta):
 	if !spinbox_held:
 		moving_origin(delta)
 		moving_sprite(delta)
+		
 
 func moving_origin(delta):
 	for i in held_sprites:
@@ -195,9 +201,9 @@ func moving_origin(delta):
 
 					offset(i)
 
-func rot():
-	held_sprite.rotation = held_sprite.sprite_data.rotation
-	held_sprite.save_state(current_state)
+func rot(i):
+	i.rotation = i.sprite_data.rotation
+	i.save_state(current_state)
 	update_pos_spins.emit()
 
 func moving_sprite(delta):
@@ -237,3 +243,49 @@ func mouse_delay():
 	if frame_counter >= FRAME_INTERVAL:
 		update_mouse_vel_pos.emit()
 		frame_counter = 0
+
+
+func update_cycles(key):
+	for cycle in settings_dict.cycles:
+		if cycle.sprites.size() > 0:
+			if cycle.toggle.as_text() == key:
+				var array = cycle.sprites.duplicate()
+				if array.has(cycle.last_sprite):
+					array.remove_at(array.find(cycle.last_sprite))
+
+				var rand = array.pick_random()
+				cycle.last_sprite = rand
+				cycle.pos = cycle.sprites.find(rand)
+				for sprite in get_tree().get_nodes_in_group("Sprites"):
+					if sprite.sprite_id in cycle.sprites && sprite.sprite_data.is_cycle:
+						sprite.get_node("%Drag").hide()
+						sprite.was_active_before = sprite.get_node("%Drag").visible
+					
+					if sprite.sprite_id == rand && sprite.sprite_data.is_cycle:
+						sprite.get_node("%Drag").show()
+						sprite.was_active_before = sprite.get_node("%Drag").visible
+					#print(rand)
+					
+			elif cycle.forward.as_text() == key:
+				cycle.pos = wrap(cycle.pos +1,0 ,  cycle.sprites.size() - 1)
+				cycle.last_sprite = cycle.sprites[cycle.pos]
+				for sprite in get_tree().get_nodes_in_group("Sprites"):
+					if sprite.sprite_id in cycle.sprites && sprite.sprite_data.is_cycle:
+						sprite.get_node("%Drag").hide()
+						sprite.was_active_before = sprite.get_node("%Drag").visible
+					
+					if sprite.sprite_id == cycle.last_sprite && sprite.sprite_data.is_cycle:
+						sprite.get_node("%Drag").show()
+						sprite.was_active_before = sprite.get_node("%Drag").visible
+				
+			elif cycle.backward.as_text() == key:
+				cycle.pos = wrap(cycle.pos -1,0 ,  cycle.sprites.size() - 1)
+				cycle.last_sprite = cycle.sprites[cycle.pos]
+				for sprite in get_tree().get_nodes_in_group("Sprites"):
+					if sprite.sprite_id in cycle.sprites && sprite.sprite_data.is_cycle:
+						sprite.get_node("%Drag").hide()
+						sprite.was_active_before = sprite.get_node("%Drag").visible
+					
+					if sprite.sprite_id == cycle.last_sprite && sprite.sprite_data.is_cycle:
+						sprite.get_node("%Drag").show()
+						sprite.was_active_before = sprite.get_node("%Drag").visible
