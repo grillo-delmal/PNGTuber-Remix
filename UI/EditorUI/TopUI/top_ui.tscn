@@ -250,6 +250,7 @@ offset_bottom = 247.0
 
 [node name="CreditLabel" type="Label" parent="AboutPopUp/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(350, 10)
 layout_mode = 2
 text = "TR_FULL_CREDITS"
 horizontal_alignment = 1
