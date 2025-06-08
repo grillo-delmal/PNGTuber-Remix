@@ -196,7 +196,7 @@ layout_mode = 2
 focus_mode = 1
 mouse_force_pass_scroll_events = false
 theme_override_font_sizes/font_size = 20
-placeholder_text = "Name"
+placeholder_text = "TR_NAME"
 alignment = 1
 
 [node name="RenameTexture" type="TextureRect" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Properties/Name"]

@@ -129,6 +129,7 @@ TR_MOUSE_VELOCITY,Mouse Velocity
 TR_MOUTH_CLOSED,Mouth Closed :
 TR_MOVE_WITH_MOUSE_TOOLTIP,"Animate to Mouse must be turned on in order for this feature to work when toggled off, it stops the sprite from moving on the x and y axis, but keeps the Animate to Mouse working."
 TR_MOVE_WITH_MOUSE,Move with Mouse
+TR_NAME,Name
 TR_NEW_PNGTUBER_TEXT,Do you want to make a new PNGTuber model?
 TR_NEW,New
 TR_NONE_ANIMATED_SHEET_TOOLTIP,Turns a SpriteSheet into Static Frames that you can choose from.
@@ -138,7 +139,6 @@ TR_NORMAL_MAP_DEMO,Normal Map Demo
 TR_NORMAL_MAP,Normal Map
 TR_OFFSET_X,Offset-X :
 TR_OFFSET_Y,Offset-Y :
-TR_OPEN,Open
 TR_OPEN,Open
 TR_OUTLINE,Outline
 TR_PAUSE_MOVEMENT_TOOLTIP,Turns your model Static.\nUncheck to preview your model's movement.\nThis automatically gets unchecked when changing modes.
