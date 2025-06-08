@@ -14,6 +14,8 @@ TR_ABOUT,About
 TR_ACHROMATOPSIA,Achromatopsia
 TR_ADD_APPENDAGE,Add Appendage Based Image
 TR_ADD_IMAGE,Add Image
+TR_ADD_NEW_STATE,Add new State
+TR_ADD,Add
 TR_ADVANCED_LIP_SYNC_TOOLTIP,Only works if your mouth shapes are in a sprite-sheet. 14 frames\n(Check the Lipsync configuration)
 TR_ADVANCED_LIP_SYNC,Advanced Lipsync
 TR_ALWAYS_ON_TOP,Always on Top
@@ -63,11 +65,14 @@ TR_COLOR,Color :
 TR_CREDITS,Credits
 TR_CUSTOM,Custom
 TR_DARKEN,Darken
+TR_DELETE_STATE,Delete State
+TR_DELETE,Delete
 TR_DEMO_MODEL,Demo Model
 TR_DEUTERANOPIA,Deuteranopia
 TR_DISABLED,Disabled
 TR_DISAPPEAR_KEYS,Disappear Key(s)
 TR_DONT_HIDE,Don't Hide
+TR_DUPLICATE_STATE,Duplicate State
 TR_EDITOR,Editor
 TR_EFFECT_COLOR,Effect Color :
 TR_EFFECT_HYPER,Hyper
@@ -101,6 +106,7 @@ TR_FULL_CREDITS,"PNGTuber Remix by TheMime (MudkipWorld)\nOriginal PNGTuber+ Cod
 TR_GRAY,Gray
 TR_GREEN,Green
 TR_HATCHES,Hatches
+TR_HOT_KEY_LABEL,Hot Key :
 TR_IDLE,Idle
 TR_IGNORE_BOUNCE,Ignore Bound
 TR_IMAGE,Image
@@ -146,6 +152,8 @@ TR_PROTANOPIA,Protanopia
 TR_RAINBOW,Rainbow
 TR_REACTION,Reaction
 TR_RED,Red
+TR_REMAP_STATE_HOTKEYS,Remap State Hot Keys
+TR_REMAP,Remap
 TR_RESET_ANIMATION_TOOLTIP,Resets animation on changing the current State.
 TR_RESET_ANIMATION,Reset Animation
 TR_RESET_ON_STATE_CHANGE_TOOLTIP,"Resets the animaton of (APNG, GIF or SpriteSheet) when changing States."
@@ -171,6 +179,7 @@ TR_SOURCE_CODE,Source Code :
 TR_SPRITES,Sprites
 TR_SQUISH_AMOUNT,Squish Amount
 TR_SQUISH_ON_BLINK,Squish on Blink
+TR_STATE_REMAP,State Remap
 TR_STATIC_OBJECT,Static Object
 TR_SYNC_EFFECT,Sync Effect
 TR_TEST_FRAME,Frame :

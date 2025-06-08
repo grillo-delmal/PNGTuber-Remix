@@ -11,7 +11,7 @@ size_flags_horizontal = 3
 [node name="State" type="Label" parent="."]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-text = "Hotkey :"
+text = "TR_HOT_KEY_LABEL"
 
 [node name="StateRemapButton" type="Button" parent="." groups=["StateRemapButton"]]
 custom_minimum_size = Vector2(120, 20)
