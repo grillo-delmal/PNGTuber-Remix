@@ -7,6 +7,12 @@ func _ready() -> void:
 	%UIThemeButton.item_selected.connect(Settings._on_ui_theme_button_item_selected)
 	%UIThemeButton.select(Settings.theme_settings.theme_id)
 	%MicroPhoneMenu.get_popup().connect("id_pressed",choosing_device)
+	for i in %LanguageOptions.item_count:
+		if %LanguageOptions.get_item_text(i) == Global.preferences.get_value("General", "language"):
+			%LanguageOptions.select(i)
+			break
+			
+
 	get_parent().close_requested.connect(close)
 	sliders_revalue(Global.settings_dict)
 	check_data()
@@ -236,3 +242,6 @@ func _on_use_threads_toggled(toggled_on: bool) -> void:
 func _on_keep_old_trim_data_toggled(toggled_on: bool) -> void:
 	Settings.theme_settings.save_raw_sprite = toggled_on
 	Settings.save()
+
+func _on_remix_language_set(index: int) -> void:
+	Global.set_language(%LanguageOptions.get_item_text(index))

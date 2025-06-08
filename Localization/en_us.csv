@@ -140,6 +140,7 @@ TR_NORMAL_MAP,Normal Map
 TR_OFFSET_X,Offset-X :
 TR_OFFSET_Y,Offset-Y :
 TR_OPEN,Open
+TR_LANGUAGE_LABEL,Language :
 TR_OUTLINE,Outline
 TR_PAUSE_MOVEMENT_TOOLTIP,Turns your model Static.\nUncheck to preview your model's movement.\nThis automatically gets unchecked when changing modes.
 TR_PAUSE_MOVEMENT,Pause Movement

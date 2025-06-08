@@ -133,11 +133,16 @@ func _ready():
 	get_window().title = "PNGTuber-Remix V" + version
 	current_state = 0
 	key_pressed.connect(update_cycles)
-	if settings_dict.language == "automatic":
-		settings_dict.preferred_language = OS.get_locale_language()
-		TranslationServer.set_locale(settings_dict.preferred_language)
+	# Load Preferences
+	if FileAccess.file_exists(PREFERENCES_LOCATION):
+		self.preferences.load(PREFERENCES_LOCATION)
 	else:
-		TranslationServer.set_locale(settings_dict.language)
+		_create_default_preferences()
+	var locale = Util.get_locale(self.preferences.get_value("General", "language"))
+	if locale == "automatic":
+		TranslationServer.set_locale(OS.get_locale_language())
+	else:
+		TranslationServer.set_locale(locale)
 func set_mode(new_mode) -> void:
 	if new_mode == mode: return
 	mode = new_mode
@@ -364,3 +369,12 @@ func update_cycles(key):
 func update_camera_smoothing() -> void:
 	if !is_instance_valid(camera): return
 	camera.position_smoothing_enabled = Settings.theme_settings.floaty_panning
+
+func set_language(language: String) -> void:
+	var locale = Util.get_locale(language)
+	self.preferences.set_value("General", "language", language)
+	self.preferences.save(PREFERENCES_LOCATION)
+	if locale == "automatic":
+		TranslationServer.set_locale(OS.get_locale_language())
+	else:
+		TranslationServer.set_locale(locale)
