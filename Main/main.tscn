@@ -217,19 +217,23 @@ script = ExtResource("12_f3gf5")
 
 [node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
 unique_name_in_owner = true
+title = "TR_PLEASE_CONFIRM"
 initial_position = 2
-size = Vector2i(338, 100)
-dialog_text = "Do you want to make a new PNGTuber model?"
+size = Vector2i(338, 106)
+ok_button_text = "TR_YES"
+dialog_text = "TR_NEW_PNGTUBER_TEXT"
 dialog_autowrap = true
+cancel_button_text = "TR_CANCEL"
 
 [node name="FileDialog" type="FileDialog" parent="."]
 unique_name_in_owner = true
-title = "Open File(s)"
+title = "TR_FILE_DIALOG_TITLE"
 initial_position = 2
 size = Vector2i(800, 500)
 always_on_top = true
 force_native = true
-ok_button_text = "Open"
+ok_button_text = "TR_OPEN"
+cancel_button_text = "TR_CANCEL"
 file_mode = 1
 access = 2
 filters = PackedStringArray("*.png", "*.jpeg", "*.jpg", "*.svg")
