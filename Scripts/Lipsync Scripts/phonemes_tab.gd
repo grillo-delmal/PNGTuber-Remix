@@ -2,14 +2,6 @@ extends TabBar
 
 @export var sprite : AnimatedSprite2D
 
-## Last phoneme matches
-@warning_ignore("unused_private_class_variable")
-var _matches := []
-
-
-## Last fingerprint
-@warning_ignore("unused_private_class_variable")
-var _fingerprint := LipSyncFingerprint.new()
 
 func _ready() -> void:
 	sprite.stop()
@@ -20,4 +12,5 @@ func _process(_delta: float) -> void:
 		sprite.frame = 13
 	else:
 		sprite.frame = GlobalAudioStreamPlayer.t.actual_value
-	%PhBox.get_child(GlobalAudioStreamPlayer.t.actual_value).value = GlobalAudioStreamPlayer.t.value
+	if GlobalAudioStreamPlayer.t != null:
+		%PhBox.get_child(GlobalAudioStreamPlayer.t.actual_value).value = GlobalAudioStreamPlayer.t.value

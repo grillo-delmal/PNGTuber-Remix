@@ -38,7 +38,7 @@ func _toggled(_button_pressed):
 func _unhandled_input(event):
 	if current_remap == Remap.Asset:
 		if not event is InputEventMouseMotion:
-			if event.is_pressed():
+			if event.is_released():
 				if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
 					InputMap.action_erase_events(action)
 					InputMap.action_add_event(action, event)

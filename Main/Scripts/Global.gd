@@ -95,7 +95,7 @@ var swtich_session_popup : Node = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	get_window().min_size = Vector2(1000,720)
+	get_window().min_size = Vector2(720,720)
 	add_child(blink_timer)
 	blinking()
 	get_window().title = "PNGTube-Remix V" + str(ProjectSettings.get_setting("application/config/version"))
@@ -175,19 +175,19 @@ func moving_origin(delta):
 		if i != null && is_instance_valid(i):
 			if Input.is_action_pressed("ui_up"):
 				i.get_node("%Sprite2D").global_position.y += 10 * delta
-				i.position.y -= 10 * delta
+				i.global_position.y -= 10 * delta
 				offset(i)
 			elif Input.is_action_pressed("ui_down"):
 				i.get_node("%Sprite2D").global_position.y -= 10 * delta
-				i.position.y += 10 * delta
+				i.global_position.y += 10 * delta
 				offset(i)
 			if Input.is_action_pressed("ui_left"):
 				i.get_node("%Sprite2D").global_position.x += 10 * delta
-				i.position.x -= 10 * delta
+				i.global_position.x -= 10 * delta
 				offset(i)
 			elif Input.is_action_pressed("ui_right"):
 				i.get_node("%Sprite2D").global_position.x -= 10 * delta
-				i.position.x += 10 * delta
+				i.global_position.x += 10 * delta
 
 				offset(i)
 			
@@ -249,21 +249,32 @@ func update_cycles(key):
 	for cycle in settings_dict.cycles:
 		if cycle.sprites.size() > 0:
 			if cycle.toggle.as_text() == key:
-				var array = cycle.sprites.duplicate()
-				if array.has(cycle.last_sprite):
-					array.remove_at(array.find(cycle.last_sprite))
+				cycle.active = !cycle.active
+				
+				if cycle.active:
+					var array = cycle.sprites.duplicate()
+					if array.has(cycle.last_sprite):
+						array.remove_at(array.find(cycle.last_sprite))
 
-				var rand = array.pick_random()
-				cycle.last_sprite = rand
-				cycle.pos = cycle.sprites.find(rand)
-				for sprite in get_tree().get_nodes_in_group("Sprites"):
-					if sprite.sprite_id in cycle.sprites && sprite.sprite_data.is_cycle:
-						sprite.get_node("%Drag").hide()
-						sprite.was_active_before = sprite.get_node("%Drag").visible
+					var rand = array.pick_random()
+					cycle.last_sprite = rand
+					cycle.pos = cycle.sprites.find(rand)
+					for sprite in get_tree().get_nodes_in_group("Sprites"):
+						if sprite.sprite_id in cycle.sprites && sprite.sprite_data.is_cycle:
+							sprite.get_node("%Drag").hide()
+							sprite.was_active_before = sprite.get_node("%Drag").visible
+						
+						if sprite.sprite_id == rand && sprite.sprite_data.is_cycle:
+							sprite.get_node("%Drag").show()
+							sprite.was_active_before = sprite.get_node("%Drag").visible
 					
-					if sprite.sprite_id == rand && sprite.sprite_data.is_cycle:
-						sprite.get_node("%Drag").show()
-						sprite.was_active_before = sprite.get_node("%Drag").visible
+					
+				elif !cycle.active:
+					for sprite in get_tree().get_nodes_in_group("Sprites"):
+						if sprite.sprite_id in cycle.sprites && sprite.sprite_data.is_cycle:
+							sprite.get_node("%Drag").hide()
+							sprite.was_active_before = sprite.get_node("%Drag").visible
+						
 					#print(rand)
 					
 			elif cycle.forward.as_text() == key:

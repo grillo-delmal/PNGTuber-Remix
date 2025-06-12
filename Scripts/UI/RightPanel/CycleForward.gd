@@ -9,15 +9,16 @@ func _toggled(toggle):
 	set_process_input(toggle)
 	if toggle:
 		text = "... Awaiting Input ..."
-		release_focus()
+		grab_focus()
 	else:
 		update_key_text()
-		grab_focus()
+		release_focus()
+		
 			
 
 func _input(event: InputEvent) -> void:
 	if not event is InputEventMouseMotion:
-		if event.is_pressed():
+		if event.is_released():
 			Global.settings_dict.cycles[%CycleChoice.get_selected_id()-1].forward = event.duplicate()
 			update_key_text()
 			button_pressed = false

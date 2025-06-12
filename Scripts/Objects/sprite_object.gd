@@ -87,8 +87,11 @@ func sel():
 	if self in Global.held_sprites:
 		selected = true
 		%Origin.show()
+		%Grab.anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
+		%Grab.modulate.a = 1.0
 	else:
 		%Origin.hide()
+
 		desel()
 
 func desel():
@@ -142,6 +145,7 @@ func _process(_delta):
 	else:
 		%Grab.mouse_filter = Control.MouseFilter.MOUSE_FILTER_IGNORE
 		%Selection.hide()
+		%Grab.modulate.a = 0.0
 		%WiggleOrigin.hide()
 	
 	if dragging:

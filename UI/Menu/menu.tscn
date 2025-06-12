@@ -14,6 +14,7 @@ grow_vertical = 2
 script = ExtResource("1_orlfr")
 
 [node name="Scene" type="Node" parent="."]
+unique_name_in_owner = true
 
 [node name="Main" parent="Scene" instance=ExtResource("1_gqyth")]
 

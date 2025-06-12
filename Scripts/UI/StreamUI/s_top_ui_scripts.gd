@@ -9,6 +9,8 @@ func _ready() -> void:
 	%ModeButton.get_popup().connect("id_pressed",choosing_mode)
 	%BGButton.get_popup().connect("id_pressed",choosing_bg_color)
 	%WindowButton.get_popup().connect("id_pressed",choosing_window)
+	await get_tree().create_timer(0.1).timeout
+	choosing_mode(Themes.theme_settings.software_mode)
 	
 
 func choosing_files(id):
@@ -31,12 +33,16 @@ func choosing_mode(id):
 			RenderingServer.set_default_clear_color(Color.SLATE_GRAY)
 			get_parent().get_parent().get_node("%UISplit").show()
 			is_editor = true
+			Themes.theme_settings.software_mode = 0
+			Themes.save()
 		1:
 			Global.main.get_node("BG").hide()
 			RenderingServer.set_default_clear_color(Global.settings_dict.bg_color)
 			get_viewport().transparent_bg = Global.settings_dict.is_transparent
 			get_parent().get_parent().get_node("%UISplit").hide()
 			is_editor = false
+			Themes.theme_settings.software_mode = 1
+			Themes.save()
 
 func choosing_bg_color(id):
 	Global.settings_dict.is_transparent = false

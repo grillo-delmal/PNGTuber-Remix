@@ -5,7 +5,9 @@ var save_dict : Dictionary = {}
 
 func save_file(path):
 	Themes.theme_settings.path = path
-	Global.top_ui.get_node("TopBarInput").path = path
+	if Global.top_ui != null && is_instance_valid(Global.top_ui):
+		if Global.top_ui.has_node("TopBarInput"):
+			Global.top_ui.get_node("TopBarInput").path = path
 	var sprites = get_tree().get_nodes_in_group("Sprites")
 	var inputs = get_tree().get_nodes_in_group("StateButtons")
 	
@@ -169,9 +171,10 @@ func load_file(path, should_load_path = false):
 				sprite_obj.get_node("%Drag").visible = sprite.was_active_before
 				sprite_obj.was_active_before = sprite.was_active_before
 				sprite_obj.saved_keys = sprite.saved_keys
-				InputMap.add_action(str(sprite.sprite_id))
-				if sprite_obj.saved_event != null:
-					InputMap.action_add_event(str(sprite.sprite_id), sprite_obj.saved_event)
+				if !InputMap.has_action(str(sprite.sprite_id)):
+					InputMap.add_action(str(sprite.sprite_id))
+					if sprite_obj.saved_event != null:
+						InputMap.action_add_event(str(sprite.sprite_id), sprite_obj.saved_event)
 					
 			if sprite.has("is_apng"):
 				load_apng(sprite_obj, sprite)

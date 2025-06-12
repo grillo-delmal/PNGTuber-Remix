@@ -1,7 +1,6 @@
 extends TabBar
 
 
-
 var _fingerprint := LipSyncFingerprint.new()
 
 var hist_max := 1.0

@@ -1,3 +1,4 @@
+extends Resource
 class_name LipSyncFingerprint
 
 
@@ -34,10 +35,10 @@ const BANDS_COUNT := 20
 const SILENCE := 0.1
 
 ## Fingerprint description
-var description: String = ""
+@export var description: String = ""
 
 ## Fingerprint values
-var values: Array = [
+@export var values: Array = [
 	0.0, 0.0, 0.0, 0.0, 0.0,
 	0.0, 0.0, 0.0, 0.0, 0.0,
 	0.0, 0.0, 0.0, 0.0, 0.0,
@@ -61,17 +62,19 @@ func populate(spectrum: AudioEffectSpectrumAnalyzerInstance):
 	var energy_scale := 0.0 if energy_max <= SILENCE else 1.0 / energy_max
 	for i in BANDS_COUNT:
 		values[i] *= energy_scale
+	
+	
 
 
 ## Calculate deviation between two fingerprints
-static func deviation(a: LipSyncFingerprint, b: LipSyncFingerprint) -> float:
+static func deviation(a: Array, b: Array) -> float:
 	# Calculate sum of squares of error
 	var sum := 0.0
 	for i in BANDS_COUNT:
 		if b == null or a == null:
 			return 0.0
-		var delta: float = b.values[i] - a.values[i]
+		var delta: float = b[i] - a[i]
 		sum += delta * delta
 	
 	# Return sum as deviation
-	return sum
+	return sqrt(sum)

@@ -5,7 +5,7 @@ var record_bus_index
 var record_effect : AudioEffectRecord
 
 const VU_COUNT = 4
-const HEIGHT = 60
+const HEIGHT = 40
 const  MAX_FREQ = 11050.0
 var bar_stuff = []
 var used_bar = 0
@@ -15,6 +15,7 @@ var t = {
 	actual_value = 0,
 }
 
+var actual_value : float = 0.0
 var mic_restart_timer : Timer = Timer.new()
 
 
@@ -43,7 +44,7 @@ func global_lipsync():
 	_fingerprint.populate(LipSyncGlobals.speech_spectrum)
 
 	# Calculate the matches
-	LipSyncGlobals.file_data.match_phonemes(_fingerprint, _matches)
+	LipSyncGlobals.file_data.match_phonemes(_fingerprint.values, _matches)
 
 	# Populate the bars
 	t = {
@@ -51,14 +52,17 @@ func global_lipsync():
 	actual_value = 0,
 	}
 	
+	
 	for phoneme in Phonemes.PHONEME.COUNT:
 		var deviation: float = _matches[phoneme]
 		var value := 0.0 if deviation < 0.0 else 1.0 - deviation
 		if get_tree().get_root().has_node("Main/LipsyncConfigurationPopup"):
 			get_tree().get_root().get_node("Main/LipsyncConfigurationPopup/%PhBox").get_child(phoneme).value = value
+			
 		if value > t.value:
 			t.value = value
-			t.actual_value = phoneme
+			actual_value = phoneme
+			t.actual_value = actual_value
 			
-	await get_tree().create_timer(0.08).timeout
+	await get_tree().create_timer(0.05).timeout
 	global_lipsync()

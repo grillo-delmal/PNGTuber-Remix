@@ -33,14 +33,14 @@ func reinfo():
 	should_change = false
 	for i in Global.held_sprites:
 		if i != null && is_instance_valid(i):
-			await get_tree().create_timer(0.01).timeout
-			held_sprite_is_true()
 			%Name.text = i.sprite_name
 			if i.sprite_type == "Sprite2D":
 				%AdvancedLipSync.button_pressed = i.sprite_data.advanced_lipsync
 				%NonAnimatedSheetCheck.button_pressed = i.sprite_data.non_animated_sheet
 				%FrameSpinbox.value = i.sprite_data.frame
 				%FrameSpinbox.max_value = (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1
+	await get_tree().create_timer(0.01).timeout
+	held_sprite_is_true()
 	should_change = true
 
 func _on_name_text_submitted(new_text):

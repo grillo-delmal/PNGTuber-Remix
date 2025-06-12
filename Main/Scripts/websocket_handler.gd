@@ -18,6 +18,7 @@ signal client_disconnected(peer_id: int)
 		if refuse:
 			pending_peers.clear()
 @export var port : int = 9321
+var is_working : bool = false
 
 
 class PendingPeer:
@@ -47,6 +48,7 @@ func stop() -> void:
 	pending_peers.clear()
 	peers.clear()
 	port_state.emit(false)
+	is_working = false
 
 
 func send(peer_id: int, message: String) -> int:
@@ -183,6 +185,7 @@ func _ready() -> void:
 func start_websocket_server():
 	var result = listen(port) #Made port static just so the port setting feature can be integrated better.
 	if result == OK:
+		is_working = true
 		port_state.emit(true)
 		print("Server now listening on port", port)
 	else:
@@ -213,5 +216,9 @@ func _on_message(peer_id: int, message: String):
 					send(peer_id,'{"event":"state", result:"success"}')
 				else:
 					send(peer_id,'{"event":"state", result:"failed"}')
+			"general":
+				var key = str(json_data["key"])
+				Global.key_pressed.emit(key)
+				send(peer_id,'{"event":"state", result:"success"}')
 
 				#print(Global.current_state)

@@ -18,13 +18,9 @@ const MAX_DEVIATION := 1000.0
 @export var weights: Dictionary
 
 
-func _init():
-	training = {}
-	weights = {}
-
 
 ## Calculate a match between the fingerprint and phonemes
-func match_phonemes(fingerprint: LipSyncFingerprint, matches: Array):
+func match_phonemes(fingerprint: Array, matches: Array):
 	# Ensure the matches array is the correct size
 	matches.resize(Phonemes.PHONEME.COUNT)
 
@@ -46,7 +42,7 @@ func match_phonemes(fingerprint: LipSyncFingerprint, matches: Array):
 
 
 ## Calculate a match between the fingerprint and visemes
-func match_visemes(fingerprint: LipSyncFingerprint, matches: Array):
+func match_visemes(fingerprint: Array, matches: Array):
 	# Ensure the matches array is the correct size
 	matches.resize(Visemes.VISEME.COUNT)
 

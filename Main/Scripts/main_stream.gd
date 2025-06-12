@@ -19,6 +19,8 @@ func load_file():
 
 func _ready() -> void:
 	Global.mode = 1
+	Global.viewport = %SubViewportContainer
+	Global.viewer = %Effects
 	Global.main = self
 	Global.sprite_container = %SpritesContainer
 	Global.light = %LightSource

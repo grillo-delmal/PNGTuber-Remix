@@ -10,15 +10,16 @@ func _toggled(toggle):
 	set_process_unhandled_input(toggle)
 	if toggle:
 		text = "... Awaiting Input ..."
-		release_focus()
-	else:
-		update_key_text()
 		grab_focus()
 		
+	else:
+		update_key_text()
+		release_focus()
+
 
 func _unhandled_input(event):
 	if not event is InputEventMouseMotion:
-		if event.is_pressed():
+		if event.is_released():
 			Global.settings_dict.cycles[%CycleChoice.get_selected_id()-1].backward = event.duplicate()
 			update_key_text()
 			button_pressed = false

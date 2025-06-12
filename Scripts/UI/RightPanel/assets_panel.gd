@@ -77,6 +77,7 @@ func _on_add_cycle_pressed() -> void:
 		sprites = [],
 		pos = 0,
 		last_sprite = 0,
+		active = false,
 	})
 
 
@@ -87,13 +88,23 @@ func _on_delete_cycle_pressed() -> void:
 		%CycleChoice.remove_item(%CycleChoice.get_selected_id())
 
 func _on_cycle_choice_sprite_item_selected(index: int) -> void:
-	for i in Global.held_sprites:
-		if i != null && is_instance_valid(i):
-			i.sprite_data.cycle = index
-			for l in Global.settings_dict.cycles:
-				if l.sprites.has(i.sprite_id):
-					l.remove_at(l.find(i.sprite_id))
-			Global.settings_dict.cycles[%CycleChoiceSprite.get_selected_id() - 1].sprites.append(i.sprite_id)
+	if %CycleChoice.get_selected_id() != 0:
+		for i in Global.held_sprites:
+			if i != null && is_instance_valid(i):
+				i.sprite_data.cycle = index
+				for l in Global.settings_dict.cycles:
+					if l.sprites.has(i.sprite_id):
+						l.remove_at(l.find(i.sprite_id))
+				Global.settings_dict.cycles[%CycleChoiceSprite.get_selected_id() - 1].sprites.append(i.sprite_id)
+	if %CycleChoice.get_selected_id() == 0:
+		for i in Global.held_sprites:
+			if i != null && is_instance_valid(i):
+				i.sprite_data.cycle = index
+				for l in Global.settings_dict.cycles:
+					if l.sprites.has(i.sprite_id):
+						l.remove_at(l.find(i.sprite_id))
+						l.get_node("%Drag").show()
+						l.was_active_before = l.get_node("%Drag").visible
 
 func update_cycle_choice():
 	%CycleChoice.clear()

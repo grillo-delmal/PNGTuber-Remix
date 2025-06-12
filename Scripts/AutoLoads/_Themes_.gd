@@ -34,6 +34,7 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	software_mode = 0,
 	ui_scaling = 1.0,
 	session = 0,
+	auto_activate_websocket = false,
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
@@ -113,10 +114,6 @@ func _ready():
 			
 			get_window().position = theme_settings.screen_pos
 			
-			if theme_settings.auto_load:
-				if FileAccess.file_exists(theme_settings.path):
-					await get_tree().create_timer(0.1).timeout
-					SaveAndLoad.load_file(theme_settings.path, true)
 			
 		load_file.close()
 		
@@ -145,12 +142,14 @@ func _ready():
 
 func lipsync_set_up():
 	if !FileAccess.file_exists(theme_settings.lipsync_file_path):
-		ResourceSaver.save(preload("res://UI/Lipsync stuff/PrebuildFile/DefaultTraining.tres") ,OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres")
-		LipSyncGlobals.file_data = ResourceLoader.load(OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres")
+		#ResourceSaver.save(preload("res://UI/Lipsync stuff/PrebuildFile/DefaultTraining.tres") ,OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres")
 		theme_settings.lipsync_file_path = OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres"
+		LipSyncGlobals.file_data = preload("res://UI/Lipsync stuff/DefaultTraining.tres")
+		LipSyncGlobals.save_file_as(theme_settings.lipsync_file_path)
+		
 		save()
 	else:
-		LipSyncGlobals.file_data = ResourceLoader.load(theme_settings.lipsync_file_path)
+		LipSyncGlobals.load_file(theme_settings.lipsync_file_path)
 
 
 func scale_window():

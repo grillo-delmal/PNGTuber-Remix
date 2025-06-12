@@ -166,36 +166,3 @@ func _update_inspector():
 		for i in LipSyncFingerprint.BANDS_COUNT:
 			var bar: ProgressBar = get_child(i)
 			bar.value = fingerprint.values[i] * max_scale
-
-
-'''
-		# Show fingerprint bars
-		$FingerprintBars.visible = true
-	elif phoneme >= 0:
-		# Hide other inspectors
-		$VisemeContainer.visible = false
-		$FingerprintBars.visible = false
-
-		# Set the text
-		$PhonemeDescription.text = PHONEME_DESCRIPTIONS[phoneme]
-
-		# Show phoneme description
-		$PhonemeDescription.visible = true
-	else:
-		# Hide other inspectors
-		$PhonemeDescription.visible = false
-		$FingerprintBars.visible = false
-
-		# Set the text and weight
-		$VisemeContainer/VisemeDescription.text = VISEME_DESCRIPTIONS[viseme]
-
-		# Set the selected viseme weight
-		_selected_viseme = viseme
-		var value := 0.0
-		if viseme in LipSyncGlobals.file_data.weights:
-			value = LipSyncGlobals.file_data.weights[viseme]
-		$VisemeContainer/HBoxContainer/WeightSlider.value = value
-
-		# Show viseme description
-		$VisemeContainer.visible = true
-'''

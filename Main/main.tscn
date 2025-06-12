@@ -21,7 +21,7 @@ shader_parameter/effect = 0
 offsets = PackedFloat32Array(0, 0.192982, 0.554386, 0.803509, 0.978947)
 colors = PackedColorArray(0.709965, 0.196036, 0.771008, 1, 1, 1, 0, 1, 0.630854, 0.955883, 1, 1, 0, 1, 1, 1, 0.709804, 0.196078, 0.772549, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_o60nc"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qac2q"]
 gradient = SubResource("Gradient_qac2q")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qac2q"]
@@ -33,7 +33,7 @@ shader_parameter/TextureLaodMult = 8.0
 shader_parameter/Tilling = 52.12
 shader_parameter/MovementDirSpeed = Vector2(-0.8, 1)
 shader_parameter/MovementDirSpeed2 = Vector2(0.6, 2)
-shader_parameter/color_gradiant = SubResource("GradientTexture1D_o60nc")
+shader_parameter/color_gradiant = SubResource("GradientTexture1D_qac2q")
 shader_parameter/Noise_Seed = Vector2(5, 1)
 shader_parameter/rainbow = false
 shader_parameter/line_color = Color(0, 0, 0, 1)
