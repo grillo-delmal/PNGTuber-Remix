@@ -154,6 +154,7 @@ TR_NORMAL_MAP_DEMO,Normal Map Demo
 TR_NORMAL_MAP,Normal Map
 TR_OFFSET_X,Offset-X :
 TR_OFFSET_Y,Offset-Y :
+TR_OPEN_FILES,Open File(s)
 TR_OPEN,Open
 TR_OUTLINE,Outline
 TR_PAUSE_MOVEMENT_TOOLTIP,Turns your model Static.\nUncheck to preview your model's movement.\nThis automatically gets unchecked when changing modes.
