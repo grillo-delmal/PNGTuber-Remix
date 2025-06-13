@@ -1,13 +1,17 @@
 key,en
 About,About
+Audio,Audio
 BG Color,BG Color
 Bounce,Bounce
 Experimental,Experimental
 Files,Files
+Import Settings,Import Settings
 Misc,Misc
 Mode,Mode
+Model Settings,Model Settings
 Movement,Movement
 Properties,Properties
+Remix Settings,Remix Settings
 Settings,Settings
 TR_ABOUT_FULL,This is a PNGTubing App made to be as lightweight and easy to use as possible. This app is based off PNGTuber+. Main goal is to implement new features as fix bugs from the original software and improve existing ones.
 TR_ABOUT,About
@@ -33,10 +37,13 @@ TR_ANIMATION_SPEED,Animation Speed
 TR_ANIMATION_SQUISH,Squish
 TR_ANIMATION_WOBBLE,Wobble
 TR_ANIMATION,Animation
+TR_ANTI_ALIASING,Anti-Aliasing
 TR_ASSET_MODEL_DEMO,Asset Model Demo
 TR_ASSETS,Assets
 TR_AURA,Aura
+TR_AUTO_LOAD_MODEL,Auto-Load Model
 TR_AUTO_ROTATION,Auto Rotation
+TR_AUTO_SAVE,Auto-Save
 TR_BASIC_DEMO,Basic Demo
 TR_BG_COLOR,BG Color
 TR_BLEND_ADD,Add
@@ -65,9 +72,12 @@ TR_COLOR,Color :
 TR_CREDITS,Credits
 TR_CUSTOM,Custom
 TR_DARKEN,Darken
+TR_DELAY,Delay
 TR_DELETE_STATE,Delete State
 TR_DELETE,Delete
 TR_DEMO_MODEL,Demo Model
+TR_DETECT_HOTKEYS_TOOLTIP,Making the software able to change States and other toggles using Hotkeys.
+TR_DETECT_HOTKEYS,Detect Hotkeys
 TR_DEUTERANOPIA,Deuteranopia
 TR_DISABLED,Disabled
 TR_DISAPPEAR_KEYS,Disappear Key(s)
@@ -98,6 +108,7 @@ TR_FM_RANGE_Y,Range Y :
 TR_FOLLOW_APPENDAGE_TIP,Follow Appendage Tip
 TR_FOLLOW_APPENDAGE,Follow Appendage
 TR_FOLLOW_MOUSE_DEMO,Follow Mouse Demo
+TR_FOLLOW_MOUSE_SCREEN_LABEL,Follow Mouse Screen :
 TR_FOLLOW_MOUSE,Follow Mouse
 TR_FOLLOW_THROUGH,Follow Through
 TR_FT_DRAG,Drag :
@@ -111,6 +122,7 @@ TR_IDLE,Idle
 TR_IGNORE_BOUNCE,Ignore Bound
 TR_IMAGE,Image
 TR_IS_ASSET,Is Asset
+TR_LANGUAGE_LABEL,Language :
 TR_LAYOUT,Layout
 TR_LIGHT_COLOR,Light Color :
 TR_LIGHT_ENERGY,Light Energy :
@@ -121,7 +133,10 @@ TR_LIGHT_VISIBLE,Light Visible
 TR_LIP_SYNC_CONFIG,LipSync Configuration
 TR_LS_DARKEN_TOOLTIP,Darkens Your model when not speaking.
 TR_MAGENTA,Magenta
+TR_MAX_FPS,Max FPS
+TR_MICROPHONE_LABEL,Microphone :
 TR_MINI_TUTORIAL,Mini Tutorial (WIP)
+TR_MINUTE_ABBREVIATION,min
 TR_MODE,Mode
 TR_MODEL_ANIMATIONS,Model Animations
 TR_MODEL_EFFECT,Model Effect :
@@ -140,7 +155,6 @@ TR_NORMAL_MAP,Normal Map
 TR_OFFSET_X,Offset-X :
 TR_OFFSET_Y,Offset-Y :
 TR_OPEN,Open
-TR_LANGUAGE_LABEL,Language :
 TR_OUTLINE,Outline
 TR_PAUSE_MOVEMENT_TOOLTIP,Turns your model Static.\nUncheck to preview your model's movement.\nThis automatically gets unchecked when changing modes.
 TR_PAUSE_MOVEMENT,Pause Movement
@@ -166,6 +180,8 @@ TR_ROT_MIN_ROT,Min-Rot :
 TR_ROT_SPEED,Rot-Speed :
 TR_ROTATION,Rotation :
 TR_SAVE_AS,Save As
+TR_SAVE_ON_EXIT_NOTE,(Helps remember toggled assets)
+TR_SAVE_ON_EXIT,Save on Exit
 TR_SAVE_WINDOW_POSITIONS,"Save Window (position, size, etc..)"
 TR_SAVE,Save
 TR_SCREEN_CRT,Screen CRT
@@ -200,9 +216,15 @@ TR_TOOLTIP_MINI_VIEW_ZOOM_OUT,Mini-View Zoom Out
 TR_TOOLTIP_MINI_VIEW_ZOOM_RESET,Mini-View Zoom Reset
 TR_TOOLTIP_REPLACE_SPRITE,Replace Sprite
 TR_TRANSPARENT,Transparent
+TR_TRIM_IMPORT,Trim Import
 TR_TRITANOPIA,Tritanopia
+TR_UI_SCALE_LABEL,UI Scale :
+TR_USE_DELTA_TIME_TOOLTIP,"The movement Ticks uses (Tick + 1 every frame),\nwhich could lead to very strong movements even with low\nmovement values.\nUsing DeltaTime makes it slower ( Tick + 0.016 every frame)\nand more forgiving to use higher values.\nThis needs to be set for every model to prevent sharing issues."
+TR_USE_DELTA_TIME,Use DeltaTime
 TR_VISIBILITY,Visibility
 TR_VISIBLE,Visible :
+TR_VOLUME_SENSITIVITY,Vol. Sensitivity
+TR_VOLUME,Volume
 TR_WIGGLE_PHYSICS,Wiggle Physics
 TR_WIGGLE_SPRITE,Wiggle Sprite
 TR_WINDOW_SIZE,Window Size

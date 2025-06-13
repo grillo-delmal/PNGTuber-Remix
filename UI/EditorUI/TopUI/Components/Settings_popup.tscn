@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://5ju7ih768ysd"]
+[gd_scene load_steps=7 format=3 uid="uid://5ju7ih768ysd"]
 
 [ext_resource type="Script" uid="uid://b2cf035nd4pj7" path="res://Scripts/UI/TopPanel/Components/settings_script.gd" id="1_j2o6a"]
 [ext_resource type="Script" uid="uid://181yhrus3jhb" path="res://Scripts/UI/Others/Spinboxes.gd" id="2_s0wg0"]
 [ext_resource type="Texture2D" uid="uid://upxotcsbnfdk" path="res://UI/Assets/slider.png" id="3_qasrd"]
+[ext_resource type="Script" uid="uid://caf875hofgogu" path="res://Scripts/UI/FormattedLocalizedLabel.gd" id="3_s0wg0"]
 [ext_resource type="Texture2D" uid="uid://x1nc07bigmj1" path="res://UI/Assets/ZoomResetButton.png" id="4_fsnh4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6iakd"]
@@ -62,9 +63,9 @@ custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
-tooltip_text = "Making the software able to change States and other toggles using Hotkeys."
+tooltip_text = "TR_DETECT_HOTKEYS_TOOLTIP"
 button_pressed = true
-text = "Detect Hotkeys : "
+text = "TR_DETECT_HOTKEYS"
 
 [node name="AntiAlCheck" type="CheckBox" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
@@ -73,7 +74,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
 button_pressed = true
-text = "Anti-Aliasing : "
+text = "TR_ANTI_ALIASING"
 
 [node name="AutoLoadCheck" type="CheckBox" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
@@ -81,20 +82,15 @@ custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
-text = "Auto-Load Model : "
+text = "TR_AUTO_LOAD_MODEL"
 
 [node name="DeltaTimeCheck" type="CheckBox" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "The movement Ticks uses (Tick + 1 every frame),
-which could lead to very strong movements even with low 
-movement values.
-Using DeltaTime makes it slower ( Tick + 0.016 every frame) 
-and more forgiving to use higher values. 
-This needs to be set for every model to prevent sharing issues."
-text = "Use DeltaTime  "
+tooltip_text = "TR_USE_DELTA_TIME_TOOLTIP"
+text = "TR_USE_DELTA_TIME"
 autowrap_mode = 3
 
 [node name="HBox2" type="HBoxContainer" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/VBoxContainer"]
@@ -106,13 +102,13 @@ custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
-text = "Save On Exit  : "
+text = "TR_SAVE_ON_EXIT"
 
 [node name="Label" type="Label" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/VBoxContainer/HBox2"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
-text = "(Helps remember toggled assets)"
+text = "TR_SAVE_ON_EXIT_NOTE"
 vertical_alignment = 1
 
 [node name="HBox" type="HBoxContainer" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/VBoxContainer"]
@@ -125,7 +121,7 @@ custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Auto-Save"
+text = "TR_AUTO_SAVE"
 
 [node name="AutoSaveSpin" type="SpinBox" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/VBoxContainer/HBox"]
 unique_name_in_owner = true
@@ -133,7 +129,7 @@ custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
-suffix = "min"
+suffix = "min."
 script = ExtResource("2_s0wg0")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/VBoxContainer"]
@@ -144,7 +140,9 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 custom_minimum_size = Vector2(144, 0)
 layout_mode = 2
-text = "Max FPS : "
+text = "{0} : "
+script = ExtResource("3_s0wg0")
+localizations = Array[String](["TR_MAX_FPS"])
 
 [node name="MaxFPSlider" type="HSlider" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
@@ -163,7 +161,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
-text = "Follow Mouse Screen : "
+text = "TR_FOLLOW_MOUSE_SCREEN_LABEL"
 
 [node name="SelectedScreen" type="OptionButton" parent="SettingVbox/SettingsTab/Model Settings/MarginContainer/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
@@ -202,7 +200,7 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 2
 size_flags_vertical = 10
 theme_override_font_sizes/font_size = 20
-text = "Volume"
+text = "TR_VOLUME"
 
 [node name="VolumeBar" type="ProgressBar" parent="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/GridContainer2"]
 unique_name_in_owner = true
@@ -235,7 +233,7 @@ value = 0.1
 layout_mode = 2
 size_flags_vertical = 10
 theme_override_font_sizes/font_size = 20
-text = "Delay"
+text = "TR_DELAY"
 
 [node name="DelayBar" type="ProgressBar" parent="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/GridContainer2"]
 unique_name_in_owner = true
@@ -267,7 +265,7 @@ value = 0.1
 layout_mode = 2
 size_flags_vertical = 10
 theme_override_font_sizes/font_size = 20
-text = "Vol. Sensitivity"
+text = "TR_VOLUME_SENSITIVITY"
 
 [node name="SensitivityBar" type="ProgressBar" parent="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/GridContainer2"]
 unique_name_in_owner = true
@@ -310,7 +308,7 @@ theme_override_constants/separation = 7
 [node name="MicLabel" type="Label" parent="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Used Microphone "
+text = "TR_MICROPHONE_LABEL"
 
 [node name="MicroPhoneMenu" type="OptionButton" parent="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
@@ -397,7 +395,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "UI Scale : "
+text = "TR_UI_SCALE_LABEL"
 
 [node name="UIScalingSpinBox" type="SpinBox" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/HBoxContainer"]
 unique_name_in_owner = true
