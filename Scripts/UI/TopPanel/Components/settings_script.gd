@@ -8,7 +8,7 @@ func _ready() -> void:
 	%UIThemeButton.select(Settings.theme_settings.theme_id)
 	%MicroPhoneMenu.get_popup().connect("id_pressed",choosing_device)
 	for i in %LanguageOptions.item_count:
-		if %LanguageOptions.get_item_text(i) == Global.preferences.get_value("General", "language"):
+		if %LanguageOptions.get_item_text(i) == Settings.theme_settings.language:
 			%LanguageOptions.select(i)
 			break
 			

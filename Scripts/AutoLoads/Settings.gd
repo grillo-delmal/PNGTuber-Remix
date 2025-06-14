@@ -44,6 +44,7 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	hide_mini_view = false,
 	hide_sprite_view = true,
 	use_threading = false,
+	language = "automatic",
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
@@ -58,8 +59,8 @@ func save_before_closing():
 		if FileAccess.file_exists(Global.save_path):
 			SaveAndLoad.save_file(Global.save_path)
 		else:
-			DirAccess.make_dir_absolute(os_path + "/AutoSaves")
-			SaveAndLoad.save_file(OS.get_executable_path().get_base_dir() + "/AutoSaves" + "/" + str(randi()))
+			DirAccess.make_dir_absolute("user://AutoSaves")
+			SaveAndLoad.save_file("user://AutoSaves/" + str(randi()))
 		window_size_changed()
 		save()
 	await get_tree().create_timer(0.1).timeout
@@ -74,8 +75,8 @@ func auto_save():
 	if FileAccess.file_exists(Global.save_path):
 		SaveAndLoad.save_file(Global.save_path)
 	else:
-		DirAccess.make_dir_absolute(os_path + "/AutoSaves")
-		SaveAndLoad.save_file(OS.get_executable_path().get_base_dir() + "/AutoSaves" + "/" + str(randi()))
+		DirAccess.make_dir_absolute("user://AutoSaves")
+		SaveAndLoad.save_file("user://AutoSaves/" + str(randi()))
 	window_size_changed()
 	save()
 	if Global.settings_dict.auto_save:
@@ -125,7 +126,7 @@ func _ready():
 		load_file.close()
 		
 	else:
-		var create_file = file.open("user://Preferences.pRDat", FileAccess.WRITE)
+		var create_file = file.open(OS.get_executable_path().get_base_dir() + "/Preferences.pRDat", FileAccess.WRITE)
 		theme_settings.theme_id = 0
 		create_file.store_var(theme_settings)
 		create_file.close()
@@ -134,7 +135,7 @@ func _ready():
 	get_window().size_changed.connect(window_size_changed)
 	
 	await get_tree().create_timer(0.05).timeout
-	get_window().size = theme_settings.screen_size
+	get_window().size = Settings.theme_settings.screen_size
 	check_ui()
 #	top_bar.check_data()
 
@@ -165,22 +166,22 @@ func scale_window():
 	get_tree().root.content_scale_factor = theme_settings.ui_scaling
 
 func window_size_changed():
-	theme_settings.screen_size = get_window().size
-	theme_settings.screen_pos = get_window().position
+	Settings.theme_settings.screen_size = get_window().size
+	Settings.theme_settings.screen_pos = get_window().position
 	if get_window().mode == get_window().MODE_MAXIMIZED:
-		theme_settings.screen_window = 1
+		Settings.theme_settings.screen_window = 1
 	elif get_window().mode == get_window().MODE_MINIMIZED:
-		theme_settings.screen_window = 2
+		Settings.theme_settings.screen_window = 2
 	else:
-		theme_settings.screen_window = 0
+		Settings.theme_settings.screen_window = 0
 		
 	if top_bar != null && is_instance_valid(top_bar):
-		top_bar.get_node("%WindowSize").text = "Window Size " + str(theme_settings.screen_size)
+		top_bar.get_node("%WindowSize").text = "Window Size " + str(Settings.theme_settings.screen_size)
 	save()
 
 func check_ui():
 	if top_bar != null && is_instance_valid(top_bar):
-		if theme_settings.mode == 0:
+		if Settings.theme_settings.mode == 0:
 			top_bar.get_node("%TopBarInput").choosing_mode(0)
 		else:
 			top_bar.get_node("%TopBarInput").choosing_mode(1)
@@ -206,28 +207,27 @@ func _on_ui_theme_button_item_selected(index):
 			current_theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
 		7:
 			current_theme = preload("res://Themes/FrutigerAeroTheme/FrutigerAero.tres")
-			
 	
 	popup.theme = current_theme
-	theme_settings.theme_id = index
+	Settings.theme_settings.theme_id = index
 	Global.theme_update.emit(current_theme)
 	save()
 
 func _on_auto_load_check_toggled(toggled_on):
-	theme_settings.auto_load = toggled_on
+	Settings.theme_settings.auto_load = toggled_on
 	save()
 
 func _on_save_on_exit_check_toggled(toggled_on):
-	theme_settings.save_on_exit = toggled_on
+	Settings.theme_settings.save_on_exit = toggled_on
 	save()
 
 func toggle_borders():
-	theme_settings.borders = !theme_settings.borders
-	var s = theme_settings.screen_size
-	if theme_settings.borders:
+	Settings.theme_settings.borders = !Settings.theme_settings.borders
+	var s = Settings.theme_settings.screen_size
+	if Settings.theme_settings.borders:
 		get_window().borderless = false
 		get_window().size = s
-	elif !theme_settings.borders:
+	elif !Settings.theme_settings.borders:
 		get_window().borderless = true
 		get_window().size = s
 	save()
@@ -247,16 +247,16 @@ func center_window():
 	window_size_changed()
 
 func set_always_on_top(toggle):
-	theme_settings.always_on_top = toggle
-	get_window().always_on_top = theme_settings.always_on_top
+	Settings.theme_settings.always_on_top = toggle
+	get_window().always_on_top = Settings.theme_settings.always_on_top
 	save()
 
 func _on_h_split_container_dragged(offset: int) -> void:
-	theme_settings.left = offset
+	Settings.theme_settings.left = offset
 	save()
 
 func _on_h_split_dragged(offset: int) -> void:
-	theme_settings.right = offset
+	Settings.theme_settings.right = offset
 	save()
 
 
