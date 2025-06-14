@@ -1,9 +1,12 @@
 key,en
 About,About
 Audio,Audio
+Basic Concepts,Basic Concepts
+Basic Controls,Basic Controls
 BG Color,BG Color
 Bounce,Bounce
 Experimental,Experimental
+FAQ,FAQ
 Files,Files
 Import Settings,Import Settings
 Misc,Misc
@@ -13,6 +16,7 @@ Movement,Movement
 Properties,Properties
 Remix Settings,Remix Settings
 Settings,Settings
+Shortcuts,Shortcuts
 TR_ABOUT_FULL,This is a PNGTubing App made to be as lightweight and easy to use as possible. This app is based off PNGTuber+. Main goal is to implement new features as fix bugs from the original software and improve existing ones.
 TR_ABOUT,About
 TR_ACHROMATOPSIA,Achromatopsia
@@ -44,6 +48,8 @@ TR_AURA,Aura
 TR_AUTO_LOAD_MODEL,Auto-Load Model
 TR_AUTO_ROTATION,Auto Rotation
 TR_AUTO_SAVE,Auto-Save
+TR_BASIC_CONCEPTS_FULL,"Okay, so bear with me!, You might have noticed many sliders here use Amp and Freq. If you don't know how they work, here is a very basic explanation! Amplitude is the main value, how high or low the object would reach, Frequency is how fast the Amp takes to go from + to - through given time."
+TR_BASIC_CONTROLS_FULL,"Held Sprite Inputs :\n- Moving Sprite : Click and drag around.\n- Move Origin : Arrow Keys or by holding Ctrl on your keyboard and pressing where you want the origin to be.\n- Scroll mouse wheel on sliders for more accurate results.\n\nInput Remap :\n- Click the button of the state you want.\n\nto remap and then add the new button:\n- Change States with input : Captures Input\nwhen minimized if on.\n\nControl Bounce :\n- Click on bounce top bar to change the bounce and gravity to your desire.\n\nMouse Controls :\n- Scroll Wheel to zoom in/ out.\n- Middle Mouse button to pan the camera."
 TR_BASIC_DEMO,Basic Demo
 TR_BG_COLOR,BG Color
 TR_BLEND_ADD,Add
@@ -61,6 +67,7 @@ TR_BLUE,Blue
 TR_BOUNCE_AMOUNT_TOOLTIP,Affects Model Bouncing
 TR_BOUNCE_AMOUNT,Bounce Amount
 TR_BOUNCE_GRAVITY,Bounce Gravity
+TR_BOUNCE_WHEN_CHANGING_STATES,Bounce when changing states
 TR_CANCEL,Cancel
 TR_CENTER_WINDOW,Center Window
 TR_CHOOSE_DEMO,Choose Demo :
@@ -71,6 +78,7 @@ TR_COLOR_BLINDNESS_HELPER,Color-Blindness Helper :
 TR_COLOR,Color :
 TR_CREDITS,Credits
 TR_CUSTOM,Custom
+TR_CYCLE_LABEL,Cycle :
 TR_DARKEN,Darken
 TR_DELAY,Delay
 TR_DELETE_STATE,Delete State
@@ -92,6 +100,7 @@ TR_EFFECT_SIZE,Effect Size :
 TR_EFFECTS,Effects
 TR_EXPORT_MODEL_PARTS,Export Model Parts
 TR_EYE_ANIMATIONS,Eye Animations
+TR_FAQ_FULL,"Who made this software?\n- TheMime (me) is the current main dev, buuut community help is still open and appreciated!\n\nIs this really PNGTubing or Vtubing or ???\n- This form of PNGTubing is the closest thing to Vtubing. Consider it a middle point I guess, lol. Still not as complex as real Vtuber models, so I personally thing it is PNGTubing still!\n\nWhy is some of the code a bit of a mess?\n- When I first made this software, I barely knew much about coding, I won't lie when I tell you some code is embarrassing and I hope to improve it myself or with community help. You can find the source code's link in the credits!\n\nYou mentioned ToonTubing in the the "What is PNGTubing?" tab. Will this ever get supported?\n- Maybe, I am currently working on a personal (private) demo to add a form of easy to understand visual scripting system to be able to pull this sort of stuff. Wish me luck lol!\n\nHow can I support this project?\n- You can simply share it around (but please don't be annoying) and show off your model made in it. Adding credit at some point to the software would be nice!\n\n(If i ever got more common questions, will put them here!)"
 TR_FAT_POINT,Point :
 TR_FILE_DIALOG_TITLE,Open File(s)
 TR_FILES,Files
@@ -142,6 +151,7 @@ TR_MODEL_ANIMATIONS,Model Animations
 TR_MODEL_EFFECT,Model Effect :
 TR_MOUSE_VELOCITY,Mouse Velocity
 TR_MOUTH_CLOSED,Mouth Closed :
+TR_MOUTH_OPEN_LABEL,Mouth Open :
 TR_MOVE_WITH_MOUSE_TOOLTIP,"Animate to Mouse must be turned on in order for this feature to work when toggled off, it stops the sprite from moving on the x and y axis, but keeps the Animate to Mouse working."
 TR_MOVE_WITH_MOUSE,Move with Mouse
 TR_NAME,Name
@@ -165,6 +175,7 @@ TR_POS_X,Pos-X :
 TR_POS_Y,Pos-Y :
 TR_PREVIEW,Preview
 TR_PROTANOPIA,Protanopia
+TR_QUIT,Quit
 TR_RAINBOW,Rainbow
 TR_REACTION,Reaction
 TR_RED,Red
@@ -183,10 +194,13 @@ TR_ROTATION,Rotation :
 TR_SAVE_AS,Save As
 TR_SAVE_ON_EXIT_NOTE,(Helps remember toggled assets)
 TR_SAVE_ON_EXIT,Save on Exit
+TR_SAVE_WARNING_FULL,"If you clicked quit without making sure your work is saved, you will lose your progress."
+TR_SAVE_WARNING,Did you make sure to save?
 TR_SAVE_WINDOW_POSITIONS,"Save Window (position, size, etc..)"
 TR_SAVE,Save
 TR_SCREEN_CRT,Screen CRT
 TR_SETTINGS,Settings
+TR_SHORTCUTS_FULL,"* Mouse Controls\n- Rotation : Ctrl+MouseWheel (Up, Down)\n- Camera Zoom : MouseWheel (Up, Down)\n- Camera Drag : MouseWheel (Pressed)\n\n*Keyboard Controls \n- Moving Sprite : \n> Ctrl+W (Up)\n> Ctrl+S (Down)\n> Ctrl+A (Left)\n> Ctrl+D (Right)\n\n- Moving Offset : \n> Arrow-Up (Up)\n> Arrow-Down (Down)\n> Arrow-Left (Left)\n> Arrow-Right (Right)\n\n- Quick Save : Ctrl+S\n- Quick Deselect : Alt+D\n- Quick Window Centering : Ctrl+ Kp -"
 TR_SHOULD_BLINK,Should Blink :
 TR_SHOULD_TALK,Should Talk :
 TR_SHOW_UI,Show UI
@@ -199,6 +213,9 @@ TR_SQUISH_AMOUNT,Squish Amount
 TR_SQUISH_ON_BLINK,Squish on Blink
 TR_STATE_REMAP,State Remap
 TR_STATIC_OBJECT,Static Object
+TR_STREAMER_WIP,Streamer (WIP)
+TR_SWITCH_SESSION_FULL,Make sure to save your Model first before switching modes since this takes you to a completely separate session of the software.
+TR_SWITCH_SESSION,Which Session type do you want to switch to?
 TR_SYNC_EFFECT,Sync Effect
 TR_TEST_FRAME,Frame :
 TR_TINT,Tint :
@@ -226,6 +243,7 @@ TR_VISIBILITY,Visibility
 TR_VISIBLE,Visible :
 TR_VOLUME_SENSITIVITY,Vol. Sensitivity
 TR_VOLUME,Volume
+TR_WHAT_IS_PNG_TUBING_FULL,"PNGTubing is a form of Vtubing. However, unlike Vtubing, it is much simpler and less costly. This is why it gained popularity in recent years. There are some different types of PNGTubing, this includes Static (like the model shown), Toon and Rigged. In this software -PNGTube-Remix, you can create both Static and Rigged! Even mix them up if needed. Hope you have fun!"
 TR_WIGGLE_PHYSICS,Wiggle Physics
 TR_WIGGLE_SPRITE,Wiggle Sprite
 TR_WINDOW_SIZE,Window Size
@@ -246,5 +264,6 @@ TR_Y_FREQUENCY_WOBBLE,Y-Freq Wobble :
 TR_Y_OFFSET,Y-Offset :
 TR_YES,Yes
 TR_Z_ORDER,Z Order :
+What is PNGTubing?,What is PNGTubing?
 Wiggle,Wiggle
 Window,Window

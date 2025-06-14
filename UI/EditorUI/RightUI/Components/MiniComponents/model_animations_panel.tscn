@@ -78,7 +78,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(116, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Mouth Open :  "
+text = "TR_MOUTH_OPEN_LABEL"
 
 [node name="MouthOpenAnim" type="MenuButton" parent="MO"]
 unique_name_in_owner = true
@@ -86,7 +86,7 @@ custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 14
-text = "Idle"
+text = "TR_IDLE"
 flat = false
 alignment = 0
 item_count = 6
@@ -121,7 +121,7 @@ type = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
-text = "Bounce when changing states    "
+text = "TR_BOUNCE_WHEN_CHANGING_STATES"
 
 [node name="HSeparator" type="HSeparator" parent="."]
 layout_mode = 2

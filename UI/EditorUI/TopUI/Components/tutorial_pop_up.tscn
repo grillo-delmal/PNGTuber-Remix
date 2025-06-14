@@ -411,22 +411,12 @@ autoplay = "default"
 frame_progress = 0.317187
 
 [node name="Label" type="Label" parent="TabContainer/What is PNGTubing?/MarginContainer/Control"]
+custom_minimum_size = Vector2(350, 404)
 layout_mode = 2
-offset_top = -2.5
-offset_right = 571.0
-offset_bottom = 401.5
-theme_override_font_sizes/font_size = 24
-text = "PNGTubing is a form of Vtubing.
-However, unlike Vtubing, it is
-much simpler and less costly.
-This is why it gained popularity
-in recent years. There are some
-different types of PNGTubing, this
-includes Static (like the model shown), Toon and
-Rigged. In this software -PNGTube-Remix, you 
-can create both Static and Rigged! Even mix them
-up if needed. Hope you have fun!
-"
+offset_top = -2.0
+offset_right = 350.0
+offset_bottom = 402.0
+text = "TR_WHAT_IS_PNG_TUBING_FULL"
 
 [node name="Basic Concepts" type="ScrollContainer" parent="TabContainer"]
 visible = false
@@ -438,20 +428,17 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="TabContainer/Basic Concepts/Control"]
-layout_mode = 1
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Basic Concepts/Control"]
+custom_minimum_size = Vector2(245, 257)
+layout_mode = 0
 offset_right = 40.0
-offset_bottom = 23.0
-text = "Okay, so bear with me!, You might
-have noticed many sliders here 
-use Amp and Freq. If you don't 
-know how they work, here is a very
-basic explanation! Amplitude is 
-the main value, how high or low
-the object would reach, Frequency 
-is how fast the Amp takes to go 
-from + to - through given time.
-"
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="TabContainer/Basic Concepts/Control/ScrollContainer"]
+custom_minimum_size = Vector2(245, 257)
+layout_mode = 2
+text = "TR_BASIC_CONCEPTS_FULL"
+autowrap_mode = 3
 
 [node name="TextureRect" type="TextureRect" parent="TabContainer/Basic Concepts/Control"]
 layout_mode = 1
@@ -484,14 +471,14 @@ expand_mode = 2
 stretch_mode = 4
 
 [node name="FreqHigh" type="AnimatedSprite2D" parent="TabContainer/Basic Concepts/Control"]
-position = Vector2(207, 313)
+position = Vector2(207, 330)
 scale = Vector2(0.43, 0.43)
 sprite_frames = SubResource("SpriteFrames_8t4wo")
 autoplay = "default"
 frame_progress = 0.678312
 
 [node name="FrqLow" type="AnimatedSprite2D" parent="TabContainer/Basic Concepts/Control"]
-position = Vector2(68, 313)
+position = Vector2(68, 330)
 scale = Vector2(0.43, 0.43)
 sprite_frames = SubResource("SpriteFrames_1uusd")
 autoplay = "default"
@@ -508,25 +495,9 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="TabContainer/Basic Controls/VBoxContainer"]
+custom_minimum_size = Vector2(550, 408)
 layout_mode = 2
-text = "Held Sprite Inputs :
-- Moving Sprite : Click and drag around.
-- Move Origin : Arrow Keys or by holding Ctrl on your keyboard and pressing where you want the origin to be.
-- Scroll mouse wheel on sliders for more accurate results.
-
-Input Remap :
-- Click the button of the state you want. 
-
-to remap and then add the new button:
-- Change States with input : Captures Input
-when minimized if on.
-
-Control Bounce :
-- Click on bounce top bar to change the bounce and gravity to your desire.
-
-Mouse Controls :
-- Scroll Wheel to zoom in/ out.
-- Middle Mouse button to pan the camera."
+text = "TR_BASIC_CONTROLS_FULL"
 autowrap_mode = 2
 
 [node name="Shortcuts" type="ScrollContainer" parent="TabContainer"]
@@ -540,60 +511,26 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="TabContainer/Shortcuts/VBoxContainer"]
+custom_minimum_size = Vector2(550, 408)
 layout_mode = 2
-text = "* Mouse Controls
-- Rotation : Ctrl+MouseWheel (Up, Down)
-- Camera Zoom : MouseWheel (Up, Down)
-- Camera Drag : MouseWheel (Pressed)
-
-*Keyboard Controls 
-- Moving Sprite : 
-> Ctrl+W (Up)
-> Ctrl+S (Down)
-> Ctrl+A (Left)
-> Ctrl+D (Right)
-
-- Moving Offset : 
-> Arrow-Up (Up)
-> Arrow-Down (Down)
-> Arrow-Left (Left)
-> Arrow-Right (Right)
-
-- Quick Save : Ctrl+S
-- Quick Deselect : Alt+D
-- Quick Window Centering : Ctrl+ Kp -
-"
+text = "TR_SHORTCUTS_FULL"
 autowrap_mode = 2
 
-[node name="QNA" type="ScrollContainer" parent="TabContainer"]
+[node name="FAQ" type="ScrollContainer" parent="TabContainer"]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/QNA"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/FAQ"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="TabContainer/QNA/VBoxContainer"]
+[node name="Label" type="Label" parent="TabContainer/FAQ/VBoxContainer"]
+custom_minimum_size = Vector2(550, 408)
 layout_mode = 2
 size_flags_vertical = 3
-text = "Who made this software?
-- TheMime (me) is the current main dev, buuut community help is still open and appreciated!
-
-Is this really PNGTubing or Vtubing or ???
-- This form of PNGTubing is the closest thing to Vtubing. Consider it a middle point I guess, lol. Still not as complex as real Vtuber models, so I personally thing it is PNGTubing still!
-
-Why is some of the code a bit of a mess?
-- When I first made this software, I barely knew much about coding, I won't lie when I tell you some code is embarrassing and I hope to improve it myself or with community help. You can find the source code's link in the credits!
-
-You mentioned ToonTubing in the the \"What is PNGTubing?\" tab. Will this ever get supported?
-- Maybe, I am currently working on a personal (private) demo to add a form of easy to understand visual scripting system to be able to pull this sort of stuff. Wish me luck lol!
-
-How can I support this project?
-- You can simply share it around (but please don't be annoying) and show off your model made in it. Adding credit at some point to the software would be nice!
-
-(If i ever got more common questions, will put them here!)"
+text = "TR_FAQ_FULL"
 autowrap_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]

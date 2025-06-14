@@ -6,9 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://dst8ervfhipkm" path="res://UI/Assets/ZoominButton.png" id="4_4rvn6"]
 [ext_resource type="Texture2D" uid="uid://bxuqwqa2tk5j8" path="res://UI/Assets/ZoomOutButton.png" id="5_w5yqn"]
 [ext_resource type="Script" uid="uid://dy1cd6xda1pu5" path="res://UI/BetterSlider/BetterToggles.gd" id="6_w5yqn"]
-[ext_resource type="Script" uid="uid://dp6m7k27uygdf" path="res://Scripts/UI/RightPanel/CycleToggles.gd" id="7_hf4n0"]
-[ext_resource type="Script" uid="uid://bq0jinc7th4h0" path="res://Scripts/UI/RightPanel/CycleForward.gd" id="8_u22l2"]
-[ext_resource type="Script" uid="uid://cglby66eahspg" path="res://Scripts/UI/RightPanel/CycleBackward.gd" id="9_olugq"]
+[ext_resource type="Script" path="res://Scripts/UI/RightPanel/CycleToggles.gd" id="7_hf4n0"]
+[ext_resource type="Script" path="res://Scripts/UI/RightPanel/CycleForward.gd" id="8_u22l2"]
+[ext_resource type="Script" path="res://Scripts/UI/RightPanel/CycleBackward.gd" id="9_olugq"]
 
 [node name="AssetsBox" type="VBoxContainer"]
 anchors_preset = 15
@@ -160,7 +160,7 @@ size_flags_horizontal = 3
 focus_mode = 0
 selected = 0
 item_count = 1
-popup/item_0/text = "None"
+popup/item_0/text = "TR_NONE"
 popup/item_0/id = 0
 
 [node name="HSeparator2" type="HSeparator" parent="."]
@@ -172,7 +172,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Cycle :"
+text = "TR_CYCLE"
 
 [node name="HBox" type="HBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
@@ -186,7 +186,7 @@ size_flags_horizontal = 3
 focus_mode = 0
 selected = 0
 item_count = 1
-popup/item_0/text = "None"
+popup/item_0/text = "TR_NONE"
 popup/item_0/id = 0
 
 [node name="AddCycle" type="Button" parent="HBoxContainer/HBox"]
