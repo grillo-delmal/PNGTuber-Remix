@@ -24,9 +24,9 @@ func _ready():
 	ProjectSettings.set("audio/driver/mix_rate", AudioServer.get_mix_rate())
 	update_window_button()
 	
-	print("user://autosaves")
-	if !DirAccess.dir_exists_absolute("user://autosaves"):
-		DirAccess.make_dir_absolute("user://autosaves")
+	print(Themes.auto_saves_location)
+	if !DirAccess.dir_exists_absolute(Themes.auto_saves_location):
+		DirAccess.make_dir_absolute(Themes.auto_saves_location)
 		
 	await get_tree().physics_frame
 	choosing_mode(Settings.theme_settings.mode)
@@ -225,7 +225,7 @@ func _on_preview_mode_check_toggled(toggled_on: bool) -> void:
 
 func export_images(images = get_tree().get_nodes_in_group("Sprites")):
 	#OS.get_executable_path().get_base_dir() + "/ExportedAssets" + "/" + str(randi())
-	var dire = "user://ExportedAssets"
+	var dire = OS.get_executable_path() + "/ExportedAssets"
 	if !DirAccess.dir_exists_absolute(dire):
 		DirAccess.make_dir_absolute(dire)
 		

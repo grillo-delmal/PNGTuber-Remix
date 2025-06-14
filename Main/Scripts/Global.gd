@@ -135,10 +135,6 @@ func _ready():
 	key_pressed.connect(update_cycles)
 	
 	_on_load()
-	
-	var old_auto_save_location = OS.get_executable_path().get_base_dir() + "AutoSaves"
-	if DirAccess.dir_exists_absolute(old_auto_save_location):
-		DirAccess.rename_absolute(old_auto_save_location, "user://AutoSaves")
 
 func _on_load():
 	var locale = Util.get_locale(Settings.language)
