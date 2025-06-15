@@ -24,12 +24,13 @@ func _ready():
 	ProjectSettings.set("audio/driver/mix_rate", AudioServer.get_mix_rate())
 	update_window_button()
 	
-	print(Themes.auto_saves_location)
-	if !DirAccess.dir_exists_absolute(Themes.auto_saves_location):
-		DirAccess.make_dir_absolute(Themes.auto_saves_location)
+	print(OS.get_executable_path().get_base_dir() + "/autosaves")
+	if !DirAccess.dir_exists_absolute(OS.get_executable_path().get_base_dir() + "/autosaves"):
+		DirAccess.make_dir_absolute(OS.get_executable_path().get_base_dir() + "/autosaves")
 		
 	await get_tree().physics_frame
 	choosing_mode(Settings.theme_settings.mode)
+
 
 func update_window_button() -> void:
 	var menu := %WindowButton.get_popup() as PopupMenu
@@ -225,7 +226,7 @@ func _on_preview_mode_check_toggled(toggled_on: bool) -> void:
 
 func export_images(images = get_tree().get_nodes_in_group("Sprites")):
 	#OS.get_executable_path().get_base_dir() + "/ExportedAssets" + "/" + str(randi())
-	var dire = Preferences.save_data_location + "/ExportedAssets"
+	var dire = OS.get_executable_path().get_base_dir() + "/ExportedAssets"
 	if !DirAccess.dir_exists_absolute(dire):
 		DirAccess.make_dir_absolute(dire)
 		

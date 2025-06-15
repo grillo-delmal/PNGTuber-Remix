@@ -133,15 +133,7 @@ func _ready():
 	get_window().title = "PNGTuber-Remix V" + version
 	current_state = 0
 	key_pressed.connect(update_cycles)
-	
-	_on_load()
 
-func _on_load():
-	var locale = Util.get_locale(Settings.language)
-	if locale == "automatic":
-		TranslationServer.set_locale(OS.get_locale_language())
-	else:
-		TranslationServer.set_locale(locale)
 
 func set_mode(new_mode) -> void:
 	if new_mode == mode: return

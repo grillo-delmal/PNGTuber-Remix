@@ -1,6 +1,7 @@
 extends Node
 
 signal theme_changed
+signal file_error
 
 var top_bar = null
 var ui_theme
@@ -46,6 +47,7 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	use_threading = false,
 	language = "automatic",
 }
+var save_location = OS.get_executable_path().get_base_dir() + "/Preferences.pRDat"
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
 var additional_output = RefCounted.new()
@@ -67,9 +69,14 @@ func save_before_closing():
 	get_tree().quit()
 
 func save():
-	var save_file = FileAccess.open(OS.get_executable_path().get_base_dir() + "/Preferences.pRDat", FileAccess.WRITE)
-	save_file.store_var(theme_settings)
-	save_file.close()
+	var save_file = FileAccess.open(save_location, FileAccess.WRITE)
+	if (save_file):
+		save_file.store_var(theme_settings)
+		save_file.close()
+	else:
+		push_error("Could not save settings: ", FileAccess.get_open_error())
+		file_error.emit("SAVE_ERROR", FileAccess.get_open_error())
+
 
 func auto_save():
 	if FileAccess.file_exists(Global.save_path):
@@ -95,8 +102,8 @@ func _ready():
 		top_bar = get_tree().get_root().get_node("Main/%TopUI")
 	
 	var file = FileAccess
-	if file.file_exists(OS.get_executable_path().get_base_dir() + "/Preferences.pRDat"):
-		var load_file = file.open(OS.get_executable_path().get_base_dir() + "/Preferences.pRDat", FileAccess.READ)
+	if file.file_exists(save_location):
+		var load_file = file.open(save_location, FileAccess.READ)
 		var info = load_file.get_var()
 		if info is Dictionary:
 			theme_settings.merge(info, true)
@@ -126,10 +133,14 @@ func _ready():
 		load_file.close()
 		
 	else:
-		var create_file = file.open(OS.get_executable_path().get_base_dir() + "/Preferences.pRDat", FileAccess.WRITE)
+		var create_file = file.open(save_location, FileAccess.WRITE)
 		theme_settings.theme_id = 0
-		create_file.store_var(theme_settings)
-		create_file.close()
+		if (create_file):
+			create_file.store_var(theme_settings)
+			create_file.close()
+		else:
+			push_error(file.get_open_error())
+			file_error.emit("INITIAL_SAVE_ERROR", file.get_open_error())
 		loaded_UI(theme_settings.theme_id)
 	
 	get_window().size_changed.connect(window_size_changed)
@@ -150,6 +161,13 @@ func _ready():
 			AudioServer.input_device = theme_settings.microphone
 	
 	change_cursor()
+
+	# Load language
+	var locale = Util.get_locale(theme_settings.language)
+	if locale == "automatic":
+		TranslationServer.set_locale(OS.get_locale_language())
+	else:
+		TranslationServer.set_locale(locale)
 
 func lipsync_set_up():
 	if !FileAccess.file_exists(theme_settings.lipsync_file_path):
