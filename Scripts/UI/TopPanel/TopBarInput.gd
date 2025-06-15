@@ -225,7 +225,7 @@ func _on_preview_mode_check_toggled(toggled_on: bool) -> void:
 
 func export_images(images = get_tree().get_nodes_in_group("Sprites")):
 	#OS.get_executable_path().get_base_dir() + "/ExportedAssets" + "/" + str(randi())
-	var dire = OS.get_executable_path() + "/ExportedAssets"
+	var dire = Preferences.save_data_location + "/ExportedAssets"
 	if !DirAccess.dir_exists_absolute(dire):
 		DirAccess.make_dir_absolute(dire)
 		
