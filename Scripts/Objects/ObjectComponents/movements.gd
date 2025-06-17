@@ -104,7 +104,7 @@ func follow_wiggle():
 		if actor.get_parent() is WigglyAppendage2D && is_instance_valid(actor.get_parent()):
 			var pnt = actor.get_parent().points[clamp(actor.sprite_data.tip_point,0, actor.get_parent().points.size() -1)]
 			actor.position = actor.position.lerp(pnt, 0.6)
-			%Pos.rotation = lerp(%Pos.rotation, clamp(actor.position.angle(), deg_to_rad(actor.sprite_data.follow_wa_mini), deg_to_rad(actor.sprite_data.follow_wa_max)),0.08)
+			%Pos.rotation = clamp(atan2(actor.position.y, actor.position.x), deg_to_rad(actor.sprite_data.follow_wa_mini), deg_to_rad(actor.sprite_data.follow_wa_max))
 		else:
 			%Pos.rotation = 0
 		
@@ -129,6 +129,8 @@ func mouse_delay():
 	var mouse_delta = last_mouse_position - mouse
 	if !mouse_delta.is_zero_approx():
 		distance = Vector2(tanh(mouse_delta.x), tanh(mouse_delta.y))
+		if distance.length() == NAN:
+			distance = Vector2(0.0, 0.0)
 		last_mouse_position = mouse  # Only update when there's actual movement
 
 func follow_mouse(_delta):
@@ -165,10 +167,12 @@ func follow_mouse(_delta):
 		var normalized_mouse = (mouse_x - screen_width / 2) / (screen_width / 2)
 
 		# Map the normalized position to the rotation factor
-		var rotation_factor = lerp(actor.sprite_data.mouse_rotation_max, actor.sprite_data.mouse_rotation, (normalized_mouse + 1) / 2)
+		var rotation_factor = lerp(actor.sprite_data.mouse_rotation_max, actor.sprite_data.mouse_rotation, max(0.01, (normalized_mouse + 1) / 2))
 
+		var safe_rot_min = clamp(actor.sprite_data.rLimitMin, -360, 360)
+		var safe_rot_max = clamp(actor.sprite_data.rLimitMax, -360, 360)
 		# Calculate the target rotation, scaled by the factor and clamped
-		var target_rotation = clamp(normalized_mouse * rotation_factor * deg_to_rad(90), deg_to_rad(actor.sprite_data.rLimitMin), deg_to_rad(actor.sprite_data.rLimitMax))
+		var target_rotation = clamp(normalized_mouse * rotation_factor * deg_to_rad(90), deg_to_rad(safe_rot_min), deg_to_rad(safe_rot_max))
 
 		# Smoothly interpolate the sprite's rotation
 		%Drag.rotation = lerp_angle(%Drag.rotation, target_rotation, actor.sprite_data.mouse_delay)
@@ -183,8 +187,8 @@ func follow_mouse(_delta):
 		var dist_from_center = last_dist - main_marker.coords
 		var norm_x = clamp(abs(dist_from_center.x) / center.x, 0.0, 1.0)
 		var norm_y = clamp(abs(dist_from_center.y) / center.y, 0.0, 1.0)
-		var target_scale_x = lerp(1.0, 1.0 - actor.sprite_data.mouse_scale_x , norm_x)
-		var target_scale_y = lerp(1.0, 1.0 - actor.sprite_data.mouse_scale_y, norm_y)
+		var target_scale_x = lerp(1.0, 1.0 - actor.sprite_data.mouse_scale_x , max(norm_x, 0.01))
+		var target_scale_y = lerp(1.0, 1.0 - actor.sprite_data.mouse_scale_y, max(norm_y, 0.01))
 		%Drag.scale.x = lerp(%Drag.scale.x, target_scale_x, actor.sprite_data.mouse_delay)
 		%Drag.scale.y = lerp(%Drag.scale.y, target_scale_y, actor.sprite_data.mouse_delay)
 		
@@ -214,27 +218,25 @@ func follow_mouse(_delta):
 		
 		var mouse_x = mouse.x
 		var screen_width = screen_size.x
-
 		# Calculate the normalized mouse position (-1 to 1, where 0 is center)
-		var normalized_mouse = (mouse_x - screen_width / 2) / (screen_width / 2)
-
+		var normalized_mouse = (mouse_x) / (screen_width / 2)
+		normalized_mouse = clamp(normalized_mouse, -1.0, 1.0)
+		
+		var safe_rot_min = clamp(actor.sprite_data.rLimitMin, -360, 360)
+		var safe_rot_max = clamp(actor.sprite_data.rLimitMax, -360, 360)
 		# Map the normalized position to the rotation factor
-		var rotation_factor = lerp(actor.sprite_data.mouse_rotation, actor.sprite_data.mouse_rotation_max, (normalized_mouse + 1) / 2)
-
+		var rotation_factor = lerp(actor.sprite_data.mouse_rotation, actor.sprite_data.mouse_rotation_max, max((normalized_mouse + 1) / 2, 0.001))
 		# Calculate the target rotation, scaled by the factor and clamped
-		var target_rotation = clamp(rotation_factor, deg_to_rad(actor.sprite_data.rLimitMin), deg_to_rad(actor.sprite_data.rLimitMax))
-
+		var target_rotation = clamp(rotation_factor, deg_to_rad(safe_rot_min), deg_to_rad(safe_rot_max))
 		# Smoothly interpolate the sprite's rotation
 		%Drag.rotation = lerp_angle(%Drag.rotation, target_rotation, actor.sprite_data.mouse_delay)
-		
-
 			
 		var center = screen_size * 0.5
 		var dist_from_center = mouse
 		var norm_x = clamp(abs(dist_from_center.x) / center.x, 0.0, 1.0)
 		var norm_y = clamp(abs(dist_from_center.y) / center.y, 0.0, 1.0)
-		var target_scale_x = lerp(1.0, 1.0 - actor.sprite_data.mouse_scale_x , norm_x)
-		var target_scale_y = lerp(1.0, 1.0 - actor.sprite_data.mouse_scale_y, norm_y)
+		var target_scale_x = lerp(1.0, 1.0 - actor.sprite_data.mouse_scale_x , max(norm_x, 0.001))
+		var target_scale_y = lerp(1.0, 1.0 - actor.sprite_data.mouse_scale_y, max(norm_y, 0.001))
 		%Drag.scale.x = lerp(%Drag.scale.x, target_scale_x, actor.sprite_data.mouse_delay)
 		%Drag.scale.y = lerp(%Drag.scale.y, target_scale_y, actor.sprite_data.mouse_delay)
 		

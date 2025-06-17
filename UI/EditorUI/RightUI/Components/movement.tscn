@@ -156,7 +156,7 @@ unique_name_in_owner = true
 layout_mode = 2
 sp_type = ""
 label_text = "Min-Rot :"
-mini_value = -180.0
+mini_value = -360.0
 step = 0.01
 value_to_update = "rLimitMin"
 
@@ -165,7 +165,7 @@ unique_name_in_owner = true
 layout_mode = 2
 sp_type = ""
 label_text = "Max-Rot :"
-max_value = 180.0
+max_value = 360.0
 step = 0.01
 value_to_update = "rLimitMax"
 
@@ -217,8 +217,8 @@ unique_name_in_owner = true
 layout_mode = 2
 sp_type = ""
 label_text = "Range X  : "
-mini_value = -1000.0
-max_value = 1000.0
+mini_value = -5000.0
+max_value = 5000.0
 step = 0.01
 value_to_update = "look_at_mouse_pos"
 
@@ -227,8 +227,8 @@ unique_name_in_owner = true
 layout_mode = 2
 sp_type = ""
 label_text = "Range  Y : "
-mini_value = -1000.0
-max_value = 1000.0
+mini_value = -5000.0
+max_value = 5000.0
 step = 0.01
 value_to_update = "look_at_mouse_pos_y"
 
