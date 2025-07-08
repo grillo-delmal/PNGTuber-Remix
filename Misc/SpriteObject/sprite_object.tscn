@@ -40,8 +40,8 @@ shader_parameter/alpha_threshold = 0.15
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5cd6y"]
 shader = ExtResource("7_4xt5n")
-shader_parameter/ant_color_1 = Color(1, 1, 1, 1)
-shader_parameter/ant_color_2 = Color(0, 0, 0, 1)
+shader_parameter/ant_color_1 = Color(1, 1, 1, 0.392157)
+shader_parameter/ant_color_2 = Color(0, 0, 0, 0.392157)
 shader_parameter/ant_width = 1.5
 shader_parameter/ant_length = 10.0
 shader_parameter/ant_speed = 30.0
@@ -56,7 +56,7 @@ gradient = SubResource("Gradient_4xt5n")
 [node name="SpriteObject" type="Node2D" node_paths=PackedStringArray("sprite_object") groups=["Sprites"]]
 physics_interpolation_mode = 1
 script = ExtResource("1_i7wd5")
-sprite_object = NodePath("Pos/Wobble/Drag/Rotation/Sprite2D")
+sprite_object = NodePath("Pos/Drag/Rotation/Sprite2D")
 sprite_type = "Sprite2D"
 
 [node name="Pos" type="Node2D" parent="."]
@@ -64,39 +64,35 @@ unique_name_in_owner = true
 physics_interpolation_mode = 1
 use_parent_material = true
 
-[node name="Wobble" type="Node2D" parent="Pos"]
+[node name="Dragger" type="Node2D" parent="Pos"]
+unique_name_in_owner = true
+physics_interpolation_mode = 1
+top_level = true
+
+[node name="Drag" type="Node2D" parent="Pos"]
 unique_name_in_owner = true
 physics_interpolation_mode = 1
 use_parent_material = true
 
-[node name="Dragger" type="Node2D" parent="Pos/Wobble"]
-unique_name_in_owner = true
-physics_interpolation_mode = 1
-
-[node name="Drag" type="Node2D" parent="Pos/Wobble"]
+[node name="Rotation" type="Node2D" parent="Pos/Drag"]
 unique_name_in_owner = true
 physics_interpolation_mode = 1
 use_parent_material = true
 
-[node name="Rotation" type="Node2D" parent="Pos/Wobble/Drag"]
-unique_name_in_owner = true
-physics_interpolation_mode = 1
-use_parent_material = true
-
-[node name="Origin" type="Sprite2D" parent="Pos/Wobble/Drag/Rotation"]
+[node name="Origin" type="Sprite2D" parent="Pos/Drag/Rotation"]
 unique_name_in_owner = true
 visible = false
 z_index = 4096
 z_as_relative = false
 texture = ExtResource("2_1i6gu")
 
-[node name="Sprite2D" type="Sprite2D" parent="Pos/Wobble/Drag/Rotation"]
+[node name="Sprite2D" type="Sprite2D" parent="Pos/Drag/Rotation"]
 unique_name_in_owner = true
 physics_interpolation_mode = 1
 material = SubResource("ShaderMaterial_1tqhp")
 texture = SubResource("CanvasTexture_upggl")
 
-[node name="Selection" type="Sprite2D" parent="Pos/Wobble/Drag/Rotation/Sprite2D"]
+[node name="Selection" type="Sprite2D" parent="Pos/Drag/Rotation/Sprite2D"]
 unique_name_in_owner = true
 visible = false
 z_index = 4096
@@ -104,9 +100,10 @@ z_as_relative = false
 material = SubResource("ShaderMaterial_4cvp6")
 texture = SubResource("CanvasTexture_upggl")
 
-[node name="Grab" type="TextureButton" parent="Pos/Wobble/Drag/Rotation/Sprite2D"]
+[node name="Grab" type="TextureButton" parent="Pos/Drag/Rotation/Sprite2D"]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
+z_index = 4096
 material = SubResource("ShaderMaterial_5cd6y")
 layout_direction = 1
 anchors_preset = 15
@@ -124,7 +121,7 @@ mouse_filter = 2
 texture_normal = SubResource("GradientTexture2D_5cd6y")
 stretch_mode = 0
 
-[node name="WiggleOrigin" type="Sprite2D" parent="Pos/Wobble/Drag/Rotation/Sprite2D"]
+[node name="WiggleOrigin" type="Sprite2D" parent="Pos/Drag/Rotation/Sprite2D"]
 unique_name_in_owner = true
 visible = false
 self_modulate = Color(1, 0, 0, 1)
@@ -153,11 +150,11 @@ animation_handler = NodePath("../AnimatedSpriteTexture")
 unique_name_in_owner = true
 script = ExtResource("9_4cvp6")
 actor = NodePath("..")
-sprite_node = NodePath("../Pos/Wobble/Drag/Rotation/Sprite2D")
+sprite_node = NodePath("../Pos/Drag/Rotation/Sprite2D")
 metadata/_custom_type_script = "uid://dfyvj4w18tr1"
 
-[connection signal="button_down" from="Pos/Wobble/Drag/Rotation/Sprite2D/Grab" to="." method="_on_grab_button_down"]
-[connection signal="button_up" from="Pos/Wobble/Drag/Rotation/Sprite2D/Grab" to="." method="_on_grab_button_up"]
-[connection signal="mouse_entered" from="Pos/Wobble/Drag/Rotation/Sprite2D/Grab" to="." method="_on_grab_mouse_entered"]
-[connection signal="mouse_exited" from="Pos/Wobble/Drag/Rotation/Sprite2D/Grab" to="." method="_on_grab_mouse_exited"]
+[connection signal="button_down" from="Pos/Drag/Rotation/Sprite2D/Grab" to="." method="_on_grab_button_down"]
+[connection signal="button_up" from="Pos/Drag/Rotation/Sprite2D/Grab" to="." method="_on_grab_button_up"]
+[connection signal="mouse_entered" from="Pos/Drag/Rotation/Sprite2D/Grab" to="." method="_on_grab_mouse_entered"]
+[connection signal="mouse_exited" from="Pos/Drag/Rotation/Sprite2D/Grab" to="." method="_on_grab_mouse_exited"]
 [connection signal="timeout" from="Animation" to="." method="animation"]

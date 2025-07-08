@@ -1,9 +1,13 @@
-[gd_scene load_steps=14 format=3 uid="uid://ngta1o5yiqxs"]
+[gd_scene load_steps=18 format=3 uid="uid://ngta1o5yiqxs"]
 
 [ext_resource type="Script" uid="uid://dvpyywoct4riy" path="res://Scripts/UI/control.gd" id="1_1r6xj"]
 [ext_resource type="Script" uid="uid://bpegrg5a15v2v" path="res://Scripts/UI/UIInput.gd" id="3_1eur5"]
+[ext_resource type="Script" uid="uid://74mv3eeev8pt" path="res://Scripts/UI/Others/cam_zoom.gd" id="4_epu7g"]
+[ext_resource type="Texture2D" uid="uid://dst8ervfhipkm" path="res://UI/Assets/ZoominButton.png" id="4_in571"]
 [ext_resource type="PackedScene" uid="uid://cpcj4o080w37m" path="res://UI/EditorUI/LeftUI/left_panel.tscn" id="5_0cvxm"]
+[ext_resource type="Texture2D" uid="uid://bxuqwqa2tk5j8" path="res://UI/Assets/ZoomOutButton.png" id="5_epu7g"]
 [ext_resource type="PackedScene" uid="uid://duk3smjtw111j" path="res://UI/EditorUI/RightUI/Components/wiggle.tscn" id="6_63lps"]
+[ext_resource type="Texture2D" uid="uid://cje55ikf44l63" path="res://UI/Assets/ZoomResetMainButton.png" id="6_seimj"]
 [ext_resource type="PackedScene" uid="uid://w2l13b1625f6" path="res://UI/EditorUI/RightUI/Components/animation_tab.tscn" id="7_1r6xj"]
 [ext_resource type="PackedScene" uid="uid://cwtfmnxmnl7h3" path="res://UI/EditorUI/RightUI/Components/light.tscn" id="7_4jud0"]
 [ext_resource type="PackedScene" uid="uid://nh83ldjgbynt" path="res://UI/EditorUI/RightUI/Components/model_anim.tscn" id="8_1r6xj"]
@@ -54,10 +58,58 @@ size_flags_horizontal = 3
 mouse_filter = 2
 split_offset = 2500
 
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="HSplitContainer/HSplit"]
+[node name="AspectRatioContainer" type="Control" parent="HSplitContainer/HSplit"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
+
+[node name="CamZoom" type="HBoxContainer" parent="HSplitContainer/HSplit/AspectRatioContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(107, 20)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -100.0
+offset_top = 6.0
+offset_right = 7.0
+offset_bottom = 34.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/separation = 10
+alignment = 2
+script = ExtResource("4_epu7g")
+
+[node name="ZoomInButton" type="Button" parent="HSplitContainer/HSplit/AspectRatioContainer/CamZoom"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Mini-View Zoom In"
+focus_mode = 0
+icon = ExtResource("4_in571")
+icon_alignment = 1
+expand_icon = true
+
+[node name="ZoomOutButton" type="Button" parent="HSplitContainer/HSplit/AspectRatioContainer/CamZoom"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Mini-View Zoom Out"
+focus_mode = 0
+icon = ExtResource("5_epu7g")
+icon_alignment = 1
+expand_icon = true
+
+[node name="ZoomMainResetButton" type="Button" parent="HSplitContainer/HSplit/AspectRatioContainer/CamZoom"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+tooltip_text = "Main-View Zoom Reset"
+focus_mode = 0
+icon = ExtResource("6_seimj")
+icon_alignment = 1
+expand_icon = true
 
 [node name="RightPanel" type="Panel" parent="HSplitContainer/HSplit"]
 unique_name_in_owner = true
@@ -261,6 +313,9 @@ value_to_update = "animate_to_mouse_track_pos"
 [node name="StatePanel" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer" instance=ExtResource("10_1r6xj")]
 layout_mode = 2
 
+[connection signal="pressed" from="HSplitContainer/HSplit/AspectRatioContainer/CamZoom/ZoomInButton" to="HSplitContainer/HSplit/AspectRatioContainer/CamZoom" method="_on_zoom_in_button_pressed"]
+[connection signal="pressed" from="HSplitContainer/HSplit/AspectRatioContainer/CamZoom/ZoomOutButton" to="HSplitContainer/HSplit/AspectRatioContainer/CamZoom" method="_on_zoom_out_button_pressed"]
+[connection signal="pressed" from="HSplitContainer/HSplit/AspectRatioContainer/CamZoom/ZoomMainResetButton" to="HSplitContainer/HSplit/AspectRatioContainer/CamZoom" method="_on_zoom_main_reset_button_pressed"]
 [connection signal="focus_entered" from="HSplitContainer/HSplit/RightPanel/Properties/Name" to="UIInput" method="_on_name_focus_entered"]
 [connection signal="focus_exited" from="HSplitContainer/HSplit/RightPanel/Properties/Name" to="UIInput" method="_on_name_focus_exited"]
 [connection signal="text_submitted" from="HSplitContainer/HSplit/RightPanel/Properties/Name" to="UIInput" method="_on_name_text_submitted"]

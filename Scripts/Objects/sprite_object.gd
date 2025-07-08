@@ -79,7 +79,7 @@ func _ready():
 	og_glob = sprite_data.position
 	animation()
 	%Dragger.top_level = true
-	%Dragger.global_position = %Wobble.global_position
+	%Dragger.global_position = %Pos.global_position
 	Global.reinfo.connect(sel)
 	Global.deselect.connect(desel)
 
@@ -87,6 +87,10 @@ func sel():
 	if self in Global.held_sprites:
 		selected = true
 		%Origin.show()
+		if sprite_data.folder:
+			%Grab.stretch_mode = TextureButton.StretchMode.STRETCH_KEEP
+			%Grab.texture_normal.width = 500
+			%Grab.texture_normal.height = 500
 		%Grab.anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		%Grab.modulate.a = 1.0
 	else:
@@ -214,7 +218,7 @@ func get_state(id):
 		%Sprite2D.position = sprite_data.offset 
 		%Sprite2D.scale = Vector2(1,1)
 		
-		%Wobble.z_index = sprite_data.z_index
+		%Rotation.z_index = sprite_data.z_index
 		modulate = sprite_data.colored
 		scale = sprite_data.scale
 	#	global_position = sprite_data.global_position

@@ -89,7 +89,7 @@ func _ready():
 	Global.reparent_objects.connect(reparent_obj)
 	Global.reparent_objects.connect(set_anchor_sprite)
 	%Dragger.top_level = true
-	%Dragger.global_position = %Wobble.global_position
+	%Dragger.global_position = %Pos.global_position
 	set_process(true)
 	update_wiggle_parts()
 	Global.reinfo.connect(sel)
@@ -99,6 +99,11 @@ func sel():
 	if self in Global.held_sprites:
 		selected = true
 		%Origin.show()
+		%Grab.stretch_mode = TextureButton.StretchMode.STRETCH_KEEP
+		%Grab.texture_normal.width =  %Sprite2D.texture.get_image().get_size().x/2
+		%Grab.texture_normal.height = sprite_data.width
+		%Grab.anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
+		%Grab.position.x -= %Grab.texture_normal.width/2
 	else:
 		%Origin.hide()
 		desel()
@@ -159,7 +164,7 @@ func get_state(id):
 	if not states[id].is_empty():
 		var dict = states[id]
 		sprite_data.merge(dict, true)
-		%Wobble.z_index = sprite_data.z_index
+		%Rotation.z_index = sprite_data.z_index
 		modulate = sprite_data.colored
 		visible = sprite_data.visible
 		scale = sprite_data.scale

@@ -94,6 +94,7 @@ expand_icon = true
 
 [node name="ZoomMainResetButton" type="Button" parent="ViewportCam"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 tooltip_text = "Main-View Zoom Reset"

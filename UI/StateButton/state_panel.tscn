@@ -23,6 +23,7 @@ layout_mode = 2
 alignment = 1
 
 [node name="AddState" type="Button" parent="HBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -38,7 +39,7 @@ size_flags_horizontal = 3
 tooltip_text = "Duplicate State."
 focus_mode = 0
 theme_override_font_sizes/font_size = 14
-text = "Duplicate"
+text = "Add"
 metadata/_edit_use_anchors_ = true
 
 [node name="StateRemap" type="Button" parent="HBoxContainer"]
