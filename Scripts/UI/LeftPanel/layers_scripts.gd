@@ -175,19 +175,29 @@ func _on_layer_color_color_changed(color: Color) -> void:
 func correct_recolor():
 	var layers = %LayersTree.get_all_layeritems(%LayersTree.get_root(), true)
 	for item in layers:
-		var sprite = item.get_metadata(0).sprite_object
+		var meta = item.get_metadata(0)
+		if meta == null or not meta.has("sprite_object"):
+			continue
+
+		var sprite = meta.sprite_object
+		if sprite == null:
+			continue
+
 		var color = sprite.layer_color
 		var is_inherited = false
 
 		if color == Color.BLACK:
 			var parent = item.get_parent()
 			while parent:
-				var parent_sprite = parent.get_metadata(0).sprite_object
-				var parent_color = parent_sprite.layer_color
-				if parent_color != Color.BLACK:
-					color = parent_color
-					is_inherited = true
-					break
+				var parent_meta = parent.get_metadata(0)
+				if parent_meta != null and parent_meta.has("sprite_object"):
+					var parent_sprite = parent_meta.sprite_object
+					if parent_sprite != null:
+						var parent_color = parent_sprite.layer_color
+						if parent_color != Color.BLACK:
+							color = parent_color
+							is_inherited = true
+							break
 				parent = parent.get_parent()
 
 		if color != Color.BLACK:
