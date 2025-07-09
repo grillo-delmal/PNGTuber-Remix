@@ -10,6 +10,7 @@ var heldTicks = 0
 var squish = 1
 # Misc
 var treeitem = null
+var layer_color : Color = Color.BLACK
 var visb
 var sprite_name : String = ""
 @export var states : Array = [{}]

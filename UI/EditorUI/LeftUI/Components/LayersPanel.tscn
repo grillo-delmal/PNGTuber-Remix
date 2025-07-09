@@ -180,8 +180,8 @@ layer_buttons = NodePath("../../LayersPanelScripts")
 
 [node name="LayerPopup" type="PopupMenu" parent="Layers/LayersScripts"]
 unique_name_in_owner = true
-size = Vector2i(109, 100)
-item_count = 7
+size = Vector2i(133, 224)
+item_count = 8
 item_0/text = "Add Sprites"
 item_0/id = 0
 item_1/text = "Add Folder"
@@ -190,12 +190,32 @@ item_2/text = "Replace Sprite"
 item_2/id = 2
 item_3/text = "Duplicate"
 item_3/id = 3
-item_4/text = "Add Normal"
+item_4/text = "Delete Normal"
 item_4/id = 4
-item_5/text = "Delete Normal"
+item_5/text = "Add Normal"
 item_5/id = 5
 item_6/text = "Deselect"
-item_6/id = 6
+item_6/id = 7
+item_7/text = "Recolor Layer"
+item_7/id = 8
+
+[node name="PopupColor" type="PopupPanel" parent="Layers/LayersScripts"]
+unique_name_in_owner = true
+size = Vector2i(272, 377)
+
+[node name="LayerColor" type="ColorPicker" parent="Layers/LayersScripts/PopupColor"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 268.0
+offset_bottom = 373.0
+edit_alpha = false
+color_mode = 1
+picker_shape = 1
+sampler_visible = false
+color_modes_visible = false
+hex_visible = false
+presets_visible = false
 
 [node name="LayersTree" type="Tree" parent="Layers"]
 unique_name_in_owner = true
@@ -231,6 +251,7 @@ script = ExtResource("11_hewhr")
 [connection signal="pressed" from="ButtonsPanel/LayersButtons/DeleteButton" to="LayersPanelScripts" method="_on_delete_button_pressed"]
 [connection signal="pressed" from="ButtonsPanel/LayersButtons/AddNormalButton" to="LayersPanelScripts" method="_on_add_normal_button_pressed"]
 [connection signal="pressed" from="ButtonsPanel/LayersButtons/DelNormalButton" to="LayersPanelScripts" method="_on_del_normal_button_pressed"]
+[connection signal="color_changed" from="Layers/LayersScripts/PopupColor/LayerColor" to="Layers/LayersScripts" method="_on_layer_color_color_changed"]
 [connection signal="button_clicked" from="Layers/LayersTree" to="Layers/LayersScripts" method="_on_layers_tree_button_clicked"]
 [connection signal="empty_clicked" from="Layers/LayersTree" to="Layers/LayersScripts" method="_on_layers_tree_empty_clicked"]
 [connection signal="gui_input" from="Layers/LayersTree" to="Layers/LayersScripts" method="_on_layers_tree_gui_input"]

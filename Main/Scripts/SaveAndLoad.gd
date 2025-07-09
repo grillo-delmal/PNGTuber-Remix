@@ -54,6 +54,7 @@ func save_file(path):
 				show_only = sprt.show_only,
 				is_collapsed = sprt.is_collapsed,
 				is_premultiplied = true,
+				layer_color = sprt.layer_color,
 			}
 			
 			sprites_array.append(sprt_dict)
@@ -96,6 +97,7 @@ func save_file(path):
 				saved_keys = sprt.saved_keys,
 				is_collapsed = sprt.is_collapsed,
 				is_premultiplied = true,
+				layer_color = sprt.layer_color,
 			}
 			sprites_array.append(sprt_dict)
 		
@@ -161,6 +163,8 @@ func load_file(path, should_load_path = false):
 				
 			sprite_obj.states.clear()
 			sprite_obj.states = cleaned_array
+			sprite_obj.layer_color = sprite.get("layer_color", Color.BLACK)
+			
 			
 			if sprite.has("is_asset"):
 				sprite_obj.is_asset = sprite.is_asset
