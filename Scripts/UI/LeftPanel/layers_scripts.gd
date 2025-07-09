@@ -52,8 +52,6 @@ func choosing_layers_popup(id):
 					
 					%PopupColor.position = get_viewport().get_mouse_position() + Vector2(0,%PopupColor.size.y/2)
 					%PopupColor.popup()
-		
-		
 
 func update_layers(update_type : int, new_item = null, type : String = "Sprite"):
 	match update_type:
@@ -107,7 +105,6 @@ func correct_rearrange(sprites : Array = get_tree().get_nodes_in_group("Sprites"
 				l.treeitem.add_child(i.treeitem)
 	correct_recolor()
 
-
 func update_visib_buttons():
 	for i in get_tree().get_nodes_in_group("Sprites"):
 		if i.sprite_data.visible:
@@ -120,7 +117,6 @@ func collapsing(sprites):
 		if i.treeitem.get_children().size() > 0:
 			i.treeitem.collapsed = i.is_collapsed
 
-
 func _on_layers_tree_item_collapsed(item: TreeItem) -> void:
 	item.get_metadata(0).sprite_object.is_collapsed = item.collapsed
 
@@ -132,25 +128,6 @@ func _on_layers_tree_empty_clicked(_click_position: Vector2, _mouse_button_index
 	tree.deselect_all()
 	Global.deselect.emit()
 
-'''
-func _on_layers_tree_item_selected() -> void:
-	if tree.get_selected() != tree.get_root():
-		if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
-			if Global.held_sprite.has_node("%Origin"):
-				Global.held_sprite.get_node("%Origin").hide()
-		Global.held_sprite = tree.get_selected().get_metadata(0).sprite_object
-		if Global.held_sprite.has_node("%Origin"):
-			Global.held_sprite.get_node("%Origin").show()
-		Global.reinfo.emit()
-	elif tree.get_selected() == tree.get_root():
-		if Global.held_sprite != null && is_instance_valid(Global.held_sprite):
-			if Global.held_sprite.has_node("%Origin"):
-				Global.held_sprite.get_node("%Origin").hide()
-		Global.held_sprite = null
-		Global.deselect.emit()
-		tree.deselect_all()
-'''
-
 func _on_layers_tree_button_clicked(item: TreeItem, column: int, id: int, _mouse_button_index: int) -> void:
 	if id == 0 && column == 0:
 		item.get_metadata(0).sprite_object.sprite_data.visible =! item.get_metadata(0).sprite_object.sprite_data.visible 
@@ -161,15 +138,12 @@ func _on_layers_tree_button_clicked(item: TreeItem, column: int, id: int, _mouse
 		elif not item.get_metadata(0).sprite_object.visible:
 			item.set_button(column, id, preload("res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/EyeButton2.png"))
 
-
 func _on_layers_tree_gui_input(event: InputEvent) -> void:
 	if event.is_action_pressed("rmb"):
 		layers_popup.popup(Rect2i(get_parent().get_global_mouse_position().x,get_parent().get_global_mouse_position().y, 100,100 ))
 
-
 func _on_layers_tree_multi_selected(item: TreeItem, _column: int, selected: bool) -> void:
 	call_deferred("select_items", item, _column, selected)
-
 
 func select_items(_item: TreeItem, _column: int, _selected: bool):
 	var cleaned_array : Array[SpriteObject] = []
@@ -184,12 +158,9 @@ func select_items(_item: TreeItem, _column: int, _selected: bool):
 	else:
 		Global.deselect.emit()
 
-
 func empty_sprites_array():
 	tree.deselect_all()
 	Global.held_sprites.clear()
-#	print(Global.held_sprites)
-
 
 func _on_layer_color_color_changed(color: Color) -> void:
 	for i in Global.held_sprites:
@@ -206,6 +177,7 @@ func correct_recolor():
 	for item in layers:
 		var sprite = item.get_metadata(0).sprite_object
 		var color = sprite.layer_color
+		var is_inherited = false
 
 		if color == Color.BLACK:
 			var parent = item.get_parent()
@@ -214,10 +186,14 @@ func correct_recolor():
 				var parent_color = parent_sprite.layer_color
 				if parent_color != Color.BLACK:
 					color = parent_color
+					is_inherited = true
 					break
 				parent = parent.get_parent()
 
 		if color != Color.BLACK:
-			item.set_custom_bg_color(0, Color(color.r, color.g, color.b, 0.35))
+			var alpha = 0.45
+			if is_inherited:
+				alpha = 0.35
+			item.set_custom_bg_color(0, Color(color.r, color.g, color.b, alpha))
 		else:
 			item.set_custom_bg_color(0, Color.TRANSPARENT)
