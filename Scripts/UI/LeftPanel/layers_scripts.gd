@@ -29,13 +29,13 @@ func choosing_layers_popup(id):
 		1:  
 			layer_buttons._on_folder_button_pressed()
 		2:#replace
-			get_tree().get_root().get_node("Main").replacing_sprite()
+			main.replacing_sprite()
 		3:#duplicate
 			layer_buttons._on_duplicate_button_pressed()
 		4:#Delete
 			layer_buttons._on_delete_button_pressed()
 		5:#add normal
-			get_tree().get_root().get_node("Main").add_normal_sprite()
+			main.add_normal_sprite()
 		6: #delete normal
 			layer_buttons._on_del_normal_button_pressed()
 		7: #Deselect
