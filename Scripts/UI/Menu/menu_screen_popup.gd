@@ -44,21 +44,21 @@ func _on_steamer_mode_pressed() -> void:
 
 func auto_load_model():
 	if Settings.theme_settings.auto_load:
-		if FileAccess.file_exists(Settings.theme_settings.path):
+		if FileAccess.file_exists(Global.save_path):
 			await get_tree().create_timer(0.15).timeout
-			SaveAndLoad.load_file(Settings.theme_settings.path, false)
+			SaveAndLoad.load_file(Global.save_path, false)
 
 
 func save_between_sessions():
 	if Settings.theme_settings.session == 0:
-		if FileAccess.file_exists(Settings.theme_settings.path) && Global.top_ui.get_node("%TopBarInput").path == Settings.theme_settings.path:
-			SaveAndLoad.save_file(Settings.theme_settings.path)
+		if FileAccess.file_exists(Global.save_path):
+			SaveAndLoad.save_file(Global.save_path)
 		else:
 			DirAccess.make_dir_absolute(Settings.os_path + "/AutoSaves")
 			SaveAndLoad.save_file(OS.get_executable_path().get_base_dir() + "/AutoSaves" + "/" + str(randi()))
 	elif Settings.theme_settings.session == 1:
-		if FileAccess.file_exists(Settings.theme_settings.path):
-			SaveAndLoad.save_file(Settings.theme_settings.path)
+		if FileAccess.file_exists(Global.save_path):
+			SaveAndLoad.save_file(Global.save_path)
 		else:
 			DirAccess.make_dir_absolute(Settings.os_path + "/AutoSaves")
 			SaveAndLoad.save_file(OS.get_executable_path().get_base_dir() + "/AutoSaves" + "/" + str(randi()))

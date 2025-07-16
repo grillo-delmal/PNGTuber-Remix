@@ -92,6 +92,7 @@ var frame_counter := 0
 const FRAME_INTERVAL := 3  # Run every 5 frames
 var swtich_session_popup : Node = null
 
+var save_path := ""
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

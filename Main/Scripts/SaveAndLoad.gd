@@ -4,10 +4,7 @@ extends Node
 var save_dict : Dictionary = {}
 
 func save_file(path):
-	Settings.theme_settings.path = path
-	if Global.top_ui != null && is_instance_valid(Global.top_ui):
-		if Global.top_ui.has_node("TopBarInput"):
-			Global.top_ui.get_node("TopBarInput").path = path
+	Global.save_path = path
 	var sprites = get_tree().get_nodes_in_group("Sprites")
 	var inputs = get_tree().get_nodes_in_group("StateButtons")
 	
@@ -118,11 +115,6 @@ func load_file(path, should_load_path = false):
 	if path.get_extension() == "save":
 		load_pngplus_file(path)
 	else:
-		Settings.theme_settings.path = path
-		if should_load_path:
-			Global.top_ui.get_node("TopBarInput").path = path
-		#	print("t")
-		
 		Global.delete_states.emit()
 		Global.main.clear_sprites()
 		
@@ -137,6 +129,7 @@ func load_file(path, should_load_path = false):
 			return
 		Global.settings_dict.merge(load_dict.settings_dict, true)
 		Global.remake_states.emit(load_dict.settings_dict.states)
+		Global.save_path = path
 		
 		
 		for sprite in load_dict.sprites_array:
@@ -376,9 +369,6 @@ func load_gif(sprite_obj, sprite):
 	sprite_obj.get_node("%Sprite2D").texture = img_can
 
 func load_pngplus_file(path):
-	Settings.theme_settings.path = path
-#	get_tree().get_root().get_node("Main/%TopUI/TopBarInput").path = path
-	
 	get_tree().get_root().get_node("Main/%Control/StatesStuff").delete_all_states()
 	get_tree().get_root().get_node("Main").clear_sprites()
 	
@@ -494,6 +484,7 @@ func load_pngplus_file(path):
 	for n in 10:
 		get_tree().get_root().get_node("Main/%Control/StatesStuff").add_state()
 	
+	Global.save_path = path
 	Global.load_sprite_states(0)
 	Global.remake_layers.emit()
 	Global.slider_values.emit(Global.settings_dict)

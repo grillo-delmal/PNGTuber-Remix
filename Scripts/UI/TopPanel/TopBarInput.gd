@@ -12,8 +12,6 @@ var settings = preload("res://UI/EditorUI/TopUI/Components/Settings_popup.tscn")
 
 var tutorial = preload("res://UI/EditorUI/TopUI/Components/tutorial_pop_up.tscn")
 
-var path = ""
-
 func _ready():
 	get_viewport().transparent_bg = false
 	RenderingServer.set_default_clear_color(Color.SLATE_GRAY)
@@ -60,11 +58,8 @@ func choosing_files(id):
 		6:
 			main.load_append_sprites()
 		8:
-			if path != null:
-				if !path.is_empty():
-					SaveAndLoad.save_file(path)
-				else:
-					main.save_as_file()
+			if Global.save_path:
+				SaveAndLoad.save_file(Global.save_path)
 			else:
 				main.save_as_file()
 		9:
@@ -78,8 +73,8 @@ func choosing_files(id):
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("save"):
-		if path != null && path != "":
-			SaveAndLoad.save_file(path)
+		if Global.save_path:
+			SaveAndLoad.save_file(Global.save_path)
 		else:
 			Global.main.save_as_file()
 	if event.is_action_pressed("desel"):

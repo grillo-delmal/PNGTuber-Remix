@@ -171,8 +171,6 @@ func import_objects():
 
 
 func _on_confirmation_dialog_confirmed():
-	Settings.theme_settings.path = ""
-	%TopUI/TopBarInput.path = ""
 	%TopUI/TopBarInput.last_path = ""
 	Global.new_file.emit()
 	clear_sprites()

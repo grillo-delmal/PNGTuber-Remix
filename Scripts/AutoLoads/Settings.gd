@@ -13,7 +13,6 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	theme_id = 0,
 	auto_load = false,
 	save_on_exit = false,
-	path = "",
 	fps = 24,
 	as_apng = false,
 	screen_size = Vector2(1152, 648),
@@ -47,8 +46,8 @@ func _notification(what: int) -> void:
 
 func save_before_closing():
 	if theme_settings.save_on_exit:
-		if FileAccess.file_exists(theme_settings.path) && Global.top_ui.get_node("%TopBarInput").path == theme_settings.path:
-			SaveAndLoad.save_file(theme_settings.path)
+		if FileAccess.file_exists(Global.save_path):
+			SaveAndLoad.save_file(Global.save_path)
 		else:
 			DirAccess.make_dir_absolute(os_path + "/AutoSaves")
 			SaveAndLoad.save_file(OS.get_executable_path().get_base_dir() + "/AutoSaves" + "/" + str(randi()))
@@ -65,8 +64,8 @@ func save():
 	save_file.close()
 
 func auto_save():
-	if FileAccess.file_exists(theme_settings.path) && Global.top_ui.get_node("%TopBarInput").path == theme_settings.path:
-		SaveAndLoad.save_file(theme_settings.path)
+	if FileAccess.file_exists(Global.save_path):
+		SaveAndLoad.save_file(Global.save_path)
 	else:
 		DirAccess.make_dir_absolute(os_path + "/AutoSaves")
 		SaveAndLoad.save_file(OS.get_executable_path().get_base_dir() + "/AutoSaves" + "/" + str(randi()))
