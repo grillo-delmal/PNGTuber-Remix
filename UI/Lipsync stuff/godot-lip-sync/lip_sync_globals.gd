@@ -53,7 +53,7 @@ func new_file():
 func load_file(path: String):
 	# Load the data
 	file_name = path
-	Themes.theme_settings.lipsync_file_path = file_name
+	Settings.theme_settings.lipsync_file_path = file_name
 	file_data = ResourceLoader.load(file_name)
 	file_modified = false
 	# Report file changed
@@ -65,7 +65,7 @@ func load_file(path: String):
 func save_file():
 	# Save the resource
 	ResourceSaver.save(file_data.duplicate(true), file_name)
-	Themes.theme_settings.lipsync_file_path = file_name
+	Settings.theme_settings.lipsync_file_path = file_name
 	file_modified = false
 
 	# Report file changed

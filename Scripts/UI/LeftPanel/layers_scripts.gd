@@ -173,37 +173,43 @@ func _on_layer_color_color_changed(color: Color) -> void:
 			correct_recolor()
 
 func correct_recolor():
-	var layers = %LayersTree.get_all_layeritems(%LayersTree.get_root(), true)
-	for item in layers:
-		var meta = item.get_metadata(0)
-		if meta == null or not meta.has("sprite_object"):
-			continue
+	var root = %LayersTree.get_root()
+	if root == null:
+		return
 
-		var sprite = meta.sprite_object
-		if sprite == null:
-			continue
+	var root_items = %LayersTree.get_all_layeritems(root, false)
+	for item in root_items:
+		_recolor_recursive(item, Color.BLACK, false)
 
-		var color = sprite.layer_color
-		var is_inherited = false
 
-		if color == Color.BLACK:
-			var parent = item.get_parent()
-			while parent:
-				var parent_meta = parent.get_metadata(0)
-				if parent_meta != null and parent_meta.has("sprite_object"):
-					var parent_sprite = parent_meta.sprite_object
-					if parent_sprite != null:
-						var parent_color = parent_sprite.layer_color
-						if parent_color != Color.BLACK:
-							color = parent_color
-							is_inherited = true
-							break
-				parent = parent.get_parent()
+func _recolor_recursive(item: TreeItem, inherited_color: Color, is_inherited: bool):
+	var meta = item.get_metadata(0)
+	if meta == null or !meta.has("sprite_object"):
+		return
 
-		if color != Color.BLACK:
-			var alpha = 0.45
-			if is_inherited:
-				alpha = 0.35
-			item.set_custom_bg_color(0, Color(color.r, color.g, color.b, alpha))
-		else:
-			item.set_custom_bg_color(0, Color.TRANSPARENT)
+	var sprite = meta.sprite_object
+	if sprite == null:
+		return
+
+	var current_color = sprite.layer_color
+	var use_color = current_color
+	var use_inherited = is_inherited
+
+	if current_color == Color.BLACK:
+		use_color = inherited_color
+		use_inherited = true
+	else:
+		use_inherited = false
+
+	# Set color
+	if use_color != Color.BLACK:
+		var alpha = 0.35 if use_inherited else 0.45
+		item.set_custom_bg_color(0, Color(use_color.r, use_color.g, use_color.b, alpha))
+	else:
+		item.set_custom_bg_color(0, Color.TRANSPARENT)
+
+	# Recurse into children
+	var child = item.get_first_child()
+	while child:
+		_recolor_recursive(child, use_color, use_inherited)
+		child = child.get_next()

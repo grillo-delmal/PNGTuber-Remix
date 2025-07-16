@@ -22,8 +22,8 @@ func _on_editor_mode_pressed() -> void:
 			i.queue_free()
 		
 		container.add_child(editor_mode.instantiate())
-		Themes.theme_settings.session = 0
-		Themes.save()
+		Settings.theme_settings.session = 0
+		Settings.save()
 		current_mode = 0
 		auto_load_model()
 
@@ -36,31 +36,31 @@ func _on_steamer_mode_pressed() -> void:
 		for i in container.get_children():
 			i.queue_free()
 		container.add_child(streamer_mode.instantiate())
-		Themes.theme_settings.session = 1
-		Themes.save()
+		Settings.theme_settings.session = 1
+		Settings.save()
 		current_mode = 1
 		auto_load_model()
 
 
 func auto_load_model():
-	if Themes.theme_settings.auto_load:
-		if FileAccess.file_exists(Themes.theme_settings.path):
+	if Settings.theme_settings.auto_load:
+		if FileAccess.file_exists(Settings.theme_settings.path):
 			await get_tree().create_timer(0.15).timeout
-			SaveAndLoad.load_file(Themes.theme_settings.path, false)
+			SaveAndLoad.load_file(Settings.theme_settings.path, false)
 
 
 func save_between_sessions():
-	if Themes.theme_settings.session == 0:
-		if FileAccess.file_exists(Themes.theme_settings.path) && Global.top_ui.get_node("%TopBarInput").path == Themes.theme_settings.path:
-			SaveAndLoad.save_file(Themes.theme_settings.path)
+	if Settings.theme_settings.session == 0:
+		if FileAccess.file_exists(Settings.theme_settings.path) && Global.top_ui.get_node("%TopBarInput").path == Settings.theme_settings.path:
+			SaveAndLoad.save_file(Settings.theme_settings.path)
 		else:
-			DirAccess.make_dir_absolute(Themes.os_path + "/AutoSaves")
+			DirAccess.make_dir_absolute(Settings.os_path + "/AutoSaves")
 			SaveAndLoad.save_file(OS.get_executable_path().get_base_dir() + "/AutoSaves" + "/" + str(randi()))
-	elif Themes.theme_settings.session == 1:
-		if FileAccess.file_exists(Themes.theme_settings.path):
-			SaveAndLoad.save_file(Themes.theme_settings.path)
+	elif Settings.theme_settings.session == 1:
+		if FileAccess.file_exists(Settings.theme_settings.path):
+			SaveAndLoad.save_file(Settings.theme_settings.path)
 		else:
-			DirAccess.make_dir_absolute(Themes.os_path + "/AutoSaves")
+			DirAccess.make_dir_absolute(Settings.os_path + "/AutoSaves")
 			SaveAndLoad.save_file(OS.get_executable_path().get_base_dir() + "/AutoSaves" + "/" + str(randi()))
 
 

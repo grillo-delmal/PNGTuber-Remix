@@ -35,6 +35,7 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	ui_scaling = 1.0,
 	session = 0,
 	auto_activate_websocket = false,
+	custom_cursor = false,
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
@@ -138,7 +139,7 @@ func _ready():
 	if theme_settings.microphone != null:
 		if AudioServer.get_input_device_list().has(theme_settings.microphone):
 			AudioServer.input_device = theme_settings.microphone
-
+	change_cursor()
 
 func lipsync_set_up():
 	if !FileAccess.file_exists(theme_settings.lipsync_file_path):
@@ -259,3 +260,10 @@ func _on_h_split_dragged(offset: int) -> void:
 func _on_v_split_container_dragged(offset: int) -> void:
 	theme_settings.properties = offset
 	save()
+
+
+func change_cursor():
+	if theme_settings.custom_cursor:
+		Input.set_custom_mouse_cursor(preload("res://Misc/TestAssets/PicklesCursor.png"))
+	else:
+		Input.set_custom_mouse_cursor(null)

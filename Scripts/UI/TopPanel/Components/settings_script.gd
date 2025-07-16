@@ -4,8 +4,8 @@ var devices : Array = []
 var change_setting : bool = false
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	%UIThemeButton.item_selected.connect(Themes._on_ui_theme_button_item_selected)
-	%UIThemeButton.select(Themes.theme_settings.theme_id)
+	%UIThemeButton.item_selected.connect(Settings._on_ui_theme_button_item_selected)
+	%UIThemeButton.select(Settings.theme_settings.theme_id)
 	%MicroPhoneMenu.get_popup().connect("id_pressed",choosing_device)
 	get_parent().close_requested.connect(close)
 	sliders_revalue(Global.settings_dict)
@@ -14,7 +14,7 @@ func _ready() -> void:
 	
 	for i in devices:
 		%MicroPhoneMenu.get_popup().add_item(i)
-		if i == Themes.theme_settings.microphone:
+		if i == Settings.theme_settings.microphone:
 			%MicroPhoneMenu.select(devices.find(i))
 	
 	%SelectedScreen.add_item("All Screens")
@@ -35,13 +35,14 @@ func close():
 
 func check_data():
 	change_setting = false
-	%AutoLoadCheck.button_pressed = Themes.theme_settings.auto_load
-	%SaveOnExitCheck.button_pressed = Themes.theme_settings.save_on_exit
+	%AutoLoadCheck.button_pressed = Settings.theme_settings.auto_load
+	%SaveOnExitCheck.button_pressed = Settings.theme_settings.save_on_exit
 	%AutoSaveCheck.button_pressed = Global.settings_dict.auto_save
-	%ImportTrim.button_pressed = Themes.theme_settings.enable_trimmer
+	%ImportTrim.button_pressed = Settings.theme_settings.enable_trimmer
 	
-	%UIScalingSpinBox.value = Themes.theme_settings.ui_scaling
-	%UIScalingSlider.value = Themes.theme_settings.ui_scaling
+	%UIScalingSpinBox.value = Settings.theme_settings.ui_scaling
+	%UIScalingSlider.value = Settings.theme_settings.ui_scaling
+	%CustomCursor.button_pressed = Settings.theme_settings.custom_cursor
 	change_setting = true
 
 func _physics_process(_delta):
@@ -78,13 +79,13 @@ func _on_sensitivity_slider_value_changed(value: float) -> void:
 
 
 func _on_auto_load_check_toggled(toggled_on: bool) -> void:
-	Themes.theme_settings.auto_load = toggled_on
-	Themes.save()
+	Settings.theme_settings.auto_load = toggled_on
+	Settings.save()
 
 
 func _on_save_on_exit_check_toggled(toggled_on: bool) -> void:
-	Themes.theme_settings.save_on_exit = toggled_on
-	Themes.save()
+	Settings.theme_settings.save_on_exit = toggled_on
+	Settings.save()
 
 
 func _on_delta_time_check_toggled(toggled_on: bool) -> void:
@@ -92,7 +93,7 @@ func _on_delta_time_check_toggled(toggled_on: bool) -> void:
 
 
 func _on_auto_save_spin_value_changed(value):
-	Themes.save_timer.wait_time = value * 60
+	Settings.save_timer.wait_time = value * 60
 	Global.settings_dict.auto_save_timer = value
 
 
@@ -101,8 +102,8 @@ func choosing_device(id):
 	if id != null:
 		if AudioServer.get_input_device_list().has(devices[id]):
 			AudioServer.input_device = devices[id]
-			Themes.theme_settings.microphone = devices[id]
-			Themes.save()
+			Settings.theme_settings.microphone = devices[id]
+			Settings.save()
 	else:
 		reset_mic_list()
 
@@ -144,14 +145,14 @@ func _on_max_fp_slider_value_changed(value: float) -> void:
 func _on_auto_save_check_toggled(toggled_on):
 	Global.settings_dict.auto_save = toggled_on
 	if toggled_on:
-		Themes.save_timer.start()
+		Settings.save_timer.start()
 	else:
-		Themes.save_timer.stop()
+		Settings.save_timer.stop()
 
 
 func _on_import_trim_toggled(toggled_on: bool) -> void:
-	Themes.theme_settings.enable_trimmer = toggled_on
-	Themes.save()
+	Settings.theme_settings.enable_trimmer = toggled_on
+	Settings.save()
 
 
 func _on_selected_screen_item_selected(index: int) -> void:
@@ -165,17 +166,24 @@ func _on_selected_screen_item_selected(index: int) -> void:
 
 func _on_ui_scaling_slider_value_changed(value: float) -> void:
 	if change_setting:
-		Themes.theme_settings.ui_scaling = value
-		Themes.scale_window()
-		Themes.save()
+		Settings.theme_settings.ui_scaling = value
+		Settings.scale_window()
+		Settings.save()
 		%UIScalingSpinBox.value = value
 		get_parent().move_to_center()
 
 
 func _on_ui_scaling_spin_box_value_changed(value: float) -> void:
 	if change_setting:
-		Themes.theme_settings.ui_scaling = value
-		Themes.scale_window()
-		Themes.save()
+		Settings.theme_settings.ui_scaling = value
+		Settings.scale_window()
+		Settings.save()
 		%UIScalingSlider.value = value
 		get_parent().move_to_center()
+
+
+func _on_custom_cursor_toggled(toggled_on: bool) -> void:
+	if change_setting:
+		Settings.theme_settings.custom_cursor = toggled_on
+		Settings.change_cursor()
+		Settings.save()

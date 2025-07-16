@@ -27,7 +27,7 @@ func sliders_revalue(settings_dict):
 		Global.camera.get_parent().global_position = settings_dict.pan
 	update_fps(settings_dict.max_fps)
 	if Global.settings_dict.auto_save:
-		Themes.save_timer.start()
+		Settings.save_timer.start()
 		
 func update_fps(value):
 	if value == 241:

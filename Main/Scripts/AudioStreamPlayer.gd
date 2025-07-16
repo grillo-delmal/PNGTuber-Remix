@@ -29,16 +29,18 @@ func _ready():
 	record_bus_index = AudioServer.get_bus_index("Mic")
 	record_effect = AudioServer.get_bus_effect(record_bus_index, 0)
 	await get_tree().current_scene.ready
-	mic_restart_timer.wait_time = 2700
+	mic_restart_timer.wait_time = 1800
 	mic_restart_timer.start()
 	global_lipsync()
 
 
 func mic_restart_timer_timeout():
 	stop()
-	await  get_tree().physics_frame
+	record_effect.set_recording_active(false)
+	await get_tree().physics_frame
 	play()
-	mic_restart_timer.call_deferred("start")
+	record_effect.set_recording_active(true)
+	mic_restart_timer.start()
 
 func global_lipsync():
 	_fingerprint.populate(LipSyncGlobals.speech_spectrum)

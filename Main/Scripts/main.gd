@@ -34,7 +34,7 @@ func _ready():
 	Global.theme_update.connect(update_theme)
 	Global.file_dialog = %FileDialog
 	%FileDialog.use_native_dialog = true
-	update_theme(Themes.current_theme)
+	update_theme(Settings.current_theme)
 	
 	
 
@@ -99,7 +99,7 @@ func _on_file_dialog_file_selected(path):
 		State.LoadFile:
 			%FileImporter.trim = false
 			if path.get_extension() == "save":
-				if Themes.theme_settings.enable_trimmer:
+				if Settings.theme_settings.enable_trimmer:
 					model_path = path
 					%ConfirmTrim.popup_centered()
 				else:
@@ -110,7 +110,7 @@ func _on_file_dialog_file_selected(path):
 			SaveAndLoad.save_file(path)
 			
 		State.ReplaceSprite:
-			if Themes.theme_settings.enable_trimmer:
+			if Settings.theme_settings.enable_trimmer:
 				var apng_test = AImgIOAPNGImporter.load_from_file(path)
 				if apng_test != ["No frames", null]:
 					%FileImporter.trim = false
@@ -123,7 +123,7 @@ func _on_file_dialog_file_selected(path):
 				%FileImporter.replace_texture(path)
 
 		State.AddNormal:
-			if Themes.theme_settings.enable_trimmer:
+			if Settings.theme_settings.enable_trimmer:
 				var apng_test = AImgIOAPNGImporter.load_from_file(path)
 				if apng_test != ["No frames", null]:
 					%FileImporter.trim = false
@@ -139,7 +139,7 @@ func _on_file_dialog_file_selected(path):
 func _on_file_dialog_files_selected(paths):
 	if current_state == State.LoadSprites or current_state == State.AddAppend:
 		sprite_paths = paths
-		if Themes.theme_settings.enable_trimmer:
+		if Settings.theme_settings.enable_trimmer:
 			%ConfirmTrim.popup_centered()
 		else:
 			%FileImporter.trim = false
@@ -171,7 +171,7 @@ func import_objects():
 
 
 func _on_confirmation_dialog_confirmed():
-	Themes.theme_settings.path = ""
+	Settings.theme_settings.path = ""
 	%TopUI/TopBarInput.path = ""
 	%TopUI/TopBarInput.last_path = ""
 	Global.new_file.emit()

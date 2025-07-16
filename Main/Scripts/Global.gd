@@ -173,19 +173,19 @@ func _process(delta):
 func moving_origin(delta):
 	for i in held_sprites:
 		if i != null && is_instance_valid(i):
-			if Input.is_action_pressed("ui_up"):
+			if Input.is_action_pressed("up"):
 				i.get_node("%Sprite2D").global_position.y += 10 * delta
 				i.global_position.y -= 10 * delta
 				offset(i)
-			elif Input.is_action_pressed("ui_down"):
+			elif Input.is_action_pressed("down"):
 				i.get_node("%Sprite2D").global_position.y -= 10 * delta
 				i.global_position.y += 10 * delta
 				offset(i)
-			if Input.is_action_pressed("ui_left"):
+			if Input.is_action_pressed("left"):
 				i.get_node("%Sprite2D").global_position.x += 10 * delta
 				i.global_position.x -= 10 * delta
 				offset(i)
-			elif Input.is_action_pressed("ui_right"):
+			elif Input.is_action_pressed("right"):
 				i.get_node("%Sprite2D").global_position.x -= 10 * delta
 				i.global_position.x += 10 * delta
 

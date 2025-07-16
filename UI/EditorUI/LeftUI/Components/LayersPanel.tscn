@@ -173,6 +173,7 @@ size_flags_vertical = 3
 mouse_filter = 1
 
 [node name="LayersScripts" type="Node" parent="Layers" node_paths=PackedStringArray("layers_popup", "tree", "layer_buttons")]
+unique_name_in_owner = true
 script = ExtResource("9_bjklo")
 layers_popup = NodePath("LayerPopup")
 tree = NodePath("../LayersTree")

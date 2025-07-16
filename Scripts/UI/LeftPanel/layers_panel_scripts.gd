@@ -5,7 +5,7 @@ var append_obj = preload("res://Misc/AppendageObject/Appendage_object.tscn")
 var has_folder : bool = false
 
 func _ready() -> void:
-	Themes.theme_changed.connect(change_theme)
+	Settings.theme_changed.connect(change_theme)
 	Global.deselect.connect(nullfy)
 	Global.reinfo.connect(enable)
 	nullfy()

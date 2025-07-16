@@ -26,7 +26,7 @@ func _ready() -> void:
 	Global.light = %LightSource
 	Global.camera = %Camera2D
 	Global.theme_update.connect(update_theme)
-	update_theme(Themes.current_theme)
+	update_theme(Settings.current_theme)
 
 func update_theme(new_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")):
 	%UI.theme = new_theme

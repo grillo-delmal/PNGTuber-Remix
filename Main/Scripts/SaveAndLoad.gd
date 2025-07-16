@@ -4,7 +4,7 @@ extends Node
 var save_dict : Dictionary = {}
 
 func save_file(path):
-	Themes.theme_settings.path = path
+	Settings.theme_settings.path = path
 	if Global.top_ui != null && is_instance_valid(Global.top_ui):
 		if Global.top_ui.has_node("TopBarInput"):
 			Global.top_ui.get_node("TopBarInput").path = path
@@ -110,7 +110,7 @@ func save_file(path):
 #	if FileAccess.file_exists(path):
 	#	print(file.get_var())
 	
-	Themes.save()
+	Settings.save()
 	file.store_var(save_dict, true)
 	file.close()
 
@@ -118,7 +118,7 @@ func load_file(path, should_load_path = false):
 	if path.get_extension() == "save":
 		load_pngplus_file(path)
 	else:
-		Themes.theme_settings.path = path
+		Settings.theme_settings.path = path
 		if should_load_path:
 			Global.top_ui.get_node("TopBarInput").path = path
 		#	print("t")
@@ -230,7 +230,7 @@ func load_file(path, should_load_path = false):
 		Global.load_sprite_states(0)
 		if Global.main.has_node("%Control"):
 			Global.reinfoanim.emit()
-		Themes.save()
+		Settings.save()
 		file.close()
 		
 		if Global.settings_dict.anti_alias:
@@ -239,10 +239,10 @@ func load_file(path, should_load_path = false):
 			Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
 		
 		if Global.settings_dict.auto_save:
-			Themes.save_timer.wait_time = Global.settings_dict.auto_save_timer * 60
-			Themes.save_timer.start()
+			Settings.save_timer.wait_time = Global.settings_dict.auto_save_timer * 60
+			Settings.save_timer.start()
 		else:
-			Themes.save_timer.stop()
+			Settings.save_timer.stop()
 	
 	Global.main.get_node("%Marker").current_screen = Global.settings_dict.monitor
 	Global.load_model.emit()
@@ -376,7 +376,7 @@ func load_gif(sprite_obj, sprite):
 	sprite_obj.get_node("%Sprite2D").texture = img_can
 
 func load_pngplus_file(path):
-	Themes.theme_settings.path = path
+	Settings.theme_settings.path = path
 #	get_tree().get_root().get_node("Main/%TopUI/TopBarInput").path = path
 	
 	get_tree().get_root().get_node("Main/%Control/StatesStuff").delete_all_states()

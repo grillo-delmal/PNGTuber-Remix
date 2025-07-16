@@ -399,6 +399,16 @@ max_value = 2.0
 step = 0.001
 value = 1.0
 
+[node name="Grid" type="GridContainer" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox"]
+layout_mode = 2
+columns = 2
+
+[node name="CustomCursor" type="CheckBox" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Custom Cursor"
+
 [node name="Grid2" type="GridContainer" parent="SettingVbox"]
 layout_mode = 2
 size_flags_horizontal = 0
@@ -452,3 +462,4 @@ popup/item_7/id = 7
 [connection signal="toggled" from="SettingVbox/SettingsTab/Import Settings/Margin/VBox/ImportTrim" to="SettingsScript" method="_on_import_trim_toggled"]
 [connection signal="value_changed" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/HBoxContainer/UIScalingSpinBox" to="SettingsScript" method="_on_ui_scaling_spin_box_value_changed"]
 [connection signal="value_changed" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/HBoxContainer/UIScalingSlider" to="SettingsScript" method="_on_ui_scaling_slider_value_changed"]
+[connection signal="toggled" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid/CustomCursor" to="SettingsScript" method="_on_custom_cursor_toggled"]

@@ -53,8 +53,7 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 			item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
 			item.get_metadata(0).sprite_object.parent_id = 0
 			Global.sprite_container.add_child(item.get_metadata(0).sprite_object)
-			if item.get_metadata(0).sprite_object.layer_color == Color.BLACK:
-				item.set_custom_bg_color(0, Color.TRANSPARENT)
+			recolor_layer()
 		else:
 			item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
 			other_item.get_metadata(0).sprite_object.get_node("%Sprite2D").add_child(item.get_metadata(0).sprite_object)
@@ -62,17 +61,7 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 		item.get_metadata(0).sprite_object.global_position = og_pos
 		item.get_metadata(0).sprite_object.sprite_data.position = item.get_metadata(0).sprite_object.position
 		item.get_metadata(0).sprite_object.save_state(Global.current_state)
-		var p = other_item
-		if p.get_metadata(0) != null:
-			if p.get_metadata(0).sprite_object.layer_color != Color.BLACK && item.get_metadata(0).sprite_object.layer_color == Color.BLACK:
-				item.set_custom_bg_color(0, Color(p.get_custom_bg_color(0).r, p.get_custom_bg_color(0).g, p.get_custom_bg_color(0).b, 0.35))
-			else:
-				if item.get_metadata(0).sprite_object.layer_color == Color.BLACK:
-					item.set_custom_bg_color(0, Color.TRANSPARENT)
-		else:
-			if item.get_metadata(0).sprite_object.layer_color == Color.BLACK:
-				item.set_custom_bg_color(0, Color.TRANSPARENT)
-
+		recolor_layer()
 		
 	elif true_pos == -1:
 		if other_item.get_parent() != item.get_parent():
@@ -99,11 +88,11 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 			item.get_metadata(0).sprite_object.save_state(Global.current_state)
 			await get_tree().physics_frame
 			item.get_metadata(0).sprite_object.get_node("%Dragger").global_position = og_pos
-			recolor_layer(item, other_item)
+			recolor_layer()
 		else:
 			item.move_before(other_item)
 			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object,item.get_index())
-			recolor_layer(item, other_item)
+			recolor_layer()
 
 	elif true_pos == 1:
 		if other_item.get_parent() != item.get_parent():
@@ -129,26 +118,16 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 			item.get_metadata(0).sprite_object.save_state(Global.current_state)
 			await get_tree().physics_frame
 			item.get_metadata(0).sprite_object.get_node("%Dragger").global_position = og_pos
-			recolor_layer(item, other_item)
+			recolor_layer()
 				
 		else:
 			item.move_after(other_item)
 			var count = item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1
 			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(other_item.get_metadata(0).sprite_object.get_index()+1, 0, count))
-			recolor_layer(item, other_item)
+			recolor_layer()
 
-func recolor_layer(item, other_item):
-	var p = other_item.get_parent()
-	if p.get_metadata(0) != null:
-		if p.get_metadata(0).sprite_object.layer_color != Color.BLACK && item.get_metadata(0).sprite_object.layer_color == Color.BLACK:
-			item.set_custom_bg_color(0, Color(p.get_custom_bg_color(0).r, p.get_custom_bg_color(0).g, p.get_custom_bg_color(0).b, 0.35))
-		else:
-			if item.get_metadata(0).sprite_object.layer_color == Color.BLACK:
-				item.set_custom_bg_color(0, Color.TRANSPARENT)
-	else:
-		if item.get_metadata(0).sprite_object.layer_color == Color.BLACK:
-			item.set_custom_bg_color(0, Color.TRANSPARENT)
-
+func recolor_layer():
+	%LayersScripts.correct_recolor()
 
 func get_all_layeritems(layeritem, recursive) -> Array:
 	var children := []

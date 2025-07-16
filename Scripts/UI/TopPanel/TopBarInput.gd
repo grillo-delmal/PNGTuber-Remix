@@ -25,7 +25,7 @@ func _ready():
 
 	ProjectSettings.set("audio/driver/mix_rate", AudioServer.get_mix_rate())
 	
-	%WindowButton.get_popup().set_item_checked(2, Themes.theme_settings.always_on_top)
+	%WindowButton.get_popup().set_item_checked(2, Settings.theme_settings.always_on_top)
 	
 	print(OS.get_executable_path().get_base_dir() + "/autosaves")
 	if !DirAccess.dir_exists_absolute(OS.get_executable_path().get_base_dir() + "/autosaves"):
@@ -35,14 +35,14 @@ func _ready():
 func choosing_window(id):
 	match id:
 		0:
-			Themes.toggle_borders()
+			Settings.toggle_borders()
 		1:
-			Themes.window_size_changed()
+			Settings.window_size_changed()
 		2:
 			%WindowButton.get_popup().toggle_item_checked(2)
-			Themes.set_always_on_top(%WindowButton.get_popup().is_item_checked(2))
+			Settings.set_always_on_top(%WindowButton.get_popup().is_item_checked(2))
 		3:
-			Themes.center_window()
+			Settings.center_window()
 
 func choosing_files(id):
 	var main = Global.main
@@ -127,9 +127,9 @@ func choosing_mode(id):
 			saved_id = 0
 		
 
-	Themes.theme_settings.mode = saved_id
+	Settings.theme_settings.mode = saved_id
 	Global.mode = id
-	Themes.save()
+	Settings.save()
 	desel_everything()
 
 func choosing_bg_color(id):
