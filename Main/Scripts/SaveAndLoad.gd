@@ -237,7 +237,8 @@ func load_file(path):
 		else:
 			Settings.save_timer.stop()
 	
-	Global.main.get_node("%Marker").current_screen = Global.settings_dict.monitor
+	Global.main.get_node("%Marker").current_screen = mini(
+		Global.settings_dict.monitor, DisplayServer.get_screen_count() - 1)
 	Global.load_model.emit()
 
 func load_sprite(sprite_obj, sprite):
