@@ -40,6 +40,7 @@ var held_sprite = null
 var held_sprites : Array[SpriteObject] = []
 var tick = 0
 var current_state : int = 0
+var is_speaking := false
 
 var settings_dict : Dictionary = {
 	sensitivity_limit = 1,

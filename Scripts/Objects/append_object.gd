@@ -79,6 +79,7 @@ var sprite_data : Dictionary = {
 	static_obj = false,
 	is_cycle = false,
 	cycle = 0,
+	mouse_follow = Movement.FollowMouse.Enabled,
 	}
 
 var smooth_rot = 0.0

@@ -17,6 +17,7 @@ var speech_value : float :
 		if value >= Global.settings_dict.volume_limit:
 			if not has_spoken:
 				delay = 1
+				Global.is_speaking = true
 				Global.speaking.emit()
 				has_delayed = true
 				has_spoken = true
@@ -29,6 +30,7 @@ var speech_delay : float :
 	set(value):
 		if value < Global.settings_dict.volume_delay:
 			if has_delayed:
+				Global.is_speaking = false
 				Global.not_speaking.emit()
 				has_delayed = false
 

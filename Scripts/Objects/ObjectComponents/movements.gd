@@ -130,22 +130,33 @@ func mouse_delay():
 			distance = Vector2(0.0, 0.0)
 		last_mouse_position = mouse_coords  # Only update when there's actual movement
 
+
 func follow_mouse(_delta):
+	var update_mouse_pos := true
+	match actor.sprite_data.mouse_follow:
+		Movement.FollowMouse.Disabled: return
+		Movement.FollowMouse.OnMouthOpen:
+			update_mouse_pos = Global.is_speaking
+		Movement.FollowMouse.OnMouthClosed:
+			update_mouse_pos = !Global.is_speaking
+	
 	var main_marker = Global.main.get_node("%Marker")
-	if main_marker.current_screen != Monitor.ALL_SCREENS:
-		if !main_marker.mouse_in_current_screen():
-			mouse_coords = Vector2.ZERO
+	
+	if update_mouse_pos:
+		if main_marker.current_screen != Monitor.ALL_SCREENS:
+			if !main_marker.mouse_in_current_screen():
+				mouse_coords = Vector2.ZERO
+			else:
+				var viewport_size = actor.get_viewport().size
+				var origin = actor.get_global_transform_with_canvas().origin
+				var x_per = 1.0 - origin.x/float(viewport_size.x)
+				var y_per = 1.0 - origin.y/float(viewport_size.y)
+				var display_size = DisplayServer.screen_get_size(main_marker.current_screen)
+				var offset = Vector2(display_size.x * x_per, display_size.y * y_per)
+				var mouse_pos = DisplayServer.mouse_get_position() - DisplayServer.screen_get_position(main_marker.current_screen)
+				mouse_coords = Vector2(mouse_pos - display_size) + offset 
 		else:
-			var viewport_size = actor.get_viewport().size
-			var origin = actor.get_global_transform_with_canvas().origin
-			var x_per = 1.0 - origin.x/float(viewport_size.x)
-			var y_per = 1.0 - origin.y/float(viewport_size.y)
-			var display_size = DisplayServer.screen_get_size(main_marker.current_screen)
-			var offset = Vector2(display_size.x * x_per, display_size.y * y_per)
-			var mouse_pos = DisplayServer.mouse_get_position() - DisplayServer.screen_get_position(main_marker.current_screen)
-			mouse_coords = Vector2(mouse_pos - display_size) + offset 
-	else:
-		mouse_coords = actor.get_local_mouse_position()
+			mouse_coords = actor.get_local_mouse_position()
 	
 	var dir = distance.direction_to(mouse_coords)
 	var dist = mouse_coords.length()

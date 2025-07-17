@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://ccvo3k5t6lis6"]
+[gd_scene load_steps=4 format=3 uid="uid://ccvo3k5t6lis6"]
 
+[ext_resource type="Script" uid="uid://c8nhrcj1ttgu0" path="res://Scripts/UI/RightPanel/movement_tab.gd" id="1_fsl5l"]
 [ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="1_h5u6y"]
 [ext_resource type="Script" uid="uid://dy1cd6xda1pu5" path="res://UI/BetterSlider/BetterToggles.gd" id="2_qiucb"]
 
@@ -11,6 +12,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 metadata/_tab_index = 1
+
+[node name="MovementTab" type="Node" parent="."]
+script = ExtResource("1_fsl5l")
 
 [node name="ScrollContainer3" type="ScrollContainer" parent="."]
 layout_mode = 1
@@ -200,6 +204,35 @@ layout_mode = 2
 text = "Follow Mouse:"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="FollowMouseEnabled" type="HBoxContainer" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="FollowMouseEnabledLabel" type="Label" parent="ScrollContainer3/MarginContainer/VBoxContainer/FollowMouseEnabled"]
+visible = false
+custom_minimum_size = Vector2(116, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Enabled :"
+
+[node name="SelectFollowMouseEnabled" type="MenuButton" parent="ScrollContainer3/MarginContainer/VBoxContainer/FollowMouseEnabled"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "Always"
+flat = false
+alignment = 0
+item_count = 4
+popup/item_0/text = "Always"
+popup/item_0/id = 0
+popup/item_1/text = "Never"
+popup/item_1/id = 1
+popup/item_2/text = "While Mouth is Open"
+popup/item_2/id = 2
+popup/item_3/text = "While Mouth is Closed"
+popup/item_3/id = 3
 
 [node name="FMDBSlider2" parent="ScrollContainer3/MarginContainer/VBoxContainer" instance=ExtResource("1_h5u6y")]
 unique_name_in_owner = true
