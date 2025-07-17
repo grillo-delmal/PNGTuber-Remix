@@ -403,11 +403,42 @@ value = 1.0
 layout_mode = 2
 columns = 2
 
-[node name="CustomCursor" type="CheckBox" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid"]
+[node name="CustomCursorEditor" type="CheckBox" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Custom Cursor"
+focus_mode = 0
+text = "Fancy Cursor in Editor"
+
+[node name="SelectCursorButton" type="Button" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Select a custom image for the cursor.
+The image should be smaller than 256x256.
+Sizes larger than 128x128 may cause rendering issues."
+focus_mode = 0
+text = "Select Custom Cursor"
+
+[node name="SelectCursor" type="FileDialog" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid/SelectCursorButton"]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.png", "*.jpg", "*.jpeg")
+use_native_dialog = true
+
+[node name="CustomCursorPreview" type="CheckBox" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "Fancy Cursor in Preview"
+
+[node name="RemoveCustomCursor" type="Button" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid"]
+layout_mode = 2
+tooltip_text = "Remove the custom cursor image and use the default cursor."
+focus_mode = 0
+text = "Remove Custom Cursor"
 
 [node name="Grid2" type="GridContainer" parent="SettingVbox"]
 layout_mode = 2
@@ -462,4 +493,8 @@ popup/item_7/id = 7
 [connection signal="toggled" from="SettingVbox/SettingsTab/Import Settings/Margin/VBox/ImportTrim" to="SettingsScript" method="_on_import_trim_toggled"]
 [connection signal="value_changed" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/HBoxContainer/UIScalingSpinBox" to="SettingsScript" method="_on_ui_scaling_spin_box_value_changed"]
 [connection signal="value_changed" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/HBoxContainer/UIScalingSlider" to="SettingsScript" method="_on_ui_scaling_slider_value_changed"]
-[connection signal="toggled" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid/CustomCursor" to="SettingsScript" method="_on_custom_cursor_toggled"]
+[connection signal="toggled" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid/CustomCursorEditor" to="SettingsScript" method="_on_custom_cursor_editor_toggled"]
+[connection signal="pressed" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid/SelectCursorButton" to="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid/SelectCursorButton/SelectCursor" method="popup_centered"]
+[connection signal="file_selected" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid/SelectCursorButton/SelectCursor" to="SettingsScript" method="_on_select_cursor_file_selected"]
+[connection signal="toggled" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid/CustomCursorPreview" to="SettingsScript" method="_on_custom_cursor_preview_toggled"]
+[connection signal="pressed" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid/RemoveCustomCursor" to="SettingsScript" method="_on_remove_custom_cursor_pressed"]

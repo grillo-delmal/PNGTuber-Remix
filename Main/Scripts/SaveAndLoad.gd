@@ -111,7 +111,7 @@ func save_file(path):
 	file.store_var(save_dict, true)
 	file.close()
 
-func load_file(path, should_load_path = false):
+func load_file(path):
 	if path.get_extension() == "save":
 		load_pngplus_file(path)
 	else:

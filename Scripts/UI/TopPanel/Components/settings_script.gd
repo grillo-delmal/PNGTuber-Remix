@@ -42,7 +42,8 @@ func check_data():
 	
 	%UIScalingSpinBox.value = Settings.theme_settings.ui_scaling
 	%UIScalingSlider.value = Settings.theme_settings.ui_scaling
-	%CustomCursor.button_pressed = Settings.theme_settings.custom_cursor
+	%CustomCursorEditor.button_pressed = Settings.theme_settings.custom_cursor_editor
+	%CustomCursorPreview.button_pressed = Settings.theme_settings.custom_cursor_preview
 	change_setting = true
 
 func _physics_process(_delta):
@@ -181,9 +182,28 @@ func _on_ui_scaling_spin_box_value_changed(value: float) -> void:
 		%UIScalingSlider.value = value
 		get_parent().move_to_center()
 
+func cursor_changed():
+	Settings.change_cursor()
+	Settings.save()
 
-func _on_custom_cursor_toggled(toggled_on: bool) -> void:
-	if change_setting:
-		Settings.theme_settings.custom_cursor = toggled_on
-		Settings.change_cursor()
-		Settings.save()
+
+func _on_custom_cursor_editor_toggled(toggled_on: bool) -> void:
+	if !change_setting: return
+	Settings.theme_settings.custom_cursor_editor = toggled_on
+	cursor_changed()
+
+
+func _on_custom_cursor_preview_toggled(toggled_on: bool) -> void:
+	if !change_setting: return
+	Settings.theme_settings.custom_cursor_preview = toggled_on
+	cursor_changed()
+
+func _on_select_cursor_file_selected(path: String) -> void:
+	if !change_setting: return
+	Settings.theme_settings.custom_cursor_path = path
+	cursor_changed()
+
+func _on_remove_custom_cursor_pressed() -> void:
+	if !change_setting: return
+	Settings.theme_settings.custom_cursor_path = ""
+	cursor_changed()

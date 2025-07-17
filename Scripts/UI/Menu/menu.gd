@@ -21,4 +21,4 @@ func auto_load_model():
 	if Settings.theme_settings.auto_load:
 		if FileAccess.file_exists(Global.save_path):
 			await get_tree().create_timer(0.1).timeout
-			SaveAndLoad.load_file(Global.save_path, false)
+			SaveAndLoad.load_file(Global.save_path)

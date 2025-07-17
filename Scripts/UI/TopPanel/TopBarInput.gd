@@ -6,7 +6,6 @@ extends Node
 @onready var about = %AboutButton
 var bg_color = Color.DIM_GRAY
 var is_transparent : bool
-var is_editor : bool = true
 var last_path : String = ""
 var settings = preload("res://UI/EditorUI/TopUI/Components/Settings_popup.tscn")
 
@@ -91,7 +90,7 @@ func choosing_mode(id):
 			Global.main.get_node("%Control").show()
 			%HideUIButton.button_pressed = true
 			%HideUIButton.show()
-			is_editor = true
+			Global.is_editor = true
 			%PreviewModeCheck.show()
 			saved_id = 0
 		
@@ -100,7 +99,7 @@ func choosing_mode(id):
 			RenderingServer.set_default_clear_color(Global.settings_dict.bg_color)
 			get_viewport().transparent_bg = Global.settings_dict.is_transparent
 			Global.main.get_node("%Control").hide()
-			is_editor = false
+			Global.is_editor = false
 			if Global.light != null && is_instance_valid(Global.light):
 				Global.light.get_node("Grab").hide()
 #			Global.main.get_node("%Control/%LSShapeVis").button_pressed = false
@@ -117,7 +116,7 @@ func choosing_mode(id):
 			RenderingServer.set_default_clear_color(Color.SLATE_GRAY)
 			Global.main.get_node("%Control").hide()
 			%HideUIButton.button_pressed = true
-			is_editor = true
+			Global.is_editor = true
 			%PreviewModeCheck.hide()
 			saved_id = 0
 		
@@ -150,7 +149,7 @@ func choosing_bg_color(id):
 			
 		6:
 			%Background.popup()
-	if not is_editor:
+	if not Global.is_editor:
 		RenderingServer.set_default_clear_color(Global.settings_dict.bg_color)
 		get_viewport().transparent_bg = Global.settings_dict.is_transparent
 
@@ -164,7 +163,7 @@ func choosing_about(id):
 			get_parent().add_child(tutorial.instantiate())
 
 func _notification(what):
-	if not is_editor:
+	if not Global.is_editor:
 		if what == MainLoop.NOTIFICATION_APPLICATION_FOCUS_IN:
 			%TopBar.show()
 		elif what == MainLoop.NOTIFICATION_APPLICATION_FOCUS_OUT:
@@ -176,7 +175,7 @@ func _on_inputs_button_pressed():
 
 func _on_color_picker_color_changed(color):
 	Global.settings_dict.bg_color = color
-	if not is_editor:
+	if not Global.is_editor:
 		RenderingServer.set_default_clear_color(color)
 
 func update_bg_color(color, transparency):

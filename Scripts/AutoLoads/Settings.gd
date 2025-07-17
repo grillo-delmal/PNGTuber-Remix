@@ -34,7 +34,9 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	ui_scaling = 1.0,
 	session = 0,
 	auto_activate_websocket = false,
-	custom_cursor = false,
+	custom_cursor_editor = false,
+	custom_cursor_preview = false,
+	custom_cursor_path = "",
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
@@ -58,8 +60,7 @@ func save_before_closing():
 
 
 func save():
-	var file = FileAccess
-	var save_file = file.open(OS.get_executable_path().get_base_dir() + "/Preferences.pRDat", FileAccess.WRITE)
+	var save_file = FileAccess.open(OS.get_executable_path().get_base_dir() + "/Preferences.pRDat", FileAccess.WRITE)
 	save_file.store_var(theme_settings)
 	save_file.close()
 
@@ -260,9 +261,24 @@ func _on_v_split_container_dragged(offset: int) -> void:
 	theme_settings.properties = offset
 	save()
 
+func get_custom_cursor() -> Image:
+	var cursor := (preload("res://Misc/TestAssets/PicklesCursor.png") as Texture2D).get_image()
+	if theme_settings.custom_cursor_path.is_empty(): return cursor
+	if !FileAccess.file_exists(theme_settings.custom_cursor_path): return cursor
+	var loaded := Image.load_from_file(theme_settings.custom_cursor_path)
+	if loaded.get_height() > 256: return cursor
+	if loaded.get_width() > 256: return cursor
+	if !is_instance_valid(loaded): return cursor
+	return loaded
+
+func should_use_custom_cursor() -> bool:
+	if Global.is_editor:
+		return theme_settings.custom_cursor_editor
+	else:
+		return theme_settings.custom_cursor_preview
 
 func change_cursor():
-	if theme_settings.custom_cursor:
-		Input.set_custom_mouse_cursor(preload("res://Misc/TestAssets/PicklesCursor.png"))
+	if should_use_custom_cursor():
+		Input.set_custom_mouse_cursor(get_custom_cursor())
 	else:
 		Input.set_custom_mouse_cursor(null)

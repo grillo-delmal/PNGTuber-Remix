@@ -1,7 +1,6 @@
 extends Node
 
 var settings_scene = preload("res://UI/EditorUI/TopUI/Components/Settings_popup.tscn")
-var is_editor : bool = true
 
 func _ready() -> void:
 	Global.top_ui = get_parent()
@@ -32,7 +31,7 @@ func choosing_mode(id):
 			get_viewport().transparent_bg = false
 			RenderingServer.set_default_clear_color(Color.SLATE_GRAY)
 			get_parent().get_parent().get_node("%UISplit").show()
-			is_editor = true
+			Global.is_editor = true
 			Settings.theme_settings.software_mode = 0
 			Settings.save()
 		1:
@@ -40,7 +39,7 @@ func choosing_mode(id):
 			RenderingServer.set_default_clear_color(Global.settings_dict.bg_color)
 			get_viewport().transparent_bg = Global.settings_dict.is_transparent
 			get_parent().get_parent().get_node("%UISplit").hide()
-			is_editor = false
+			Global.is_editor = false
 			Settings.theme_settings.software_mode = 1
 			Settings.save()
 
@@ -68,7 +67,7 @@ func choosing_bg_color(id):
 		6:
 			pass
 			#%Background.popup()
-	if not is_editor:
+	if not Global.is_editor:
 		RenderingServer.set_default_clear_color(Global.settings_dict.bg_color)
 		get_viewport().transparent_bg = Global.settings_dict.is_transparent
 
@@ -85,7 +84,7 @@ func choosing_window(id):
 			Settings.center_window()
 
 func _notification(what):
-	if not is_editor:
+	if not Global.is_editor:
 		if what == MainLoop.NOTIFICATION_APPLICATION_FOCUS_IN:
 			get_parent().get_parent().show()
 		elif what == MainLoop.NOTIFICATION_APPLICATION_FOCUS_OUT:
