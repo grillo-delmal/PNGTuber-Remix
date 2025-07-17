@@ -31,6 +31,7 @@ func _ready():
 	Global.top_ui = %TopUI
 	Global.light = %LightSource
 	Global.camera = %Camera2D
+	%Camera2D.position_smoothing_enabled = Global.settings_dict.floaty_camera
 	
 	Global.theme_update.connect(update_theme)
 	Global.file_dialog = %FileDialog

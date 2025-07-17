@@ -67,6 +67,7 @@ var settings_dict : Dictionary = {
 	max_fps = 241,
 	monitor = Monitor.ALL_SCREENS,
 	cycles = [],
+	floaty_camera = false,
 }
 
 var mode : int = 0 : 
