@@ -37,6 +37,7 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	custom_cursor_editor = false,
 	custom_cursor_preview = false,
 	custom_cursor_path = "",
+	floaty_panning = false,
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 

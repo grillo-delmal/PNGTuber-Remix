@@ -67,7 +67,6 @@ var settings_dict : Dictionary = {
 	max_fps = 241,
 	monitor = Monitor.ALL_SCREENS,
 	cycles = [],
-	floaty_camera = false,
 }
 
 var mode : int = 0 : 
@@ -308,3 +307,7 @@ func update_cycles(key):
 					if sprite.sprite_id == cycle.last_sprite && sprite.sprite_data.is_cycle:
 						sprite.get_node("%Drag").show()
 						sprite.was_active_before = sprite.get_node("%Drag").visible
+
+func update_camera_smoothing() -> void:
+	if !is_instance_valid(camera): return
+	camera.position_smoothing_enabled = Settings.theme_settings.floaty_panning
