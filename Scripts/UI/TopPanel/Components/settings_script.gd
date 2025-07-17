@@ -20,13 +20,13 @@ func _ready() -> void:
 	%SelectedScreen.add_item("All Screens")
 	for i in DisplayServer.get_screen_count():
 		%SelectedScreen.add_item("Screen " + str(i))
-	if Global.settings_dict.monitor == 9999:
+	if Global.settings_dict.monitor == Monitor.ALL_SCREENS:
 		%SelectedScreen.select(0)
 	else:
 		if %SelectedScreen.item_count > Global.settings_dict.monitor:
 			%SelectedScreen.select(Global.settings_dict.monitor + 1)
 		else:
-			Global.settings_dict.monitor = 9999
+			Global.settings_dict.monitor = Monitor.ALL_SCREENS
 			%SelectedScreen.select(0)
 
 
@@ -158,11 +158,12 @@ func _on_import_trim_toggled(toggled_on: bool) -> void:
 
 func _on_selected_screen_item_selected(index: int) -> void:
 	if index == 0:
-		Global.main.get_node("%Marker").current_screen = 9999
+		Global.main.get_node("%Marker").current_screen = Monitor.ALL_SCREENS
 	else:
 		Global.main.get_node("%Marker").current_screen = index - 1
 	
 	Global.settings_dict.monitor = Global.main.get_node("%Marker").current_screen
+	print(Global.settings_dict.monitor)
 
 
 func _on_ui_scaling_slider_value_changed(value: float) -> void:

@@ -132,7 +132,7 @@ func mouse_delay():
 
 func follow_mouse(_delta):
 	var main_marker = Global.main.get_node("%Marker")
-	if main_marker.current_screen != main_marker.ALL_SCREENS_ID:
+	if main_marker.current_screen != Monitor.ALL_SCREENS:
 		if !main_marker.mouse_in_current_screen():
 			mouse_coords = Vector2.ZERO
 		else:
@@ -197,7 +197,7 @@ func follow_mouse_vel(mouse, main_marker):
 		applied_rotation = 0.0
 	
 	var screen_size = DisplayServer.screen_get_size(-1)
-	if main_marker.current_screen == main_marker.ALL_SCREENS_ID:
+	if main_marker.current_screen == Monitor.ALL_SCREENS:
 		screen_size = DisplayServer.screen_get_size(1)
 	else:
 		screen_size = DisplayServer.screen_get_size(main_marker.current_screen)
@@ -224,7 +224,7 @@ func follow_mouse_normal(mouse, main_marker, dir, dist):
 		applied_pos.y = lerp(%Pos.position.y, dir.y * min(dist, actor.sprite_data.look_at_mouse_pos_y), actor.sprite_data.mouse_delay)
 		
 	var screen_size = DisplayServer.screen_get_size(-1)
-	if main_marker.current_screen == main_marker.ALL_SCREENS_ID:
+	if main_marker.current_screen == Monitor.ALL_SCREENS:
 		screen_size = DisplayServer.screen_get_size(1)
 	else:
 		screen_size = DisplayServer.screen_get_size(main_marker.current_screen)

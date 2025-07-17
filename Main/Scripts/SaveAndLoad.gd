@@ -128,6 +128,10 @@ func load_file(path):
 		if !load_dict.has("sprites_array"):
 			return
 		Global.settings_dict.merge(load_dict.settings_dict, true)
+		if Global.settings_dict.monitor != Monitor.ALL_SCREENS:
+			if Global.settings_dict.monitor >= DisplayServer.get_screen_count():
+				Global.settings_dict.monitor = Monitor.ALL_SCREENS
+		
 		Global.remake_states.emit(load_dict.settings_dict.states)
 		Global.save_path = path
 		
@@ -237,8 +241,7 @@ func load_file(path):
 		else:
 			Settings.save_timer.stop()
 	
-	Global.main.get_node("%Marker").current_screen = mini(
-		Global.settings_dict.monitor, DisplayServer.get_screen_count() - 1)
+	Global.main.get_node("%Marker").current_screen = Global.settings_dict.monitor
 	Global.load_model.emit()
 
 func load_sprite(sprite_obj, sprite):
@@ -485,7 +488,6 @@ func load_pngplus_file(path):
 	for n in 10:
 		get_tree().get_root().get_node("Main/%Control/StatesStuff").add_state()
 	
-	Global.save_path = path
 	Global.load_sprite_states(0)
 	Global.remake_layers.emit()
 	Global.slider_values.emit(Global.settings_dict)
@@ -494,5 +496,5 @@ func load_pngplus_file(path):
 	
 	Global.load_sprite_states(0)
 	Global.reinfoanim.emit()
-	get_tree().get_root().get_node("Main/%Marker").current_screen = 9999
+	get_tree().get_root().get_node("Main/%Marker").current_screen = Monitor.ALL_SCREENS
 	Global.load_model.emit()

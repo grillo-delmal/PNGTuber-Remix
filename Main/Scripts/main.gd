@@ -20,7 +20,8 @@ var can_scroll : bool = false
 var rec_inp : bool = false
 
 @onready var origin = %SpritesContainer
-var of
+var of := Vector2.ZERO
+var cam_pos_before_pan := Vector2.ZERO
 
 func _ready():
 	Global.viewport = %SubViewportContainer
@@ -176,8 +177,8 @@ func _on_confirmation_dialog_confirmed():
 	clear_sprites()
 	Global.settings_dict.max_fps = 241
 	%TopUI.update_fps(241)
-	Global.main.get_node("%Marker").current_screen = 9999
-	Global.settings_dict.monitor = 9999
+	Global.main.get_node("%Marker").current_screen = Monitor.ALL_SCREENS
+	Global.settings_dict.monitor = Monitor.ALL_SCREENS
 
 func clear_sprites():
 	Global.held_sprite = null
@@ -206,10 +207,13 @@ func _input(event):
 				Global.settings_dict.zoom = %Camera2D.zoom
 		
 		if Input.is_action_just_pressed("pan"):
-			of = get_global_mouse_position() + %CamPos.global_position
+			cam_pos_before_pan = %CamPos.global_position
+			of = get_global_mouse_position()
 		
 		elif Input.is_action_pressed("pan"):
-			%CamPos.global_position = -get_global_mouse_position() + of
+			var offset := of - get_global_mouse_position()
+			offset /= %Camera2D.zoom
+			%CamPos.global_position = cam_pos_before_pan + offset
 			Global.settings_dict.pan = %CamPos.global_position
 
 func _on_sub_viewport_container_mouse_entered():
