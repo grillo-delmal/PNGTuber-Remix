@@ -197,21 +197,33 @@ func clear_sprites():
 	Global.settings_dict.zoom = Vector2(1,1)
 	Global.settings_dict.pan = Vector2(640, 360)
 
+func set_zoom(new_zoom: Vector2) -> void:
+	var mouse_pos := %Node2D.get_local_mouse_position() as Vector2
+	var cam_pos := %Node2D.to_local(%Camera2D.get_screen_center_position()) as Vector2
+	var last_zoom: float = %Camera2D.zoom.x
+	
+	%Camera2D.zoom = new_zoom.clampf(0.01, 5.)
+	Global.settings_dict.zoom = %Camera2D.zoom
+	
+	var change: float = %Camera2D.zoom.x / last_zoom
+	%CamPos.position = (cam_pos - mouse_pos) / change + mouse_pos
+	%Camera2D.reset_smoothing()
+	Global.settings_dict.pan = %CamPos.global_position
+
+
 func _input(event):
 	if can_scroll && not Input.is_action_pressed("ctrl"):
 		if event.is_action_pressed("scrollup"):
-				%Camera2D.zoom = clamp(%Camera2D.zoom*Vector2(1.1,1.1) , Vector2(0.01,0.01), Vector2(5,5))
-				Global.settings_dict.zoom = %Camera2D.zoom
+			set_zoom(%Camera2D.zoom*1.1)
 		elif event.is_action_pressed("scrolldown"):
-				%Camera2D.zoom = clamp(%Camera2D.zoom/Vector2(1.1,1.1) , Vector2(0.01,0.01), Vector2(5,5))
-				Global.settings_dict.zoom = %Camera2D.zoom
+			set_zoom(%Camera2D.zoom/1.1)
 		
 		if Input.is_action_just_pressed("pan"):
 			cam_pos_before_pan = %CamPos.global_position
 			of = get_global_mouse_position()
 		
 		elif Input.is_action_pressed("pan"):
-			var offset := of - get_global_mouse_position()
+			var offset: Vector2 = of - get_global_mouse_position()
 			offset /= %Camera2D.zoom
 			%CamPos.global_position = cam_pos_before_pan + offset
 			Global.settings_dict.pan = %CamPos.global_position
