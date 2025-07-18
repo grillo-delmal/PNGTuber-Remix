@@ -34,8 +34,8 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	ui_scaling = 1.0,
 	session = 0,
 	auto_activate_websocket = false,
-	custom_cursor_editor = false,
-	custom_cursor_preview = false,
+	custom_cursor_editor = true,
+	custom_cursor_preview = true,
 	custom_cursor_path = "",
 	floaty_panning = false,
 }
@@ -124,6 +124,8 @@ func _ready():
 		theme_settings.theme_id = 0
 		create_file.store_var(theme_settings)
 		create_file.close()
+		loaded_UI(theme_settings.theme_id)
+	
 	get_window().size_changed.connect(window_size_changed)
 	
 	await get_tree().create_timer(0.05).timeout
