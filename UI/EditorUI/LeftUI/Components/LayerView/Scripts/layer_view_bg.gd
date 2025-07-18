@@ -52,7 +52,7 @@ func add_new_layer_item(new_item, type):
 		parent = new_layer_item,
 	}
 	if type == "Sprite2D":
-		if new_item.sprite_data.folder:
+		if new_item.get_value("folder"):
 			new_layer_item.get_node("%Icon").texture = preload("res://UI/Assets/FolderButton.png")
 		else:
 			new_layer_item.get_node("%Icon").texture = new_item.get_node("%Sprite2D").texture
@@ -94,9 +94,9 @@ func correct_rearrange(sprites : Array = get_tree().get_nodes_in_group("Sprites"
 
 func update_visib_buttons():
 	for i in get_tree().get_nodes_in_group("Sprites"):
-		if i.sprite_data.visible:
+		if i.get_value("visible"):
 			i.treeitem.get_node("%Visiblity").button_pressed = false
-		elif not i.sprite_data.visible:
+		elif not i.get_value("visible"):
 			i.treeitem.get_node("%Visiblity").button_pressed = true
 
 func collapsing(sprites):

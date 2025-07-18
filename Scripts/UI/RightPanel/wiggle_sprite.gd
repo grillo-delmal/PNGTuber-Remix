@@ -37,14 +37,14 @@ func set_data():
 				%TipSpin.max_value = i.get_parent().points.size() -1
 				
 			
-			%TipSpin.value = i.sprite_data.tip_point
-			%FollowWiggleAppTip.button_pressed = i.sprite_data.follow_wa_tip
+			%TipSpin.value = i.get_value("tip_point")
+			%FollowWiggleAppTip.button_pressed = i.get_value("follow_wa_tip")
 			if i.sprite_type == "Sprite2D"  && !append_folder_selected:
 				%WiggleStuff.show()
-				%WiggleCheck.button_pressed = i.sprite_data.wiggle
-				%FollowParentEffect.button_pressed = i.sprite_data.follow_parent_effects
-				%XoffsetSpinBox.value = i.sprite_data.wiggle_rot_offset.x
-				%YoffsetSpinBox.value = i.sprite_data.wiggle_rot_offset.y
+				%WiggleCheck.button_pressed = i.get_value("wiggle")
+				%FollowParentEffect.button_pressed = i.get_value("follow_parent_effects")
+				%XoffsetSpinBox.value = i.get_value("wiggle_rot_offset").x
+				%YoffsetSpinBox.value = i.get_value("wiggle_rot_offset").y
 			else:
 				%WiggleStuff.hide()
 	should_change = true

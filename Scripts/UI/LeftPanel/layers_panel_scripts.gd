@@ -39,12 +39,12 @@ func enable():
 	%DeleteButton.disabled = false
 	has_folder = false
 	for i in Global.held_sprites:
-		if i.sprite_data.folder or Global.held_sprites.size() > 1:
+		if i.get_value("folder") or Global.held_sprites.size() > 1:
 			%AddNormalButton.disabled = true
 			%DelNormalButton.disabled = true
 			%ReplaceButton.disabled = true
 			has_folder = true
-		elif !i.sprite_data.folder && !has_folder:
+		elif !i.get_value("folder") && !has_folder:
 			%AddNormalButton.disabled = false
 			%DelNormalButton.disabled = false
 			%ReplaceButton.disabled = false
@@ -80,7 +80,7 @@ func _on_duplicate_button_pressed():
 				obj.get_node("%Sprite2D").texture = sprite.get_node("%Sprite2D").texture
 			obj.sprite_name = "Duplicate" + sprite.sprite_name 
 
-			if sprite.sprite_data.folder:
+			if sprite.get_value("folder"):
 				obj.sprite_data.folder = true
 			
 			if sprite.img_animated:
@@ -117,7 +117,7 @@ func _on_duplicate_button_pressed():
 					obj_to_spawn.get_node("%Sprite2D").texture = i.child.get_metadata(0).sprite_object.get_node("%Sprite2D").texture
 				obj_to_spawn.sprite_name = "Duplicate" + i.child.get_metadata(0).sprite_object.sprite_name 
 
-				if i.child.get_metadata(0).sprite_object.sprite_data.folder:
+				if i.child.get_metadata(0).sprite_object.get_value("folder"):
 					obj_to_spawn.sprite_data.folder = true
 				
 				if i.child.get_metadata(0).sprite_object.img_animated:
@@ -168,11 +168,11 @@ func _on_del_normal_button_pressed():
 	for sprite in Global.held_sprites:
 		if sprite != null && is_instance_valid(sprite):
 			if !sprite.is_apng:
-				if not sprite.sprite_data.folder:
+				if not sprite.get_value("folder"):
 					sprite.get_node("%Sprite2D").texture.normal_texture = null
 					Global.reinfo.emit()
 			elif sprite.is_apng or sprite.img_animated:
-				if not sprite.sprite_data.folder:
+				if not sprite.get_value("folder"):
 					sprite.get_node("%AnimatedSpriteTexture").frames2.clear()
 					sprite.get_node("%Sprite2D").texture.normal_texture = null
 					Global.reinfo.emit()

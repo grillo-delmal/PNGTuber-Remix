@@ -229,7 +229,7 @@ func check_indents():
 			%Intend2.show()
 
 func update_visib_buttons():
-	if Global.held_sprite.sprite_data.visible:
+	if Global.held_sprite.get_value("visible"):
 		%Visiblity.button_pressed = false
-	elif !Global.held_sprite.sprite_data.visible:
+	elif !Global.held_sprite.get_value("visible"):
 		%Visiblity.button_pressed = true

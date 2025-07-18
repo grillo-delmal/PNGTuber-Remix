@@ -14,7 +14,7 @@ func nullfy():
 
 func enable():
 	if Global.held_sprites.size() == 1:
-		if not Global.held_sprites[0].sprite_data.folder:
+		if not Global.held_sprites[0].get_value("folder"):
 			%CurrentSelectedNormal.texture = Global.held_sprites[0].get_node("%Sprite2D").texture.normal_texture
 			%CurrentSelected.texture = Global.held_sprites[0].get_node("%Sprite2D").texture.diffuse_texture
 		else:

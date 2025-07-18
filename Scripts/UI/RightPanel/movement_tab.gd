@@ -1,45 +1,37 @@
 extends Node
-class_name Movement
 
-enum FollowMouse {
-	Enabled,
-	Disabled,
-	OnMouthOpen,
-	OnMouthClosed
-}
-
-@onready var select_follow: MenuButton = %SelectFollowMouseEnabled
+@onready var select: MenuButton = %EditValuesForMenu
 
 
 func _ready() -> void:
-	select_follow.get_popup().id_pressed.connect(_on_enabled_selected)
+	select.get_popup().id_pressed.connect(_on_selected)
 	Global.reinfo.connect(enable)
-	Global.deselect.connect(nullfy)
-	nullfy()
+	Global.deselect.connect(nullify)
+	nullify()
+
 
 func enable() -> void:
-	for i in Global.held_sprites:
-		select_follow.disabled = false
-		select_follow.text = select_follow.get_popup().get_item_text(i.sprite_data.mouse_follow)
-		break
-
-func nullfy() -> void:
-	select_follow.text = "Always"
-	select_follow.disabled = true
-
-func _on_enabled_selected(id) -> void:
-	select_follow.text = select_follow.get_popup().get_item_text(id)
+	var sp: SpriteObject = null
+	if Global.held_sprites:
+		sp = Global.held_sprites[0]
 	
-	var undo_redo_data : Array = []
-	for i in Global.held_sprites:
-		if !is_instance_valid(i): continue
-		var og_val = i.sprite_data.duplicate()
-		i.sprite_data.mouse_follow = id as FollowMouse
-		i.save_state(Global.current_state)
-		undo_redo_data.append({sprite_object = i, 
-		data = i.sprite_data.duplicate(), 
-		og_data = og_val,
-		data_type = "sprite_data", 
-		state = Global.current_state})
+	if !is_instance_valid(sp):
+		nullify()
+		return
 	
-	UndoRedoManager.add_data_to_manager(undo_redo_data)
+	Global.editing_for = sp.get_value("editing_for")
+	select.text = select.get_popup().get_item_text(int(Global.editing_for))
+
+func nullify() -> void:
+	Global.editing_for = Global.Mouth.Closed
+	select.text = select.get_popup().get_item_text(0)
+
+func _on_selected(id) -> void:
+	select.text = select.get_popup().get_item_text(id)
+	Global.editing_for = id as Global.Mouth
+	
+	for sp in Global.held_sprites:
+		sp.sprite_data.editing_for = Global.editing_for
+
+func _on_shared_movement_changed(value: bool) -> void:
+	if !value: nullify()

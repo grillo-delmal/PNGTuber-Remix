@@ -48,15 +48,15 @@ func set_data():
 			if i != null && is_instance_valid(i):
 				if i.sprite_type == "WiggleApp":
 					%WiggleAppStuff.show()
-					%WiggleWidthSpin.value = i.sprite_data.width
-					%WiggleLengthSpin.value = i.sprite_data.segm_length
-					%WiggleSubDSpin.value = i.sprite_data.subdivision
-					%WAGravityX.value = i.sprite_data.wiggle_gravity.x
-					%WAGravityY.value = i.sprite_data.wiggle_gravity.y
-					%ClosedLoopCheck.button_pressed = i.sprite_data.wiggle_closed_loop
-					%AutoWagCheck.button_pressed = i.sprite_data.auto_wag
+					%WiggleWidthSpin.value = i.get_value("width")
+					%WiggleLengthSpin.value = i.get_value("segm_length")
+					%WiggleSubDSpin.value = i.get_value("subdivision")
+					%WAGravityX.value = i.get_value("wiggle_gravity").x
+					%WAGravityY.value = i.get_value("wiggle_gravity").y
+					%ClosedLoopCheck.button_pressed = i.get_value("wiggle_closed_loop")
+					%AutoWagCheck.button_pressed = i.get_value("auto_wag")
 					populate_anchor_data()
-					match i.sprite_data.tile:
+					match i.get_value("tile"):
 						1:
 							%TextureModeOption.select(1)
 						2:
@@ -75,7 +75,7 @@ func _on_auto_wag_check_toggled(toggled_on):
 					%AutoWagSettings.show()
 					%WiggleAppsCurveBSlider.hide()
 				if !toggled_on:
-					i.get_node("%Sprite2D").curvature = i.sprite_data.wiggle_curve
+					i.get_node("%Sprite2D").curvature = i.get_value("wiggle_curve")
 					%AutoWagSettings.hide()
 					%WiggleAppsCurveBSlider.show()
 					
@@ -159,7 +159,7 @@ func populate_anchor_data():
 		if i.sprite_name != Global.held_sprites[0].sprite_name:
 			%AnchorSprite.add_item(i.sprite_name)
 			%AnchorSprite.set_item_metadata(ind, i)
-			if Global.held_sprites[0].sprite_data.anchor_id == i.sprite_id:
+			if Global.held_sprites[0].get_value("anchor_id") == i.sprite_id:
 				%AnchorSprite.select(ind)
 				
 			ind += 1

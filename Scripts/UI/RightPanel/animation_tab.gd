@@ -27,10 +27,10 @@ func enable():
 func set_data():
 	should_change = false
 	for i in Global.held_sprites:
-		%AnimationReset.button_pressed = i.sprite_data.should_reset
-		%AnimationOneShot.button_pressed = i.sprite_data.one_shot
-		%ResetonStateChange.button_pressed = i.sprite_data.should_reset_state
-		%RSSlider.value = i.sprite_data.rainbow_speed
+		%AnimationReset.button_pressed = i.get_value("should_reset")
+		%AnimationOneShot.button_pressed = i.get_value("one_shot")
+		%ResetonStateChange.button_pressed = i.get_value("should_reset_state")
+		%RSSlider.value = i.get_value("rainbow_speed")
 
 	should_change = true
 

@@ -73,41 +73,41 @@ func enable():
 func set_data():
 	should_change = false
 	for i in Global.held_sprites:
-		%ColorPickerButton.color = i.sprite_data.colored
-		%TintPickerButton.color = i.sprite_data.tint
-		%Visible.button_pressed = i.sprite_data.visible
-		%ZOrderSpinbox.value = i.sprite_data.z_index
-		%SizeSpinBox.value = i.sprite_data.scale.x
-		%SizeSpinYBox.value = i.sprite_data.scale.y
+		%ColorPickerButton.color = i.get_value("colored")
+		%TintPickerButton.color = i.get_value("tint")
+		%Visible.button_pressed = i.get_value("visible")
+		%ZOrderSpinbox.value = i.get_value("z_index")
+		%SizeSpinBox.value = i.get_value("scale").x
+		%SizeSpinYBox.value = i.get_value("scale").y
 		
 		if i.get_node("%Sprite2D").get_clip_children_mode() == 0:
 			%ClipChildren.button_pressed = false
 		else:
 			%ClipChildren.button_pressed = true
 			
-		%BlendMode.text = i.sprite_data.blend_mode
-		%OffsetXSpinBox.value = i.sprite_data.offset.x
-		%OffsetYSpinBox.value = i.sprite_data.offset.y
+		%BlendMode.text = i.get_value("blend_mode")
+		%OffsetXSpinBox.value = i.get_value("offset").x
+		%OffsetYSpinBox.value = i.get_value("offset").y
 		
-		%PosXSpinBox.value = i.sprite_data.position.x
-		%PosYSpinBox.value = i.sprite_data.position.y
-		%RotSpinBox.value = i.sprite_data.rotation / 0.01745
+		%PosXSpinBox.value = i.get_value("position").x
+		%PosYSpinBox.value = i.get_value("position").y
+		%RotSpinBox.value = i.get_value("rotation") / 0.01745
 		
 		if !%PosXSpinBox.value_changed.is_connected(_on_pos_x_spin_box_value_changed):
 			%PosXSpinBox.value_changed.connect(_on_pos_x_spin_box_value_changed)
 			%PosYSpinBox.value_changed.connect(_on_pos_y_spin_box_value_changed)
 			%RotSpinBox.value_changed.connect(_on_rot_spin_box_value_changed)
 		
-		if i.sprite_data.should_blink:
-			if i.sprite_data.open_eyes:
+		if i.get_value("should_blink"):
+			if i.get_value("open_eyes"):
 				%EyeOption.select(1)
 			else:
 				%EyeOption.select(2)
 		else:
 			%EyeOption.select(0)
 		
-		if i.sprite_data.should_talk:
-			if i.sprite_data.open_mouth:
+		if i.get_value("should_talk"):
+			if i.get_value("open_mouth"):
 				%MouthOption.select(1)
 			else:
 				%MouthOption.select(2)
@@ -115,12 +115,12 @@ func set_data():
 			%MouthOption.select(0)
 		
 		if i.sprite_type == "Sprite2D":
-			%FlipSpriteH.button_pressed = i.sprite_data.flip_sprite_h
-			%FlipSpriteV.button_pressed = i.sprite_data.flip_sprite_v
+			%FlipSpriteH.button_pressed = i.get_value("flip_sprite_h")
+			%FlipSpriteV.button_pressed = i.get_value("flip_sprite_v")
 		
 		elif i.sprite_type == "WiggleApp":
-			%FlipSpriteH.button_pressed = i.sprite_data.flip_h
-			%FlipSpriteV.button_pressed = i.sprite_data.flip_v
+			%FlipSpriteH.button_pressed = i.get_value("flip_h")
+			%FlipSpriteV.button_pressed = i.get_value("flip_v")
 
 		
 	should_change = true
@@ -145,8 +145,8 @@ func _on_blend_state_pressed(id):
 				
 			6:
 				i.sprite_data.blend_mode = "Cursed"
-		%BlendMode.text = i.sprite_data.blend_mode
-		i.set_blend(i.sprite_data.blend_mode)
+		%BlendMode.text = i.get_value("blend_mode")
+		i.set_blend(i.get_value("blend_mode"))
 		i.save_state(Global.current_state)
 
 func update_pos_spins():
@@ -158,8 +158,8 @@ func update_pos_spins():
 
 func update_offset():
 	for i in Global.held_sprites:
-		%OffsetXSpinBox.value = i.sprite_data.offset.x
-		%OffsetYSpinBox.value = i.sprite_data.offset.y
+		%OffsetXSpinBox.value = i.get_value("offset").x
+		%OffsetYSpinBox.value = i.get_value("offset").y
 		update_pos_spins()
 
 func _on_color_picker_button_color_changed(color: Color) -> void:
@@ -325,12 +325,12 @@ func _on_offset_y_spin_box_value_changed(value):
 			var undo_redo_data : Array = []
 			for i in Global.held_sprites:
 				var og_val = i.sprite_data.duplicate()
-				var of = i.sprite_data.offset.y - value
+				var of = i.get_value("offset").y - value
 				i.sprite_data.position.y += of
-				i.position.y = i.sprite_data.position.y
+				i.position.y = i.get_value("position").y
 				
 				i.sprite_data.offset.y = value
-				i.get_node("%Sprite2D").position.y = i.sprite_data.offset.y
+				i.get_node("%Sprite2D").position.y = i.get_value("offset").y
 				i.save_state(Global.current_state)
 				update_pos_spins()
 				undo_redo_data.append({sprite_object = i, 
@@ -348,12 +348,12 @@ func _on_offset_x_spin_box_value_changed(value):
 			var undo_redo_data : Array = []
 			for i in Global.held_sprites:
 				var og_val = i.sprite_data.duplicate()
-				var of = i.sprite_data.offset.x - value
+				var of = i.get_value("offset").x - value
 				i.sprite_data.position.x += of
-				i.position.x = i.sprite_data.position.x
+				i.position.x = i.get_value("position").x
 				
 				i.sprite_data.offset.x = value
-				i.get_node("%Sprite2D").position.x = i.sprite_data.offset.x
+				i.get_node("%Sprite2D").position.x = i.get_value("offset").x
 				i.save_state(Global.current_state)
 				undo_redo_data.append({sprite_object = i, 
 				data = i.sprite_data.duplicate(), 
@@ -372,7 +372,7 @@ func _on_flip_sprite_h_toggled(toggled_on: bool) -> void:
 			var og_val = i.sprite_data.duplicate()
 			if i.sprite_type == "Sprite2D":
 				i.sprite_data.flip_sprite_h = toggled_on
-				if i.sprite_data.flip_sprite_h:
+				if i.get_value("flip_sprite_h"):
 					i.get_node("%Sprite2D").scale.x = -1
 				else:
 					i.get_node("%Sprite2D").scale.x = 1
@@ -380,7 +380,7 @@ func _on_flip_sprite_h_toggled(toggled_on: bool) -> void:
 				i.save_state(Global.current_state)
 			elif i.sprite_type == "WiggleApp":
 				i.sprite_data.flip_h = toggled_on
-				if i.sprite_data.flip_h:
+				if i.get_value("flip_h"):
 					i.get_node("%Sprite2D").scale.x = -1
 				else:
 					i.get_node("%Sprite2D").scale.x = 1
@@ -401,7 +401,7 @@ func _on_flip_sprite_v_toggled(toggled_on: bool) -> void:
 			var og_val = i.sprite_data.duplicate()
 			if i.sprite_type == "Sprite2D":
 				i.sprite_data.flip_sprite_v = toggled_on
-				if i.sprite_data.flip_sprite_v:
+				if i.get_value("flip_sprite_v"):
 					i.get_node("%Sprite2D").scale.y = -1
 				else:
 					i.get_node("%Sprite2D").scale.y = 1
@@ -409,7 +409,7 @@ func _on_flip_sprite_v_toggled(toggled_on: bool) -> void:
 				
 			elif i.sprite_type == "WiggleApp":
 				i.sprite_data.flip_v = toggled_on
-				if i.sprite_data.flip_v:
+				if i.get_value("flip_v"):
 					i.get_node("%Sprite2D").scale.y = -1
 				else:
 					i.get_node("%Sprite2D").scale.y = 1

@@ -1,89 +1,37 @@
 extends SpriteObject
 
 
-var sprite_data : Dictionary = {
-	xFrq = 0,
-	xAmp = 0,
-	yFrq = 0,
-	yAmp = 0,
-	rdragStr = 0,
-	rLimitMax = 180,
-	rLimitMin = -180,
-	dragSpeed = 0,
-	stretchAmount = 0,
-	blend_mode = "Normal",
-	visible = true,
-	colored = Color.WHITE,
-	tint = Color.WHITE,
-	z_index = 0,
-	open_eyes = true,
-	open_mouth = false,
-	should_blink = false,
-	should_talk =  false,
-	animation_speed = 1,
-	hframes = 1,
-	scale = Vector2(1.0,1.0),
-	folder = false,
-	position = Vector2.ZERO,
-	rotation = 0.0,
-	offset = Vector2.ZERO,
-	ignore_bounce = false,
-	clip = 0,
-	physics = true,
-	wiggle_segm = 5,
-	wiggle_curve = 0,
-	wiggle_stiff = 20,
-	wiggle_max_angle = 0.5,
-	wiggle_physics_stiffness = 2.5,
-	wiggle_gravity = Vector2(0,0),
-	wiggle_closed_loop = false,
-	advanced_lipsync = false,
-	look_at_mouse_pos = 0,
-	look_at_mouse_pos_y = 0,
-	should_rotate = false,
-	should_rot_speed = 0.001,
-	width = 80,
-	segm_length = 30,
-	subdivision = 5,
-	should_reset = false,
-	should_reset_state = false,
-	one_shot = false,
-	rainbow = false,
-	rainbow_self = false,
-	rainbow_speed = 0.01,
-	follow_wa_tip = false,
-	tip_point = 0,
-	auto_wag = false,
-	wag_mini = -180,
-	wag_max = 180,
-	wag_speed = 0.5,
-	wag_freq = 0.02,
-	follow_wa_mini = -180,
-	follow_wa_max = 180,
-	
-	max_angular_momentum = 15,
-	damping = 5,
-	comeback_speed = 0.419,
-	follow_mouse_velocity = false,
-	flip_h = false,
-	flip_v = false,
-	rot_frq = 0.0,
-	mouse_rotation = 0.0,
-	mouse_scale_x = 0.0,
-	mouse_scale_y = 0.0,
-	mouse_rotation_max = 0.0,
-	mouse_delay = 0.1,
-	
-	tile = 2,
-	anchor_id = null,
-	static_obj = false,
-	is_cycle = false,
-	cycle = 0,
-	mouse_follow = Movement.FollowMouse.Enabled,
-	}
-
 var smooth_rot = 0.0
 var smooth_glob = Vector2(0.0,0.0)
+
+
+func get_default_object_data() -> Dictionary:
+	return {
+		wiggle_segm = 5,
+		wiggle_curve = 0,
+		wiggle_stiff = 20,
+		wiggle_max_angle = 0.5,
+		wiggle_physics_stiffness = 2.5,
+		wiggle_gravity = Vector2(0,0),
+		wiggle_closed_loop = false,
+		width = 80,
+		segm_length = 30,
+		subdivision = 5,
+		auto_wag = false,
+		wag_mini = -180,
+		wag_max = 180,
+		wag_speed = 0.5,
+		wag_freq = 0.02,
+		
+		max_angular_momentum = 15,
+		damping = 5,
+		comeback_speed = 0.419,
+		flip_h = false,
+		flip_v = false,
+		
+		tile = 2,
+		anchor_id = null,
+	}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -102,7 +50,7 @@ func sel():
 		%Origin.show()
 		%Grab.stretch_mode = TextureButton.StretchMode.STRETCH_KEEP
 		%Grab.texture_normal.width =  %Sprite2D.texture.get_image().get_size().x/2
-		%Grab.texture_normal.height = sprite_data.width
+		%Grab.texture_normal.height = get_value("width")
 		%Grab.anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		%Grab.position.x -= %Grab.texture_normal.width/2
 	else:
@@ -138,17 +86,17 @@ func _process(_delta):
 	
 	
 	if !Global.static_view:
-		if sprite_data.auto_wag:
-			%Sprite2D.curvature = clamp(sin(Global.tick*(sprite_data.wag_freq))*sprite_data.wag_speed, deg_to_rad(sprite_data.wag_mini), deg_to_rad(sprite_data.wag_max))
+		if get_value("auto_wag"):
+			%Sprite2D.curvature = clamp(sin(Global.tick*(get_value("wag_freq")))*get_value("wag_speed"), deg_to_rad(get_value("wag_mini")), deg_to_rad(get_value("wag_max")))
 	else:
-		if sprite_data.auto_wag:
+		if get_value("auto_wag"):
 			%Sprite2D.curvature = 0.0
 		
 	%Grab.anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 
 func wiggle_sprite():
-	var wiggle_val = sin(Global.tick*sprite_data.wiggle_freq)*sprite_data.wiggle_amp
-	if sprite_data.wiggle_physics:
+	var wiggle_val = sin(Global.tick*get_value("wiggle_freq"))*get_value("wiggle_amp")
+	if get_value("wiggle_physics"):
 		if get_parent() is Sprite2D or get_parent() is WigglyAppendage2D:
 			var c_parent = get_parent().owner
 			var c_parrent_length = (c_parent.glob.y - c_parent.dragger.global_position.y)
@@ -165,41 +113,41 @@ func get_state(id):
 	if not states[id].is_empty():
 		var dict = states[id]
 		sprite_data.merge(dict, true)
-		%Rotation.z_index = sprite_data.z_index
-		modulate = sprite_data.colored
-		visible = sprite_data.visible
-		scale = sprite_data.scale
-	#	global_position = sprite_data.global_position
-		if sprite_data.should_reset_state:
+		%Rotation.z_index = get_value("z_index")
+		modulate = get_value("colored")
+		visible = get_value("visible")
+		scale = get_value("scale")
+	#	global_position = get_value("global_position")
+		if get_value("should_reset_state"):
 			%ReactionConfig.reset_anim()
 	
-		position = sprite_data.position
-		%Sprite2D.position = sprite_data.offset 
+		position = get_value("position")
+		%Sprite2D.position = get_value("offset") 
 		%Sprite2D.scale = Vector2(1,1)
 		
-		%Sprite2D.closed = sprite_data.wiggle_closed_loop
-		%Sprite2D.gravity = sprite_data.wiggle_gravity
+		%Sprite2D.closed = get_value("wiggle_closed_loop")
+		%Sprite2D.gravity = get_value("wiggle_gravity")
 		
-		if sprite_data.look_at_mouse_pos == 0:
+		if get_value("look_at_mouse_pos") == 0:
 			%Pos.position.x = 0
-		if sprite_data.look_at_mouse_pos_y == 0:
+		if get_value("look_at_mouse_pos_y") == 0:
 			%Pos.position.y = 0
 		
-		%Sprite2D.texture_mode = sprite_data.tile
+		%Sprite2D.texture_mode = get_value("tile")
 		
-		%Sprite2D.set_clip_children_mode(sprite_data.clip)
-		rotation = sprite_data.rotation
+		%Sprite2D.set_clip_children_mode(get_value("clip"))
+		rotation = get_value("rotation")
 
-		if sprite_data.flip_h:
+		if get_value("flip_h"):
 			%Sprite2D.scale.x = -1
 		else:
 			%Sprite2D.scale.x = 1
-		if sprite_data.flip_v:
+		if get_value("flip_v"):
 			%Sprite2D.scale.y = -1
 		else:
 			%Sprite2D.scale.y = 1
 		
-		if !sprite_data.should_blink:
+		if !get_value("should_blink"):
 			%Pos.show()
 		else:
 			%ReactionConfig.update_to_mode_change(Global.mode)
@@ -207,24 +155,24 @@ func get_state(id):
 		update_wiggle_parts()
 		set_anchor_sprite()
 #		animation()
-		set_blend(sprite_data.blend_mode)
-		if sprite_data.one_shot:
+		set_blend(get_value("blend_mode"))
+		if get_value("one_shot"):
 			if is_apng:
 				%AnimatedSpriteTexture.index = 0
 				%AnimatedSpriteTexture.proper_apng_one_shot()
 				
-		if !sprite_data.cycle in range(Global.settings_dict.cycles.size()):
+		if !get_value("cycle") in range(Global.settings_dict.cycles.size()):
 			sprite_data.cycle = 0
 				
 	elif states[id].is_empty():
 		states[id] = sprite_data.duplicate(true)
 
 func set_anchor_sprite(_placeholder = null):
-	if sprite_data.anchor_id == null:
+	if get_value("anchor_id") == null:
 		%Sprite2D.anchor_target = null
 	else:
 		for i in get_tree().get_nodes_in_group("Sprites"):
-			if i.sprite_id == sprite_data.anchor_id:
+			if i.sprite_id == get_value("anchor_id"):
 				%Sprite2D.anchor_target = i.get_node("%Sprite2D")
 				return
 			else:
@@ -233,34 +181,34 @@ func set_anchor_sprite(_placeholder = null):
 
 
 func update_wiggle_parts():
-	if %Sprite2D.segment_count != sprite_data.wiggle_segm:
-		%Sprite2D.segment_count = sprite_data.wiggle_segm
-	if %Sprite2D.curvature != sprite_data.wiggle_curve:
-		%Sprite2D.curvature = sprite_data.wiggle_curve
-	if %Sprite2D.stiffness != sprite_data.wiggle_stiff:
-		%Sprite2D.stiffness = sprite_data.wiggle_stiff
-	if %Sprite2D.max_angle != sprite_data.wiggle_max_angle:
-		%Sprite2D.max_angle = sprite_data.wiggle_max_angle
+	if %Sprite2D.segment_count != get_value("wiggle_segm"):
+		%Sprite2D.segment_count = get_value("wiggle_segm")
+	if %Sprite2D.curvature != get_value("wiggle_curve"):
+		%Sprite2D.curvature = get_value("wiggle_curve")
+	if %Sprite2D.stiffness != get_value("wiggle_stiff"):
+		%Sprite2D.stiffness = get_value("wiggle_stiff")
+	if %Sprite2D.max_angle != get_value("wiggle_max_angle"):
+		%Sprite2D.max_angle = get_value("wiggle_max_angle")
 	
-	if %Sprite2D.width != sprite_data.width:
-		%Sprite2D.width = sprite_data.width
-	if %Sprite2D.segment_length != sprite_data.segm_length:
-		%Sprite2D.segment_length = sprite_data.segm_length
-	if %Sprite2D.subdivision!= sprite_data.subdivision:
-		%Sprite2D.subdivision = sprite_data.subdivision
+	if %Sprite2D.width != get_value("width"):
+		%Sprite2D.width = get_value("width")
+	if %Sprite2D.segment_length != get_value("segm_length"):
+		%Sprite2D.segment_length = get_value("segm_length")
+	if %Sprite2D.subdivision!= get_value("subdivision"):
+		%Sprite2D.subdivision = get_value("subdivision")
 		
-	if %Sprite2D.comeback_speed!= sprite_data.comeback_speed:
-		%Sprite2D.comeback_speed = sprite_data.comeback_speed
+	if %Sprite2D.comeback_speed!= get_value("comeback_speed"):
+		%Sprite2D.comeback_speed = get_value("comeback_speed")
 		
-	if %Sprite2D.max_angular_momentum!= sprite_data.max_angular_momentum:
-		%Sprite2D.max_angular_momentum = sprite_data.max_angular_momentum
+	if %Sprite2D.max_angular_momentum!= get_value("max_angular_momentum"):
+		%Sprite2D.max_angular_momentum = get_value("max_angular_momentum")
 		
-	if %Sprite2D.damping!= sprite_data.damping:
-		%Sprite2D.damping = sprite_data.damping
+	if %Sprite2D.damping!= get_value("damping"):
+		%Sprite2D.damping = get_value("damping")
 
 func check_talk():
-	if sprite_data.should_talk:
-		if sprite_data.open_mouth:
+	if get_value("should_talk"):
+		if get_value("open_mouth"):
 			%Rotation.hide()
 		else:
 			%Rotation.show()

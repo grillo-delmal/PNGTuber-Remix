@@ -1,6 +1,113 @@
 extends Node2D
 class_name SpriteObject
 
+var sprite_data := {}
+var cached_defaults := {}
+const DEFAULT_DATA := {
+	# Use mouth closed movement for all mouth states?
+	shared_movement = true,
+	editing_for = Global.Mouth.Closed,
+	
+	# Movement when mouth closed
+	xAmp = 0,
+	xFrq = 0,
+	yAmp = 0,
+	yFrq = 0,
+	dragSpeed = 0,
+	stretchAmount = 0,
+	rdragStr = 0,
+	rot_frq = 0.0,
+	rLimitMin = -180,
+	rLimitMax = 180,
+	should_rot_speed = 0.01,
+	should_rotate = false,
+	mouse_delay = 0.1,
+	look_at_mouse_pos = 0,
+	look_at_mouse_pos_y = 0,
+	mouse_rotation = 0.0,
+	mouse_rotation_max = 0.0,
+	mouse_scale_x = 0.0,
+	mouse_scale_y = 0.0,
+	
+	# Movement when mouth open
+	mo_xAmp = 0,
+	mo_xFrq = 0,
+	mo_yAmp = 0,
+	mo_yFrq = 0,
+	mo_dragSpeed = 0,
+	mo_stretchAmount = 0,
+	mo_rdragStr = 0,
+	mo_rot_frq = 0.0,
+	mo_rLimitMin = -180,
+	mo_rLimitMax = 180,
+	mo_should_rot_speed = 0.01,
+	mo_should_rotate = false,
+	mo_mouse_delay = 0.1,
+	mo_look_at_mouse_pos = 0,
+	mo_look_at_mouse_pos_y = 0,
+	mo_mouse_rotation = 0.0,
+	mo_mouse_rotation_max = 0.0,
+	mo_mouse_scale_x = 0.0,
+	mo_mouse_scale_y = 0.0,
+	
+	# Movement when screaming
+	scream_xAmp = 0,
+	scream_xFrq = 0,
+	scream_yAmp = 0,
+	scream_yFrq = 0,
+	scream_dragSpeed = 0,
+	scream_stretchAmount = 0,
+	scream_rdragStr = 0,
+	scream_rot_frq = 0.0,
+	scream_rLimitMin = -180,
+	scream_rLimitMax = 180,
+	scream_should_rot_speed = 0.01,
+	scream_should_rotate = false,
+	scream_mouse_delay = 0.1,
+	scream_look_at_mouse_pos = 0,
+	scream_look_at_mouse_pos_y = 0,
+	scream_mouse_rotation = 0.0,
+	scream_mouse_rotation_max = 0.0,
+	scream_mouse_scale_x = 0.0,
+	scream_mouse_scale_y = 0.0,
+	
+	# Other stuff idk
+	blend_mode = "Normal",
+	visible = true,
+	colored = Color.WHITE,
+	tint = Color.WHITE,
+	z_index = 0,
+	open_eyes = true,
+	open_mouth = false,
+	should_blink = false,
+	should_talk =  false,
+	animation_speed = 1,
+	hframes = 1,
+	scale = Vector2(1,1),
+	folder = false,
+	position = Vector2.ZERO,
+	rotation = 0.0,
+	offset = Vector2(0,0),
+	ignore_bounce = false,
+	clip = 0,
+	physics = true,
+	advanced_lipsync = false,
+	should_reset = false,
+	should_reset_state = false,
+	one_shot = false,
+	rainbow = false,
+	rainbow_self = false,
+	rainbow_speed = 0.01,
+	follow_wa_tip = false,
+	tip_point = 0,
+	follow_wa_mini = -180,
+	follow_wa_max = 180,
+	follow_mouse_velocity = false,
+	static_obj = false,
+	is_cycle = false,
+	cycle = 0,
+	}
+
 
 @export var sprite_object : Node2D
 
@@ -57,6 +164,75 @@ var last_dist : Vector2 = Vector2(0,0)
 var global
 
 var selected : bool = false
+
+func get_default_object_data() -> Dictionary:
+	return {}
+
+func _init() -> void:
+	cached_defaults = DEFAULT_DATA.merged(get_default_object_data(), true)
+	sprite_data = cached_defaults.duplicate()
+
+func does_value_match_default(value: Variant, key: String) -> bool:
+	if value is float:
+		return is_equal_approx(value, cached_defaults[key])
+	
+	if value is Vector2:
+		return value.is_equal_approx(cached_defaults[key])
+	
+	return value == cached_defaults[key]
+
+func is_default(key: String, use_alts := true) -> bool:
+	if key not in sprite_data:
+		return true
+	
+	if key not in cached_defaults:
+		return true
+	
+	var value = get_value(key) if use_alts else sprite_data[key]
+	return does_value_match_default(value, key)
+
+func is_all_default(key: String) -> bool:
+	if key not in sprite_data:
+		return true
+	
+	if key not in cached_defaults:
+		return true
+	
+	for prefix: String in ["", "mo_", "scream_"]:
+		if prefix and sprite_data.shared_movement:
+			break
+		
+		var new_key := prefix + key
+		var value = sprite_data[new_key]
+		
+		if not does_value_match_default(value, new_key):
+			return false
+	
+	return true
+
+func get_value(key: String) -> Variant:
+	if key not in sprite_data:
+		return null
+	
+	var default = sprite_data[key]
+	
+	if sprite_data.shared_movement:
+		return default
+	
+	var state := Global.editing_for
+	
+	if state == Global.Mouth.Closed:
+		state = Global.mouth
+	
+	match state:
+		Global.Mouth.Closed: pass
+		Global.Mouth.Open: key = "mo_" + key
+		Global.Mouth.Screaming: key = "scream_" + key
+	
+	if key in sprite_data:
+		return sprite_data[key]
+	
+	return default
 
 
 func set_blend(blend):

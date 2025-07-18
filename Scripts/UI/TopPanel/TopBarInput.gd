@@ -27,7 +27,7 @@ func _ready():
 	print(OS.get_executable_path().get_base_dir() + "/autosaves")
 	if !DirAccess.dir_exists_absolute(OS.get_executable_path().get_base_dir() + "/autosaves"):
 		DirAccess.make_dir_absolute(OS.get_executable_path().get_base_dir() + "/autosaves")
-		
+
 
 func choosing_window(id):
 	match id:
@@ -234,7 +234,7 @@ func export_images(images = get_tree().get_nodes_in_group("Sprites")):
 		DirAccess.make_dir_absolute(dire)
 		
 	for sprite in images:
-		if !sprite.sprite_data.folder:
+		if !sprite.get_value("folder"):
 			if sprite.img_animated:
 				var file = FileAccess.open(dire +"/" + sprite.sprite_name + str(randi()) + ".gif", FileAccess.WRITE)
 				file.store_buffer(sprite.anim_texture)

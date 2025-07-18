@@ -111,7 +111,7 @@ func save_file(path):
 	file.store_var(save_dict, true)
 	file.close()
 
-func load_file(path):
+func load_file(path: String):
 	if path.get_extension() == "save":
 		load_pngplus_file(path)
 	else:
@@ -133,8 +133,9 @@ func load_file(path):
 				Global.settings_dict.monitor = Monitor.ALL_SCREENS
 		
 		Global.remake_states.emit(load_dict.settings_dict.states)
-		Global.save_path = path
 		
+		if not path.begins_with("res://"):
+			Global.save_path = path
 		
 		for sprite in load_dict.sprites_array:
 			var sprite_obj

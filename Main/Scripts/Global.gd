@@ -1,5 +1,11 @@
 extends Node2D
 
+enum Mouth {
+	Closed,
+	Open,
+	Screaming
+}
+
 signal key_pressed
 
 signal blink
@@ -35,12 +41,19 @@ signal reset_states
 
 signal update_mouse_vel_pos
 
+signal editing_for_changed
+
 var blink_timer : Timer = Timer.new()
 var held_sprite = null
 var held_sprites : Array[SpriteObject] = []
 var tick = 0
 var current_state : int = 0
-var is_speaking := false
+var mouth := Mouth.Closed
+var editing_for := Mouth.Closed:
+	set(x):
+		if x == editing_for: return
+		editing_for = x
+		editing_for_changed.emit()
 
 var settings_dict : Dictionary = {
 	sensitivity_limit = 1,
@@ -170,7 +183,7 @@ func offset(i):
 func _process(delta):
 	if settings_dict.should_delta:
 		tick = wrap(tick + delta, 0, 922337203685477630)
-	elif !settings_dict.should_delta:
+	else:
 		tick = wrap(tick + 1, 0, 922337203685477630)
 	#	print(tick)
 	if !spinbox_held:
@@ -210,7 +223,7 @@ func moving_origin(delta):
 					offset(i)
 
 func rot(i):
-	i.rotation = i.sprite_data.rotation
+	i.rotation = i.get_value("rotation")
 	i.save_state(current_state)
 	update_pos_spins.emit()
 
@@ -268,18 +281,18 @@ func update_cycles(key):
 					cycle.last_sprite = rand
 					cycle.pos = cycle.sprites.find(rand)
 					for sprite in get_tree().get_nodes_in_group("Sprites"):
-						if sprite.sprite_id in cycle.sprites && sprite.sprite_data.is_cycle:
+						if sprite.sprite_id in cycle.sprites && sprite.get_value("is_cycle"):
 							sprite.get_node("%Drag").hide()
 							sprite.was_active_before = sprite.get_node("%Drag").visible
 						
-						if sprite.sprite_id == rand && sprite.sprite_data.is_cycle:
+						if sprite.sprite_id == rand && sprite.get_value("is_cycle"):
 							sprite.get_node("%Drag").show()
 							sprite.was_active_before = sprite.get_node("%Drag").visible
 					
 					
 				elif !cycle.active:
 					for sprite in get_tree().get_nodes_in_group("Sprites"):
-						if sprite.sprite_id in cycle.sprites && sprite.sprite_data.is_cycle:
+						if sprite.sprite_id in cycle.sprites && sprite.get_value("is_cycle"):
 							sprite.get_node("%Drag").hide()
 							sprite.was_active_before = sprite.get_node("%Drag").visible
 						
@@ -289,11 +302,11 @@ func update_cycles(key):
 				cycle.pos = wrap(cycle.pos +1,0 ,  cycle.sprites.size() - 1)
 				cycle.last_sprite = cycle.sprites[cycle.pos]
 				for sprite in get_tree().get_nodes_in_group("Sprites"):
-					if sprite.sprite_id in cycle.sprites && sprite.sprite_data.is_cycle:
+					if sprite.sprite_id in cycle.sprites && sprite.get_value("is_cycle"):
 						sprite.get_node("%Drag").hide()
 						sprite.was_active_before = sprite.get_node("%Drag").visible
 					
-					if sprite.sprite_id == cycle.last_sprite && sprite.sprite_data.is_cycle:
+					if sprite.sprite_id == cycle.last_sprite && sprite.get_value("is_cycle"):
 						sprite.get_node("%Drag").show()
 						sprite.was_active_before = sprite.get_node("%Drag").visible
 				
@@ -301,11 +314,11 @@ func update_cycles(key):
 				cycle.pos = wrap(cycle.pos -1,0 ,  cycle.sprites.size() - 1)
 				cycle.last_sprite = cycle.sprites[cycle.pos]
 				for sprite in get_tree().get_nodes_in_group("Sprites"):
-					if sprite.sprite_id in cycle.sprites && sprite.sprite_data.is_cycle:
+					if sprite.sprite_id in cycle.sprites && sprite.get_value("is_cycle"):
 						sprite.get_node("%Drag").hide()
 						sprite.was_active_before = sprite.get_node("%Drag").visible
 					
-					if sprite.sprite_id == cycle.last_sprite && sprite.sprite_data.is_cycle:
+					if sprite.sprite_id == cycle.last_sprite && sprite.get_value("is_cycle"):
 						sprite.get_node("%Drag").show()
 						sprite.was_active_before = sprite.get_node("%Drag").visible
 

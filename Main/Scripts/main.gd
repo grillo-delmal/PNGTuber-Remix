@@ -38,7 +38,12 @@ func _ready():
 	%FileDialog.use_native_dialog = true
 	update_theme(Settings.current_theme)
 	
-	
+	# Load demo model when running from engine
+	# so its easier to test features
+	if !OS.has_feature("editor"): return
+	await get_tree().create_timer(.2).timeout
+	SaveAndLoad.load_file("res://DemoModels/PickleModelFollowMouse.pngRemix")
+
 
 func update_theme(new_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")):
 	%UIHolder.theme = new_theme
@@ -76,7 +81,7 @@ func load_append_sprites():
 func replacing_sprite():
 	if Global.held_sprites.size() == 1:
 		if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
-			if not Global.held_sprites[0].sprite_data.folder:
+			if not Global.held_sprites[0].get_value("folder"):
 				%FileDialog.filters = ["*.png, *.apng, *.gif", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
 				$FileDialog.file_mode = 0
 				current_state = State.ReplaceSprite
@@ -85,7 +90,7 @@ func replacing_sprite():
 func add_normal_sprite():
 	if Global.held_sprites.size() == 1:
 		if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
-			if not Global.held_sprites[0].sprite_data.folder:
+			if not Global.held_sprites[0].get_value("folder"):
 				if Global.held_sprites[0].img_animated:
 					%FileDialog.filters = ["*.gif"]
 				elif Global.held_sprites[0].is_apng:

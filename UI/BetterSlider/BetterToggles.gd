@@ -1,54 +1,75 @@
 extends Button
 class_name BetterToggles
 
+signal changed(value: bool)
+
 var should_change : bool = false
 @export var sp_type : String = "Null"
-@export var value_to_update : String = "position"
+@export var value_to_update : String = "position": get = get_value
+@export var has_alt_values := false
+@export var inverted := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Global.reinfo.connect(enable)
 	Global.deselect.connect(nullfy)
+	Global.editing_for_changed.connect(enable)
 	nullfy()
 	toggle_mode = true
 	toggled.connect(on_toggle)
 
 func enable():
-	should_change = false
-	if sp_type == "Null":
-		disabled = true
-		#button_pressed = Global.held_sprite.sprite_data[value_to_update]
+	if sp_type == "Null": return
+	if Global.held_sprites.is_empty(): return
 	
-	else:
-		for i in Global.held_sprites:
-			if sp_type == i.sprite_type:
-				disabled = false
-				button_pressed = i.sprite_data[value_to_update]
-				
-			elif sp_type == "":
-				disabled = false
-				button_pressed = i.sprite_data[value_to_update]
+	var sp: SpriteObject = null
+	for x in Global.held_sprites:
+		if !is_instance_valid(x): continue
+		if sp_type not in [x.sprite_type, ""]: continue
+		sp = x
+	
+	if !is_instance_valid(sp): return
+	
+	should_change = false
+	disabled = false
+	button_pressed = sp.sprite_data[value_to_update] != inverted
+	
 	should_change = true
+	changed.emit(button_pressed)
+
+func get_value() -> String:
+	if !has_alt_values:
+		return value_to_update
+	
+	match Global.editing_for:
+		Global.Mouth.Open:
+			return "mo_" + value_to_update
+		Global.Mouth.Screaming:
+			return "scream_" + value_to_update
+	
+	return value_to_update
 
 func nullfy():
+	should_change = false
 	disabled = true
+	button_pressed = false
+	changed.emit(button_pressed)
 
 func on_toggle(toggle : bool):
-	if should_change:
-		if sp_type != "Null":
-			var undo_redo_data : Array = []
-			for i in Global.held_sprites:
-				var og_val = i.sprite_data.duplicate()
-				if sp_type == i.sprite_type:
-					i.sprite_data[value_to_update] = toggle
-					i.save_state(Global.current_state)
-				elif sp_type == "":
-					i.sprite_data[value_to_update] = toggle
-					i.save_state(Global.current_state)
-				undo_redo_data.append({sprite_object = i, 
-				data = i.sprite_data.duplicate(), 
-				og_data = og_val,
-				data_type = "sprite_data", 
-				state = Global.current_state})
-				
-			UndoRedoManager.add_data_to_manager(undo_redo_data)
+	if !should_change: return
+	if sp_type == "Null": return
+	
+	var undo_redo_data : Array = []
+	for i in Global.held_sprites:
+		var og_val = i.sprite_data.duplicate()
+		if sp_type in [i.sprite_type, ""]:
+			i.sprite_data[value_to_update] = toggle != inverted
+			i.save_state(Global.current_state)
+		undo_redo_data.append({sprite_object = i, 
+		data = i.sprite_data.duplicate(), 
+		og_data = og_val,
+		data_type = "sprite_data", 
+		state = Global.current_state})
+	
+	UndoRedoManager.add_data_to_manager(undo_redo_data)
+	changed.emit(button_pressed)

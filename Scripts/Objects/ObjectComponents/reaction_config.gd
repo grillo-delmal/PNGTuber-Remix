@@ -41,14 +41,14 @@ func update_to_mode_change(mode : int):
 	match mode:
 		0:
 			%Pos.show()
-			if actor.sprite_data.should_blink:
-				if actor.sprite_data.open_eyes:
+			if actor.get_value("should_blink"):
+				if actor.get_value("open_eyes"):
 					if !blinking:
 						%Pos.modulate.a = 1
 					elif blinking:
 						%Pos.modulate.a = 0.2
 
-				elif !actor.sprite_data.open_eyes:
+				elif !actor.get_value("open_eyes"):
 					if blinking:
 						%Pos.modulate.a = 1
 					elif !blinking:
@@ -56,14 +56,14 @@ func update_to_mode_change(mode : int):
 
 			
 			%Rotation.show()
-			if actor.sprite_data.should_talk:
-				if actor.sprite_data.open_mouth:
+			if actor.get_value("should_talk"):
+				if actor.get_value("open_mouth"):
 					if currently_speaking:
 						%Rotation.modulate.a = 1
 					else:
 						%Rotation.modulate.a = 0.2
 
-				elif !actor.sprite_data.open_mouth:
+				elif !actor.get_value("open_mouth"):
 					if !currently_speaking:
 						%Rotation.modulate.a = 1
 					else:
@@ -73,28 +73,28 @@ func update_to_mode_change(mode : int):
 				%Rotation.modulate.a = 1
 		1:
 			%Pos.modulate.a = 1
-			if actor.sprite_data.should_blink:
-				if actor.sprite_data.open_eyes:
+			if actor.get_value("should_blink"):
+				if actor.get_value("open_eyes"):
 					if !blinking:
 						%Pos.show()
 					elif blinking:
 						%Pos.hide()
 
-				elif !actor.sprite_data.open_eyes:
+				elif !actor.get_value("open_eyes"):
 					if blinking:
 						%Pos.show()
 					elif !blinking:
 						%Pos.hide()
 
 			%Rotation.modulate.a = 1
-			if actor.sprite_data.should_talk:
-				if actor.sprite_data.open_mouth:
+			if actor.get_value("should_talk"):
+				if actor.get_value("open_mouth"):
 					if currently_speaking:
 						%Rotation.show()
 					else:
 						%Rotation.hide()
 
-				elif !actor.sprite_data.open_mouth:
+				elif !actor.get_value("open_mouth"):
 					if !currently_speaking:
 						%Rotation.show()
 					else:
@@ -105,9 +105,9 @@ func update_to_mode_change(mode : int):
 
 func editor_blink():
 	if Global.mode == 0:
-		if actor.sprite_data.should_blink:
+		if actor.get_value("should_blink"):
 			%Pos.show()
-			if not actor.sprite_data.open_eyes:
+			if not actor.get_value("open_eyes"):
 				%Pos.modulate.a = 1
 				reset_animations()
 			else:
@@ -117,8 +117,8 @@ func editor_blink():
 		%Blink.start()
 		blinking = true
 		await  %Blink.timeout
-		if actor.sprite_data.should_blink:
-			if not actor.sprite_data.open_eyes:
+		if actor.get_value("should_blink"):
+			if not actor.get_value("open_eyes"):
 				%Pos.modulate.a = 0.2
 			else:
 				%Pos.modulate.a = 1
@@ -129,9 +129,9 @@ func editor_blink():
 
 func blink():
 	if Global.mode != 0:
-		if actor.sprite_data.should_blink:
+		if actor.get_value("should_blink"):
 			%Pos.modulate.a = 1
-			if not actor.sprite_data.open_eyes:
+			if not actor.get_value("open_eyes"):
 				%Pos.show()
 				reset_animations()
 			else:
@@ -141,8 +141,8 @@ func blink():
 		%Blink.start()
 		blinking = true
 		await  %Blink.timeout
-		if actor.sprite_data.should_blink:
-			if not actor.sprite_data.open_eyes:
+		if actor.get_value("should_blink"):
+			if not actor.get_value("open_eyes"):
 				%Pos.hide()
 			else:
 				%Pos.show()
@@ -154,8 +154,8 @@ func blink():
 func speaking():
 	if Global.mode != 0:
 		%Rotation.modulate.a = 1
-		if actor.sprite_data.should_talk:
-			if actor.sprite_data.open_mouth:
+		if actor.get_value("should_talk"):
+			if actor.get_value("open_mouth"):
 				reset_animations()
 				%Rotation.show()
 					
@@ -166,8 +166,8 @@ func speaking():
 			
 	elif Global.mode == 0:
 		%Rotation.show()
-		if actor.sprite_data.should_talk:
-			if actor.sprite_data.open_mouth:
+		if actor.get_value("should_talk"):
+			if actor.get_value("open_mouth"):
 				%Rotation.modulate.a = 1
 				reset_animations()
 			else:
@@ -177,10 +177,10 @@ func speaking():
 	currently_speaking = true
 
 func reset_animations(_place_holder : int = 0):
-	if actor.sprite_data.one_shot:
+	if actor.get_value("one_shot"):
 		reset_anim()
 	
-	if actor.sprite_data.should_reset:
+	if actor.get_value("should_reset"):
 		reset_anim()
 
 func reset_anim():
@@ -195,8 +195,8 @@ func reset_anim():
 func not_speaking():
 	if Global.mode != 0:
 		%Rotation.modulate.a = 1
-		if actor.sprite_data.should_talk:
-			if actor.sprite_data.open_mouth:
+		if actor.get_value("should_talk"):
+			if actor.get_value("open_mouth"):
 				%Rotation.hide()
 			else:
 				reset_animations()
@@ -206,8 +206,8 @@ func not_speaking():
 			
 	elif Global.mode == 0:
 		%Rotation.show()
-		if actor.sprite_data.should_talk:
-			if actor.sprite_data.open_mouth:
+		if actor.get_value("should_talk"):
+			if actor.get_value("open_mouth"):
 				%Rotation.modulate.a = 0.2
 			else:
 				reset_animations()

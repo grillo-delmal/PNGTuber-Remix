@@ -20,7 +20,7 @@ func enable():
 	should_change = false
 	for i in Global.held_sprites:
 		if i != null && is_instance_valid(i):
-			if !i.sprite_data.advanced_lipsync:
+			if !i.get_value("advanced_lipsync"):
 				if i.sprite_type == "Sprite2D":
 					if !append_folder_selected:
 						%AnimationFramesSlider.editable = true
@@ -38,9 +38,9 @@ func enable():
 			#	append_folder_selected = true
 				
 			if i.sprite_type == "Sprite2D" && !append_folder_selected:
-				%AnimationFramesSlider.value = i.sprite_data.hframes
-				%AnimationFramesSlider2.value = i.sprite_data.vframes
-				%AnimationSpeedSlider.value = i.sprite_data.animation_speed
+				%AnimationFramesSlider.value = i.get_value("hframes")
+				%AnimationFramesSlider2.value = i.get_value("vframes")
+				%AnimationSpeedSlider.value = i.get_value("animation_speed")
 			
 	should_change = true
 

@@ -20,12 +20,14 @@ var should_change : bool = false
 @export var step : float
 @export var value : float
 @export var ui_type : Type
-@export var value_to_update : String = "position"
+@export var value_to_update : String = "position": get = get_value
+@export var has_alt_values := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.reinfo.connect(enable)
 	Global.deselect.connect(nullfy)
+	Global.editing_for_changed.connect(enable)
 	nullfy()
 	%SpinBoxValue.get_line_edit().focus_mode = 1
 	%SpinBoxValue.min_value = mini_value
@@ -57,6 +59,19 @@ func ready_type(typ):
 			%SpinBoxValue.hide()
 			%SpinBoxValue.editable = false
 			%BetterSliderLabel.hide()
+
+
+func get_value() -> String:
+	if !has_alt_values:
+		return value_to_update
+	
+	match Global.editing_for:
+		Global.Mouth.Open:
+			return "mo_" + value_to_update
+		Global.Mouth.Screaming:
+			return "scream_" + value_to_update
+	
+	return value_to_update
 
 
 func release():
