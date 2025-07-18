@@ -9,7 +9,7 @@ func _ready():
 	Global.deselect.connect(info_desel)
 	%CreditLabel.text = "PNGTuber Remix by TheMime (MudkipWorld)
 	Original PNGTuber+ Code by kaiakairos. Better UI by LeoRson.
-	V" + str(ProjectSettings.get_setting("application/config/version"))
+	V" + Global.version
 	get_window().size_changed.connect(update_size_label)
 
 func info_held():

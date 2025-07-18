@@ -99,15 +99,16 @@ func save_file(path):
 			sprites_array.append(sprt_dict)
 		
 	save_dict = {
+		version = Global.version,
 		sprites_array = sprites_array,
 		settings_dict = Global.settings_dict,
 		input_array = input_array,
 	}
+	Settings.save()
 	var file = FileAccess.open(path,FileAccess.WRITE)
 #	if FileAccess.file_exists(path):
 	#	print(file.get_var())
 	
-	Settings.save()
 	file.store_var(save_dict, true)
 	file.close()
 
@@ -124,9 +125,27 @@ func load_file(path: String):
 		
 		var file = FileAccess.open(path, FileAccess.READ)
 		var load_dict = file.get_var(true)
+		file.close()
 		
 		if !load_dict.has("sprites_array"):
 			return
+		
+		var file_version := ""
+		if "version" in load_dict:
+			file_version = load_dict.version
+		
+		if file_version != Global.version:
+			save_backup(load_dict, path)
+			await get_tree().process_frame
+			
+			load_dict = VersionConverter.convert_save(load_dict, file_version)
+			await get_tree().process_frame
+			
+			var new_file := FileAccess.open(path, FileAccess.WRITE)
+			new_file.store_var(load_dict, true)
+			new_file.close()
+			await get_tree().process_frame
+		
 		Global.settings_dict.merge(load_dict.settings_dict, true)
 		if Global.settings_dict.monitor != Monitor.ALL_SCREENS:
 			if Global.settings_dict.monitor >= DisplayServer.get_screen_count():
@@ -229,7 +248,6 @@ func load_file(path: String):
 		if Global.main.has_node("%Control"):
 			Global.reinfoanim.emit()
 		Settings.save()
-		file.close()
 		
 		if Global.settings_dict.anti_alias:
 			Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
@@ -244,6 +262,20 @@ func load_file(path: String):
 	
 	Global.main.get_node("%Marker").current_screen = Global.settings_dict.monitor
 	Global.load_model.emit()
+
+func save_backup(data: Dictionary, previous_path: String) -> void:
+	var base_path := previous_path.get_basename()
+	var extension := "." + previous_path.get_extension()
+	base_path += "_backup"
+	
+	var counter: int = 1
+	var path := base_path + extension
+	while FileAccess.file_exists(path):
+		counter += 1
+		path = base_path + str(counter) + extension
+	
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	file.store_var(data, true)
 
 func load_sprite(sprite_obj, sprite):
 	var img_data

@@ -43,6 +43,9 @@ signal update_mouse_vel_pos
 
 signal editing_for_changed
 
+# Remix version
+@onready var version: String = ProjectSettings.get_setting("application/config/version")
+
 var blink_timer : Timer = Timer.new()
 var held_sprite = null
 var held_sprites : Array[SpriteObject] = []
@@ -119,7 +122,7 @@ func _ready():
 	get_window().min_size = Vector2(720,720)
 	add_child(blink_timer)
 	blinking()
-	get_window().title = "PNGTube-Remix V" + str(ProjectSettings.get_setting("application/config/version"))
+	get_window().title = "PNGTube-Remix V" + version
 	current_state = 0
 	key_pressed.connect(update_cycles)
 
