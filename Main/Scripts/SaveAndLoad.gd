@@ -142,7 +142,7 @@ func load_file(path: String):
 			load_dict = VersionConverter.convert_save(load_dict, file_version)
 			await get_tree().process_frame
 			
-			if not path.begins_with("res://"):
+			if OS.has_feature("editor") or not path.begins_with("res://"):
 				var new_file := FileAccess.open(path, FileAccess.WRITE)
 				new_file.store_var(load_dict, true)
 				new_file.close()
