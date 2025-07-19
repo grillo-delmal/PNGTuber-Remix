@@ -135,16 +135,18 @@ func load_file(path: String):
 			file_version = load_dict.version
 		
 		if file_version != Global.version:
-			save_backup(load_dict, path)
-			await get_tree().process_frame
+			if not path.begins_with("res://"):
+				save_backup(load_dict, path)
+				await get_tree().process_frame
 			
 			load_dict = VersionConverter.convert_save(load_dict, file_version)
 			await get_tree().process_frame
 			
-			var new_file := FileAccess.open(path, FileAccess.WRITE)
-			new_file.store_var(load_dict, true)
-			new_file.close()
-			await get_tree().process_frame
+			if not path.begins_with("res://"):
+				var new_file := FileAccess.open(path, FileAccess.WRITE)
+				new_file.store_var(load_dict, true)
+				new_file.close()
+				await get_tree().process_frame
 		
 		Global.settings_dict.merge(load_dict.settings_dict, true)
 		if Global.settings_dict.monitor != Monitor.ALL_SCREENS:

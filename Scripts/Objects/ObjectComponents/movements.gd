@@ -164,7 +164,12 @@ var global_mouse := Vector2.ZERO
 func follow_mouse(_delta):
 	var main_marker = Global.main.get_node("%Marker")
 	
-	if main_marker.current_screen != Monitor.ALL_SCREENS:
+	if WindowHandler.windows:
+		mouse_coords = Vector2.ZERO
+		if main_marker.current_screen == Monitor.ALL_SCREENS or main_marker.mouse_in_current_screen():
+			mouse_coords = DisplayServer.mouse_get_position() - WindowHandler.windows[0].position
+	
+	elif main_marker.current_screen != Monitor.ALL_SCREENS:
 		if !main_marker.mouse_in_current_screen():
 			mouse_coords = Vector2.ZERO
 		else:

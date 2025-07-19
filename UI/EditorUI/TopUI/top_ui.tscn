@@ -142,7 +142,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
 text = " Window "
-item_count = 4
+item_count = 5
 popup/item_0/text = "Toggle Borders"
 popup/item_0/id = 0
 popup/item_1/text = "Save Window (position, size, etc..)"
@@ -152,6 +152,8 @@ popup/item_2/checkable = 1
 popup/item_2/id = 2
 popup/item_3/text = "Center Window"
 popup/item_3/id = 3
+popup/item_4/text = "Add Window"
+popup/item_4/id = 4
 
 [node name="AboutButton" type="MenuButton" parent="TopBar/HBox"]
 unique_name_in_owner = true
@@ -394,6 +396,7 @@ color_modes_visible = false
 presets_visible = false
 
 [connection signal="pressed" from="TopBar/HBox/InputsButton" to="TopBarInput" method="_on_inputs_button_pressed"]
+[connection signal="about_to_popup" from="TopBar/HBox/WindowButton" to="TopBarInput" method="_on_window_button_about_to_popup"]
 [connection signal="toggled" from="TopBar/HBox/PreviewModeCheck" to="TopBarInput" method="_on_preview_mode_check_toggled"]
 [connection signal="toggled" from="TopBar/HBox/HideUIButton" to="TopBarInput" method="_on_hide_ui_button_toggled"]
 [connection signal="pressed" from="TopBar/HBox/DeselectButton" to="TopBarInput" method="_on_deselect_button_pressed"]

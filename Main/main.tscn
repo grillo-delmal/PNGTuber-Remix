@@ -1,9 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://b28gjkefgi5bs"]
+[gd_scene load_steps=17 format=3 uid="uid://b28gjkefgi5bs"]
 
 [ext_resource type="Script" uid="uid://bn6wdd2hwqxfp" path="res://Main/Scripts/main.gd" id="1_6pthk"]
 [ext_resource type="Script" uid="uid://u4rstm0uk8wb" path="res://Scripts/Misc/file_importer.gd" id="2_j4lix"]
 [ext_resource type="Script" uid="uid://b6atx7ybrp5sq" path="res://Main/Scripts/SpritesContainer.gd" id="2_lv028"]
 [ext_resource type="PackedScene" uid="uid://ngta1o5yiqxs" path="res://UI/control.tscn" id="2_micm1"]
+[ext_resource type="Script" uid="uid://qgnk6t8mi76s" path="res://Scripts/UI/WindowHandler/window_handler.gd" id="2_o60nc"]
 [ext_resource type="PackedScene" uid="uid://dw4brgrpdpurf" path="res://Misc/LightSource/light_source.tscn" id="3_eo07p"]
 [ext_resource type="Shader" uid="uid://brpv37x267rmr" path="res://Scripts/Shaders/ColorBlindness.gdshader" id="3_o60nc"]
 [ext_resource type="Shader" uid="uid://bc5tbhguskdv2" path="res://Scripts/Shaders/ModelEffects.gdshader" id="3_rj11h"]
@@ -83,6 +84,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6pthk")
+
+[node name="WindowHandler" type="Node" parent="."]
+script = ExtResource("2_o60nc")
 
 [node name="FileImporter" type="Node" parent="."]
 unique_name_in_owner = true

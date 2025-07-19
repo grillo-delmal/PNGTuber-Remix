@@ -19,15 +19,26 @@ func _ready():
 	bgcolor.get_popup().connect("id_pressed",choosing_bg_color)
 	about.get_popup().connect("id_pressed",choosing_about)
 	%WindowButton.get_popup().connect("id_pressed",choosing_window)
+	Global.mode_changed.connect(on_mode_changed)
 
 	ProjectSettings.set("audio/driver/mix_rate", AudioServer.get_mix_rate())
-	
-	%WindowButton.get_popup().set_item_checked(2, Settings.theme_settings.always_on_top)
+	update_window_button()
 	
 	print(OS.get_executable_path().get_base_dir() + "/autosaves")
 	if !DirAccess.dir_exists_absolute(OS.get_executable_path().get_base_dir() + "/autosaves"):
 		DirAccess.make_dir_absolute(OS.get_executable_path().get_base_dir() + "/autosaves")
 
+func update_window_button() -> void:
+	var menu := %WindowButton.get_popup() as PopupMenu
+	menu.set_item_checked(2, Settings.theme_settings.always_on_top)
+	
+	var i := menu.get_item_index(100)
+	if i >= 0: menu.remove_item(i)
+	
+	for window in WindowHandler.windows:
+		if !window.borderless: continue
+		menu.add_item("Edit Windows", 100)
+		break
 
 func choosing_window(id):
 	match id:
@@ -40,6 +51,10 @@ func choosing_window(id):
 			Settings.set_always_on_top(%WindowButton.get_popup().is_item_checked(2))
 		3:
 			Settings.center_window()
+		4:
+			Global.add_window.emit()
+		100:
+			Global.edit_windows.emit()
 
 func choosing_files(id):
 	var main = Global.main
@@ -80,51 +95,22 @@ func _input(event: InputEvent) -> void:
 		desel_everything()
 		Global.deselect.emit()
 
-func choosing_mode(id):
-	var saved_id = 0
-	match id:
+func on_mode_changed(new_mode) -> void:
+	desel_everything()
+	match new_mode:
 		0:
-	#		Global.main.get_node("SubViewportContainer").mouse_filter = 1
-			get_viewport().transparent_bg = false
-			RenderingServer.set_default_clear_color(Color.SLATE_GRAY)
-			Global.main.get_node("%Control").show()
+			%PreviewModeCheck.show()
 			%HideUIButton.button_pressed = true
 			%HideUIButton.show()
-			Global.is_editor = true
-			%PreviewModeCheck.show()
-			saved_id = 0
-		
 		1:
-		#	Global.main.get_node("SubViewportContainer").mouse_filter = 1
-			RenderingServer.set_default_clear_color(Global.settings_dict.bg_color)
-			get_viewport().transparent_bg = Global.settings_dict.is_transparent
-			Global.main.get_node("%Control").hide()
-			Global.is_editor = false
-			if Global.light != null && is_instance_valid(Global.light):
-				Global.light.get_node("Grab").hide()
-#			Global.main.get_node("%Control/%LSShapeVis").button_pressed = false
 			%HideUIButton.hide()
 			%HideUIButton.button_pressed = false
-			Global.deselect.emit()
 			%PreviewModeCheck.hide()
-			Global.static_view = false
 			%PreviewModeCheck.button_pressed = false
-			saved_id = 1
-		2:
-		#	Global.main.get_node("SubViewportContainer").mouse_filter = 1
-			get_viewport().transparent_bg = false
-			RenderingServer.set_default_clear_color(Color.SLATE_GRAY)
-			Global.main.get_node("%Control").hide()
-			%HideUIButton.button_pressed = true
-			Global.is_editor = true
-			%PreviewModeCheck.hide()
-			saved_id = 0
-		
 
-	Settings.theme_settings.mode = saved_id
+
+func choosing_mode(id):
 	Global.mode = id
-	Settings.save()
-	desel_everything()
 
 func choosing_bg_color(id):
 	Global.settings_dict.is_transparent = false
@@ -293,3 +279,6 @@ func add_a_lipsync_config():
 	var lipsync = preload("res://UI/Lipsync stuff/lipsync_configuration_popup.tscn").instantiate()
 	lipsync.name = "LipsyncConfigurationPopup"
 	Global.main.add_child(lipsync)
+
+func _on_window_button_about_to_popup() -> void:
+	update_window_button()

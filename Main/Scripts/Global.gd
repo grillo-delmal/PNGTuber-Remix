@@ -43,6 +43,9 @@ signal update_mouse_vel_pos
 
 signal editing_for_changed
 
+signal add_window
+signal edit_windows
+
 # Remix version
 @onready var version: String = ProjectSettings.get_setting("application/config/version")
 
@@ -86,11 +89,8 @@ var settings_dict : Dictionary = {
 	cycles = [],
 }
 
-var mode : int = 0 : 
-	set(nmode):
-		mode = nmode
-		mode_changed.emit(nmode)
-		
+var mode: int = 0: set = set_mode
+
 #var undo_redo : UndoRedo = UndoRedo.new()
 var new_rot = 0
 var static_view : bool = false
@@ -125,6 +125,30 @@ func _ready():
 	get_window().title = "PNGTuber-Remix V" + version
 	current_state = 0
 	key_pressed.connect(update_cycles)
+
+func set_mode(new_mode) -> void:
+	if new_mode == mode: return
+	mode = new_mode
+	
+	match mode:
+		0:
+			get_viewport().transparent_bg = false
+			RenderingServer.set_default_clear_color(Color.SLATE_GRAY)
+			main.get_node("%Control").show()
+			is_editor = true
+		1:
+			RenderingServer.set_default_clear_color(settings_dict.bg_color)
+			get_viewport().transparent_bg = settings_dict.is_transparent
+			main.get_node("%Control").hide()
+			is_editor = false
+			if light != null && is_instance_valid(light):
+				light.get_node("Grab").hide()
+			deselect.emit()
+			static_view = false
+	
+	Settings.theme_settings.mode = mode
+	Settings.save()
+	mode_changed.emit(mode)
 
 
 func blinking():
