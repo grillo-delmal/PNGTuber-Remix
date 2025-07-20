@@ -30,10 +30,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/side_margin = 1
-current_tab = 3
+current_tab = 0
 
 [node name="Model Settings" type="ScrollContainer" parent="SettingVbox/SettingsTab"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -304,7 +303,7 @@ theme_override_constants/separation = 5
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 2
+size_flags_vertical = 0
 theme_override_constants/separation = 7
 
 [node name="MicLabel" type="Label" parent="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/HBoxContainer"]
@@ -329,6 +328,15 @@ button_mask = 7
 icon = ExtResource("4_fsnh4")
 icon_alignment = 1
 expand_icon = true
+
+[node name="FixMicDelay" type="CheckBox" parent="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(262, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "Only toggle this on if you are experiencing
+a significant delay when the microphone
+is picking up sound."
+text = "Fix Microphone Latency Issue"
 
 [node name="Import Settings" type="ScrollContainer" parent="SettingVbox/SettingsTab"]
 visible = false
@@ -357,6 +365,7 @@ surrounding an image when the image is opened."
 text = "Crop Images to Content"
 
 [node name="Remix Settings" type="ScrollContainer" parent="SettingVbox/SettingsTab"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 
@@ -505,6 +514,7 @@ popup/item_7/id = 7
 [connection signal="drag_ended" from="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/GridContainer2/SensitivityBar/SensitivitySlider" to="SettingsScript" method="_on_sensitivity_slider_drag_ended"]
 [connection signal="value_changed" from="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/GridContainer2/SensitivityBar/SensitivitySlider" to="SettingsScript" method="_on_sensitivity_slider_value_changed"]
 [connection signal="pressed" from="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/HBoxContainer/ResetMicButton" to="SettingsScript" method="_on_reset_mic_button_pressed"]
+[connection signal="toggled" from="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/FixMicDelay" to="SettingsScript" method="_on_fix_mic_delay_toggled"]
 [connection signal="toggled" from="SettingVbox/SettingsTab/Import Settings/Margin/VBox/ImportTrim" to="SettingsScript" method="_on_import_trim_toggled"]
 [connection signal="value_changed" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/HBoxContainer/UIScalingSpinBox" to="SettingsScript" method="_on_ui_scaling_spin_box_value_changed"]
 [connection signal="value_changed" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/HBoxContainer/UIScalingSlider" to="SettingsScript" method="_on_ui_scaling_slider_value_changed"]

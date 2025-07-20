@@ -213,3 +213,6 @@ func _on_floaty_panning_toggled(toggled_on: bool) -> void:
 	if !change_setting: return
 	Settings.theme_settings.floaty_panning = toggled_on
 	Global.update_camera_smoothing()
+
+func _on_fix_mic_delay_toggled(toggled_on: bool) -> void:
+	GlobalAudioStreamPlayer.change_mic_restart_time(toggled_on)

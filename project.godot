@@ -32,12 +32,11 @@ driver/enable_input=true
 VersionConverter="*res://Scripts/AutoLoads/VersionConversion/VersionConverter.tscn"
 Global="*res://Main/Scripts/Global.gd"
 SaveAndLoad="*res://Main/Scripts/SaveAndLoad.gd"
-GlobalAudioStreamPlayer="*res://Main/Scripts/AudioStreamPlayer.gd"
+GlobalAudioStreamPlayer="*res://Scripts/AutoLoads/audio_stream_player.tscn"
 Settings="*res://Scripts/AutoLoads/Settings.gd"
 LipSyncGlobals="*res://UI/Lipsync stuff/godot-lip-sync/lip_sync_globals.gd"
 GlobalMicAudio="*res://Main/Scripts/GlobalMicAudio.gd"
 GlobalInputCapture="*res://Scripts/AutoLoads/GlobalInputCapture.gd"
-GAudioStreamPlayer="*res://Scripts/AutoLoads/audio_stream_player.tscn"
 WebsocketHandler="*res://Main/Scripts/websocket_handler.gd"
 UndoRedoManager="*res://Scripts/AutoLoads/UndoRedoManager.gd"
 
