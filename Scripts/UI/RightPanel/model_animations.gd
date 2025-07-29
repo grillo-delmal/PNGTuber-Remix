@@ -97,4 +97,4 @@ func _on_blink_chance_slider_value_changed(value: float) -> void:
 
 
 func _on_bounce_state_check_toggled(toggled_on):
-	Global.sprite_container.state_param.bounce_state = toggled_on
+	Global.sprite_container.bounce_state = toggled_on
