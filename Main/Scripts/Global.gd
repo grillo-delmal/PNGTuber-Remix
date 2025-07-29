@@ -83,7 +83,7 @@ var settings_dict : Dictionary = {
 	zoom = Vector2(1,1),
 	pan = Vector2(640, 360),
 	
-	should_delta = false,
+	should_delta = true,
 	max_fps = 241,
 	monitor = Monitor.ALL_SCREENS,
 	cycles = [],

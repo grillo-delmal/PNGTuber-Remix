@@ -40,9 +40,10 @@ func _ready():
 	
 	# Load demo model when running from engine
 	# so its easier to test features
+	'''
 	if !OS.has_feature("editor"): return
 	await get_tree().create_timer(.2).timeout
-	SaveAndLoad.load_file("res://DemoModels/PickleModelFollowMouse.pngRemix")
+	SaveAndLoad.load_file("res://DemoModels/PickleModelFollowMouse.pngRemix")'''
 
 
 func update_theme(new_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")):
@@ -182,6 +183,7 @@ func _on_confirmation_dialog_confirmed():
 	Global.new_file.emit()
 	clear_sprites()
 	Global.settings_dict.max_fps = 241
+	Global.settings_dict.should_delta = true
 	%TopUI.update_fps(241)
 	Global.main.get_node("%Marker").current_screen = Monitor.ALL_SCREENS
 	Global.settings_dict.monitor = Monitor.ALL_SCREENS

@@ -35,8 +35,8 @@ func _process(delta: float) -> void:
 	
 	follow_wiggle()
 	
-	%Rotation.rotation = applied_rotation
-	%Pos.position = applied_pos
+	%Rotation.rotation = is_nan_or_inf(clamp(applied_rotation, deg_to_rad(-360), deg_to_rad(360)))
+	%Pos.position = is_nan_or_inf(applied_pos)
 
 func movements(delta):
 	if !Global.static_view:
@@ -113,7 +113,7 @@ func rotationalDrag(length, delta: float):
 	
 	yvel = clamp(yvel,actor.get_value("rLimitMin"),actor.get_value("rLimitMax"))
 	
-	applied_rotation = lerp_angle(applied_rotation,deg_to_rad(yvel),0.08)
+	applied_rotation = is_nan_or_inf(lerp_angle(applied_rotation,deg_to_rad(yvel),0.08))
 
 func stretch(length,_delta):
 	var yvel = (length * actor.get_value("stretchAmount") * 0.01)
@@ -136,7 +136,7 @@ func follow_wiggle():
 		if actor.get_parent() is WigglyAppendage2D && is_instance_valid(actor.get_parent()):
 			var pnt = actor.get_parent().points[clamp(actor.get_value("tip_point"),0, actor.get_parent().points.size() -1)]
 			actor.position = actor.position.lerp(pnt, 0.6)
-			applied_rotation += clamp(atan2(actor.position.y* pnt.y, actor.position.x* pnt.x)*0.15, deg_to_rad(actor.get_value("follow_wa_mini")), deg_to_rad(actor.get_value("follow_wa_max")))
+			applied_rotation += is_nan_or_inf(clamp(atan2(actor.position.y* pnt.y, actor.position.x* pnt.x)*0.15, deg_to_rad(actor.get_value("follow_wa_mini")), deg_to_rad(actor.get_value("follow_wa_max"))))
 
 func rainbow():
 	if actor.get_value("rainbow"):
@@ -230,9 +230,7 @@ func follow_mouse_vel(mouse, main_marker):
 	var target_rotation = clamp(normalized_mouse * rotation_factor * deg_to_rad(90), deg_to_rad(safe_rot_min), deg_to_rad(safe_rot_max))
 
 	# Smoothly interpolate the sprite's rotation
-	applied_rotation = lerp_angle(%Rotation.rotation, target_rotation, actor.get_value("mouse_delay"))
-	if applied_rotation == NAN:
-		applied_rotation = 0.0
+	applied_rotation = is_nan_or_inf(lerp_angle(%Rotation.rotation, target_rotation, actor.get_value("mouse_delay")))
 	
 	var screen_size = DisplayServer.screen_get_size(-1)
 	if main_marker.current_screen == Monitor.ALL_SCREENS:
@@ -246,8 +244,8 @@ func follow_mouse_vel(mouse, main_marker):
 	var norm_y = clamp(abs(dist_from_center.y) / center.y, 0.0, 1.0)
 	var target_scale_x = lerp(1.0, 1.0 - actor.get_value("mouse_scale_x") , max(norm_x, 0.01))
 	var target_scale_y = lerp(1.0, 1.0 - actor.get_value("mouse_scale_y"), max(norm_y, 0.01))
-	%Drag.scale.x = lerp(%Drag.scale.x, target_scale_x, actor.get_value("mouse_delay"))
-	%Drag.scale.y = lerp(%Drag.scale.y, target_scale_y, actor.get_value("mouse_delay"))
+	%Drag.scale.x = is_nan_or_inf(lerp(%Drag.scale.x, target_scale_x, actor.get_value("mouse_delay")))
+	%Drag.scale.y = is_nan_or_inf(lerp(%Drag.scale.y, target_scale_y, actor.get_value("mouse_delay")))
 
 func follow_mouse_normal(mouse, main_marker, dir, dist):
 	if actor.sprite_type == "Sprite2D":
@@ -320,3 +318,25 @@ func follow_mouse_sprite_anim(dir, dist):
 
 func auto_rotate():
 	%Pos.rotate(actor.get_value("should_rot_speed"))
+	%Pos.rotation = is_nan_or_inf(%Pos.rotation)
+
+func is_nan_or_inf(value):
+	if (value is int) or (value is float):
+		if value.is_inf():
+			value = 0.0
+		if value.is_nan():
+			value = 0.0
+		return value
+		
+	elif (value is Vector2) or (value is Vector2i):
+		if value.x.is_inf():
+			value.x = 0.0
+		if value.x.is_nan():
+			value.x = 0.0
+		if value.y.is_inf():
+			value.y = 0.0
+		if value.y.is_nan():
+			value.y = 0.0
+		return value
+	else:
+		return value

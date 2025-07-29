@@ -18,7 +18,6 @@ func get_default_object_data() -> Dictionary:
 		frame = 0,
 	}
 
-
 var wiggle_val : float = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -210,8 +209,6 @@ func get_state(id):
 		
 	elif states[id].is_empty():
 		states[id] = sprite_data.duplicate(true)
-		
-
 
 func check_talk():
 	if get_value("should_talk"):
