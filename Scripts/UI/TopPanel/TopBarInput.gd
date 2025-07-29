@@ -31,7 +31,8 @@ func _ready():
 func update_window_button() -> void:
 	var menu := %WindowButton.get_popup() as PopupMenu
 	menu.set_item_checked(2, Settings.theme_settings.always_on_top)
-	
+	menu.set_item_checked(5, Settings.theme_settings.hide_mini_view)
+	menu.set_item_checked(6, Settings.theme_settings.hide_sprite_view)
 	var i := menu.get_item_index(100)
 	if i >= 0: menu.remove_item(i)
 	
@@ -53,6 +54,15 @@ func choosing_window(id):
 			Settings.center_window()
 		4:
 			Global.add_window.emit()
+		5:
+			%WindowButton.get_popup().toggle_item_checked(5)
+			Settings.set_ui_pieces(%WindowButton.get_popup().is_item_checked(5), 5)
+			Global.update_ui_pieces.emit()
+		6:
+			%WindowButton.get_popup().toggle_item_checked(6)
+			Settings.set_ui_pieces(%WindowButton.get_popup().is_item_checked(6), 6)
+			Global.update_ui_pieces.emit()
+			
 		100:
 			Global.edit_windows.emit()
 

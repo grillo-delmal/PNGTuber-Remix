@@ -28,16 +28,13 @@ func sliders_revalue(settings_dict):
 	update_fps(settings_dict.max_fps)
 	if Global.settings_dict.auto_save:
 		Settings.save_timer.start()
-		
+
 func update_fps(value):
 	if value == 241:
 		Engine.max_fps = 0
 		return
 	
 	Engine.max_fps = value
-
-
-
 
 func update_size_label():
 	%WindowSize.text = "Window Size " + str(get_window().size)

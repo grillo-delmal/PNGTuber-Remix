@@ -37,7 +37,9 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	custom_cursor_editor = true,
 	custom_cursor_preview = true,
 	custom_cursor_path = "",
-	floaty_panning = false,
+	floaty_panning = true,
+	hide_mini_view = true,
+	hide_sprite_view = true,
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
@@ -230,8 +232,6 @@ func toggle_borders():
 		get_window().size = s
 	save()
 
-
-
 func _input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("toggle_borders"):
 		toggle_borders()
@@ -285,3 +285,10 @@ func change_cursor():
 		Input.set_custom_mouse_cursor(get_custom_cursor())
 	else:
 		Input.set_custom_mouse_cursor(null)
+
+func set_ui_pieces(val : int, id : int):
+	if id == 5:
+		theme_settings.hide_mini_view = val
+	elif id == 6:
+		theme_settings.hide_sprite_view = val
+	save()

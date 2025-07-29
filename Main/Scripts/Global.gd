@@ -46,6 +46,8 @@ signal editing_for_changed
 signal add_window
 signal edit_windows
 
+signal update_ui_pieces
+
 # Remix version
 @onready var version: String = ProjectSettings.get_setting("application/config/version")
 

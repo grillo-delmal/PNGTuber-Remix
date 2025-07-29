@@ -3,6 +3,7 @@ extends Panel
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	Global.update_ui_pieces.connect(ui_pieces)
 	await get_tree().create_timer(0.1).timeout
 	%LayersViewSplit.split_offset = Settings.theme_settings.layers
 
@@ -10,3 +11,7 @@ func _ready() -> void:
 func _on_layers_view_split_dragged(offset: int) -> void:
 	Settings.theme_settings.layers = offset
 	Settings.save()
+
+func ui_pieces():
+	%CameraPanel.visible = Settings.theme_settings.hide_mini_view
+	%BG.visible = Settings.theme_settings.hide_sprite_view

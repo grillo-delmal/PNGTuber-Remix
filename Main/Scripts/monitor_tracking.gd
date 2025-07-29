@@ -5,6 +5,10 @@ class_name Monitor
 const ALL_SCREENS = 9999
 var current_screen = ALL_SCREENS
 var coords : Vector2 = Vector2(0,0)
+var screen_count = 0
+
+func _ready():
+	screen_count = DisplayServer.get_screen_count()
 
 func _process(_delta):
 	var global_mouse_pos = get_local_mouse_position()

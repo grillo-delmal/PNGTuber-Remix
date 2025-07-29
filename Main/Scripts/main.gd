@@ -37,6 +37,8 @@ func _ready():
 	Global.file_dialog = %FileDialog
 	%FileDialog.use_native_dialog = true
 	update_theme(Settings.current_theme)
+	await get_tree().create_timer(0.1).timeout
+	Global.update_ui_pieces.emit()
 	
 	# Load demo model when running from engine
 	# so its easier to test features
@@ -143,7 +145,6 @@ func _on_file_dialog_file_selected(path):
 				%FileImporter.trim = false
 				%FileImporter.add_normal(path)
 
-
 func _on_file_dialog_files_selected(paths):
 	if current_state == State.LoadSprites or current_state == State.AddAppend:
 		sprite_paths = paths
@@ -176,7 +177,6 @@ func import_objects():
 				Global.update_layers.emit(0, sprte_obj, "WiggleApp")
 			else:
 				Global.update_layers.emit(0, sprte_obj, "Sprite2D")
-
 
 func _on_confirmation_dialog_confirmed():
 	%TopUI/TopBarInput.last_path = ""
@@ -218,14 +218,26 @@ func set_zoom(new_zoom: Vector2) -> void:
 	%Camera2D.reset_smoothing()
 	Global.settings_dict.pan = %CamPos.global_position
 
-
 func _input(event):
 	if can_scroll && not Input.is_action_pressed("ctrl"):
 		if event.is_action_pressed("scrollup"):
-			set_zoom(%Camera2D.zoom*1.1)
+			if Input.is_action_pressed("alt"):
+				set_zoom(%Camera2D.zoom*1.1)
+			else:
+				var val = min(%Camera2D.zoom.x*1.1, 5.0)
+				%Camera2D.zoom = Vector2(val, val)
+				Global.settings_dict.zoom = %Camera2D.zoom
+
+				
 		elif event.is_action_pressed("scrolldown"):
-			set_zoom(%Camera2D.zoom/1.1)
-		
+			if Input.is_action_pressed("alt"):
+				set_zoom(%Camera2D.zoom/1.1)
+			else:
+				var val = max(%Camera2D.zoom.x/1.1, 0.01)
+				%Camera2D.zoom = Vector2(val, val)
+				Global.settings_dict.zoom = %Camera2D.zoom
+				
+				
 		if Input.is_action_just_pressed("pan"):
 			cam_pos_before_pan = %CamPos.global_position
 			of = get_global_mouse_position()

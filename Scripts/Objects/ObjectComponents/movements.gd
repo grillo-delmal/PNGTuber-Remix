@@ -36,7 +36,7 @@ func _process(delta: float) -> void:
 	follow_wiggle()
 	
 	%Rotation.rotation = is_nan_or_inf(clamp(applied_rotation, deg_to_rad(-360), deg_to_rad(360)))
-	%Pos.position = is_nan_or_inf(applied_pos)
+	%Pos.position += is_nan_or_inf(applied_pos)
 
 func movements(delta):
 	if !Global.static_view:
@@ -250,14 +250,14 @@ func follow_mouse_vel(mouse, main_marker):
 func follow_mouse_normal(mouse, main_marker, dir, dist):
 	if actor.sprite_type == "Sprite2D":
 		if actor.get_value("non_animated_sheet") && actor.get_value("animate_to_mouse") && !actor.get_value("animate_to_mouse_track_pos"):
-			applied_pos.x = lerp(%Pos.position.x, 0.0, actor.get_value("mouse_delay"))
-			applied_pos.y = lerp(%Pos.position.y, 0.0, actor.get_value("mouse_delay"))
+			%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, 0.0, actor.get_value("mouse_delay")))
+			%Pos.position.y = is_nan_or_inf(lerp(%Pos.position.y, 0.0, actor.get_value("mouse_delay")))
 		else:
-			applied_pos.x = lerp(%Pos.position.x, dir.x * min(dist, actor.get_value("look_at_mouse_pos")), actor.get_value("mouse_delay"))
-			applied_pos.y = lerp(%Pos.position.y, dir.y * min(dist, actor.get_value("look_at_mouse_pos_y")), actor.get_value("mouse_delay"))
+			%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, dir.x * min(dist, actor.get_value("look_at_mouse_pos")), actor.get_value("mouse_delay")))
+			%Pos.position.y = is_nan_or_inf(lerp(%Pos.position.y, dir.y * min(dist, actor.get_value("look_at_mouse_pos_y")), actor.get_value("mouse_delay")))
 	else:
-		applied_pos.x = lerp(%Pos.position.x, dir.x * min(dist, actor.get_value("look_at_mouse_pos")), actor.get_value("mouse_delay"))
-		applied_pos.y = lerp(%Pos.position.y, dir.y * min(dist, actor.get_value("look_at_mouse_pos_y")), actor.get_value("mouse_delay"))
+		%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, dir.x * min(dist, actor.get_value("look_at_mouse_pos")), actor.get_value("mouse_delay")))
+		%Pos.position.y = is_nan_or_inf(lerp(%Pos.position.y, dir.y * min(dist, actor.get_value("look_at_mouse_pos_y")), actor.get_value("mouse_delay")))
 		
 	var screen_size = DisplayServer.screen_get_size(-1)
 	if main_marker.current_screen == Monitor.ALL_SCREENS:
@@ -322,20 +322,20 @@ func auto_rotate():
 
 func is_nan_or_inf(value):
 	if (value is int) or (value is float):
-		if value.is_inf():
+		if is_inf(value):
 			value = 0.0
-		if value.is_nan():
+		if is_nan(value):
 			value = 0.0
 		return value
 		
 	elif (value is Vector2) or (value is Vector2i):
-		if value.x.is_inf():
+		if is_inf(value.x):
 			value.x = 0.0
-		if value.x.is_nan():
+		if is_nan(value.x):
 			value.x = 0.0
-		if value.y.is_inf():
+		if is_inf(value.y):
 			value.y = 0.0
-		if value.y.is_nan():
+		if is_nan(value.y):
 			value.y = 0.0
 		return value
 	else:
