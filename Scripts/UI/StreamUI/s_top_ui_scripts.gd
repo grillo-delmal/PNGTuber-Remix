@@ -8,7 +8,7 @@ func _ready() -> void:
 	%ModeButton.get_popup().connect("id_pressed",choosing_mode)
 	%BGButton.get_popup().connect("id_pressed",choosing_bg_color)
 	%WindowButton.get_popup().connect("id_pressed",choosing_window)
-	await get_tree().create_timer(0.1).timeout
+	await get_tree().current_scene.ready
 	choosing_mode(Settings.theme_settings.software_mode)
 	
 

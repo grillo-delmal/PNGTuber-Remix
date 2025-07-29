@@ -193,25 +193,30 @@ func _on_custom_cursor_editor_toggled(toggled_on: bool) -> void:
 	if !change_setting: return
 	Settings.theme_settings.custom_cursor_editor = toggled_on
 	cursor_changed()
+	Settings.save()
 
 func _on_custom_cursor_preview_toggled(toggled_on: bool) -> void:
 	if !change_setting: return
 	Settings.theme_settings.custom_cursor_preview = toggled_on
 	cursor_changed()
+	Settings.save()
 
 func _on_select_cursor_file_selected(path: String) -> void:
 	if !change_setting: return
 	Settings.theme_settings.custom_cursor_path = path
 	cursor_changed()
+	Settings.save()
 
 func _on_remove_custom_cursor_pressed() -> void:
 	if !change_setting: return
 	Settings.theme_settings.custom_cursor_path = ""
 	cursor_changed()
+	Settings.save()
 
 func _on_floaty_panning_toggled(toggled_on: bool) -> void:
 	if !change_setting: return
 	Settings.theme_settings.floaty_panning = toggled_on
+	Settings.save()
 	Global.update_camera_smoothing()
 
 func _on_fix_mic_delay_toggled(toggled_on: bool) -> void:

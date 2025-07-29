@@ -39,6 +39,7 @@ func _ready():
 	update_theme(Settings.current_theme)
 	await get_tree().create_timer(0.1).timeout
 	Global.update_ui_pieces.emit()
+	Global.update_camera_smoothing()
 	
 	# Load demo model when running from engine
 	# so its easier to test features

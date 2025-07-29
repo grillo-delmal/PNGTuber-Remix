@@ -529,6 +529,7 @@ func load_pngplus_file(path):
 	for i in get_tree().get_nodes_in_group("Sprites"):
 		i.zazaza(get_tree().get_nodes_in_group("Sprites"))
 	
+	Global.settings_dict.should_delta = false
 	Global.load_sprite_states(0)
 	Global.reinfoanim.emit()
 	get_tree().get_root().get_node("Main/%Marker").current_screen = Monitor.ALL_SCREENS

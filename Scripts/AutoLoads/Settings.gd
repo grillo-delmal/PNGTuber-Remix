@@ -34,6 +34,7 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	ui_scaling = 1.0,
 	session = 0,
 	auto_activate_websocket = false,
+	websocket_id = 1234,
 	custom_cursor_editor = true,
 	custom_cursor_preview = true,
 	custom_cursor_path = "",
