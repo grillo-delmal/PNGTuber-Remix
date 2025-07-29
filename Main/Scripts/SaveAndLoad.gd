@@ -2,8 +2,17 @@ extends Node
 
 
 var save_dict : Dictionary = {}
+var thread : Thread = Thread.new()
+
 
 func save_file(path):
+	if Settings.theme_settings.use_threading:
+		if !thread.is_alive():
+			var _err = thread.start(save_model.bind(path))
+	else:
+		save_model(path)
+
+func save_model(path):
 	Global.save_path = path
 	var sprites = get_tree().get_nodes_in_group("Sprites")
 	var inputs = get_tree().get_nodes_in_group("StateButtons")
@@ -111,159 +120,173 @@ func save_file(path):
 	
 	file.store_var(save_dict, true)
 	file.close()
+	if Settings.theme_settings.use_threading:
+		thread.call_deferred("wait_to_finish")
 
 func load_file(path: String):
-	if path.get_extension() == "save":
-		load_pngplus_file(path)
+	if Settings.theme_settings.use_threading:
+		if !thread.is_alive():
+			if path.get_extension() == "save":
+				var _err = thread.start(load_pngplus_file.bind(path))
+			else:
+				var _err = thread.start(load_model.bind(path))
 	else:
-		Global.delete_states.emit()
-		Global.main.clear_sprites()
-		
-		Global.main.get_node("Timer").start()
-		Global.delete_states.emit()
-		await Global.main.get_node("Timer").timeout
-		
-		var file = FileAccess.open(path, FileAccess.READ)
-		var load_dict = file.get_var(true)
-		file.close()
-		
-		if !load_dict.has("sprites_array"):
-			return
-		
-		var file_version := ""
-		if "version" in load_dict:
-			file_version = load_dict.version
-		
-		if file_version != Global.version:
-			if not path.begins_with("res://"):
-				save_backup(load_dict, path)
-				await get_tree().process_frame
-			
-			load_dict = VersionConverter.convert_save(load_dict, file_version)
-			await get_tree().process_frame
-			
-			if OS.has_feature("editor") or not path.begins_with("res://"):
-				var new_file := FileAccess.open(path, FileAccess.WRITE)
-				new_file.store_var(load_dict, true)
-				new_file.close()
-				await get_tree().process_frame
-		
-		Global.settings_dict.merge(load_dict.settings_dict, true)
-		if Global.settings_dict.monitor != Monitor.ALL_SCREENS:
-			if Global.settings_dict.monitor >= DisplayServer.get_screen_count():
-				Global.settings_dict.monitor = Monitor.ALL_SCREENS
-		
-		Global.remake_states.emit(load_dict.settings_dict.states)
-		
-		if not path.begins_with("res://"):
-			Global.save_path = path
-		
-		for sprite in load_dict.sprites_array:
-			var sprite_obj
-			if sprite.has("sprite_type"):
-				if sprite.sprite_type == "Sprite2D":
-					sprite_obj = preload("res://Misc/SpriteObject/sprite_object.tscn").instantiate()
-				elif sprite.sprite_type == "WiggleApp":
-					sprite_obj = preload("res://Misc/AppendageObject/Appendage_object.tscn").instantiate()
-					
-			else:
-				sprite_obj = preload("res://Misc/SpriteObject/sprite_object.tscn").instantiate()
-				
-			var cleaned_array = []
-			
-			for st in sprite.states:
-				if !st.is_empty():
-					cleaned_array.append(st)
-					
-			for st in cleaned_array:
-				var new_dict = sprite_obj.sprite_data.duplicate()
-				new_dict.merge(st, true)
-				st = new_dict
-				
-			sprite_obj.states.clear()
-			sprite_obj.states = cleaned_array
-			sprite_obj.layer_color = sprite.get("layer_color", Color.BLACK)
-			
-			
-			if sprite.has("is_asset"):
-				sprite_obj.is_asset = sprite.is_asset
-				sprite_obj.saved_event = sprite.saved_event
-				sprite_obj.should_disappear = sprite.should_disappear
-				if sprite.has("show_only"):
-					sprite_obj.show_only = sprite.show_only
-				sprite_obj.get_node("%Drag").visible = sprite.was_active_before
-				sprite_obj.was_active_before = sprite.was_active_before
-				sprite_obj.saved_keys = sprite.saved_keys
-				if !InputMap.has_action(str(sprite.sprite_id)):
-					InputMap.add_action(str(sprite.sprite_id))
-					if sprite_obj.saved_event != null:
-						InputMap.action_add_event(str(sprite.sprite_id), sprite_obj.saved_event)
-					
-			if sprite.has("is_apng"):
-				load_apng(sprite_obj, sprite)
-			else:
-				if sprite.has("img_animated"):
-					if sprite.img_animated:
-						load_gif(sprite_obj, sprite)
-					else:
-						load_sprite(sprite_obj, sprite)
-				else:
-					
-					
-					load_sprite(sprite_obj, sprite)
-
-			if sprite.has("image_data"):
-				sprite_obj.image_data = sprite.image_data 
-				sprite_obj.normal_data = sprite.normal_data 
-				
-			sprite_obj.sprite_id = sprite.sprite_id
-			if sprite.parent_id != null:
-				sprite_obj.parent_id = sprite.parent_id
-			sprite_obj.sprite_name = sprite.sprite_name
-			if sprite.has("is_collapsed"):
-				sprite_obj.is_collapsed = sprite.is_collapsed
-			Global.sprite_container.add_child(sprite_obj)
-			sprite_obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
-
-		if !load_dict.input_array.is_empty():
-			for input in len(load_dict.input_array):
-				if load_dict.input_array[input] is Dictionary:
-					get_tree().get_nodes_in_group("StateButtons")[input].saved_event = load_dict.input_array[input].hot_key
-					get_tree().get_nodes_in_group("StateButtons")[input].state_name = load_dict.input_array[input].state_name
-					get_tree().get_nodes_in_group("StateButtons")[input].text = load_dict.input_array[input].state_name
-					get_tree().get_nodes_in_group("StateButtons")[input].update_stuff()
-				else:
-					get_tree().get_nodes_in_group("StateButtons")[input].saved_event = load_dict.input_array[input]
-					get_tree().get_nodes_in_group("StateButtons")[input].update_stuff()
-					
-
-		var state_count = get_tree().get_nodes_in_group("StateButtons").size()
-		for i in get_tree().get_nodes_in_group("Sprites"):
-			if i.states.size() != state_count:
-				for l in abs(i.states.size() - state_count):
-					i.states.append({})
-		Global.load_sprite_states(0)
-		Global.remake_layers.emit()
-		Global.reparent_objects.emit(get_tree().get_nodes_in_group("Sprites"))
-		Global.slider_values.emit(Global.settings_dict)
-		Global.load_sprite_states(0)
-		if Global.main.has_node("%Control"):
-			Global.reinfoanim.emit()
-		Settings.save()
-		
-		if Global.settings_dict.anti_alias:
-			Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		if path.get_extension() == "save":
+			load_pngplus_file(path)
 		else:
-			Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
-		
-		if Global.settings_dict.auto_save:
-			Settings.save_timer.wait_time = Global.settings_dict.auto_save_timer * 60
-			Settings.save_timer.start()
-		else:
-			Settings.save_timer.stop()
+			load_model(path)
+
+func load_model(path : String):
+	Global.delete_states.emit()
+	Global.main.clear_sprites()
 	
+	Global.main.get_node("Timer").start()
+	Global.delete_states.emit()
+	await Global.main.get_node("Timer").timeout
+	
+	var file = FileAccess.open(path, FileAccess.READ)
+	var load_dict = file.get_var(true)
+	file.close()
+	
+	if !load_dict.has("sprites_array"):
+		return
+	
+	var file_version := ""
+	if "version" in load_dict:
+		file_version = load_dict.version
+	
+	if file_version != Global.version:
+		if not path.begins_with("res://"):
+			save_backup(load_dict, path)
+			await get_tree().process_frame
+		
+		load_dict = VersionConverter.convert_save(load_dict, file_version)
+		await get_tree().process_frame
+		
+		if OS.has_feature("editor") or not path.begins_with("res://"):
+			var new_file := FileAccess.open(path, FileAccess.WRITE)
+			new_file.store_var(load_dict, true)
+			new_file.close()
+			await get_tree().process_frame
+	
+	Global.settings_dict.merge(load_dict.settings_dict, true)
+	if Global.settings_dict.monitor != Monitor.ALL_SCREENS:
+		if Global.settings_dict.monitor >= DisplayServer.get_screen_count():
+			Global.settings_dict.monitor = Monitor.ALL_SCREENS
+	
+	Global.remake_states.emit(load_dict.settings_dict.states)
+	
+	if not path.begins_with("res://"):
+		Global.save_path = path
+	
+	for sprite in load_dict.sprites_array:
+		var sprite_obj
+		if sprite.has("sprite_type"):
+			if sprite.sprite_type == "Sprite2D":
+				sprite_obj = preload("res://Misc/SpriteObject/sprite_object.tscn").instantiate()
+			elif sprite.sprite_type == "WiggleApp":
+				sprite_obj = preload("res://Misc/AppendageObject/Appendage_object.tscn").instantiate()
+				
+		else:
+			sprite_obj = preload("res://Misc/SpriteObject/sprite_object.tscn").instantiate()
+			
+		var cleaned_array = []
+		
+		for st in sprite.states:
+			if !st.is_empty():
+				cleaned_array.append(st)
+				
+		for st in cleaned_array:
+			var new_dict = sprite_obj.sprite_data.duplicate()
+			new_dict.merge(st, true)
+			st = new_dict
+			
+		sprite_obj.states.clear()
+		sprite_obj.states = cleaned_array
+		sprite_obj.layer_color = sprite.get("layer_color", Color.BLACK)
+		
+		
+		if sprite.has("is_asset"):
+			sprite_obj.is_asset = sprite.is_asset
+			sprite_obj.saved_event = sprite.saved_event
+			sprite_obj.should_disappear = sprite.should_disappear
+			if sprite.has("show_only"):
+				sprite_obj.show_only = sprite.show_only
+			sprite_obj.get_node("%Drag").visible = sprite.was_active_before
+			sprite_obj.was_active_before = sprite.was_active_before
+			sprite_obj.saved_keys = sprite.saved_keys
+			if !InputMap.has_action(str(sprite.sprite_id)):
+				InputMap.add_action(str(sprite.sprite_id))
+				if sprite_obj.saved_event != null:
+					InputMap.action_add_event(str(sprite.sprite_id), sprite_obj.saved_event)
+				
+		if sprite.has("is_apng"):
+			load_apng(sprite_obj, sprite)
+		else:
+			if sprite.has("img_animated"):
+				if sprite.img_animated:
+					load_gif(sprite_obj, sprite)
+				else:
+					load_sprite(sprite_obj, sprite)
+			else:
+				
+				
+				load_sprite(sprite_obj, sprite)
+
+		if sprite.has("image_data"):
+			sprite_obj.image_data = sprite.image_data 
+			sprite_obj.normal_data = sprite.normal_data 
+			
+		sprite_obj.sprite_id = sprite.sprite_id
+		if sprite.parent_id != null:
+			sprite_obj.parent_id = sprite.parent_id
+		sprite_obj.sprite_name = sprite.sprite_name
+		if sprite.has("is_collapsed"):
+			sprite_obj.is_collapsed = sprite.is_collapsed
+		Global.sprite_container.add_child(sprite_obj)
+		sprite_obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
+
+	if !load_dict.input_array.is_empty():
+		for input in len(load_dict.input_array):
+			if load_dict.input_array[input] is Dictionary:
+				get_tree().get_nodes_in_group("StateButtons")[input].saved_event = load_dict.input_array[input].hot_key
+				get_tree().get_nodes_in_group("StateButtons")[input].state_name = load_dict.input_array[input].state_name
+				get_tree().get_nodes_in_group("StateButtons")[input].text = load_dict.input_array[input].state_name
+				get_tree().get_nodes_in_group("StateButtons")[input].update_stuff()
+			else:
+				get_tree().get_nodes_in_group("StateButtons")[input].saved_event = load_dict.input_array[input]
+				get_tree().get_nodes_in_group("StateButtons")[input].update_stuff()
+				
+
+	var state_count = get_tree().get_nodes_in_group("StateButtons").size()
+	for i in get_tree().get_nodes_in_group("Sprites"):
+		if i.states.size() != state_count:
+			for l in abs(i.states.size() - state_count):
+				i.states.append({})
+	Global.load_sprite_states(0)
+	Global.remake_layers.emit()
+	Global.reparent_objects.emit(get_tree().get_nodes_in_group("Sprites"))
+	Global.slider_values.emit(Global.settings_dict)
+	Global.load_sprite_states(0)
+	if Global.main.has_node("%Control"):
+		Global.reinfoanim.emit()
+	Settings.save()
+	
+	if Global.settings_dict.anti_alias:
+		Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	else:
+		Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
+	
+	if Global.settings_dict.auto_save:
+		Settings.save_timer.wait_time = Global.settings_dict.auto_save_timer * 60
+		Settings.save_timer.start()
+	else:
+		Settings.save_timer.stop()
+
 	Global.main.get_node("%Marker").current_screen = Global.settings_dict.monitor
 	Global.load_model.emit()
+	if Settings.theme_settings.use_threading:
+		thread.call_deferred("wait_to_finish")
 
 func save_backup(data: Dictionary, previous_path: String) -> void:
 	var base_path := previous_path.get_basename()
@@ -408,12 +431,11 @@ func load_gif(sprite_obj, sprite):
 	sprite_obj.get_node("%Sprite2D").texture = img_can
 
 func load_pngplus_file(path):
-	get_tree().get_root().get_node("Main/%Control/StatesStuff").delete_all_states()
-	get_tree().get_root().get_node("Main").clear_sprites()
+	Global.delete_states.emit()
+	Global.main.clear_sprites()
 	
-	get_tree().get_root().get_node("Main/Timer").start()
-	get_tree().get_root().get_node("Main/%Control/StatesStuff").delete_all_states()
-	await get_tree().get_root().get_node("Main/Timer").timeout
+	Global.main.get_node("Timer").start()
+	await Global.main.get_node("Timer").timeout
 	
 	
 	
@@ -442,14 +464,18 @@ func load_pngplus_file(path):
 			img_can.diffuse_texture = img_tex
 			sprite_obj.get_node("%Sprite2D").texture = img_can
 		else:
-			var img_can = Global.main.get_node("%FileImporter").import_png_from_buffer(img_data, "", sprite_obj)
+			var img_can = Global.main.get_node("%FileImporter").import_png_from_buffer(img_data, sprite_obj)
 			sprite_obj.get_node("%Sprite2D").texture = img_can
 		
 	#	'''
 	
 		sprite_obj.is_plus_first_import = true
 		sprite_obj.sprite_id = load_dict[i]["identification"]
-		sprite_obj.parent_id = load_dict[i]["parentId"]
+		var id = load_dict[i].get("parentId", 0)
+		if id == null:
+			id = 0
+		
+		sprite_obj.parent_id = id
 		sprite_obj.sprite_name = load_dict[i]["path"].get_file().trim_suffix(".png")
 		
 		sprite_obj.sprite_data.xFrq = load_dict[i]["xFrq"]
@@ -520,17 +546,20 @@ func load_pngplus_file(path):
 		Global.sprite_container.add_child(sprite_obj)
 		sprite_obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		
-	for n in 10:
-		get_tree().get_root().get_node("Main/%Control/StatesStuff").add_state()
+	Global.remake_for_plus.emit()
+
 	
 	Global.load_sprite_states(0)
 	Global.remake_layers.emit()
 	Global.slider_values.emit(Global.settings_dict)
+	Global.reparent_objects.emit(get_tree().get_nodes_in_group("Sprites"))
 	for i in get_tree().get_nodes_in_group("Sprites"):
 		i.zazaza(get_tree().get_nodes_in_group("Sprites"))
 	
 	Global.settings_dict.should_delta = false
 	Global.load_sprite_states(0)
 	Global.reinfoanim.emit()
-	get_tree().get_root().get_node("Main/%Marker").current_screen = Monitor.ALL_SCREENS
+	Global.main.get_node("%Marker").current_screen = Monitor.ALL_SCREENS
 	Global.load_model.emit()
+	if Settings.theme_settings.use_threading:
+		thread.call_deferred("wait_to_finish")

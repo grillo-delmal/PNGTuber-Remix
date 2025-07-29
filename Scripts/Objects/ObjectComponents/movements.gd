@@ -93,7 +93,6 @@ func wobble(delta: float) -> void:
 	applied_pos.x = lerp(applied_pos.x, last_wobble_pos.x, 0.15)
 	applied_pos.y = lerp(applied_pos.y, last_wobble_pos.y, 0.15)
 
-
 var paused_rotation: float = 0
 var last_rot: float = 0
 func rotationalDrag(length, delta: float):
@@ -207,14 +206,14 @@ func follow_mouse_vel(mouse, main_marker):
 	
 	if actor.sprite_type == "Sprite2D":
 		if actor.get_value("non_animated_sheet") && actor.get_value("animate_to_mouse") && !actor.get_value("animate_to_mouse_track_pos"):
-			applied_pos.x = lerp(%Pos.position.x, 0.0, actor.get_value("mouse_delay"))
-			applied_pos.y = lerp(%Pos.position.y, 0.0, actor.get_value("mouse_delay"))
+			applied_pos.x = is_nan_or_inf(lerp(%Pos.position.x, 0.0, actor.get_value("mouse_delay")))
+			applied_pos.y = is_nan_or_inf(lerp(%Pos.position.y, 0.0, actor.get_value("mouse_delay")))
 		else:
-			applied_pos.x = lerp(%Pos.position.x, last_dist.x, actor.get_value("mouse_delay"))
-			applied_pos.y = lerp(%Pos.position.y, last_dist.y, actor.get_value("mouse_delay"))
+			applied_pos.x = is_nan_or_inf(lerp(%Pos.position.x, last_dist.x, actor.get_value("mouse_delay")))
+			applied_pos.y = is_nan_or_inf(lerp(%Pos.position.y, last_dist.y, actor.get_value("mouse_delay")))
 	else:
-		applied_pos.x = lerp(%Pos.position.x, last_dist.x, actor.get_value("mouse_delay"))
-		applied_pos.y = lerp(%Pos.position.y, last_dist.y, actor.get_value("mouse_delay"))
+		applied_pos.x = is_nan_or_inf(lerp(%Pos.position.x, last_dist.x, actor.get_value("mouse_delay")))
+		applied_pos.y = is_nan_or_inf(lerp(%Pos.position.y, last_dist.y, actor.get_value("mouse_delay")))
 
 	var mouse_x = mouse.x
 	var screen_width = get_viewport().size.x
@@ -244,8 +243,8 @@ func follow_mouse_vel(mouse, main_marker):
 	var norm_y = clamp(abs(dist_from_center.y) / center.y, 0.0, 1.0)
 	var target_scale_x = lerp(1.0, 1.0 - actor.get_value("mouse_scale_x") , max(norm_x, 0.01))
 	var target_scale_y = lerp(1.0, 1.0 - actor.get_value("mouse_scale_y"), max(norm_y, 0.01))
-	%Drag.scale.x = is_nan_or_inf(lerp(%Drag.scale.x, target_scale_x, actor.get_value("mouse_delay")))
-	%Drag.scale.y = is_nan_or_inf(lerp(%Drag.scale.y, target_scale_y, actor.get_value("mouse_delay")))
+	%Drag.scale.x = is_nan_or_inf(lerp(%Drag.scale.x, target_scale_x, actor.get_value("mouse_delay")), true)
+	%Drag.scale.y = is_nan_or_inf(lerp(%Drag.scale.y, target_scale_y, actor.get_value("mouse_delay")), true)
 
 func follow_mouse_normal(mouse, main_marker, dir, dist):
 	if actor.sprite_type == "Sprite2D":
@@ -277,7 +276,7 @@ func follow_mouse_normal(mouse, main_marker, dir, dist):
 
 	var target_rotation = clamp(rotation_factor, deg_to_rad(safe_rot_min), deg_to_rad(safe_rot_max))
 
-	applied_rotation = lerp_angle(%Rotation.rotation, target_rotation, actor.get_value("mouse_delay"))
+	applied_rotation = is_nan_or_inf(lerp_angle(%Rotation.rotation, target_rotation, actor.get_value("mouse_delay")))
 
 	if applied_rotation == NAN:
 		applied_rotation = 0.0
@@ -288,8 +287,8 @@ func follow_mouse_normal(mouse, main_marker, dir, dist):
 	var norm_y = clamp(abs(dist_from_center.y) / center.y, 0.0, 1.0)
 	var target_scale_x = lerp(1.0, 1.0 - actor.get_value("mouse_scale_x") , max(norm_x, 0.001))
 	var target_scale_y = lerp(1.0, 1.0 - actor.get_value("mouse_scale_y"), max(norm_y, 0.001))
-	%Drag.scale.x = lerp(%Drag.scale.x, target_scale_x, actor.get_value("mouse_delay"))
-	%Drag.scale.y = lerp(%Drag.scale.y, target_scale_y, actor.get_value("mouse_delay"))
+	%Drag.scale.x = is_nan_or_inf(lerp(%Drag.scale.x, target_scale_x, actor.get_value("mouse_delay")), true)
+	%Drag.scale.y = is_nan_or_inf(lerp(%Drag.scale.y, target_scale_y, actor.get_value("mouse_delay")), true)
 
 func follow_mouse_sprite_anim(dir, dist):
 	if actor.sprite_type == "Sprite2D":
@@ -320,23 +319,41 @@ func auto_rotate():
 	%Pos.rotate(actor.get_value("should_rot_speed"))
 	%Pos.rotation = is_nan_or_inf(%Pos.rotation)
 
-func is_nan_or_inf(value):
+func is_nan_or_inf(value, should_be_one = false):
 	if (value is int) or (value is float):
 		if is_inf(value):
-			value = 0.0
+			if should_be_one:
+				value = 1.0
+			else:
+				value = 0.0
 		if is_nan(value):
-			value = 0.0
+			if should_be_one:
+				value = 1.0
+			else:
+				value = 0.0
 		return value
 		
 	elif (value is Vector2) or (value is Vector2i):
 		if is_inf(value.x):
-			value.x = 0.0
+			if should_be_one:
+				value.x = 1.0
+			else:
+				value.x = 0.0
 		if is_nan(value.x):
-			value.x = 0.0
+			if should_be_one:
+				value.x = 1.0
+			else:
+				value.x = 0.0
 		if is_inf(value.y):
-			value.y = 0.0
+			if should_be_one:
+				value.y = 1.0
+			else:
+				value.y = 0.0
 		if is_nan(value.y):
-			value.y = 0.0
+			if should_be_one:
+				value.y = 1.0
+			else:
+				value.y = 0.0
 		return value
 	else:
 		return value

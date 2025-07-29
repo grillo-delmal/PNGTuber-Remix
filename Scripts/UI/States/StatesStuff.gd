@@ -8,6 +8,7 @@ func _ready():
 	Global.delete_states.connect(delete_all_states)
 	Global.remake_states.connect(update_states)
 	Global.reset_states.connect(initial_state)
+	Global.remake_for_plus.connect(plus_import)
 	delete_all_states()
 	initial_state()
 
@@ -68,7 +69,10 @@ func delete_all_states():
 		
 	Global.settings_dict.states = []
 	Global.settings_dict.light_states = [{}]
-	
+
+func plus_import():
+	for i in 9:
+		add_state()
 
 func add_state():
 	var button = state_button.instantiate()
@@ -94,6 +98,7 @@ func add_state():
 				i.states.append({})
 	
 	Global.settings_dict.saved_inputs.resize(Global.settings_dict.states.size())
+
 
 func update_states(states):
 	var states_size = states.size()

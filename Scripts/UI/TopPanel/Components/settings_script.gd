@@ -45,6 +45,7 @@ func check_data():
 	%CustomCursorEditor.button_pressed = Settings.theme_settings.custom_cursor_editor
 	%CustomCursorPreview.button_pressed = Settings.theme_settings.custom_cursor_preview
 	%FloatyPanning.button_pressed = Settings.theme_settings.floaty_panning
+	%UseThreads.button_pressed = Settings.theme_settings.use_threading
 	change_setting = true
 
 func _physics_process(_delta):
@@ -221,3 +222,9 @@ func _on_floaty_panning_toggled(toggled_on: bool) -> void:
 
 func _on_fix_mic_delay_toggled(toggled_on: bool) -> void:
 	GlobalAudioStreamPlayer.change_mic_restart_time(toggled_on)
+
+
+func _on_use_threads_toggled(toggled_on: bool) -> void:
+	if !change_setting: return
+	Settings.theme_settings.use_threading = toggled_on
+	Settings.save()

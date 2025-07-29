@@ -40,13 +40,6 @@ func _ready():
 	await get_tree().create_timer(0.1).timeout
 	Global.update_ui_pieces.emit()
 	Global.update_camera_smoothing()
-	
-	# Load demo model when running from engine
-	# so its easier to test features
-	'''
-	if !OS.has_feature("editor"): return
-	await get_tree().create_timer(.2).timeout
-	SaveAndLoad.load_file("res://DemoModels/PickleModelFollowMouse.pngRemix")'''
 
 
 func update_theme(new_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")):

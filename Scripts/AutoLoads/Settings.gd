@@ -41,6 +41,7 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	floaty_panning = true,
 	hide_mini_view = true,
 	hide_sprite_view = true,
+	use_threading = false,
 }
 @onready var os_path = OS.get_executable_path().get_base_dir()
 

@@ -27,6 +27,9 @@ func _ready():
 	print(OS.get_executable_path().get_base_dir() + "/autosaves")
 	if !DirAccess.dir_exists_absolute(OS.get_executable_path().get_base_dir() + "/autosaves"):
 		DirAccess.make_dir_absolute(OS.get_executable_path().get_base_dir() + "/autosaves")
+		
+	await get_tree().physics_frame
+	choosing_mode(Settings.theme_settings.mode)
 
 func update_window_button() -> void:
 	var menu := %WindowButton.get_popup() as PopupMenu
@@ -118,7 +121,6 @@ func on_mode_changed(new_mode) -> void:
 			%PreviewModeCheck.hide()
 			%PreviewModeCheck.button_pressed = false
 
-
 func choosing_mode(id):
 	Global.mode = id
 
@@ -167,7 +169,6 @@ func _notification(what):
 
 func _on_inputs_button_pressed():
 	Global.top_ui.add_child(settings.instantiate())
-
 
 func _on_color_picker_color_changed(color):
 	Global.settings_dict.bg_color = color
@@ -218,7 +219,6 @@ func desel_everything():
 		#	%LayersTree.get_selected().deselect(0)
 	Global.held_sprite = null
 	Global.deselect.emit()
-
 
 func _on_preview_mode_check_toggled(toggled_on: bool) -> void:
 	Global.static_view = toggled_on

@@ -17,7 +17,6 @@ func import_sprite(path : String):
 	spawn.get_node("%Sprite2D").texture = img_tex
 	return spawn
 
-
 func import_appendage(path : String):
 	var spawn = appendage.instantiate()
 	var apng_test = AImgIOAPNGImporter.load_from_file(path)
@@ -56,7 +55,6 @@ func import_apng_sprite(path : String , spawn) -> CanvasTexture:
 
 	
 	return img_can
-
 
 func import_gif(path : String, spawn) -> CanvasTexture:
 	var g_file = FileAccess.get_file_as_bytes(path)
@@ -294,3 +292,26 @@ func _on_confirm_trim_canceled() -> void:
 	else:
 		trim = false
 		get_parent().import_objects()
+
+func import_png_from_buffer(buffer, spawn) -> CanvasTexture:
+	var img = Image.new()
+	img.load_png_from_buffer(buffer)
+	var og_image = img.duplicate(true)
+	if trim:
+		img = ImageTrimmer.trim_image(img)
+		var original_width = og_image.get_width()
+		var original_height = og_image.get_height()
+		var trimmed_width = img.get_width()
+		var trimmed_height = img.get_height()
+		# Calculate offset to maintain visual position
+		var trim_info = ImageTrimmer.calculate_trim_info(og_image)
+		var center_shift_x = trim_info.min_x - ((original_width - trimmed_width) / 2.0)
+		var center_shift_y = trim_info.min_y - ((original_height - trimmed_height) / 2.0)
+		# Adjust position to keep image visually stable
+		spawn.sprite_data.offset += Vector2(center_shift_x, center_shift_y)
+		spawn.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
+	img.fix_alpha_edges()
+	var texture = ImageTexture.create_from_image(img)
+	var img_can = CanvasTexture.new()
+	img_can.diffuse_texture = texture
+	return img_can

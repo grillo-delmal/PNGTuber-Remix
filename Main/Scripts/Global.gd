@@ -37,6 +37,7 @@ signal update_offset_spins
 
 signal delete_states
 signal remake_states
+signal remake_for_plus
 signal reset_states
 
 signal update_mouse_vel_pos
@@ -114,7 +115,9 @@ var swtich_session_popup : Node = null
 var save_path := ""
 var is_editor := true:
 	set(x):
-		if x == is_editor: return
+		if x == is_editor: 
+			is_editor = x
+			return
 		is_editor = x
 		Settings.change_cursor()
 
@@ -136,12 +139,14 @@ func set_mode(new_mode) -> void:
 		0:
 			get_viewport().transparent_bg = false
 			RenderingServer.set_default_clear_color(Color.SLATE_GRAY)
-			main.get_node("%Control").show()
+			if main.has_node("%Control"):
+				main.get_node("%Control").show()
 			is_editor = true
 		1:
 			RenderingServer.set_default_clear_color(settings_dict.bg_color)
 			get_viewport().transparent_bg = settings_dict.is_transparent
-			main.get_node("%Control").hide()
+			if main.has_node("%Control"):
+				main.get_node("%Control").hide()
 			is_editor = false
 			if light != null && is_instance_valid(light):
 				light.get_node("Grab").hide()
