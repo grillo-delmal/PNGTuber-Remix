@@ -122,15 +122,16 @@ func _on_duplicate_state_pressed() -> void:
 	%StateButtons.add_child(button)
 	InputMap.add_action(button.input_key)
 	
-	Global.settings_dict.states.append(Global.settings_dict.states[Global.current_state].duplicate())
+	Global.settings_dict.states.append(Global.settings_dict.states[Global.current_state].duplicate(true))
 	
-	Global.settings_dict.light_states.append(Global.settings_dict.light_states[Global.current_state].duplicate())
+	Global.settings_dict.light_states.append(Global.settings_dict.light_states[Global.current_state].duplicate(true))
 	
 	state_count = get_tree().get_nodes_in_group("StateButtons").size()
 	for i in get_tree().get_nodes_in_group("Sprites"):
 		if i.states.size() != state_count:
 			for l in abs(i.states.size() - state_count):
-				i.states.append(i.states[Global.current_state].duplicate())
+				i.states.append(i.sprite_data.duplicate(true))
+				
 	
 	Global.settings_dict.saved_inputs.resize(Global.settings_dict.states.size())
 

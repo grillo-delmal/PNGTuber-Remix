@@ -149,7 +149,7 @@ func advanced_lipsyc():
 			%Sprite2D.frame_coords.x = 13
 
 func save_state(id):
-	var dict : Dictionary = sprite_data.duplicate()
+	var dict : Dictionary = sprite_data.duplicate(true)
 	states[id] = dict
 
 func get_state(id):

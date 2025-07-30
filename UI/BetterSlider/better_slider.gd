@@ -90,6 +90,7 @@ func _on_spin_box_value_value_changed(nvalue):
 			if i != null && is_instance_valid(i) && sp_type != "Null":
 				var og_val = i.sprite_data.duplicate()
 				i.sprite_data[value_to_update] = nvalue
+				StateButton.multi_edit(nvalue, value_to_update, i, i.states)
 				i.save_state(Global.current_state)
 				undo_redo_data.append({sprite_object = i, 
 				data = i.sprite_data.duplicate(), 

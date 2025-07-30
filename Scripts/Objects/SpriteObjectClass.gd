@@ -234,7 +234,6 @@ func get_value(key: String) -> Variant:
 	
 	return default
 
-
 func set_blend(blend):
 	match  blend:
 		"Normal":
@@ -257,7 +256,6 @@ func set_blend(blend):
 		"Cursed":
 			sprite_object.material.set_shader_parameter("enabled", true)
 			sprite_object.material.set_shader_parameter("Blend", preload("res://Misc/EasyBlend/Blends/test1.png"))
-
 
 func reparent_obj(parent):
 	for i in parent:

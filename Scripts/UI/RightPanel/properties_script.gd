@@ -204,7 +204,6 @@ func _on_pos_x_spin_box_value_changed(value):
 				
 			UndoRedoManager.add_data_to_manager(undo_redo_data)
 
-
 func _on_pos_y_spin_box_value_changed(value):
 	if %PosYSpinBox.get_line_edit().has_focus():
 		if should_change:
@@ -222,7 +221,6 @@ func _on_pos_y_spin_box_value_changed(value):
 				
 			UndoRedoManager.add_data_to_manager(undo_redo_data)
 
-
 func _on_rot_spin_box_value_changed(value):
 	if %RotSpinBox.get_line_edit().has_focus():
 		if should_change:
@@ -239,7 +237,6 @@ func _on_rot_spin_box_value_changed(value):
 				state = Global.current_state})
 				
 			UndoRedoManager.add_data_to_manager(undo_redo_data)
-
 
 func _on_visible_toggled(toggled_on):
 	if should_change:
@@ -263,7 +260,6 @@ func _on_visible_toggled(toggled_on):
 			
 		UndoRedoManager.add_data_to_manager(undo_redo_data)
 
-
 func _on_z_order_spinbox_value_changed(value):
 	if %ZOrderSpinbox.get_line_edit().has_focus():
 		if should_change:
@@ -280,8 +276,6 @@ func _on_z_order_spinbox_value_changed(value):
 				state = Global.current_state})
 				
 			UndoRedoManager.add_data_to_manager(undo_redo_data)
-
-
 
 func _on_size_spin_y_box_value_changed(value):
 	if %SizeSpinYBox.get_line_edit().has_focus():
@@ -300,7 +294,6 @@ func _on_size_spin_y_box_value_changed(value):
 				
 			UndoRedoManager.add_data_to_manager(undo_redo_data)
 
-
 func _on_size_spin_box_value_changed(value):
 	if %SizeSpinBox.get_line_edit().has_focus():
 		if should_change:
@@ -317,7 +310,6 @@ func _on_size_spin_box_value_changed(value):
 				state = Global.current_state})
 				
 			UndoRedoManager.add_data_to_manager(undo_redo_data)
-
 
 func _on_offset_y_spin_box_value_changed(value):
 	if %OffsetYSpinBox.get_line_edit().has_focus():
@@ -341,7 +333,6 @@ func _on_offset_y_spin_box_value_changed(value):
 				
 			UndoRedoManager.add_data_to_manager(undo_redo_data)
 
-
 func _on_offset_x_spin_box_value_changed(value):
 	if %OffsetXSpinBox.get_line_edit().has_focus():
 		if should_change:
@@ -363,7 +354,6 @@ func _on_offset_x_spin_box_value_changed(value):
 				
 			UndoRedoManager.add_data_to_manager(undo_redo_data)
 		update_pos_spins()
-
 
 func _on_flip_sprite_h_toggled(toggled_on: bool) -> void:
 	if should_change:
@@ -393,7 +383,6 @@ func _on_flip_sprite_h_toggled(toggled_on: bool) -> void:
 			
 		UndoRedoManager.add_data_to_manager(undo_redo_data)
 
-
 func _on_flip_sprite_v_toggled(toggled_on: bool) -> void:
 	if should_change:
 		var undo_redo_data : Array = []
@@ -422,7 +411,6 @@ func _on_flip_sprite_v_toggled(toggled_on: bool) -> void:
 			
 		UndoRedoManager.add_data_to_manager(undo_redo_data)
 
-
 func _on_clip_children_toggled(toggled_on: bool) -> void:
 	if should_change:
 		var undo_redo_data : Array = []
@@ -442,8 +430,6 @@ func _on_clip_children_toggled(toggled_on: bool) -> void:
 			state = Global.current_state})
 			
 		UndoRedoManager.add_data_to_manager(undo_redo_data)
-
-
 
 func _on_eye_option_item_selected(index: int) -> void:
 	if should_change:

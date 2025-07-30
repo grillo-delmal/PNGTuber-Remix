@@ -18,6 +18,7 @@ custom_minimum_size = Vector2(35, 35)
 offset_right = 35.0
 offset_bottom = 35.0
 size_flags_vertical = 0
+focus_mode = 0
 theme_override_font_sizes/font_size = 15
 text = "1"
 script = ExtResource("2_2ybu4")
@@ -31,6 +32,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_esdw3")
 
 [connection signal="pressed" from="." to="." method="_on_pressed"]
