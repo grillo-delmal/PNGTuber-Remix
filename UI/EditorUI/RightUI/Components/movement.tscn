@@ -68,10 +68,10 @@ inverted = true
 layout_mode = 2
 
 [node name="EditValuesForLabel" type="Label" parent="ScrollContainer3/MarginContainer/VBoxContainer/EditValuesFor"]
-custom_minimum_size = Vector2(116, 0)
+custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
-text = "Editing Values For :"
+theme_override_font_sizes/font_size = 14
+text = "Editing Values :"
 
 [node name="EditValuesForMenu" type="MenuButton" parent="ScrollContainer3/MarginContainer/VBoxContainer/EditValuesFor"]
 unique_name_in_owner = true
@@ -90,6 +90,16 @@ popup/item_1/id = 1
 popup/item_2/text = "Screaming (Coming Soon)"
 popup/item_2/id = 2
 popup/item_2/disabled = true
+
+[node name="PauseMovement" type="CheckBox" parent="ScrollContainer3/MarginContainer/VBoxContainer/EditValuesFor"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Pauses movement if the Value of the that parameter is equal zero."
+theme_override_font_sizes/font_size = 14
+text = "Pause movement"
+script = ExtResource("2_qiucb")
+sp_type = ""
+value_to_update = "pause_movement"
 
 [node name="Sp5" type="HSeparator" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
 layout_mode = 2

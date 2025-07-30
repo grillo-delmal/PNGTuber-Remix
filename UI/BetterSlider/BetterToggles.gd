@@ -64,6 +64,7 @@ func on_toggle(toggle : bool):
 		var og_val = i.sprite_data.duplicate()
 		if sp_type in [i.sprite_type, ""]:
 			i.sprite_data[value_to_update] = toggle != inverted
+			StateButton.multi_edit(i.sprite_data[value_to_update], value_to_update, i, i.states)
 			i.save_state(Global.current_state)
 		undo_redo_data.append({sprite_object = i, 
 		data = i.sprite_data.duplicate(), 

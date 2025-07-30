@@ -40,6 +40,7 @@ func _on_animation_reset_toggled(toggled_on):
 		for i in Global.held_sprites:
 			if i != null && is_instance_valid(i):
 				i.sprite_data.should_reset = toggled_on
+				StateButton.multi_edit(toggled_on, "should_reset", i, i.states)
 				i.save_state(Global.current_state)
 
 func _on_animation_one_shot_toggled(toggled_on):
@@ -47,6 +48,7 @@ func _on_animation_one_shot_toggled(toggled_on):
 		for i in Global.held_sprites:
 			if i != null && is_instance_valid(i):
 				i.sprite_data.one_shot = toggled_on
+				StateButton.multi_edit(toggled_on, "one_shot", i, i.states)
 				i.get_node("%AnimatedSpriteTexture").played_once = false
 				i.save_state(Global.current_state)
 
@@ -56,6 +58,7 @@ func _on_reseton_state_change_toggled(toggled_on: bool) -> void:
 		for i in Global.held_sprites:
 			if i != null && is_instance_valid(i):
 				i.sprite_data.should_reset_state = toggled_on
+				StateButton.multi_edit(toggled_on, "should_reset_state", i, i.states)
 				i.save_state(Global.current_state)
 
 
@@ -65,4 +68,5 @@ func _on_rs_slider_value_changed(value):
 			if i != null && is_instance_valid(i):
 				%RSLabel.text = "Rainbow Speed : " + str(snapped(value, 0.001))
 				i.sprite_data.rainbow_speed = value
+				StateButton.multi_edit(value, "rainbow_speed", i, i.states)
 				i.save_state(Global.current_state)

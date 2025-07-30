@@ -145,6 +145,7 @@ func _on_blend_state_pressed(id):
 				
 			6:
 				i.sprite_data.blend_mode = "Cursed"
+		StateButton.multi_edit(i.sprite_data.blend_mode, "blend_mode", i, i.states)
 		%BlendMode.text = i.get_value("blend_mode")
 		i.set_blend(i.get_value("blend_mode"))
 		i.save_state(Global.current_state)
@@ -167,6 +168,7 @@ func _on_color_picker_button_color_changed(color: Color) -> void:
 		for i in Global.held_sprites:
 			i.modulate = color
 			i.sprite_data.colored = color
+			StateButton.multi_edit(color, "modulate", i, i.states)
 			i.save_state(Global.current_state)
 
 func _on_color_picker_button_focus_entered() -> void:
@@ -180,6 +182,7 @@ func _on_tint_picker_button_color_changed(ncolor: Color) -> void:
 		for i in Global.held_sprites:
 			i.sprite_data.tint = ncolor
 			i.get_node("%Sprite2D").self_modulate = ncolor
+			StateButton.multi_edit(ncolor, "tint", i, i.states)
 			i.save_state(Global.current_state)
 
 func _on_pos_x_spin_box_value_changed(value):
@@ -194,6 +197,7 @@ func _on_pos_x_spin_box_value_changed(value):
 				
 				i.sprite_data.position.x = value
 				i.position.x = value
+				StateButton.multi_edit(value, "position", i, i.states, true, "x")
 				i.save_state(Global.current_state)
 				
 				undo_redo_data.append({sprite_object = i, 
@@ -212,6 +216,7 @@ func _on_pos_y_spin_box_value_changed(value):
 				var og_val = i.sprite_data.duplicate()
 				i.sprite_data.position.y = value
 				i.position.y = value
+				StateButton.multi_edit(value, "position", i, i.states, true, "y")
 				i.save_state(Global.current_state)
 				undo_redo_data.append({sprite_object = i, 
 				data = i.sprite_data.duplicate(), 
@@ -229,6 +234,7 @@ func _on_rot_spin_box_value_changed(value):
 				var og_val = i.sprite_data.duplicate()
 				i.rotation = value * 0.01745
 				i.sprite_data.rotation = value * 0.01745
+				StateButton.multi_edit(i.sprite_data.rotation, "rotation", i, i.states)
 				i.save_state(Global.current_state)
 				undo_redo_data.append({sprite_object = i, 
 				data = i.sprite_data.duplicate(), 
@@ -251,6 +257,8 @@ func _on_visible_toggled(toggled_on):
 				i.sprite_data.visible = false
 				i.visible = false
 				i.treeitem.set_button(0, 0, preload("res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/EyeButton2.png"))
+			
+			StateButton.multi_edit(i.sprite_data.visible, "visible", i, i.states)
 			i.save_state(Global.current_state)
 			undo_redo_data.append({sprite_object = i, 
 			data = i.sprite_data.duplicate(), 
@@ -267,6 +275,7 @@ func _on_z_order_spinbox_value_changed(value):
 			for i in Global.held_sprites:
 				var og_val = i.sprite_data.duplicate()
 				i.sprite_data.z_index = value
+				StateButton.multi_edit(value, "z_index", i, i.states)
 				i.get_node("%Rotation").z_index = value
 				i.save_state(Global.current_state)
 				undo_redo_data.append({sprite_object = i, 
@@ -285,6 +294,7 @@ func _on_size_spin_y_box_value_changed(value):
 				var og_val = i.sprite_data.duplicate()
 				i.sprite_data.scale.y = value
 				i.scale.y = value
+				StateButton.multi_edit(value, "scale", i, i.states, true, "y")
 				i.save_state(Global.current_state)
 				undo_redo_data.append({sprite_object = i, 
 				data = i.sprite_data.duplicate(), 
@@ -302,6 +312,7 @@ func _on_size_spin_box_value_changed(value):
 				var og_val = i.sprite_data.duplicate()
 				i.sprite_data.scale.x = value
 				i.scale.x = value
+				StateButton.multi_edit(value, "scale", i, i.states, true, "x")
 				i.save_state(Global.current_state)
 				undo_redo_data.append({sprite_object = i, 
 				data = i.sprite_data.duplicate(), 
@@ -320,8 +331,9 @@ func _on_offset_y_spin_box_value_changed(value):
 				var of = i.get_value("offset").y - value
 				i.sprite_data.position.y += of
 				i.position.y = i.get_value("position").y
-				
 				i.sprite_data.offset.y = value
+				StateButton.multi_edit(i.sprite_data.position.y, "position", i, i.states, true, "y")
+				StateButton.multi_edit(value, "offset", i, i.states, true, "y")
 				i.get_node("%Sprite2D").position.y = i.get_value("offset").y
 				i.save_state(Global.current_state)
 				update_pos_spins()
@@ -342,8 +354,10 @@ func _on_offset_x_spin_box_value_changed(value):
 				var of = i.get_value("offset").x - value
 				i.sprite_data.position.x += of
 				i.position.x = i.get_value("position").x
-				
 				i.sprite_data.offset.x = value
+				StateButton.multi_edit(i.sprite_data.position.x, "position", i, i.states, true, "x")
+				StateButton.multi_edit(value, "offset", i, i.states, true, "x")
+				
 				i.get_node("%Sprite2D").position.x = i.get_value("offset").x
 				i.save_state(Global.current_state)
 				undo_redo_data.append({sprite_object = i, 
@@ -367,6 +381,7 @@ func _on_flip_sprite_h_toggled(toggled_on: bool) -> void:
 				else:
 					i.get_node("%Sprite2D").scale.x = 1
 				
+				StateButton.multi_edit(toggled_on, "flip_sprite_h", i, i.states)
 				i.save_state(Global.current_state)
 			elif i.sprite_type == "WiggleApp":
 				i.sprite_data.flip_h = toggled_on
@@ -374,6 +389,7 @@ func _on_flip_sprite_h_toggled(toggled_on: bool) -> void:
 					i.get_node("%Sprite2D").scale.x = -1
 				else:
 					i.get_node("%Sprite2D").scale.x = 1
+				StateButton.multi_edit(toggled_on, "flip_h", i, i.states)
 				i.save_state(Global.current_state)
 			undo_redo_data.append({sprite_object = i, 
 			data = i.sprite_data.duplicate(), 
@@ -394,6 +410,7 @@ func _on_flip_sprite_v_toggled(toggled_on: bool) -> void:
 					i.get_node("%Sprite2D").scale.y = -1
 				else:
 					i.get_node("%Sprite2D").scale.y = 1
+				StateButton.multi_edit(toggled_on, "flip_sprite_v", i, i.states)
 				i.save_state(Global.current_state)
 				
 			elif i.sprite_type == "WiggleApp":
@@ -402,6 +419,7 @@ func _on_flip_sprite_v_toggled(toggled_on: bool) -> void:
 					i.get_node("%Sprite2D").scale.y = -1
 				else:
 					i.get_node("%Sprite2D").scale.y = 1
+				StateButton.multi_edit(toggled_on, "flip_v", i, i.states)
 				i.save_state(Global.current_state)
 			undo_redo_data.append({sprite_object = i, 
 			data = i.sprite_data.duplicate(), 
@@ -422,6 +440,7 @@ func _on_clip_children_toggled(toggled_on: bool) -> void:
 			else:
 				i.get_node("%Sprite2D").set_clip_children_mode(0)
 				i.sprite_data.clip = 0
+			StateButton.multi_edit(i.sprite_data.clip, "clip", i, i.states)
 			i.save_state(Global.current_state)
 			undo_redo_data.append({sprite_object = i, 
 			data = i.sprite_data.duplicate(), 
@@ -446,6 +465,8 @@ func _on_eye_option_item_selected(index: int) -> void:
 					i.sprite_data.should_blink = true
 					i.sprite_data.open_eyes = false
 				
+			StateButton.multi_edit(i.sprite_data.should_blink, "should_blink", i, i.states)
+			StateButton.multi_edit(i.sprite_data.open_eyes, "open_eyes", i, i.states)
 			undo_redo_data.append({sprite_object = i, 
 			data = i.sprite_data.duplicate(), 
 			og_data = og_val,
@@ -469,6 +490,8 @@ func _on_mouth_option_item_selected(index: int) -> void:
 				2:
 					i.sprite_data.should_talk = true
 					i.sprite_data.open_mouth = false
+			StateButton.multi_edit(i.sprite_data.should_talk, "should_talk", i, i.states)
+			StateButton.multi_edit(i.sprite_data.open_mouth, "open_mouth", i, i.states)
 			undo_redo_data.append({sprite_object = i, 
 			data = i.sprite_data.duplicate(), 
 			og_data = og_val,

@@ -73,6 +73,7 @@ func _on_follow_wiggle_app_tip_toggled(toggled_on):
 					%MiniFWBSlider.hide()
 					%MaxFWBSlider.hide()
 					i.get_node("Pos").position = Vector2(0,0)
+				StateButton.multi_edit(toggled_on, "follow_wa_tip", i, i.states)
 				i.save_state(Global.current_state)
 
 func _on_tip_spin_value_changed(value):
@@ -80,6 +81,7 @@ func _on_tip_spin_value_changed(value):
 		for i in Global.held_sprites:
 			if i != null && is_instance_valid(i):
 				i.sprite_data.tip_point = value
+				StateButton.multi_edit(value, "tip_point", i, i.states)
 				i.save_state(Global.current_state)
 
 func _on_wiggle_check_toggled(toggled_on):
@@ -88,6 +90,7 @@ func _on_wiggle_check_toggled(toggled_on):
 			if i != null && is_instance_valid(i):
 				i.sprite_data.wiggle = toggled_on
 				i.get_node("%Sprite2D").material.set_shader_parameter("wiggle", toggled_on)
+				StateButton.multi_edit(toggled_on, "wiggle", i, i.states)
 				i.save_state(Global.current_state)
 
 func _on_follow_parent_effect_toggled(toggled_on):
@@ -95,6 +98,7 @@ func _on_follow_parent_effect_toggled(toggled_on):
 		for i in Global.held_sprites:
 			if i != null && is_instance_valid(i):
 				i.sprite_data.follow_parent_effects = toggled_on
+				StateButton.multi_edit(toggled_on, "follow_parent_effects", i, i.states)
 				i.save_state(Global.current_state)
 
 func _on_xoffset_spin_box_value_changed(value):
@@ -103,6 +107,7 @@ func _on_xoffset_spin_box_value_changed(value):
 			if i != null && is_instance_valid(i):
 				i.sprite_data.wiggle_rot_offset.x = value
 				i.get_node("%Sprite2D").material.set_shader_parameter("rotation_offset", Vector2(value, i.get_node("%Sprite2D").material.get_shader_parameter("rotation_offset").y))
+				StateButton.multi_edit(value, "wiggle_rot_offset", i, i.states, true, "x")
 				i.save_state(Global.current_state)
 
 func _on_yoffset_spin_box_value_changed(value):
@@ -111,4 +116,5 @@ func _on_yoffset_spin_box_value_changed(value):
 			if i != null && is_instance_valid(i):
 				i.sprite_data.wiggle_rot_offset.y = value
 				i.get_node("%Sprite2D").material.set_shader_parameter("rotation_offset", Vector2(i.get_node("%Sprite2D").material.get_shader_parameter("rotation_offset").x, value))
+				StateButton.multi_edit(value, "wiggle_rot_offset", i, i.states, true, "y")
 				i.save_state(Global.current_state)

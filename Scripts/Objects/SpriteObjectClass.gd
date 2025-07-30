@@ -106,6 +106,7 @@ const DEFAULT_DATA := {
 	static_obj = false,
 	is_cycle = false,
 	cycle = 0,
+	pause_movement = false,
 	}
 
 

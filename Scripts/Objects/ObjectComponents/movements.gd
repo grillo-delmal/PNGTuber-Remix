@@ -75,18 +75,24 @@ var last_wobble_pos := Vector2.ZERO
 var paused_wobble := Vector2.ZERO
 func wobble(delta: float) -> void:
 	if actor.is_default("xFrq"):
-		if actor.is_all_default("xFrq"):
-			last_wobble_pos.x = 0
+		if actor.get_value("pause_movement"):
+			if actor.is_all_default("xFrq"):
+				last_wobble_pos.x = 0
+			else:
+				paused_wobble.x += delta if Global.settings_dict.should_delta else 1.
 		else:
-			paused_wobble.x += delta if Global.settings_dict.should_delta else 1.
+			last_wobble_pos.x = sin((Global.tick-paused_wobble.x)*actor.get_value("xFrq"))*actor.get_value("xAmp")
 	else:
 		last_wobble_pos.x = sin((Global.tick-paused_wobble.x)*actor.get_value("xFrq"))*actor.get_value("xAmp")
 	
 	if actor.is_default("yFrq"):
-		if actor.is_all_default("yFrq"):
-			last_wobble_pos.y = 0
+		if actor.get_value("pause_movement"):
+			if actor.is_all_default("yFrq"):
+				last_wobble_pos.y = 0
+			else:
+				paused_wobble.y += delta if Global.settings_dict.should_delta else 1.
 		else:
-			paused_wobble.y += delta if Global.settings_dict.should_delta else 1.
+			last_wobble_pos.y = sin((Global.tick-paused_wobble.y)*actor.get_value("yFrq"))*actor.get_value("yAmp")
 	else:
 		last_wobble_pos.y = sin((Global.tick-paused_wobble.y)*actor.get_value("yFrq"))*actor.get_value("yAmp")
 	
@@ -97,10 +103,14 @@ var paused_rotation: float = 0
 var last_rot: float = 0
 func rotationalDrag(length, delta: float):
 	if actor.is_default("rot_frq"):
-		if actor.is_all_default("rot_frq"):
-			last_rot = 0
+		if actor.get_value("pause_movement"):
+			if actor.is_all_default("rot_frq"):
+				last_rot = 0
+			else:
+				paused_rotation += delta if Global.settings_dict.should_delta else 1.
 		else:
-			paused_rotation += delta if Global.settings_dict.should_delta else 1.
+			last_rot = sin((Global.tick-paused_rotation) * actor.get_value("rot_frq"))
+			last_rot *= deg_to_rad(actor.get_value("rdragStr"))
 	else:
 		last_rot = sin((Global.tick-paused_rotation) * actor.get_value("rot_frq"))
 		last_rot *= deg_to_rad(actor.get_value("rdragStr"))

@@ -78,7 +78,8 @@ func _on_auto_wag_check_toggled(toggled_on):
 					i.get_node("%Sprite2D").curvature = i.get_value("wiggle_curve")
 					%AutoWagSettings.hide()
 					%WiggleAppsCurveBSlider.show()
-					
+				
+				StateButton.multi_edit(toggled_on, "auto_wag", i, i.states)
 				i.save_state(Global.current_state)
 
 func _on_wa_gravity_x_value_changed(value):
@@ -87,6 +88,7 @@ func _on_wa_gravity_x_value_changed(value):
 			if i != null && is_instance_valid(i):
 				if i.sprite_type == "WiggleApp":
 					i.sprite_data.wiggle_gravity.x = value
+					StateButton.multi_edit(value, "wiggle_gravity", i, i.states, true, "x")
 					i.get_node("%Sprite2D").gravity.x = value
 					i.save_state(Global.current_state)
 
@@ -96,6 +98,7 @@ func _on_wa_gravity_y_value_changed(value):
 			if i != null && is_instance_valid(i):
 				if i.sprite_type == "WiggleApp":
 					i.sprite_data.wiggle_gravity.y = value
+					StateButton.multi_edit(value, "wiggle_gravity", i, i.states, true, "y")
 					i.get_node("%Sprite2D").gravity.y = value
 					i.save_state(Global.current_state)
 
@@ -105,6 +108,7 @@ func _on_closed_loop_check_toggled(toggled_on):
 			if i != null && is_instance_valid(i):
 				if i.sprite_type == "WiggleApp":
 					i.sprite_data.wiggle_closed_loop = toggled_on
+					StateButton.multi_edit(toggled_on, "wiggle_closed_loop", i, i.states)
 					i.get_node("%Sprite2D").closed = toggled_on
 					i.save_state(Global.current_state)
 
@@ -113,6 +117,7 @@ func _on_wiggle_width_spin_value_changed(value):
 		for i in Global.held_sprites:
 			if i != null && is_instance_valid(i):
 				i.sprite_data.width = value
+				StateButton.multi_edit(value, "width", i, i.states)
 				i.get_node("%Sprite2D").width = value
 				i.save_state(Global.current_state)
 
@@ -121,6 +126,7 @@ func _on_wiggle_length_spin_value_changed(value):
 		for i in Global.held_sprites:
 			if i != null && is_instance_valid(i):
 				i.sprite_data.segm_length = value
+				StateButton.multi_edit(value, "segm_length", i, i.states)
 				i.get_node("%Sprite2D").segment_length = value
 				i.save_state(Global.current_state)
 
@@ -129,6 +135,7 @@ func _on_wiggle_sub_d_spin_value_changed(value):
 		for i in Global.held_sprites:
 			if i != null && is_instance_valid(i):
 				i.sprite_data.subdivision = value
+				StateButton.multi_edit(value, "subdivision", i, i.states)
 				i.get_node("%Sprite2D").subdivision = value
 				i.save_state(Global.current_state)
 
@@ -140,6 +147,7 @@ func _on_texture_mode_option_item_selected(index: int) -> void:
 				for i in Global.held_sprites:
 					if i != null && is_instance_valid(i):
 						i.sprite_data.tile = 2
+						StateButton.multi_edit(2, "tile", i, i.states)
 						i.get_node("%Sprite2D").texture_mode = 2
 						i.save_state(Global.current_state)
 		1:
@@ -147,6 +155,7 @@ func _on_texture_mode_option_item_selected(index: int) -> void:
 				for i in Global.held_sprites:
 					if i != null && is_instance_valid(i):
 						i.sprite_data.tile = 1
+						StateButton.multi_edit(1, "tile", i, i.states)
 						i.get_node("%Sprite2D").texture_mode = 1
 						i.save_state(Global.current_state)
 
@@ -170,6 +179,7 @@ func _on_anchor_sprite_item_selected(index: int) -> void:
 			for i in Global.held_sprites:
 				if i != null && is_instance_valid(i):
 					i.sprite_data.anchor_id = null
+					StateButton.multi_edit(i.sprite_data.anchor_id, "anchor_id", i, i.states)
 					i.get_node("%Sprite2D").anchor_target = null
 					i.save_state(Global.current_state)
 	else:
@@ -177,5 +187,6 @@ func _on_anchor_sprite_item_selected(index: int) -> void:
 			for i in Global.held_sprites:
 				if i != null && is_instance_valid(i):
 					i.sprite_data.anchor_id = %AnchorSprite.get_item_metadata(index).sprite_id
+					StateButton.multi_edit(i.sprite_data.anchor_id, "anchor_id", i, i.states)
 					i.get_node("%Sprite2D").anchor_target = %AnchorSprite.get_item_metadata(index).get_node("%Sprite2D")
 					i.save_state(Global.current_state)

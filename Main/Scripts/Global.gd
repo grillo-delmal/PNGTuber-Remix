@@ -171,9 +171,8 @@ func load_sprite_states(state):
 	current_state = state
 	for i in get_tree().get_nodes_in_group("Sprites"):
 		i.get_state(current_state)
-	if held_sprite != null && is_instance_valid(held_sprite):
-		emit_signal("reinfo")
 		
+	reinfo.emit()
 	animation_state.emit(current_state)
 	light_info.emit(current_state)
 	reinfoanim.emit()
@@ -186,9 +185,8 @@ func get_sprite_states(state):
 	current_state = state
 	for i in get_tree().get_nodes_in_group("Sprites"):
 		i.get_state(current_state)
-	if held_sprite != null && is_instance_valid(held_sprite):
-		emit_signal("reinfo")
-		
+	
+	reinfo.emit()
 	animation_state.emit(current_state)
 	light_info.emit(current_state)
 	update_layer_visib.emit()
