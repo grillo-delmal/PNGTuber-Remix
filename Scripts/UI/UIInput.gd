@@ -5,7 +5,7 @@ var should_change : bool = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	await get_tree().current_scene.ready
-	%ScrollContainer.get_tab_bar().focus_mode = Control.FocusMode.FOCUS_NONE
+#	%ScrollContainer.get_tab_bar().focus_mode = Control.FocusMode.FOCUS_NONE
 	held_sprite_is_null()
 	Global.connect("reinfo", reinfo)
 	Global.deselect.connect(held_sprite_is_null)

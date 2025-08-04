@@ -47,7 +47,7 @@ gradient = SubResource("Gradient_uswo1")
 [node name="AppendageObject" type="Node2D" node_paths=PackedStringArray("sprite_object") groups=["Sprites"]]
 physics_interpolation_mode = 1
 script = ExtResource("1_yuqos")
-sprite_object = NodePath("Pos/Drag/Rotation/Sprite2D")
+sprite_object = NodePath("Pos/MouseRot/Drag/Rotation/Sprite2D")
 
 [node name="Pos" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -59,21 +59,24 @@ unique_name_in_owner = true
 physics_interpolation_mode = 1
 top_level = true
 
-[node name="Drag" type="Node2D" parent="Pos"]
+[node name="MouseRot" type="Node2D" parent="Pos"]
+unique_name_in_owner = true
+
+[node name="Drag" type="Node2D" parent="Pos/MouseRot"]
 unique_name_in_owner = true
 physics_interpolation_mode = 1
 
-[node name="Rotation" type="Node2D" parent="Pos/Drag"]
+[node name="Rotation" type="Node2D" parent="Pos/MouseRot/Drag"]
 unique_name_in_owner = true
 physics_interpolation_mode = 1
 
-[node name="Origin" type="Sprite2D" parent="Pos/Drag/Rotation"]
+[node name="Origin" type="Sprite2D" parent="Pos/MouseRot/Drag/Rotation"]
 unique_name_in_owner = true
 visible = false
 z_index = 4096
 texture = ExtResource("2_rjec0")
 
-[node name="Sprite2D" type="Line2D" parent="Pos/Drag/Rotation"]
+[node name="Sprite2D" type="Line2D" parent="Pos/MouseRot/Drag/Rotation"]
 unique_name_in_owner = true
 physics_interpolation_mode = 1
 texture_repeat = 2
@@ -90,7 +93,7 @@ max_angular_momentum = 20.0
 subdivision = 5
 additional_start_segment = true
 
-[node name="Grab" type="TextureButton" parent="Pos/Drag/Rotation/Sprite2D"]
+[node name="Grab" type="TextureButton" parent="Pos/MouseRot/Drag/Rotation/Sprite2D"]
 unique_name_in_owner = true
 z_index = 4096
 anchors_preset = 15
@@ -103,7 +106,7 @@ size_flags_vertical = 3
 mouse_filter = 1
 texture_normal = SubResource("GradientTexture2D_vfwff")
 
-[node name="Selection" type="TextureRect" parent="Pos/Drag/Rotation/Sprite2D/Grab"]
+[node name="Selection" type="TextureRect" parent="Pos/MouseRot/Drag/Rotation/Sprite2D/Grab"]
 unique_name_in_owner = true
 visible = false
 z_index = 4096
@@ -140,8 +143,8 @@ animation_handler = NodePath("../AnimatedSpriteTexture")
 unique_name_in_owner = true
 script = ExtResource("10_wmc63")
 actor = NodePath("..")
-sprite_node = NodePath("../Pos/Drag/Rotation/Sprite2D")
+sprite_node = NodePath("../Pos/MouseRot/Drag/Rotation/Sprite2D")
 metadata/_custom_type_script = "uid://dfyvj4w18tr1"
 
-[connection signal="button_down" from="Pos/Drag/Rotation/Sprite2D/Grab" to="." method="_on_grab_button_down"]
-[connection signal="button_up" from="Pos/Drag/Rotation/Sprite2D/Grab" to="." method="_on_grab_button_up"]
+[connection signal="button_down" from="Pos/MouseRot/Drag/Rotation/Sprite2D/Grab" to="." method="_on_grab_button_down"]
+[connection signal="button_up" from="Pos/MouseRot/Drag/Rotation/Sprite2D/Grab" to="." method="_on_grab_button_up"]

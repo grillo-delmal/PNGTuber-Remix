@@ -22,3 +22,7 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 visible = false
 container = NodePath("../Scene")
+
+[node name="ProjectManager" type="CanvasLayer" parent="."]
+layer = 5
+visible = false

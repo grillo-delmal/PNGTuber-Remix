@@ -128,11 +128,6 @@ func get_state(id):
 		%Sprite2D.closed = get_value("wiggle_closed_loop")
 		%Sprite2D.gravity = get_value("wiggle_gravity")
 		
-		if get_value("look_at_mouse_pos") == 0:
-			%Pos.position.x = 0
-		if get_value("look_at_mouse_pos_y") == 0:
-			%Pos.position.y = 0
-		
 		%Sprite2D.texture_mode = get_value("tile")
 		
 		%Sprite2D.set_clip_children_mode(get_value("clip"))

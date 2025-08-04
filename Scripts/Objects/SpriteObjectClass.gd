@@ -129,7 +129,7 @@ var of = Vector2(0,0)
 var sprite_id : float
 var parent_id : float = 0
 var physics_effect = 1
-var glob
+var glob : Vector2 = Vector2.ZERO
 
 @export var sprite_type : String = "WiggleApp"
 

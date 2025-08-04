@@ -13,7 +13,7 @@ var frame2 = 0
 var applied_pos = Vector2(0.0,0.0)
 var applied_rotation = 0.0
 var applied_scale = Vector2(1.0, 1.0)
-
+var placeholder_position : Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	Global.update_mouse_vel_pos.connect(mouse_delay)
@@ -35,8 +35,9 @@ func _process(delta: float) -> void:
 	
 	follow_wiggle()
 	
-	%Rotation.rotation = is_nan_or_inf(clamp(applied_rotation, deg_to_rad(-360), deg_to_rad(360)))
+	%Rotation.rotation += is_nan_or_inf(clamp(applied_rotation, deg_to_rad(-360), deg_to_rad(360)))
 	%Pos.position += is_nan_or_inf(applied_pos)
+	placeholder_position = %Pos.global_position
 
 func movements(delta):
 	if !Global.static_view:
@@ -66,9 +67,9 @@ func movements(delta):
 
 func drag(_delta):
 	if actor.get_value("dragSpeed") == 0:
-		%Dragger.global_position = %Pos.global_position
+		%Dragger.global_position = placeholder_position
 	else:
-		%Dragger.global_position = lerp(%Dragger.global_position, %Pos.global_position,1/max(actor.get_value("dragSpeed"), 1))
+		%Dragger.global_position = lerp(%Dragger.global_position, placeholder_position,1/max(actor.get_value("dragSpeed"), 1))
 		%Drag.global_position = %Dragger.global_position
 
 var last_wobble_pos := Vector2.ZERO
@@ -83,21 +84,23 @@ func wobble(delta: float) -> void:
 		else:
 			last_wobble_pos.x = sin((Global.tick-paused_wobble.x)*actor.get_value("xFrq"))*actor.get_value("xAmp")
 	else:
-		last_wobble_pos.x = sin((Global.tick-paused_wobble.x)*actor.get_value("xFrq"))*actor.get_value("xAmp")
+		last_wobble_pos.x = sin((Global.tick)*actor.get_value("xFrq"))*actor.get_value("xAmp")
 	
 	if actor.is_default("yFrq"):
 		if actor.get_value("pause_movement"):
 			if actor.is_all_default("yFrq"):
 				last_wobble_pos.y = 0
+				print("d")
 			else:
 				paused_wobble.y += delta if Global.settings_dict.should_delta else 1.
 		else:
 			last_wobble_pos.y = sin((Global.tick-paused_wobble.y)*actor.get_value("yFrq"))*actor.get_value("yAmp")
 	else:
-		last_wobble_pos.y = sin((Global.tick-paused_wobble.y)*actor.get_value("yFrq"))*actor.get_value("yAmp")
+		last_wobble_pos.y = sin((Global.tick)*actor.get_value("yFrq"))*actor.get_value("yAmp")
 	
-	applied_pos.x = lerp(applied_pos.x, last_wobble_pos.x, 0.15)
-	applied_pos.y = lerp(applied_pos.y, last_wobble_pos.y, 0.15)
+	
+	applied_pos.x += last_wobble_pos.x
+	applied_pos.y += last_wobble_pos.y
 
 var paused_rotation: float = 0
 var last_rot: float = 0
@@ -116,19 +119,22 @@ func rotationalDrag(length, delta: float):
 		last_rot *= deg_to_rad(actor.get_value("rdragStr"))
 	
 	applied_rotation = lerp_angle(applied_rotation, last_rot, 0.15)
+	
 	var yvel = ((length * actor.get_value("rdragStr"))* 0.5)
 	
 	#Calculate Max angle
 	
 	yvel = clamp(yvel,actor.get_value("rLimitMin"),actor.get_value("rLimitMax"))
 	
-	applied_rotation = is_nan_or_inf(lerp_angle(applied_rotation,deg_to_rad(yvel),0.08))
+	%Rotation.rotation = is_nan_or_inf(lerp_angle(%Rotation.rotation,deg_to_rad(yvel),0.15))
 
-func stretch(length,_delta):
+
+
+func stretch(length,delta):
 	var yvel = (length * actor.get_value("stretchAmount") * 0.01)
 	var target = Vector2(1.0-yvel,1.0+yvel)
 	
-	%Rotation.scale = lerp(%Rotation.scale,target,0.1)
+	%Rotation.scale = lerp(%Rotation.scale,target,0.15)
 
 func static_prev():
 	%Pos.position = Vector2(0,0)
@@ -139,6 +145,7 @@ func static_prev():
 	%Rotation.rotation = 0.0
 	%Rotation.scale = Vector2(1,1)
 	%Drag.scale = Vector2(1,1)
+	%MouseRot.rotation = 0.0
 
 func follow_wiggle():
 	if actor.get_value("follow_wa_tip"):
@@ -239,7 +246,7 @@ func follow_mouse_vel(mouse, main_marker):
 	var target_rotation = clamp(normalized_mouse * rotation_factor * deg_to_rad(90), deg_to_rad(safe_rot_min), deg_to_rad(safe_rot_max))
 
 	# Smoothly interpolate the sprite's rotation
-	applied_rotation = is_nan_or_inf(lerp_angle(%Rotation.rotation, target_rotation, actor.get_value("mouse_delay")))
+	%MouseRot.rotation = is_nan_or_inf(lerp_angle(%MouseRot.rotation, target_rotation, actor.get_value("mouse_delay")))
 	
 	var screen_size = DisplayServer.screen_get_size(-1)
 	if main_marker.current_screen == Monitor.ALL_SCREENS:
@@ -267,7 +274,13 @@ func follow_mouse_normal(mouse, main_marker, dir, dist):
 	else:
 		%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, dir.x * min(dist, actor.get_value("look_at_mouse_pos")), actor.get_value("mouse_delay")))
 		%Pos.position.y = is_nan_or_inf(lerp(%Pos.position.y, dir.y * min(dist, actor.get_value("look_at_mouse_pos_y")), actor.get_value("mouse_delay")))
-		
+	
+	if actor.get_value("look_at_mouse_pos") == 0:
+		%Pos.position.x = dir.x * min(dist, actor.get_value("look_at_mouse_pos"))
+	if actor.get_value("look_at_mouse_pos_y") == 0:
+		%Pos.position.y = dir.y * min(dist, actor.get_value("look_at_mouse_pos_y"))
+	
+	
 	var screen_size = DisplayServer.screen_get_size(-1)
 	if main_marker.current_screen == Monitor.ALL_SCREENS:
 		screen_size = DisplayServer.screen_get_size(1)
@@ -286,7 +299,7 @@ func follow_mouse_normal(mouse, main_marker, dir, dist):
 
 	var target_rotation = clamp(rotation_factor, deg_to_rad(safe_rot_min), deg_to_rad(safe_rot_max))
 
-	applied_rotation = is_nan_or_inf(lerp_angle(%Rotation.rotation, target_rotation, actor.get_value("mouse_delay")))
+	%MouseRot.rotation = is_nan_or_inf(lerp_angle(%MouseRot.rotation, target_rotation, actor.get_value("mouse_delay")))
 
 	if applied_rotation == NAN:
 		applied_rotation = 0.0

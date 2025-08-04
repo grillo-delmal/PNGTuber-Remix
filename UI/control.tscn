@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://ngta1o5yiqxs"]
+[gd_scene load_steps=30 format=3 uid="uid://ngta1o5yiqxs"]
 
 [ext_resource type="Script" uid="uid://dvpyywoct4riy" path="res://Scripts/UI/control.gd" id="1_1r6xj"]
 [ext_resource type="Script" uid="uid://bpegrg5a15v2v" path="res://Scripts/UI/UIInput.gd" id="3_1eur5"]
@@ -11,12 +11,57 @@
 [ext_resource type="PackedScene" uid="uid://w2l13b1625f6" path="res://UI/EditorUI/RightUI/Components/animation_tab.tscn" id="7_1r6xj"]
 [ext_resource type="PackedScene" uid="uid://cwtfmnxmnl7h3" path="res://UI/EditorUI/RightUI/Components/light.tscn" id="7_4jud0"]
 [ext_resource type="PackedScene" uid="uid://nh83ldjgbynt" path="res://UI/EditorUI/RightUI/Components/model_anim.tscn" id="8_1r6xj"]
+[ext_resource type="Script" uid="uid://l1mikgxckn2j" path="res://addons/dockable_container/dockable_container.gd" id="8_dn4of"]
+[ext_resource type="Theme" uid="uid://cpfn2bvg67l5w" path="res://Themes/DockablesTheme.tres" id="8_dockn"]
 [ext_resource type="PackedScene" uid="uid://c3f86pv0can01" path="res://UI/EditorUI/RightUI/Components/properties.tscn" id="8_i4djb"]
 [ext_resource type="Texture2D" uid="uid://di8kyreps7pl0" path="res://UI/Assets/PencilButton.png" id="8_seimj"]
+[ext_resource type="Script" uid="uid://domcyeklegrmy" path="res://addons/dockable_container/layout_panel.gd" id="9_dockn"]
 [ext_resource type="PackedScene" uid="uid://ccvo3k5t6lis6" path="res://UI/EditorUI/RightUI/Components/movement.tscn" id="9_fwbkq"]
 [ext_resource type="PackedScene" uid="uid://bk2xbsvlmq0or" path="res://UI/StateButton/state_panel.tscn" id="10_1r6xj"]
 [ext_resource type="Script" uid="uid://dy1cd6xda1pu5" path="res://UI/BetterSlider/BetterToggles.gd" id="10_ncust"]
+[ext_resource type="Script" uid="uid://c6mnetrbitmkr" path="res://addons/dockable_container/layout_split.gd" id="10_y3a4k"]
+[ext_resource type="Script" uid="uid://o3g1heay5br" path="res://addons/dockable_container/layout.gd" id="11_3vweu"]
 [ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="11_ejqfc"]
+
+[sub_resource type="Resource" id="Resource_dockn"]
+resource_name = "Tabs"
+script = ExtResource("9_dockn")
+names = PackedStringArray("Properties")
+current_tab = 0
+
+[sub_resource type="Resource" id="Resource_y3a4k"]
+resource_name = "Tabs"
+script = ExtResource("9_dockn")
+names = PackedStringArray("Inspector")
+current_tab = 0
+
+[sub_resource type="Resource" id="Resource_3vweu"]
+resource_name = "Tabs"
+script = ExtResource("9_dockn")
+names = PackedStringArray("StatePanel")
+current_tab = 0
+
+[sub_resource type="Resource" id="Resource_o0brj"]
+resource_name = "Split"
+script = ExtResource("10_y3a4k")
+direction = 1
+percent = 1.0
+first = SubResource("Resource_y3a4k")
+second = SubResource("Resource_3vweu")
+
+[sub_resource type="Resource" id="Resource_lpl1y"]
+resource_name = "Split"
+script = ExtResource("10_y3a4k")
+direction = 1
+percent = 0.0
+first = SubResource("Resource_dockn")
+second = SubResource("Resource_o0brj")
+
+[sub_resource type="Resource" id="Resource_ass7j"]
+resource_name = "Layout"
+script = ExtResource("11_3vweu")
+root = SubResource("Resource_lpl1y")
+hidden_tabs = {}
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_1r6xj"]
 blend_mode = 1
@@ -119,20 +164,33 @@ layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 
-[node name="Properties" type="VBoxContainer" parent="HSplitContainer/HSplit/RightPanel"]
-unique_name_in_owner = true
+[node name="Margin" type="MarginContainer" parent="HSplitContainer/HSplit/RightPanel"]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.0157895
-anchor_top = 0.0158501
-anchor_right = 0.984211
-anchor_bottom = 0.989914
-offset_right = -0.000183105
-offset_bottom = -0.0522461
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 12
+
+[node name="DockableContainer" type="Container" parent="HSplitContainer/HSplit/RightPanel/Margin"]
+layout_mode = 2
+theme = ExtResource("8_dockn")
+script = ExtResource("8_dn4of")
+tabs_visible = false
+layout = SubResource("Resource_ass7j")
+metadata/_custom_type_script = "uid://l1mikgxckn2j"
+
+[node name="Properties" type="VBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer"]
+unique_name_in_owner = true
+layout_mode = 2
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="Name" type="LineEdit" parent="HSplitContainer/HSplit/RightPanel/Properties"]
+[node name="Name" type="LineEdit" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Properties"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 1
@@ -141,7 +199,7 @@ theme_override_font_sizes/font_size = 20
 placeholder_text = "Name"
 alignment = 1
 
-[node name="RenameTexture" type="TextureRect" parent="HSplitContainer/HSplit/RightPanel/Properties/Name"]
+[node name="RenameTexture" type="TextureRect" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Properties/Name"]
 custom_minimum_size = Vector2(35, 0)
 layout_mode = 1
 anchors_preset = 11
@@ -155,7 +213,7 @@ texture = ExtResource("8_seimj")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="MultistateEditingCue" type="Label" parent="HSplitContainer/HSplit/RightPanel/Properties"]
+[node name="MultistateEditingCue" type="Label" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Properties"]
 unique_name_in_owner = true
 visible = false
 self_modulate = Color(1, 1, 1, 0.686275)
@@ -164,12 +222,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "*Multi-State Editing On"
 
-[node name="VSplitContainer" type="VSplitContainer" parent="HSplitContainer/HSplit/RightPanel/Properties"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="ScrollContainer" type="TabContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer"]
+[node name="Inspector" type="TabContainer" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer"]
 unique_name_in_owner = true
 clip_contents = true
 custom_minimum_size = Vector2(350, 513)
@@ -179,38 +232,38 @@ theme_override_constants/side_margin = 1
 theme_override_font_sizes/font_size = 13
 current_tab = 0
 
-[node name="Properties" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer" instance=ExtResource("8_i4djb")]
+[node name="Properties" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector" instance=ExtResource("8_i4djb")]
 layout_mode = 2
 
-[node name="Movement" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer" instance=ExtResource("9_fwbkq")]
+[node name="Movement" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector" instance=ExtResource("9_fwbkq")]
 visible = false
 layout_mode = 2
 
-[node name="Wiggle" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer" instance=ExtResource("6_63lps")]
+[node name="Wiggle" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector" instance=ExtResource("6_63lps")]
 layout_mode = 2
 
-[node name="Animation" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer" instance=ExtResource("7_1r6xj")]
+[node name="Animation" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector" instance=ExtResource("7_1r6xj")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 
-[node name="Model" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer" instance=ExtResource("8_1r6xj")]
+[node name="Model" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector" instance=ExtResource("8_1r6xj")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 4
 
-[node name="Light" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer" instance=ExtResource("7_4jud0")]
+[node name="Light" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector" instance=ExtResource("7_4jud0")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 5
 
-[node name="Tests" type="Control" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer"]
+[node name="Tests" type="Control" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector"]
 visible = false
 y_sort_enabled = true
 layout_mode = 2
 metadata/_tab_index = 6
 
-[node name="ScrollContainer6" type="ScrollContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests"]
+[node name="ScrollContainer6" type="ScrollContainer" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = -0.014
@@ -225,7 +278,7 @@ grow_vertical = 2
 mouse_filter = 2
 horizontal_scroll_mode = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6"]
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -234,17 +287,17 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 2
 theme_override_constants/margin_bottom = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer"]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 6
 
-[node name="HBox22" type="HBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
+[node name="HBox22" type="HBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="AdvancedLipSync" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/HBox22"]
+[node name="AdvancedLipSync" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/HBox22"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
@@ -252,7 +305,7 @@ size_flags_horizontal = 2
 theme_override_font_sizes/font_size = 16
 text = "Advanced Lipsync"
 
-[node name="AdvancedLipSyncLabel" type="Label" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
+[node name="AdvancedLipSyncLabel" type="Label" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(340, 0)
@@ -267,21 +320,21 @@ justification_flags = 169
 max_lines_visible = 3
 visible_characters_behavior = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HSeparator" type="HSeparator" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxPhysics2" type="HBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="HBoxPhysics2" type="HBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="HBox3" type="HBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/VBoxContainer"]
+[node name="HBox3" type="HBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = -10
 
-[node name="NonAnimatedSheetCheck" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
+[node name="NonAnimatedSheetCheck" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
@@ -289,20 +342,20 @@ tooltip_text = "Turns a SpriteSheet into Static Frames that you can choose from.
 theme_override_font_sizes/font_size = 16
 text = "None Animated Sheet"
 
-[node name="FrameHBox" type="HBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
+[node name="FrameHBox" type="HBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="FrameLabel" type="Label" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox"]
+[node name="FrameLabel" type="Label" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox"]
 layout_mode = 2
 text = "Frame : "
 
-[node name="FrameSpinbox" type="SpinBox" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox"]
+[node name="FrameSpinbox" type="SpinBox" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox"]
 unique_name_in_owner = true
 layout_mode = 2
 max_value = 12.0
 
-[node name="AnimateToMouse" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
+[node name="AnimateToMouse" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 layout_mode = 2
 tooltip_text = "Animates SpriteSheet depending on mouse position (Horizontally and Vertically)"
 text = "Animate to Mouse"
@@ -310,7 +363,7 @@ script = ExtResource("10_ncust")
 sp_type = "Sprite2D"
 value_to_update = "animate_to_mouse"
 
-[node name="BetterSlider" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer" instance=ExtResource("11_ejqfc")]
+[node name="BetterSlider" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer" instance=ExtResource("11_ejqfc")]
 layout_mode = 2
 sp_type = "Sprite2D"
 label_text = "Anim-Speed : "
@@ -320,7 +373,7 @@ step = 0.01
 value = 10.0
 value_to_update = "animate_to_mouse_speed"
 
-[node name="AnimateToMouse2" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
+[node name="AnimateToMouse2" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 layout_mode = 2
 tooltip_text = "Animate to Mouse must be turned on in order for this feature to work when toggled off, it stops the sprite from moving on the x and y axis, but keeps the Animate to Mouse working."
 text = "Move with Mouse"
@@ -328,18 +381,19 @@ script = ExtResource("10_ncust")
 sp_type = "Sprite2D"
 value_to_update = "animate_to_mouse_track_pos"
 
-[node name="StatePanel" parent="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer" instance=ExtResource("10_1r6xj")]
+[node name="StatePanel" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer" instance=ExtResource("10_1r6xj")]
 layout_mode = 2
+size_flags_vertical = 1
 
 [connection signal="pressed" from="HSplitContainer/HSplit/AspectRatioContainer/CamZoom/ZoomInButton" to="HSplitContainer/HSplit/AspectRatioContainer/CamZoom" method="_on_zoom_in_button_pressed"]
 [connection signal="pressed" from="HSplitContainer/HSplit/AspectRatioContainer/CamZoom/ZoomOutButton" to="HSplitContainer/HSplit/AspectRatioContainer/CamZoom" method="_on_zoom_out_button_pressed"]
 [connection signal="pressed" from="HSplitContainer/HSplit/AspectRatioContainer/CamZoom/ZoomMainResetButton" to="HSplitContainer/HSplit/AspectRatioContainer/CamZoom" method="_on_zoom_main_reset_button_pressed"]
-[connection signal="focus_entered" from="HSplitContainer/HSplit/RightPanel/Properties/Name" to="UIInput" method="_on_name_focus_entered"]
-[connection signal="focus_exited" from="HSplitContainer/HSplit/RightPanel/Properties/Name" to="UIInput" method="_on_name_focus_exited"]
-[connection signal="text_submitted" from="HSplitContainer/HSplit/RightPanel/Properties/Name" to="UIInput" method="_on_name_text_submitted"]
-[connection signal="mouse_entered" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/HBox22/AdvancedLipSync" to="UIInput" method="_on_advanced_lip_sync_mouse_entered"]
-[connection signal="mouse_exited" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/HBox22/AdvancedLipSync" to="UIInput" method="_on_advanced_lip_sync_mouse_exited"]
-[connection signal="toggled" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/HBox22/AdvancedLipSync" to="UIInput" method="_on_advanced_lip_sync_toggled"]
-[connection signal="toggled" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/NonAnimatedSheetCheck" to="UIInput" method="_on_non_animated_sheet_check_toggled"]
-[connection signal="mouse_entered" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox/FrameSpinbox" to="UIInput" method="_on_frame_spinbox_mouse_entered"]
-[connection signal="value_changed" from="HSplitContainer/HSplit/RightPanel/Properties/VSplitContainer/ScrollContainer/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox/FrameSpinbox" to="UIInput" method="_on_frame_spinbox_value_changed"]
+[connection signal="focus_entered" from="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Properties/Name" to="UIInput" method="_on_name_focus_entered"]
+[connection signal="focus_exited" from="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Properties/Name" to="UIInput" method="_on_name_focus_exited"]
+[connection signal="text_submitted" from="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Properties/Name" to="UIInput" method="_on_name_text_submitted"]
+[connection signal="mouse_entered" from="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/HBox22/AdvancedLipSync" to="UIInput" method="_on_advanced_lip_sync_mouse_entered"]
+[connection signal="mouse_exited" from="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/HBox22/AdvancedLipSync" to="UIInput" method="_on_advanced_lip_sync_mouse_exited"]
+[connection signal="toggled" from="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/HBox22/AdvancedLipSync" to="UIInput" method="_on_advanced_lip_sync_toggled"]
+[connection signal="toggled" from="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/NonAnimatedSheetCheck" to="UIInput" method="_on_non_animated_sheet_check_toggled"]
+[connection signal="mouse_entered" from="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox/FrameSpinbox" to="UIInput" method="_on_frame_spinbox_mouse_entered"]
+[connection signal="value_changed" from="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox/FrameSpinbox" to="UIInput" method="_on_frame_spinbox_value_changed"]

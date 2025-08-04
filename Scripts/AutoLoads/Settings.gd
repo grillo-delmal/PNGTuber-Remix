@@ -39,7 +39,7 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	custom_cursor_preview = true,
 	custom_cursor_path = "",
 	floaty_panning = true,
-	hide_mini_view = true,
+	hide_mini_view = false,
 	hide_sprite_view = true,
 	use_threading = false,
 }
@@ -62,7 +62,6 @@ func save_before_closing():
 		save()
 	await get_tree().create_timer(0.1).timeout
 	get_tree().quit()
-
 
 func save():
 	var save_file = FileAccess.open(OS.get_executable_path().get_base_dir() + "/Preferences.pRDat", FileAccess.WRITE)
@@ -159,10 +158,8 @@ func lipsync_set_up():
 	else:
 		LipSyncGlobals.load_file(theme_settings.lipsync_file_path)
 
-
 func scale_window():
 	get_tree().root.content_scale_factor = theme_settings.ui_scaling
-	
 
 func window_size_changed():
 	theme_settings.screen_size = get_window().size
@@ -188,7 +185,6 @@ func check_ui():
 func loaded_UI(id):
 	_on_ui_theme_button_item_selected(id)
 
-
 func _on_ui_theme_button_item_selected(index):
 	match index:
 		0:
@@ -213,7 +209,6 @@ func _on_ui_theme_button_item_selected(index):
 	theme_settings.theme_id = index
 	Global.theme_update.emit(current_theme)
 	save()
-
 
 func _on_auto_load_check_toggled(toggled_on):
 	theme_settings.auto_load = toggled_on

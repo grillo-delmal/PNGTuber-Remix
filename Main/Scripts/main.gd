@@ -41,7 +41,6 @@ func _ready():
 	Global.update_ui_pieces.emit()
 	Global.update_camera_smoothing()
 
-
 func update_theme(new_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")):
 	%UIHolder.theme = new_theme
 	%ConfirmTrim.theme = new_theme

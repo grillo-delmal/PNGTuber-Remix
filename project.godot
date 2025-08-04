@@ -48,25 +48,26 @@ settings/crash_handler/message="Please include this when reporting the bug on:ht
 settings/crash_handler/message.editor="Please include this when reporting the bug on:https://github.com/MudkipWorld/PNGTuber-Remix/issues"
 gdscript/warnings/unused_signal=0
 gdscript/warnings/integer_division=0
+gdscript/warnings/get_node_default_without_onready=0
 
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
-window/size/transparent=true
 window/energy_saving/keep_screen_on=false
 window/stretch/aspect="ignore"
 window/per_pixel_transparency/allowed=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/aimg_io/plugin.cfg", "res://addons/wiggly_appendage_2d/plugin.cfg")
+enabled=PackedStringArray("res://addons/aimg_io/plugin.cfg", "res://addons/dockable_container/plugin.cfg", "res://addons/wiggly_appendage_2d/plugin.cfg")
 
 [global_group]
 
 Layers=""
 InputsUIs=""
 StateRemapButton=""
+Dockables=""
 
 [gui]
 
@@ -197,8 +198,7 @@ locale/translations=PackedStringArray("res://Localization/RemixV1 Translations -
 
 [rendering]
 
-renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"
+rendering_device/driver.windows="d3d12"
+renderer/rendering_method="mobile"
 textures/vram_compression/import_s3tc_bptc=true
 textures/vram_compression/import_etc2_astc=true
-viewport/transparent_background=true

@@ -1,9 +1,54 @@
-[gd_scene load_steps=5 format=3 uid="uid://cpcj4o080w37m"]
+[gd_scene load_steps=16 format=3 uid="uid://cpcj4o080w37m"]
 
 [ext_resource type="PackedScene" uid="uid://bidkgcxxq68n6" path="res://UI/EditorUI/LeftUI/Components/camera_panel.tscn" id="1_kxhh7"]
 [ext_resource type="Script" uid="uid://b2h705vpr64xt" path="res://Scripts/UI/LeftPanel/left_panel.gd" id="1_v5jxx"]
+[ext_resource type="Script" uid="uid://l1mikgxckn2j" path="res://addons/dockable_container/dockable_container.gd" id="2_b4qs2"]
+[ext_resource type="Theme" uid="uid://cpfn2bvg67l5w" path="res://Themes/DockablesTheme.tres" id="2_x0ggy"]
 [ext_resource type="PackedScene" uid="uid://g6paooy6tpxy" path="res://UI/EditorUI/LeftUI/Components/SpritePreview.tscn" id="3_2g333"]
+[ext_resource type="Script" uid="uid://domcyeklegrmy" path="res://addons/dockable_container/layout_panel.gd" id="3_7odll"]
 [ext_resource type="PackedScene" uid="uid://7r3v4vohf4at" path="res://UI/EditorUI/LeftUI/Components/LayersPanel.tscn" id="3_fepe2"]
+[ext_resource type="Script" uid="uid://c6mnetrbitmkr" path="res://addons/dockable_container/layout_split.gd" id="4_7odll"]
+[ext_resource type="Script" uid="uid://o3g1heay5br" path="res://addons/dockable_container/layout.gd" id="4_x0ggy"]
+
+[sub_resource type="Resource" id="Resource_206pr"]
+resource_name = "Tabs"
+script = ExtResource("3_7odll")
+names = PackedStringArray("CameraPanel")
+current_tab = 0
+
+[sub_resource type="Resource" id="Resource_utslr"]
+resource_name = "Tabs"
+script = ExtResource("3_7odll")
+names = PackedStringArray("BG")
+current_tab = 0
+
+[sub_resource type="Resource" id="Resource_coxrl"]
+resource_name = "Split"
+script = ExtResource("4_7odll")
+direction = 1
+percent = 0.0762712
+first = SubResource("Resource_206pr")
+second = SubResource("Resource_utslr")
+
+[sub_resource type="Resource" id="Resource_4dm4b"]
+resource_name = "Tabs"
+script = ExtResource("3_7odll")
+names = PackedStringArray("LayersPanel")
+current_tab = 0
+
+[sub_resource type="Resource" id="Resource_opv2m"]
+resource_name = "Split"
+script = ExtResource("4_7odll")
+direction = 1
+percent = 0.28125
+first = SubResource("Resource_coxrl")
+second = SubResource("Resource_4dm4b")
+
+[sub_resource type="Resource" id="Resource_oychv"]
+resource_name = "Layout"
+script = ExtResource("4_x0ggy")
+root = SubResource("Resource_opv2m")
+hidden_tabs = {}
 
 [node name="LeftPanel" type="Panel"]
 custom_minimum_size = Vector2(270, 600)
@@ -14,38 +59,36 @@ size_flags_horizontal = 3
 mouse_filter = 2
 script = ExtResource("1_v5jxx")
 
-[node name="VBox" type="VBoxContainer" parent="."]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(220, 610)
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.022
-anchor_top = 0.01
-anchor_right = 0.975
-anchor_bottom = 0.991
-offset_left = -0.28
-offset_top = -0.22
-offset_right = 1.0
-offset_bottom = -0.401978
-mouse_filter = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 12
 
-[node name="CameraPanel" parent="VBox" instance=ExtResource("1_kxhh7")]
+[node name="Dockable" type="Container" parent="MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_x0ggy")
+theme_type_variation = &"s"
+script = ExtResource("2_b4qs2")
+tabs_visible = false
+layout = SubResource("Resource_oychv")
+metadata/_custom_type_script = "uid://l1mikgxckn2j"
+
+[node name="CameraPanel" parent="MarginContainer/Dockable" instance=ExtResource("1_kxhh7")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="LayersViewSplit" type="VSplitContainer" parent="VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 0
-split_offset = -2000
-
-[node name="BG" parent="VBox/LayersViewSplit" instance=ExtResource("3_2g333")]
+[node name="BG" parent="MarginContainer/Dockable" instance=ExtResource("3_2g333")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="LayersPanel" parent="VBox/LayersViewSplit" instance=ExtResource("3_fepe2")]
+[node name="LayersPanel" parent="MarginContainer/Dockable" instance=ExtResource("3_fepe2")]
 unique_name_in_owner = true
 layout_mode = 2
-
-[connection signal="dragged" from="VBox/LayersViewSplit" to="." method="_on_layers_view_split_dragged"]

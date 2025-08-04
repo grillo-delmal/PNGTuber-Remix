@@ -115,7 +115,8 @@ func _process(_delta):
 	advanced_lipsyc()
 
 func wiggle_sprite():
-	var length : float = 0
+	var length : float = 1.0
+	
 	if get_value("wiggle_physics"):
 		if (get_parent() is Sprite2D  or get_parent() is WigglyAppendage2D) && is_instance_valid(get_parent()):
 			var c_parent = get_parent().owner
@@ -125,7 +126,7 @@ func wiggle_sprite():
 				length +=((c_parrent_length + c_parrent_length2)/20)
 	
 	
-	wiggle_val = lerp(wiggle_val, sin((Global.tick*get_value("wiggle_freq"))+length)*get_value("wiggle_amp"), 0.05)
+	wiggle_val = lerp(wiggle_val, sin((Global.tick*length) + get_value("wiggle_freq"))*get_value("wiggle_amp"), 0.05)
 	
 	if !get_parent() is Sprite2D:
 		%Sprite2D.material.set_shader_parameter("rotation", wiggle_val )
@@ -198,14 +199,10 @@ func get_state(id):
 		animation()
 		set_blend(get_value("blend_mode"))
 		advanced_lipsyc()
-
-		if get_value("look_at_mouse_pos") == 0:
-			%Pos.position.x = 0
-		if get_value("look_at_mouse_pos_y") == 0:
-			%Pos.position.y = 0
 			
 		if !get_value("cycle") in range(Global.settings_dict.cycles.size()):
 			sprite_data.cycle = 0
+		
 		
 	elif states[id].is_empty():
 		states[id] = sprite_data.duplicate(true)
