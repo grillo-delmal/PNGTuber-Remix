@@ -12,6 +12,7 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 @onready var theme_settings : Dictionary = {
 	theme_id = 0,
 	auto_load = false,
+	path = "",
 	save_on_exit = false,
 	fps = 24,
 	as_apng = false,
@@ -145,6 +146,7 @@ func _ready():
 	if theme_settings.microphone != null:
 		if AudioServer.get_input_device_list().has(theme_settings.microphone):
 			AudioServer.input_device = theme_settings.microphone
+	
 	change_cursor()
 
 func lipsync_set_up():

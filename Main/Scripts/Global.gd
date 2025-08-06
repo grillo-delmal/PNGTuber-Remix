@@ -108,12 +108,12 @@ var file_dialog : FileDialog = null
 var light = null
 var camera : Camera2D = null
 
-var frame_counter := 0
-const FRAME_INTERVAL := 3  # Run every 5 frames
+var frame_counter : int = 0
+const FRAME_INTERVAL : int = 3  # Run every 5 frames
 var swtich_session_popup : Node = null
 
-var save_path := ""
-var is_editor := true:
+var save_path : String = ""
+var is_editor : bool = true:
 	set(x):
 		if x == is_editor: 
 			is_editor = x

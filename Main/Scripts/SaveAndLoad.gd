@@ -123,7 +123,10 @@ func save_model(path):
 	if Settings.theme_settings.use_threading:
 		thread.call_deferred("wait_to_finish")
 
-func load_file(path: String):
+func load_file(path: String, autoload : bool = false):
+	if autoload:
+		Settings.theme_settings.path = path
+		Settings.save()
 	if Settings.theme_settings.use_threading:
 		if !thread.is_alive():
 			if path.get_extension() == "save":

@@ -106,9 +106,9 @@ func _on_file_dialog_file_selected(path):
 					model_path = path
 					%ConfirmTrim.popup_centered()
 				else:
-					SaveAndLoad.load_file(path)
+					SaveAndLoad.load_file(path, true)
 			else:
-				SaveAndLoad.load_file(path)
+				SaveAndLoad.load_file(path, true)
 		State.SaveFileAs:
 			SaveAndLoad.save_file(path)
 			
@@ -172,7 +172,7 @@ func import_objects():
 				Global.update_layers.emit(0, sprte_obj, "Sprite2D")
 
 func _on_confirmation_dialog_confirmed():
-	%TopUI/TopBarInput.last_path = ""
+	Global.save_path = ""
 	Global.new_file.emit()
 	clear_sprites()
 	Global.settings_dict.max_fps = 241
