@@ -37,15 +37,17 @@ func _process(delta: float) -> void:
 	
 	%Rotation.rotation += is_nan_or_inf(clamp(applied_rotation, deg_to_rad(-360), deg_to_rad(360)))
 	%Pos.position += is_nan_or_inf(applied_pos)
+	
 	placeholder_position = %Pos.global_position
+	#print(%Drag.global_position)
 
 func movements(delta):
 	if !Global.static_view:
 		glob = %Dragger.global_position
 		if actor.get_value("static_obj"):
 			var static_pos = Global.sprite_container.get_parent().get_parent().to_global(actor.get_value("position"))
-			%Dragger.global_position = static_pos
-			%Drag.global_position = %Dragger.global_position
+			#%Dragger.global_position = static_pos
+			%Drag.global_position = static_pos
 		else:
 			drag(delta)
 		wobble(delta)
@@ -64,6 +66,7 @@ func movements(delta):
 			
 		rotationalDrag(length, delta)
 		stretch(length, delta)
+		#printt(%Dragger.global_position, %Drag.global_position)
 
 func drag(_delta):
 	if actor.get_value("dragSpeed") == 0:
@@ -138,6 +141,7 @@ func stretch(length,delta):
 
 func static_prev():
 	%Pos.position = Vector2(0,0)
+	%Pos.rotation = 0.0
 	%Drag.rotation = 0.0
 	%Sprite2D.self_modulate = actor.get_value("tint")
 	%Pos.modulate.s = 0
@@ -223,14 +227,14 @@ func follow_mouse_vel(mouse, main_marker):
 	
 	if actor.sprite_type == "Sprite2D":
 		if actor.get_value("non_animated_sheet") && actor.get_value("animate_to_mouse") && !actor.get_value("animate_to_mouse_track_pos"):
-			applied_pos.x = is_nan_or_inf(lerp(%Pos.position.x, 0.0, actor.get_value("mouse_delay")))
-			applied_pos.y = is_nan_or_inf(lerp(%Pos.position.y, 0.0, actor.get_value("mouse_delay")))
+			%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, 0.0, actor.get_value("mouse_delay")))
+			%Pos.position.y = is_nan_or_inf(lerp(%Pos.position.y, 0.0, actor.get_value("mouse_delay")))
 		else:
-			applied_pos.x = is_nan_or_inf(lerp(%Pos.position.x, last_dist.x, actor.get_value("mouse_delay")))
-			applied_pos.y = is_nan_or_inf(lerp(%Pos.position.y, last_dist.y, actor.get_value("mouse_delay")))
+			%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, last_dist.x, actor.get_value("mouse_delay")))
+			%Pos.position.y = is_nan_or_inf(lerp(%Pos.position.y, last_dist.y, actor.get_value("mouse_delay")))
 	else:
-		applied_pos.x = is_nan_or_inf(lerp(%Pos.position.x, last_dist.x, actor.get_value("mouse_delay")))
-		applied_pos.y = is_nan_or_inf(lerp(%Pos.position.y, last_dist.y, actor.get_value("mouse_delay")))
+		%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, last_dist.x, actor.get_value("mouse_delay")))
+		%Pos.position.y = is_nan_or_inf(lerp(%Pos.position.y, last_dist.y, actor.get_value("mouse_delay")))
 
 	var mouse_x = mouse.x
 	var screen_width = get_viewport().size.x

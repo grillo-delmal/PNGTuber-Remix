@@ -36,6 +36,7 @@ text = "Bounce Gravity : "
 [node name="GravityAmountSlider" parent="." instance=ExtResource("1_gkpfe")]
 unique_name_in_owner = true
 layout_mode = 2
+mini_value = 0.5
 max_value = 3000.0
 step = 1.0
 ui_type = 3
