@@ -107,6 +107,7 @@ const DEFAULT_DATA := {
 	is_cycle = false,
 	cycle = 0,
 	pause_movement = false,
+	follow_type = 0,
 	}
 
 

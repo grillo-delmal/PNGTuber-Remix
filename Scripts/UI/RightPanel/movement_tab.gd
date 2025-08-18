@@ -18,7 +18,6 @@ func enable() -> void:
 	if !is_instance_valid(sp):
 		nullify()
 		return
-	
 	Global.editing_for = sp.get_value("editing_for")
 	select.text = select.get_popup().get_item_text(int(Global.editing_for))
 
