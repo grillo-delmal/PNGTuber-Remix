@@ -17,6 +17,10 @@ var placeholder_position : Vector2 = Vector2.ZERO
 var controller_vel : Vector2 = Vector2.ZERO
 var target_x : float = 0
 var target_y  : float = 0
+var dir_vel_anim : Vector2 = Vector2.ZERO
+var dist_vel_anim : float = 0.0
+var frame_h : float = 0.0
+var frame_v : float = 0.0
 
 func _ready() -> void:
 	Global.update_mouse_vel_pos.connect(mouse_delay)
@@ -31,7 +35,7 @@ func _process(delta: float) -> void:
 		else:
 			%Pos.rotation = 0.0
 		rainbow()
-		follow_mouse(delta)
+		follow_calculation(delta)
 		movements(delta)
 	else:
 		static_prev()
@@ -40,10 +44,9 @@ func _process(delta: float) -> void:
 	
 	%Rotation.rotation += is_nan_or_inf(clamp(applied_rotation, deg_to_rad(-360), deg_to_rad(360)))
 	%Pos.position += is_nan_or_inf(applied_pos)
-	
 	placeholder_position = %Pos.global_position
-	#print(%Drag.global_position)
 
+#region Parameter Movement
 func movements(delta):
 	if !Global.static_view:
 		glob = %Dragger.global_position
@@ -68,7 +71,7 @@ func movements(delta):
 					length += c_parrent_length + c_parrent_length2
 			
 		rotationalDrag(length, delta)
-		stretch(length, delta)
+		stretch(length)
 		#printt(%Dragger.global_position, %Drag.global_position)
 
 func drag(_delta):
@@ -134,9 +137,7 @@ func rotationalDrag(length, delta: float):
 	
 	%Rotation.rotation = is_nan_or_inf(lerp_angle(%Rotation.rotation,deg_to_rad(yvel),0.15))
 
-
-
-func stretch(length,delta):
+func stretch(length):
 	var yvel = (length * actor.get_value("stretchAmount") * 0.01)
 	var target = Vector2(1.0-yvel,1.0+yvel)
 	
@@ -175,6 +176,9 @@ func rainbow():
 		%Sprite2D.self_modulate = actor.get_value("tint")
 		%Pos.modulate.s = 0
 
+#endregion
+
+#region Follow Type Movement
 func mouse_delay():
 	var mouse_delta = last_mouse_position - mouse_coords
 	if !mouse_delta.is_zero_approx():
@@ -184,7 +188,7 @@ func mouse_delay():
 		last_mouse_position = mouse_coords  # Only update when there's actual movement
 
 var global_mouse := Vector2.ZERO
-func follow_mouse(_delta):
+func follow_calculation(_delta):
 	var main_marker = Global.main.get_node("%Marker")
 	
 	if WindowHandler.windows:
@@ -210,29 +214,49 @@ func follow_mouse(_delta):
 	var dir = distance.direction_to(mouse_coords)
 	var dist = mouse_coords.length()
 	
+	
+	follow_mouse(mouse_coords, main_marker, dir, dist)
+	follow_controller()
+
+func follow_mouse(mouse, main_marker, dir, dist):
+	if actor.get_value("follow_mouse_velocity"):
+		var mouse_delta = last_mouse_position - mouse
+		if abs(Vector2(tanh(mouse_delta.x), tanh(mouse_delta.y))) > Vector2(0.5, 0.5):
+			var look := Vector2(actor.get_value("look_at_mouse_pos"),actor.get_value("look_at_mouse_pos_y"))
+			vel = lerp(vel, -look*distance, 0.15)
+			var dir_vel = Vector2.ZERO.direction_to(vel)
+			var dist_vel  = vel.limit_length(look.length()).length()
+			dist_vel_anim = dist_vel
+			last_dist = Vector2(dir_vel.x * (dist_vel),dir_vel.y * (dist_vel))
+			dir_vel_anim = mouse_delta
+			
+		
+	
 	if actor.get_value("follow_type") == 0:
 		if actor.get_value("follow_mouse_velocity"):
-			follow_mouse_vel(mouse_coords, main_marker)
+			follow_mouse_vel_position()
+			follow_sprite_anim(dir_vel_anim, dist_vel_anim)
 		else:
-			follow_mouse_normal(mouse_coords, main_marker, dir, dist)
-		follow_mouse_sprite_anim(dir, dist)
-		
-	elif actor.get_value("follow_type") == 1:
-		follow_controller(main_marker)
-
-
-func follow_mouse_vel(mouse, main_marker):
-#	mouse_delay()
-	var mouse_delta = last_mouse_position - mouse
-	if abs(Vector2(tanh(mouse_delta.x), tanh(mouse_delta.y))) > Vector2(0.5, 0.5):
-		var look := Vector2(actor.get_value("look_at_mouse_pos"),actor.get_value("look_at_mouse_pos_y"))
-		vel = lerp(vel, -look*distance, 0.15)
-		var dir = Vector2.ZERO.direction_to(vel)
-		var dist = vel.limit_length(look.length()).length()
-		last_dist = Vector2(dir.x * (dist),dir.y * (dist))
-		follow_mouse_sprite_anim(dir, dist)
+			follow_mouse_position(dir, dist)
+			follow_sprite_anim(dir, dist)
 	
-	
+	if actor.get_value("follow_type2") == 0:
+		if actor.get_value("follow_mouse_velocity"):
+			pass
+			follow_mouse_vel_rotation()
+		else:
+			follow_mouse_rotation(mouse ,main_marker)
+
+	if actor.get_value("follow_type3") == 0:
+		if actor.get_value("follow_mouse_velocity"):
+			pass
+			follow_mouse_vel_scale()
+		else:
+			follow_mouse_scale(mouse, main_marker)
+
+#region Follow Mouse Velocity
+
+func follow_mouse_vel_position():
 	if actor.sprite_type == "Sprite2D":
 		if actor.get_value("non_animated_sheet") && actor.get_value("animate_to_mouse") && !actor.get_value("animate_to_mouse_track_pos"):
 			%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, 0.0, actor.get_value("mouse_delay")))
@@ -244,38 +268,31 @@ func follow_mouse_vel(mouse, main_marker):
 		%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, last_dist.x, actor.get_value("mouse_delay")))
 		%Pos.position.y = is_nan_or_inf(lerp(%Pos.position.y, last_dist.y, actor.get_value("mouse_delay")))
 
-	var mouse_x = mouse.x
-	var screen_width = get_viewport().size.x
-	# Calculate the normalized mouse position (-1 to 1, where 0 is center)
-	var normalized_mouse = (mouse_x - screen_width / 2) / (screen_width / 2)
-
-	# Map the normalized position to the rotation factor
-	var rotation_factor = lerp(actor.get_value("mouse_rotation_max"), actor.get_value("mouse_rotation"), max(0.01, (normalized_mouse + 1) / 2))
-
+func follow_mouse_vel_rotation():
+	var t = Vector2(-dir_vel_anim.x, 0).normalized()
+	var normalized_mouse = t.x/2
+	normalized_mouse = clamp(normalized_mouse, -1.0, 1.0)
+	var rotation_factor = lerp(actor.get_value("mouse_rotation_max"), actor.get_value("mouse_rotation"), max(0.01, (normalized_mouse) / 2))
 	var safe_rot_min = clamp(actor.get_value("rLimitMin"), -360, 360)
 	var safe_rot_max = clamp(actor.get_value("rLimitMax"), -360, 360)
-	# Calculate the target rotation, scaled by the factor and clamped
 	var target_rotation = clamp(normalized_mouse * rotation_factor * deg_to_rad(90), deg_to_rad(safe_rot_min), deg_to_rad(safe_rot_max))
-
-	# Smoothly interpolate the sprite's rotation
 	%MouseRot.rotation = is_nan_or_inf(lerp_angle(%MouseRot.rotation, target_rotation, actor.get_value("mouse_delay")))
-	
-	var screen_size = DisplayServer.screen_get_size(-1)
-	if main_marker.current_screen == Monitor.ALL_SCREENS:
-		screen_size = DisplayServer.screen_get_size(1)
-	else:
-		screen_size = DisplayServer.screen_get_size(main_marker.current_screen)
-		
-	var center = screen_size * 0.5
-	var dist_from_center = last_dist - main_marker.coords
-	var norm_x = clamp(abs(dist_from_center.x) / center.x, 0.0, 1.0)
-	var norm_y = clamp(abs(dist_from_center.y) / center.y, 0.0, 1.0)
+
+func follow_mouse_vel_scale():
+	var t = dir_vel_anim.normalized()
+	var normalized_mouse = t/2
+
+	var norm_x = clamp(abs(normalized_mouse.x), 0.0, 1.0)
+	var norm_y = clamp(abs(normalized_mouse.y), 0.0, 1.0)
+
 	var target_scale_x = lerp(1.0, 1.0 - actor.get_value("mouse_scale_x") , max(norm_x, 0.01))
 	var target_scale_y = lerp(1.0, 1.0 - actor.get_value("mouse_scale_y"), max(norm_y, 0.01))
 	%Drag.scale.x = is_nan_or_inf(lerp(%Drag.scale.x, target_scale_x, actor.get_value("mouse_delay")), true)
 	%Drag.scale.y = is_nan_or_inf(lerp(%Drag.scale.y, target_scale_y, actor.get_value("mouse_delay")), true)
+#endregion
 
-func follow_mouse_normal(mouse, main_marker, dir, dist):
+#region Follow Mouse (Normal)
+func follow_mouse_position(dir, dist):
 	if actor.sprite_type == "Sprite2D":
 		if actor.get_value("non_animated_sheet") && actor.get_value("animate_to_mouse") && !actor.get_value("animate_to_mouse_track_pos"):
 			%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, 0.0, actor.get_value("mouse_delay")))
@@ -291,8 +308,8 @@ func follow_mouse_normal(mouse, main_marker, dir, dist):
 		%Pos.position.x = dir.x * min(dist, actor.get_value("look_at_mouse_pos"))
 	if actor.get_value("look_at_mouse_pos_y") == 0:
 		%Pos.position.y = dir.y * min(dist, actor.get_value("look_at_mouse_pos_y"))
-	
-	
+
+func follow_mouse_rotation(mouse ,main_marker):
 	var screen_size = DisplayServer.screen_get_size(-1)
 	if main_marker.current_screen == Monitor.ALL_SCREENS:
 		screen_size = DisplayServer.screen_get_size(1)
@@ -301,7 +318,7 @@ func follow_mouse_normal(mouse, main_marker, dir, dist):
 	
 	var mouse_x = mouse.x
 	var screen_width = screen_size.x
-	var normalized_mouse = (mouse_x) / (screen_width / 2)
+	var normalized_mouse = (mouse_x - screen_width) / (screen_width / 2)
 	normalized_mouse = clamp(normalized_mouse, -1.0, 1.0)
 	
 	var safe_rot_min = clamp(actor.get_value("rLimitMin"), -360, 360)
@@ -316,6 +333,13 @@ func follow_mouse_normal(mouse, main_marker, dir, dist):
 	if applied_rotation == NAN:
 		applied_rotation = 0.0
 
+func follow_mouse_scale(mouse, main_marker):
+	var screen_size = DisplayServer.screen_get_size(-1)
+	if main_marker.current_screen == Monitor.ALL_SCREENS:
+		screen_size = DisplayServer.screen_get_size(1)
+	else:
+		screen_size = DisplayServer.screen_get_size(main_marker.current_screen)
+	
 	var center = screen_size * 0.5
 	var dist_from_center = mouse
 	var norm_x = clamp(abs(dist_from_center.x) / center.x, 0.0, 1.0)
@@ -325,33 +349,45 @@ func follow_mouse_normal(mouse, main_marker, dir, dist):
 	%Drag.scale.x = is_nan_or_inf(lerp(%Drag.scale.x, target_scale_x, actor.get_value("mouse_delay")), true)
 	%Drag.scale.y = is_nan_or_inf(lerp(%Drag.scale.y, target_scale_y, actor.get_value("mouse_delay")), true)
 
-func follow_mouse_sprite_anim(dir, dist):
-	if actor.sprite_type == "Sprite2D":
-		if actor.get_value("non_animated_sheet") && actor.get_value("animate_to_mouse"):
-			
-			var dist_x = dir.x * min(dist, actor.get_value("look_at_mouse_pos"))
-			var dist_y = dir.y * min(dist, actor.get_value("look_at_mouse_pos_y"))
-			var max_dist_x = actor.get_value("look_at_mouse_pos")
-			var max_dist_y = actor.get_value("look_at_mouse_pos_y")
-			var hframes = %Sprite2D.hframes
-			var vframes = %Sprite2D.vframes
-			var normalized_x = (dist_x / (2.0 * max_dist_x)) + 0.5
-			var normalized_y = (dist_y / (2.0 * max_dist_y)) + 0.5
-			
-			var raw_frame_x = (normalized_x * hframes)
-			var raw_frame_y = (normalized_y * vframes)
-			
-			if sign(actor.get_value("look_at_mouse_pos")) == -1:
-				raw_frame_x = hframes - (normalized_x * hframes)
-			if sign(actor.get_value("look_at_mouse_pos_y")) == -1:
-				raw_frame_y = vframes - (normalized_y * vframes)
-			var frame_x = clamp(floor(raw_frame_x), 0, hframes - 1)
-			var frame_y = clamp(floor(raw_frame_y), 0, vframes - 1)
-			%Sprite2D.frame_coords.x = floor(move_toward(%Sprite2D.frame_coords.x, float(frame_x), actor.get_value("animate_to_mouse_speed")))
-			%Sprite2D.frame_coords.y = floor(move_toward(%Sprite2D.frame_coords.y, float(frame_y), actor.get_value("animate_to_mouse_speed")))
+#endregion
 
-func follow_controller(main_marker):
-	var axis = Input.get_vector("ControllerLeft", "ControllerRight", "ControllerUp", "ControllerDown")
+#region Controller Movement
+func follow_controller():
+	var axis_left = Input.get_vector("ControllerLeft", "ControllerRight", "ControllerUp", "ControllerDown")
+	var axis_right = Input.get_vector("ControllerFour", "ControllerTwo", "ControllerOne", "ControllerThree")
+	
+	if actor.get_value("follow_type") == 1:
+		if axis_left != Vector2.ZERO && actor.get_value("snap_pos"):
+			target_x = axis_left.x * actor.get_value("look_at_mouse_pos")
+			target_y = axis_left.y * actor.get_value("look_at_mouse_pos_y")
+		else:
+			target_x = axis_left.x * actor.get_value("look_at_mouse_pos")
+			target_y = axis_left.y * actor.get_value("look_at_mouse_pos_y")
+		var dist = Vector2(target_x, target_y).length()
+		follow_controller_position(axis_left)
+		follow_sprite_anim(axis_left, dist)
+	elif actor.get_value("follow_type") == 2:
+		if axis_right != Vector2.ZERO && actor.get_value("snap_pos"):
+			target_x = axis_right.x * actor.get_value("look_at_mouse_pos")
+			target_y = axis_right.y * actor.get_value("look_at_mouse_pos_y")
+		else:
+			target_x = axis_right.x * actor.get_value("look_at_mouse_pos")
+			target_y = axis_right.y * actor.get_value("look_at_mouse_pos_y")
+		var dist = Vector2(target_x, target_y).length()
+		follow_controller_position(axis_right)
+		follow_sprite_anim(axis_right, dist)
+	
+	if actor.get_value("follow_type2") == 1:
+		follow_controller_rotation(axis_left)
+	elif actor.get_value("follow_type2") == 2:
+		follow_controller_rotation(axis_right)
+
+	if actor.get_value("follow_type3") == 1:
+		follow_controller_scale(axis_left)
+	elif actor.get_value("follow_type3") == 2:
+		follow_controller_scale(axis_right)
+
+func follow_controller_position(axis):
 	var dist = axis.length() # simpler than accumulating
 
 	if actor.sprite_type == "Sprite2D":
@@ -363,8 +399,9 @@ func follow_controller(main_marker):
 				target_x = axis.x * actor.get_value("look_at_mouse_pos")
 				target_y = axis.y * actor.get_value("look_at_mouse_pos_y")
 	else:
-		target_x = axis.x * actor.get_value("look_at_mouse_pos")
-		target_y = axis.y * actor.get_value("look_at_mouse_pos_y")
+		if axis != Vector2.ZERO:
+			target_x = axis.x * actor.get_value("look_at_mouse_pos")
+			target_y = axis.y * actor.get_value("look_at_mouse_pos_y")
 			
 	%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, target_x, actor.get_value("mouse_delay")))
 	%Pos.position.y = is_nan_or_inf(lerp(%Pos.position.y, target_y, actor.get_value("mouse_delay")))
@@ -373,40 +410,55 @@ func follow_controller(main_marker):
 		%Pos.position.x = axis.x * min(dist, actor.get_value("look_at_mouse_pos"))
 	if actor.get_value("look_at_mouse_pos_y") == 0:
 		%Pos.position.y = axis.y * min(dist, actor.get_value("look_at_mouse_pos_y"))
-	
-	
-	var screen_size = DisplayServer.screen_get_size(-1)
-	if main_marker.current_screen == Monitor.ALL_SCREENS:
-		screen_size = DisplayServer.screen_get_size(1)
-	else:
-		screen_size = DisplayServer.screen_get_size(main_marker.current_screen)
-	
-	var mouse_x = axis.x
-	var screen_width = screen_size.x
-	var normalized_mouse = (mouse_x) / (screen_width / 2)
-	normalized_mouse = clamp(normalized_mouse, -1.0, 1.0)
-	
+
+func follow_controller_rotation(axis):
+	var normalized_mouse = clamp(axis.x, -1.0, 1.0)
 	var safe_rot_min = clamp(actor.get_value("rLimitMin"), -360, 360)
 	var safe_rot_max = clamp(actor.get_value("rLimitMax"), -360, 360)
-
 	var rotation_factor = lerp(actor.get_value("mouse_rotation"), actor.get_value("mouse_rotation_max"), max((normalized_mouse + 1) / 2, 0.001))
-
 	var target_rotation = clamp(rotation_factor, deg_to_rad(safe_rot_min), deg_to_rad(safe_rot_max))
-
 	%MouseRot.rotation = is_nan_or_inf(lerp_angle(%MouseRot.rotation, target_rotation, actor.get_value("mouse_delay")))
-
 	if applied_rotation == NAN:
 		applied_rotation = 0.0
 
-	var center = screen_size * 0.5
-	var dist_from_center = axis
-	var norm_x = clamp(abs(dist_from_center.x) / center.x, 0.0, 1.0)
-	var norm_y = clamp(abs(dist_from_center.y) / center.y, 0.0, 1.0)
+func follow_controller_scale(axis):
+	var norm_x = clamp(abs(axis.x), 0.0, 1.0)
+	var norm_y = clamp(abs(axis.y), 0.0, 1.0)
 	var target_scale_x = lerp(1.0, 1.0 - actor.get_value("mouse_scale_x") , max(norm_x, 0.001))
 	var target_scale_y = lerp(1.0, 1.0 - actor.get_value("mouse_scale_y"), max(norm_y, 0.001))
 	%Drag.scale.x = is_nan_or_inf(lerp(%Drag.scale.x, target_scale_x, actor.get_value("mouse_delay")), true)
 	%Drag.scale.y = is_nan_or_inf(lerp(%Drag.scale.y, target_scale_y, actor.get_value("mouse_delay")), true)
 
+#endregion
+
+func follow_sprite_anim(dir, dist):
+	if actor.sprite_type == "Sprite2D":
+		if actor.get_value("non_animated_sheet") && actor.get_value("animate_to_mouse"):
+			
+			var new_dir = dir
+			
+			var dist_x = new_dir.x * min(dist, actor.get_value("look_at_mouse_pos"))
+			var dist_y = new_dir.y * min(dist, actor.get_value("look_at_mouse_pos_y"))
+			var max_dist_x = actor.get_value("look_at_mouse_pos")
+			var max_dist_y = actor.get_value("look_at_mouse_pos_y")
+			var hframes = %Sprite2D.hframes
+			var vframes = %Sprite2D.vframes
+			var normalized_x = (dist_x / (2.0 * max_dist_x)) + 0.5
+			var normalized_y = (dist_y / (2.0 * max_dist_y)) + 0.5
+			var raw_frame_x = (normalized_x * hframes)
+			var raw_frame_y = (normalized_y * vframes)
+			if sign(actor.get_value("look_at_mouse_pos")) == -1:
+				raw_frame_x = hframes - (normalized_x * hframes)
+			if sign(actor.get_value("look_at_mouse_pos_y")) == -1:
+				raw_frame_y = vframes - (normalized_y * vframes)
+			var frame_x = clamp(floor(raw_frame_x), 0, hframes - 1)
+			var frame_y = clamp(floor(raw_frame_y), 0, vframes - 1)
+			frame_h = move_toward(frame_h, float(frame_x), actor.get_value("animate_to_mouse_speed"))
+			frame_v = move_toward(frame_v, float(frame_y), actor.get_value("animate_to_mouse_speed"))
+			%Sprite2D.frame_coords.x = floor(frame_h)
+			%Sprite2D.frame_coords.y = floor(frame_v)
+
+#endregion
 
 func auto_rotate():
 	%Pos.rotate(actor.get_value("should_rot_speed"))

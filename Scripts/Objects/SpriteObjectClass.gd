@@ -108,6 +108,9 @@ const DEFAULT_DATA := {
 	cycle = 0,
 	pause_movement = false,
 	follow_type = 0,
+	follow_type2 = 0,
+	follow_type3 = 0,
+	snap_pos = false,
 	}
 
 

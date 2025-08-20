@@ -17,7 +17,17 @@ func _ready() -> void:
 	Global.animation_state.connect(reset_animations)
 	await  get_tree().physics_frame
 	not_speaking()
-	
+
+func _physics_process(delta: float) -> void:
+	if actor.saved_event is InputEventJoypadButton or actor.saved_event is InputEventJoypadMotion:
+		if actor.is_asset && InputMap.action_get_events(str(actor.sprite_id)).size() > 0:
+			if Input.is_action_just_pressed(str(actor.sprite_id)):
+				if actor.saved_event == InputMap.action_get_events(str(actor.sprite_id))[0]:
+					if actor.show_only:
+						%Drag.visible = true
+					else:
+						%Drag.visible = !%Drag.visible
+					actor.was_active_before = %Drag.visible
 
 func asset(key):
 	if actor.is_asset && InputMap.action_get_events(str(actor.sprite_id)).size() > 0:

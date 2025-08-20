@@ -83,7 +83,10 @@ func import_png_from_file(path: String, spawn) -> CanvasTexture:
 	var img_can = import_png(img, spawn)
 	var buffer = FileAccess.get_file_as_bytes(path)
 	if trim:
-		spawn.image_data = buffer
+		if Settings.theme_settings.save_raw_sprite:
+			spawn.image_data = buffer
+		else:
+			spawn.image_data = []
 	else:
 		spawn.image_data = []
 	spawn.sprite_name = path.get_file().get_basename()
@@ -158,8 +161,11 @@ func add_normal(path):
 					img = ImageTrimmer.trim_normal(og_image, img)
 					
 			if trim:
-				var buffer = FileAccess.get_file_as_bytes(path)
-				Global.held_sprites[0].image_data = buffer
+				if Settings.theme_settings.save_raw_sprite:
+					var buffer = FileAccess.get_file_as_bytes(path)
+					Global.held_sprites[0].image_data = buffer
+				else:
+					Global.held_sprites[0].image_data = []
 			else:
 				Global.held_sprites[0].image_data = []
 			img.fix_alpha_edges()
@@ -243,8 +249,11 @@ func replace_texture(path : String):
 					
 				Global.update_offset_spins.emit()
 			if trim:
-				var buffer = FileAccess.get_file_as_bytes(path)
-				Global.held_sprites[0].image_data = buffer
+				if Settings.theme_settings.save_raw_sprite:
+					var buffer = FileAccess.get_file_as_bytes(path)
+					Global.held_sprites[0].image_data = buffer
+				else:
+					Global.held_sprites[0].image_data = []
 			else:
 				Global.held_sprites[0].image_data = []
 				

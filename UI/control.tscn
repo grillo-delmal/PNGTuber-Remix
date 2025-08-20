@@ -367,10 +367,10 @@ value_to_update = "animate_to_mouse"
 layout_mode = 2
 sp_type = "Sprite2D"
 label_text = "Anim-Speed : "
-mini_value = 1.0
+mini_value = 0.01
 max_value = 250.0
 step = 0.01
-value = 10.0
+value = 1.0
 value_to_update = "animate_to_mouse_speed"
 
 [node name="AnimateToMouse2" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]

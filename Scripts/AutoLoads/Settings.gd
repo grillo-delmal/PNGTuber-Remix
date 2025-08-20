@@ -29,6 +29,7 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	lipsync_file_path = OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres",
 	microphone = null,
 	enable_trimmer = false,
+	save_raw_sprite = true, #save the original sprite even when trimmed
 	always_on_top = false,
 	menu_popup = true,
 	software_mode = 0,

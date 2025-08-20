@@ -9,6 +9,7 @@ func _ready():
 	held_sprite_is_null()
 	Global.connect("reinfo", reinfo)
 	Global.deselect.connect(held_sprite_is_null)
+	
 
 #region Update Slider info
 func held_sprite_is_null():

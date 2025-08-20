@@ -99,6 +99,7 @@ popup/item_2/disabled = true
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Pauses movement if the Value of the that parameter is equal zero."
+focus_mode = 0
 theme_override_font_sizes/font_size = 14
 text = "Pause movement"
 script = ExtResource("2_qiucb")
@@ -286,19 +287,68 @@ layout_mode = 2
 [node name="Label" type="Label" parent="ScrollContainer3/MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 14
-text = "Follow Option :"
+theme_override_font_sizes/font_size = 12
+text = "Follow Option (Position) :"
 
 [node name="FollowOption" type="OptionButton" parent="ScrollContainer3/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+focus_mode = 0
 selected = 0
-item_count = 2
+item_count = 3
 popup/item_0/text = "Mouse"
 popup/item_0/id = 0
-popup/item_1/text = "Controller"
+popup/item_1/text = "Controller (Left)"
 popup/item_1/id = 1
+popup/item_2/text = "Controller (Right)"
+popup/item_2/id = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer3/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Follow Option (Rotation) :"
+
+[node name="FollowOption2" type="OptionButton" parent="ScrollContainer3/MarginContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+selected = 0
+item_count = 3
+popup/item_0/text = "Mouse"
+popup/item_0/id = 0
+popup/item_1/text = "Controller (Left)"
+popup/item_1/id = 1
+popup/item_2/text = "Controller (Right)"
+popup/item_2/id = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer3/MarginContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "Follow Option (Scale) :"
+
+[node name="FollowOption3" type="OptionButton" parent="ScrollContainer3/MarginContainer/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+selected = 0
+item_count = 3
+popup/item_0/text = "Mouse"
+popup/item_0/id = 0
+popup/item_1/text = "Controller (Left)"
+popup/item_1/id = 1
+popup/item_2/text = "Controller (Right)"
+popup/item_2/id = 2
 
 [node name="FMDBSlider2" parent="ScrollContainer3/MarginContainer/VBoxContainer" instance=ExtResource("1_h5u6y")]
 unique_name_in_owner = true
@@ -388,6 +438,19 @@ the scale change depending on mouse
 position still needs some work, it may feel
 or look a little different in later releases."
 
+[node name="ShouldSnap" type="CheckBox" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+tooltip_text = "Should snap the Position (when using controller or mouse velocity) back to origin."
+theme_override_font_sizes/font_size = 14
+text = "Position Snap"
+script = ExtResource("2_qiucb")
+sp_type = ""
+value_to_update = "snap_pos"
+
 [connection signal="changed" from="ScrollContainer3/MarginContainer/VBoxContainer/SharedMovement" to="MovementTab" method="_on_shared_movement_changed"]
 [connection signal="changed" from="ScrollContainer3/MarginContainer/VBoxContainer/SharedMovement" to="ScrollContainer3/MarginContainer/VBoxContainer/EditValuesFor" method="set_visible"]
 [connection signal="item_selected" from="ScrollContainer3/MarginContainer/VBoxContainer/HBoxContainer/FollowOption" to="Whyisntthisworking" method="_on_follow_option_item_selected"]
+[connection signal="item_selected" from="ScrollContainer3/MarginContainer/VBoxContainer/HBoxContainer2/FollowOption2" to="Whyisntthisworking" method="_on_follow_option_2_item_selected"]
+[connection signal="item_selected" from="ScrollContainer3/MarginContainer/VBoxContainer/HBoxContainer3/FollowOption3" to="Whyisntthisworking" method="_on_follow_option_3_item_selected"]

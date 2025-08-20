@@ -364,6 +364,15 @@ tooltip_text = "Automatically crop away any empty space
 surrounding an image when the image is opened."
 text = "Crop Images to Content"
 
+[node name="KeepOldTrimData" type="CheckBox" parent="SettingVbox/SettingsTab/Import Settings/Margin/VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(262, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "Keeps a save of the Sprites before trimming. If toggled off, the file will only save the trimmed Sprites."
+button_pressed = true
+text = "Keep Data Before Trim"
+
 [node name="Remix Settings" type="ScrollContainer" parent="SettingVbox/SettingsTab"]
 visible = false
 layout_mode = 2
@@ -523,6 +532,7 @@ popup/item_7/id = 7
 [connection signal="pressed" from="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/HBoxContainer/ResetMicButton" to="SettingsScript" method="_on_reset_mic_button_pressed"]
 [connection signal="toggled" from="SettingVbox/SettingsTab/Audio/MarginContainer/VBoxContainer/FixMicDelay" to="SettingsScript" method="_on_fix_mic_delay_toggled"]
 [connection signal="toggled" from="SettingVbox/SettingsTab/Import Settings/Margin/VBox/ImportTrim" to="SettingsScript" method="_on_import_trim_toggled"]
+[connection signal="toggled" from="SettingVbox/SettingsTab/Import Settings/Margin/VBox/KeepOldTrimData" to="SettingsScript" method="_on_keep_old_trim_data_toggled"]
 [connection signal="value_changed" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/HBoxContainer/UIScalingSpinBox" to="SettingsScript" method="_on_ui_scaling_spin_box_value_changed"]
 [connection signal="value_changed" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/HBoxContainer/UIScalingSlider" to="SettingsScript" method="_on_ui_scaling_slider_value_changed"]
 [connection signal="toggled" from="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/FloatyPanning" to="SettingsScript" method="_on_floaty_panning_toggled"]

@@ -46,6 +46,8 @@ func check_data():
 	%CustomCursorPreview.button_pressed = Settings.theme_settings.custom_cursor_preview
 	%FloatyPanning.button_pressed = Settings.theme_settings.floaty_panning
 	%UseThreads.button_pressed = Settings.theme_settings.use_threading
+	%KeepOldTrimData.button_pressed = Settings.theme_settings.save_raw_sprite
+	
 	change_setting = true
 
 func _physics_process(_delta):
@@ -63,6 +65,7 @@ func sliders_revalue(settings_dict):
 	%DelaySlider.value = settings_dict.volume_delay
 	%DeltaTimeCheck.button_pressed = settings_dict.should_delta
 	%MaxFPSlider.value = settings_dict.max_fps
+	
 
 
 func _on_volume_slider_drag_ended(value_changed: bool) -> void:
@@ -227,4 +230,9 @@ func _on_fix_mic_delay_toggled(toggled_on: bool) -> void:
 func _on_use_threads_toggled(toggled_on: bool) -> void:
 	if !change_setting: return
 	Settings.theme_settings.use_threading = toggled_on
+	Settings.save()
+
+
+func _on_keep_old_trim_data_toggled(toggled_on: bool) -> void:
+	Settings.theme_settings.save_raw_sprite = toggled_on
 	Settings.save()

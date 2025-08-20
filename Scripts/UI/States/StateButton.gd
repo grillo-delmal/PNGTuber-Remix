@@ -75,7 +75,7 @@ func update_stuff():
 		InputMap.action_erase_events(input_key)
 		InputMap.action_add_event(input_key, saved_event)
 
-static func multi_edit(value, value_name, obj : SpriteObject, states : Array, should_change : bool = false, type : String = "x"):
+static func multi_edit(value, value_name, _obj : SpriteObject, states : Array, should_change : bool = false, type : String = "x"):
 	if other_states.size() > 0:
 		for i in other_states:
 			if i == null or !is_instance_valid(i):

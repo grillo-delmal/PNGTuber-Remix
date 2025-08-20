@@ -186,6 +186,7 @@ tooltip_text = "Turns your model Static.
 Uncheck to preview your model's movement. 
 This automatically gets unchecked when changing modes.
 "
+focus_mode = 0
 theme_override_font_sizes/font_size = 14
 text = "Pause Movement   "
 flat = true
@@ -194,6 +195,7 @@ flat = true
 unique_name_in_owner = true
 custom_minimum_size = Vector2(79, 0)
 layout_mode = 2
+focus_mode = 0
 theme_override_font_sizes/font_size = 14
 button_pressed = true
 text = "Show UI"
@@ -204,6 +206,7 @@ unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(79, 0)
 layout_mode = 2
+focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_colors/font_outline_color = Color(0.74558, 0.74558, 0.74558, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
