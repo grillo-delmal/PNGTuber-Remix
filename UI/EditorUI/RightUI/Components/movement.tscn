@@ -277,7 +277,7 @@ theme_override_constants/separation = 5
 
 [node name="FMLable" type="Label" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Follow Mouse"
+text = "Follow Movement"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -296,13 +296,25 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 selected = 0
-item_count = 3
+item_count = 9
 popup/item_0/text = "Mouse"
 popup/item_0/id = 0
 popup/item_1/text = "Controller (Left)"
 popup/item_1/id = 1
 popup/item_2/text = "Controller (Right)"
 popup/item_2/id = 2
+popup/item_3/text = "WASD (WS)"
+popup/item_3/id = 3
+popup/item_4/text = "WASD (AD)"
+popup/item_4/id = 4
+popup/item_5/text = "WASD"
+popup/item_5/id = 5
+popup/item_6/text = "Arrow Keys (UD)"
+popup/item_6/id = 6
+popup/item_7/text = "Arrow Keys (LR)"
+popup/item_7/id = 7
+popup/item_8/text = "Arrow Keys"
+popup/item_8/id = 8
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -319,13 +331,25 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 selected = 0
-item_count = 3
+item_count = 9
 popup/item_0/text = "Mouse"
 popup/item_0/id = 0
 popup/item_1/text = "Controller (Left)"
 popup/item_1/id = 1
 popup/item_2/text = "Controller (Right)"
 popup/item_2/id = 2
+popup/item_3/text = "WASD (WS)"
+popup/item_3/id = 3
+popup/item_4/text = "WASD (AD)"
+popup/item_4/id = 4
+popup/item_5/text = "WASD"
+popup/item_5/id = 5
+popup/item_6/text = "Arrow Keys (UD)"
+popup/item_6/id = 6
+popup/item_7/text = "Arrow Keys (LR)"
+popup/item_7/id = 7
+popup/item_8/text = "Arrow Keys"
+popup/item_8/id = 8
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -342,13 +366,25 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 selected = 0
-item_count = 3
+item_count = 9
 popup/item_0/text = "Mouse"
 popup/item_0/id = 0
 popup/item_1/text = "Controller (Left)"
 popup/item_1/id = 1
 popup/item_2/text = "Controller (Right)"
 popup/item_2/id = 2
+popup/item_3/text = "WASD (WS)"
+popup/item_3/id = 3
+popup/item_4/text = "WASD (AD)"
+popup/item_4/id = 4
+popup/item_5/text = "WASD"
+popup/item_5/id = 5
+popup/item_6/text = "Arrow Keys (UD)"
+popup/item_6/id = 6
+popup/item_7/text = "Arrow Keys (LR)"
+popup/item_7/id = 7
+popup/item_8/text = "Arrow Keys"
+popup/item_8/id = 8
 
 [node name="FMDBSlider2" parent="ScrollContainer3/MarginContainer/VBoxContainer" instance=ExtResource("1_h5u6y")]
 unique_name_in_owner = true

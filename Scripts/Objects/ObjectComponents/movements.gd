@@ -22,6 +22,9 @@ var dist_vel_anim : float = 0.0
 var frame_h : float = 0.0
 var frame_v : float = 0.0
 
+var vector_l_r : Vector2 = Vector2.ZERO
+var vector_u_d : Vector2 = Vector2.ZERO
+
 func _ready() -> void:
 	Global.update_mouse_vel_pos.connect(mouse_delay)
 
@@ -194,7 +197,7 @@ func follow_calculation(_delta):
 	if WindowHandler.windows:
 		mouse_coords = Vector2.ZERO
 		if main_marker.current_screen == Monitor.ALL_SCREENS or main_marker.mouse_in_current_screen():
-			mouse_coords = DisplayServer.mouse_get_position() - WindowHandler.windows[0].position
+			mouse_coords = DisplayServer.mouse_get_position()
 	
 	elif main_marker.current_screen != Monitor.ALL_SCREENS:
 		if !main_marker.mouse_in_current_screen():
@@ -217,6 +220,7 @@ func follow_calculation(_delta):
 	
 	follow_mouse(mouse_coords, main_marker, dir, dist)
 	follow_controller()
+	follow_keyboard()
 
 func follow_mouse(mouse, main_marker, dir, dist):
 	if actor.get_value("follow_mouse_velocity"):
@@ -253,6 +257,7 @@ func follow_mouse(mouse, main_marker, dir, dist):
 			follow_mouse_vel_scale()
 		else:
 			follow_mouse_scale(mouse, main_marker)
+
 
 #region Follow Mouse Velocity
 
@@ -316,16 +321,18 @@ func follow_mouse_rotation(mouse ,main_marker):
 	else:
 		screen_size = DisplayServer.screen_get_size(main_marker.current_screen)
 	
+	
 	var mouse_x = mouse.x
 	var screen_width = screen_size.x
-	var normalized_mouse = (mouse_x - screen_width) / (screen_width / 2)
+	# Calculate the normalized mouse position (-1 to 1, where 0 is center)
+	var normalized_mouse = (mouse_x) / (screen_width / 2)
 	normalized_mouse = clamp(normalized_mouse, -1.0, 1.0)
 	
-	var safe_rot_min = clamp(actor.get_value("rLimitMin"), -360, 360)
-	var safe_rot_max = clamp(actor.get_value("rLimitMax"), -360, 360)
-
-	var rotation_factor = lerp(actor.get_value("mouse_rotation"), actor.get_value("mouse_rotation_max"), max((normalized_mouse + 1) / 2, 0.001))
-
+	var safe_rot_min = clamp(actor.sprite_data.rLimitMin, -360, 360)
+	var safe_rot_max = clamp(actor.sprite_data.rLimitMax, -360, 360)
+	# Map the normalized position to the rotation factor
+	var rotation_factor = lerp(actor.sprite_data.mouse_rotation, actor.sprite_data.mouse_rotation_max, max((normalized_mouse + 1) / 2, 0.001))
+	# Calculate the target rotation, scaled by the factor and clamped
 	var target_rotation = clamp(rotation_factor, deg_to_rad(safe_rot_min), deg_to_rad(safe_rot_max))
 
 	%MouseRot.rotation = is_nan_or_inf(lerp_angle(%MouseRot.rotation, target_rotation, actor.get_value("mouse_delay")))
@@ -388,8 +395,6 @@ func follow_controller():
 		follow_controller_scale(axis_right)
 
 func follow_controller_position(axis):
-	var dist = axis.length() # simpler than accumulating
-
 	if actor.sprite_type == "Sprite2D":
 		if actor.get_value("non_animated_sheet") && actor.get_value("animate_to_mouse") && !actor.get_value("animate_to_mouse_track_pos"):
 			%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, 0.0, actor.get_value("mouse_delay")))
@@ -407,9 +412,9 @@ func follow_controller_position(axis):
 	%Pos.position.y = is_nan_or_inf(lerp(%Pos.position.y, target_y, actor.get_value("mouse_delay")))
 
 	if actor.get_value("look_at_mouse_pos") == 0:
-		%Pos.position.x = axis.x * min(dist, actor.get_value("look_at_mouse_pos"))
+		%Pos.position.x = 0.0
 	if actor.get_value("look_at_mouse_pos_y") == 0:
-		%Pos.position.y = axis.y * min(dist, actor.get_value("look_at_mouse_pos_y"))
+		%Pos.position.y = 0.0
 
 func follow_controller_rotation(axis):
 	var normalized_mouse = clamp(axis.x, -1.0, 1.0)
@@ -430,6 +435,72 @@ func follow_controller_scale(axis):
 	%Drag.scale.y = is_nan_or_inf(lerp(%Drag.scale.y, target_scale_y, actor.get_value("mouse_delay")), true)
 
 #endregion
+
+func follow_keyboard():
+	if actor.get_value("follow_type") in [3,4,5,6,7,8]:
+		var pos_axis = some_keyboard_calc_wasd()
+	
+		if pos_axis != Vector2.ZERO && actor.get_value("snap_pos"):
+			target_x = pos_axis.x * actor.get_value("look_at_mouse_pos")
+			target_y = pos_axis.y * actor.get_value("look_at_mouse_pos_y")
+		else:
+			target_x = pos_axis.x * actor.get_value("look_at_mouse_pos")
+			target_y = pos_axis.y * actor.get_value("look_at_mouse_pos_y")
+		var dist = Vector2(target_x, target_y).length()
+		follow_controller_position(pos_axis)
+		follow_sprite_anim(pos_axis, dist)
+
+	if actor.get_value("follow_type2") in [3,4,5,6,7,8]:
+		var roation_axis = some_keyboard_calc_wasd("follow_type2")
+		follow_controller_rotation(roation_axis)
+		
+	if actor.get_value("follow_type3") in [3,4,5,6,7,8]:
+		var scale_axis = some_keyboard_calc_wasd("follow_type3")
+		follow_controller_scale(scale_axis)
+
+func some_keyboard_calc_wasd(type_name : String = "follow_type") -> Vector2:
+	var normal = Vector2(0.0, 0.0)
+	if actor.get_value(type_name) in [3,4,5]:
+		var ws : Vector2 = Vector2.ZERO
+		var ad : Vector2 = Vector2.ZERO
+		if InputMap.action_get_events("KeyMovementW")[0].as_text() in GlobalInputCapture.already_input_keys:
+			ws.y = 1.0
+		if InputMap.action_get_events("KeyMovementS")[0].as_text() in GlobalInputCapture.already_input_keys:
+			ws.x = 1.0
+		if InputMap.action_get_events("KeyMovementA")[0].as_text() in GlobalInputCapture.already_input_keys:
+			ad.y = 1.0
+		if InputMap.action_get_events("KeyMovementD")[0].as_text() in GlobalInputCapture.already_input_keys:
+			ad.x = 1.0
+		
+		if actor.get_value(type_name) == 3:
+			normal = Vector2(ws.x - ws.y, ws.x - ws.y)
+		elif actor.get_value(type_name) == 4:
+			normal = Vector2(ad.x - ad.y, ad.x - ad.y)
+		elif actor.get_value(type_name) == 5:
+			normal = Vector2(ad.x - ad.y, ws.x - ws.y)
+	
+	elif actor.get_value(type_name) in [6,7,8]:
+		var ws : Vector2 = Vector2.ZERO
+		var ad : Vector2 = Vector2.ZERO
+		if InputMap.action_get_events("KeyMovementW")[1].as_text() in GlobalInputCapture.already_input_keys:
+			ws.y = 1.0
+		if InputMap.action_get_events("KeyMovementS")[1].as_text() in GlobalInputCapture.already_input_keys:
+			ws.x = 1.0
+		if InputMap.action_get_events("KeyMovementA")[1].as_text() in GlobalInputCapture.already_input_keys:
+			ad.y = 1.0
+		if InputMap.action_get_events("KeyMovementD")[1].as_text() in GlobalInputCapture.already_input_keys:
+			ad.x = 1.0
+
+		if actor.get_value(type_name) == 6:
+			normal = Vector2(ws.x - ws.y, ws.x - ws.y)
+		elif actor.get_value(type_name) == 7:
+			normal = Vector2(ad.x - ad.y, ad.x - ad.y)
+		elif actor.get_value(type_name) == 8:
+			normal = Vector2(ad.x - ad.y, ws.x - ws.y)
+
+	return normal
+
+
 
 func follow_sprite_anim(dir, dist):
 	if actor.sprite_type == "Sprite2D":

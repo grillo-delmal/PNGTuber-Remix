@@ -16,12 +16,10 @@ var id
 func _init():
 	toggle_mode = true
 	theme_type_variation = "RemapButton"
-	
-	
+
 func _ready():
 	set_process_unhandled_input(false)
 	update_key_text()
-
 
 func _toggled(_button_pressed):
 	current_remap = Remap.Asset
@@ -33,7 +31,6 @@ func _toggled(_button_pressed):
 		else:
 			update_key_text()
 			grab_focus()
-			
 
 func _unhandled_input(event):
 	if current_remap == Remap.Asset:
@@ -67,7 +64,6 @@ func update_other_assets():
 					i.get_node("%Drag").visible = Global.held_sprites[0].get_node("%Drag").visible
 					i.was_active_before = Global.held_sprites[0].get_node("%Drag").visible
 
-
 func update_key_text():
 	if InputMap.action_get_events(action).size() != 0:
 		text = "%s" % InputMap.action_get_events(action)[0].as_text()
@@ -87,7 +83,6 @@ func _on_remove_asset_button_pressed():
 		InputMap.action_erase_events(action)
 		update_key_text()
 
-
 func _on_is_asset_check_toggled(toggled_on):
 	if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
 		if toggled_on:
@@ -103,7 +98,6 @@ func _on_is_asset_check_toggled(toggled_on):
 		
 		Global.held_sprites[0].is_asset = toggled_on
 
-
 func _on_should_disappear_check_toggled(toggled_on):
 	if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
 		Global.held_sprites[0].should_disappear = toggled_on
@@ -112,11 +106,8 @@ func _on_should_disappear_check_toggled(toggled_on):
 	else:
 		%ShouldDisListContainer.hide()
 
-
-
 func _on_should_dis_add_button_pressed():
 	%ShouldDisList.add_item("Null")
-
 
 func _on_should_dis_del_button_pressed():
 	%ShouldDisList.remove_item(id)

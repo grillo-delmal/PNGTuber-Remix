@@ -33,6 +33,7 @@ func _unhandled_input(event):
 				InputMap.action_add_event(StateButton.selected_state.input_key, event)
 				StateButton.selected_state.saved_event = event
 				
+				
 			button_pressed = false
 	
 
