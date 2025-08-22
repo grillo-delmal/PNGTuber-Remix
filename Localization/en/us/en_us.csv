@@ -81,6 +81,7 @@ TR_CHOOSE_DEMO,Choose Demo :
 TR_CLIP_CHILDREN,Clip Children
 TR_CLOSED,Closed
 TR_COLOR_BLINDNESS_HELPER_TOOLTIP,An Accessibility feature aimed at helping users and viewers with Color-blindness with viewing the Model.
+TR_COLOR_BLINDNESS_HELPER_TOOLTIP,An Accessibility feature aimed at helping users and viewers with Color-blindness with viewing the Model.
 TR_COLOR_BLINDNESS_HELPER,Color-Blindness Helper :
 TR_COLOR,Color :
 TR_COMEBACK_LABEL,Comeback : 
@@ -104,6 +105,7 @@ TR_DETECT_HOTKEYS,Detect Hotkeys
 TR_DEUTERANOPIA,Deuteranopia
 TR_DISABLED,Disabled
 TR_DISAPPEAR_KEYS,Disappear Key(s)
+TR_DONT_HIDE_ON_TOGGLE_TOOLTIP,Shows the Asset only and doesn't hide it even when key is pressed again.
 TR_DONT_HIDE,Don't Hide
 TR_DUPLICATE_STATE,Duplicate State
 TR_EDIT_VALUES_FOR_LABEL,Editing Values :
@@ -156,6 +158,7 @@ TR_HOT_KEY_LABEL,Hot Key :
 TR_IDLE,Idle
 TR_IGNORE_BOUNCE,Ignore Bound
 TR_IMAGE,Image
+TR_IS_ASSET_TOOLTIP,"An Asset is a Sprite you can toggle at any time. I.e glasses, hats, etc.."
 TR_IS_ASSET,Is Asset
 TR_LANGUAGE_LABEL,Language :
 TR_LAYOUT,Layout
@@ -170,14 +173,20 @@ TR_LIGHT_VISIBLE,Light Visible
 TR_LIP_SYNC_CONFIG,LipSync Configuration
 TR_LS_DARKEN_TOOLTIP,Darkens Your model when not speaking.
 TR_MAGENTA,Magenta
+TR_MAIN_VIEW_ZOOM_RESET,Main-View Zoom Reset
 TR_MAX_ANGLE_LABEL,Max Angle : 
 TR_MAX_CURVE_LABEL,Max-Curve : 
 TR_MAX_FPS,Max FPS
+TR_MAX_MOUSE_ROTATION,Maximum Mouse Rotation
 TR_MAX_ROTATION_LABEL,Max Rotation : 
+TR_MAX_VIEW_ZOOM_OUT,Mini-View Zoom Out
 TR_MICROPHONE_LABEL,Microphone :
 TR_MIN_CURVE_LABEL,Mini-Curve : 
+TR_MIN_MOUSE_ROTATION,Minimum Mouse Rotation
 TR_MIN_ROTATION_LABEL,Mini Rotation : 
 TR_MINI_TUTORIAL,Mini Tutorial (WIP)
+TR_MINI_VIEW_TOOLTIP,Mini-view
+TR_MINI_VIEW_ZOOM_IN,Mini-View Zoom In
 TR_MINUTE_ABBREVIATION,min
 TR_MODE,Mode
 TR_MODEL_ANIMATIONS,Model Animations
@@ -204,13 +213,18 @@ TR_OFFSET_Y,Offset-Y :
 TR_OPEN_FILES,Open File(s)
 TR_OPEN,Open
 TR_OUTLINE,Outline
+TR_PAUSE_MOVEMENT_TOOLTIP_MOVEMENT_SECTION,Pauses movement if the Value of the that parameter is equal zero.
 TR_PAUSE_MOVEMENT_TOOLTIP,Turns your model Static.\nUncheck to preview your model's movement.\nThis automatically gets unchecked when changing modes.
 TR_PAUSE_MOVEMENT,Pause Movement
 TR_PHYS_STIFFNESS_LABEL,Phys-Stiff :
+TR_PHYS_STIFFNESS_TOOLTIP,Physics/ Reaction to parent's movement stiffness.
 TR_PHYSICS,Enable Physics
 TR_PLEASE_CONFIRM,Please Confirm...
 TR_POS_X,Pos-X :
 TR_POS_Y,Pos-Y :
+TR_POSITION_SNAP_BUTTON_TOOLTIP,Should snap the Position (when using controller or mouse velocity) back to origin.
+TR_POSITION_SNAP_BUTTON,Position Snap
+TR_PREVIEW_MODE_TOOLTIP,"Turns your model Static.\nUncheck to preview your model's movement.\nThis automatically gets unchecked when changing modes."
 TR_PREVIEW,Preview
 TR_PROTANOPIA,Protanopia
 TR_QUIT,Quit
@@ -239,9 +253,12 @@ TR_SAVE,Save
 TR_SCREEN_CRT,Screen CRT
 TR_SEGMENTS_LABEL,Segments : 
 TR_SETTINGS,Settings
+TR_SHARED_MOVEMENT_TOOLTIP,Auto Rotates your Sprite. The speed can be changed from the Rot-Speed.
 TR_SHORTCUTS_FULL,"* Mouse Controls\n- Rotation : Ctrl+MouseWheel (Up, Down)\n- Camera Zoom : MouseWheel (Up, Down)\n- Camera Drag : MouseWheel (Pressed)\n\n*Keyboard Controls \n- Moving Sprite : \n> Ctrl+W (Up)\n> Ctrl+S (Down)\n> Ctrl+A (Left)\n> Ctrl+D (Right)\n\n- Moving Offset : \n> Arrow-Up (Up)\n> Arrow-Down (Down)\n> Arrow-Left (Left)\n> Arrow-Right (Right)\n\n- Quick Save : Ctrl+S\n- Quick Deselect : Alt+D\n- Quick Window Centering : Ctrl+ Kp -"
 TR_SHOULD_BLINK,Should Blink :
 TR_SHOULD_DIS_LABEL,"List of Keys for Disappearence.\n(Key must correspond to existing asset's)"
+TR_SHOULD_DISAPPEAR_TOOLTIP,Keys that makes your Sprite Disappear whenever toggled.
+TR_SHOULD_DISSAPPEAR_LIST_TOOLTIP,List of Keys (Must correspond to another asset's Key) that makes The selected Asset disappear.
 TR_SHOULD_TALK,Should Talk :
 TR_SHOW_UI,Show UI
 TR_SIZE_X,Size-X :
@@ -301,10 +318,12 @@ TR_WIGGLE_PHYSICS,Wiggle Physics
 TR_WIGGLE_SPRITE,Wiggle Sprite
 TR_WINDOW_SIZE,Window Size
 TR_WINDOW,Window
+TR_WOBBLE_FREQ_TOOLTIP,Affects the Wobbling and Squishing
 TR_WS_SYNC_EFFECT_TOOLTIP,Syncs the wiggle effect of the Sprite with the Parent's Wiggle effect (Both must be Sprite Objects)
 TR_WS_WIGGLE_AMP,Wiggle-Amp :
 TR_WS_WIGGLE_FREQUENCY,Wiggle-Freq :
 TR_X_AMPLITUDE_WOBBLE,X-Amp Wobble :
+TR_X_FREQUENCY_WOBBLE_TOOLTIP,Affects the Wobbling
 TR_X_FREQUENCY_WOBBLE,X-Freq Wobble :
 TR_X_OFFSET,X-Offset :
 TR_XY_MOVEMENTS_X_AMP,X-Amp :

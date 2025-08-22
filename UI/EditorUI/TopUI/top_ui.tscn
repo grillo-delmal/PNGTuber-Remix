@@ -187,10 +187,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(79, 0)
 layout_mode = 2
 size_flags_vertical = 4
-tooltip_text = "Turns your model Static.
-Uncheck to preview your model's movement. 
-This automatically gets unchecked when changing modes.
-"
+tooltip_text = "TR_PREVIEW_MODE_TOOLTIP"
 focus_mode = 0
 theme_override_font_sizes/font_size = 14
 text = "TR_PAUSE_MOVEMENT"

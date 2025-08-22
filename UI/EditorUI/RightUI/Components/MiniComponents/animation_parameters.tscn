@@ -54,7 +54,7 @@ size_flags_vertical = 3
 [node name="XFreqWobbleLabel" type="Label" parent="VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Affects the Wobbling"
+tooltip_text = "TR_X_FREQUENCY_WOBBLE_TOOLTIP"
 mouse_filter = 1
 text = "TR_X_FREQUENCY_WOBBLE"
 
@@ -73,7 +73,7 @@ size_flags_vertical = 3
 [node name="XAmpWobbleLabel" type="Label" parent="VBox2"]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Affects the Wobbling"
+tooltip_text = "TR_X_FREQUENCY_WOBBLE_TOOLTIP"
 mouse_filter = 1
 text = "TR_X_AMPLITUDE_WOBBLE"
 
@@ -94,7 +94,7 @@ size_flags_vertical = 3
 [node name="YFreqWobbleLabel" type="Label" parent="VBox3"]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Affects the Wobbling and Squishing"
+tooltip_text = "TR_WOBBLE_FREQ_TOOLTIP"
 mouse_filter = 1
 text = "TR_Y_FREQUENCY_WOBBLE"
 
@@ -113,7 +113,7 @@ size_flags_vertical = 3
 [node name="YAmpWobbleLabel" type="Label" parent="VBox4"]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Affects the Wobbling and Squishing"
+tooltip_text = "TR_WOBBLE_FREQ_TOOLTIP"
 mouse_filter = 1
 text = "TR_Y_AMPLITUDE_WOBBLE"
 

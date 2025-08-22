@@ -120,7 +120,7 @@ value_to_update = "wiggle_max_angle"
 [node name="WiggleAppsPhysStiffBSlider" parent="WiggleAppStuff" instance=ExtResource("2_cimjc")]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Physics/ Reaction to parent's movement stiffness."
+tooltip_text = "TR_PHYS_STIFFNESS_TOOLTIP"
 sp_type = "WiggleApp"
 label_text = "TR_PHYS_STIFFNESS_LABEL"
 mini_value = 0.5

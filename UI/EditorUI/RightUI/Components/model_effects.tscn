@@ -29,7 +29,7 @@ columns = 2
 [node name="Label" type="Label" parent="Grid"]
 layout_mode = 2
 size_flags_vertical = 3
-tooltip_text = "An Accessibility feature aimed at helping users and viewers with Color-blindness with viewing the Model."
+tooltip_text = "TR_COLOR_BLINDNESS_HELPER_TOOLTIP"
 mouse_filter = 1
 theme_override_font_sizes/font_size = 14
 text = "TR_COLOR_BLINDNESS_HELPER"

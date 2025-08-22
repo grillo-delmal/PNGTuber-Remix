@@ -34,7 +34,7 @@ columns = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "An Asset is a Sprite you can toggle at any time. I.e glasses, hats, etc.."
+tooltip_text = "TR_IS_ASSET_TOOLTIP"
 text = "TR_IS_ASSET"
 
 [node name="HBoxAsset" type="HBoxContainer" parent="Buttons"]
@@ -69,7 +69,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Shows the Asset only and doesn't hide it even when key is pressed again. "
+tooltip_text = "TR_DONT_HIDE_ON_TOGGLE_TOOLTIP"
 text = "TR_DONT_HIDE"
 
 [node name="ShouldDisappearCheck" type="CheckBox" parent="Buttons"]
@@ -77,7 +77,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Keys that makes your Sprite Disappear whenever toggled."
+tooltip_text = "TR_SHOULD_DISAPPEAR_TOOLTIP"
 text = "TR_DISAPPEAR_KEYS"
 
 [node name="ShouldDisListContainer" type="VBoxContainer" parent="."]
@@ -128,7 +128,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_vertical = 3
-tooltip_text = "List of Keys (Must correspond to another asset's Key) that makes The selected Asset disappear."
+tooltip_text = "TR_SHOULD_DISSAPPEAR_LIST_TOOLTIP"
 focus_mode = 1
 allow_reselect = true
 auto_height = true

@@ -6,6 +6,9 @@ func _run():
 		print_rich("[color=red]You must open a scene to run the translation checker.[/color]");
 		return;
 	for node in get_all_children(get_scene()):
+		if node is Control:
+			if !node.tooltip_text.is_empty() and !node.tooltip_text.begins_with("TR_"):
+				untranslated_tooltip(node);
 		if node is Label:
 			var text = node.text;
 			if node.get_parent() is BetterSlider:
@@ -22,6 +25,10 @@ func _run():
 					untranslated_warning_option_item(node, i);
 	
 	print("Done searching for untranslated keys.")
+
+
+static func untranslated_tooltip(node: Node):
+	print_rich("- [color=yellow]Control Node: %s's tooltip is untranslated[/color]\n" % node.get_path());
 
 
 static func untranslated_warning_label(node: Node):

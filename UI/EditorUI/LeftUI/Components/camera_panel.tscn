@@ -19,7 +19,7 @@ border_color = Color(0.196078, 0.415686, 0.345098, 1)
 [node name="VPPanel" type="Panel" parent="."]
 custom_minimum_size = Vector2(210, 105)
 layout_mode = 2
-tooltip_text = "Mini-view"
+tooltip_text = "TR_MINI_VIEW_TOOLTIP"
 theme_override_styles/panel = SubResource("StyleBoxFlat_gcgtm")
 metadata/_edit_use_anchors_ = true
 
