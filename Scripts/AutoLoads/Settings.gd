@@ -47,7 +47,9 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	use_threading = false,
 	language = "automatic",
 }
-var save_location = OS.get_executable_path().get_base_dir() + "/Preferences.pRDat"
+var save_location = OS.get_executable_path().get_base_dir() + "/Preferences.pRDat" :
+	set(value):
+		save_location = value + "/Preferences.pRDat"
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
 var additional_output = RefCounted.new()
@@ -69,12 +71,20 @@ func save_before_closing():
 	get_tree().quit()
 
 func save():
+	var parent_slash_index = save_location.rfind("/");
+	if parent_slash_index < 0:
+		file_error.emit("INVALID_PATH")
+		return
+	var error = DirAccess.make_dir_absolute(save_location.substr(0, parent_slash_index));
+	if error != OK:
+		file_error.emit("COULD_NOT_MAKE_PATH", error)
+	
 	var save_file = FileAccess.open(save_location, FileAccess.WRITE)
 	if (save_file):
 		save_file.store_var(theme_settings)
 		save_file.close()
 	else:
-		push_error("Could not save settings: ", FileAccess.get_open_error())
+		push_error("Could not save settings to \"" + save_location + "\"\n" + str(FileAccess.get_open_error()))
 		file_error.emit("SAVE_ERROR", FileAccess.get_open_error())
 
 
