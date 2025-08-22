@@ -97,11 +97,30 @@ script = ExtResource("2_j4lix")
 unique_name_in_owner = true
 transparent_bg = true
 initial_position = 2
-size = Vector2i(375, 106)
+size = Vector2i(375, 200)
+unresizable = true
 ok_button_text = "Yes"
 dialog_text = "Would you like to have your Sprites Trimmed?
 (Removes all unused area around your image.)"
 cancel_button_text = "No"
+
+[node name="Node" type="Node" parent="FileImporter/ConfirmTrim"]
+
+[node name="OffsetSprite" type="CheckBox" parent="FileImporter/ConfirmTrim/Node"]
+unique_name_in_owner = true
+anchors_preset = -1
+anchor_top = 0.735
+anchor_right = 1.0
+anchor_bottom = 0.735
+offset_top = -31.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 8
+tooltip_text = "Offsets imported Sprites when trimming is enabled."
+button_pressed = true
+text = "Offset Imported Sprite"
+metadata/_edit_use_anchors_ = true
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 unique_name_in_owner = true
@@ -219,9 +238,9 @@ script = ExtResource("12_f3gf5")
 unique_name_in_owner = true
 title = "TR_PLEASE_CONFIRM"
 initial_position = 2
-size = Vector2i(338, 106)
-ok_button_text = "TR_YES"
+size = Vector2i(338, 132)
 dialog_text = "TR_NEW_PNGTUBER_TEXT"
+dialog_hide_on_ok = false
 dialog_autowrap = true
 cancel_button_text = "TR_CANCEL"
 
@@ -245,6 +264,7 @@ wait_time = 0.05
 [connection signal="canceled" from="FileImporter/ConfirmTrim" to="FileImporter" method="_on_confirm_trim_canceled"]
 [connection signal="close_requested" from="FileImporter/ConfirmTrim" to="FileImporter" method="_on_confirm_trim_canceled"]
 [connection signal="confirmed" from="FileImporter/ConfirmTrim" to="FileImporter" method="_on_confirm_trim_confirmed"]
+[connection signal="toggled" from="FileImporter/ConfirmTrim/Node/OffsetSprite" to="FileImporter" method="_on_offset_sprite_toggled"]
 [connection signal="mouse_entered" from="SubViewportContainer" to="." method="_on_sub_viewport_container_mouse_entered"]
 [connection signal="mouse_exited" from="SubViewportContainer" to="." method="_on_sub_viewport_container_mouse_exited"]
 [connection signal="confirmed" from="ConfirmationDialog" to="." method="_on_confirmation_dialog_confirmed"]

@@ -24,6 +24,12 @@ var frame_v : float = 0.0
 
 var vector_l_r : Vector2 = Vector2.ZERO
 var vector_u_d : Vector2 = Vector2.ZERO
+var clamped_angle : float = 0.0
+var target_angle : float = 0.0
+var old_dir : Vector2 = Vector2.ZERO
+
+var prev_smoothed_pos: Vector2 = Vector2.ZERO
+var has_prev := false
 
 func _ready() -> void:
 	Global.update_mouse_vel_pos.connect(mouse_delay)
@@ -43,7 +49,7 @@ func _process(delta: float) -> void:
 	else:
 		static_prev()
 	
-	follow_wiggle()
+	follow_wiggle(delta)
 	
 	%Rotation.rotation += is_nan_or_inf(clamp(applied_rotation, deg_to_rad(-360), deg_to_rad(360)))
 	%Pos.position += is_nan_or_inf(applied_pos)
@@ -158,12 +164,37 @@ func static_prev():
 	%Drag.scale = Vector2(1,1)
 	%MouseRot.rotation = 0.0
 
-func follow_wiggle():
-	if actor.get_value("follow_wa_tip"):
-		if actor.get_parent() is WigglyAppendage2D && is_instance_valid(actor.get_parent()):
-			var pnt = actor.get_parent().points[clamp(actor.get_value("tip_point"),0, actor.get_parent().points.size() -1)]
-			actor.position = actor.position.lerp(pnt, 0.6)
-			applied_rotation += is_nan_or_inf(clamp(atan2(actor.position.y* pnt.y, actor.position.x* pnt.x)*0.15, deg_to_rad(actor.get_value("follow_wa_mini")), deg_to_rad(actor.get_value("follow_wa_max"))))
+
+func follow_wiggle(delta: float):
+	if not actor.get_value("follow_wa_tip"):
+		return
+	var parent = actor.get_parent()
+	if !(parent is WigglyAppendage2D) or !is_instance_valid(parent):
+		return
+	
+	var tip_index = clamp(actor.get_value("tip_point"), 0, parent.points.size() - 1)
+	var raw_tip = parent.points[tip_index]
+	
+	var smoothed_pos = actor.position.lerp(raw_tip, 0.6)
+	actor.position = smoothed_pos.snapped(Vector2(1.0, 1.0))
+	
+	var strength := 0.0
+	if has_prev:
+		var movement = smoothed_pos - prev_smoothed_pos
+		strength = max(movement.length() * max(delta, 0.0001), 0.0001) # pixels per second
+	prev_smoothed_pos = smoothed_pos
+	has_prev = true
+	var dir = smoothed_pos - raw_tip
+	if dir.length() > 0.55:
+		target_angle = atan2(dir.y, dir.x)
+		var min_ang = deg_to_rad(actor.get_value("follow_wa_mini"))
+		var max_ang = deg_to_rad(actor.get_value("follow_wa_max"))
+		clamped_angle = clamp(target_angle * min(strength, 1.0), min_ang, max_ang)
+	
+	applied_rotation += lerp_angle(applied_rotation, clamped_angle, 0.15)
+
+
+
 
 func rainbow():
 	if actor.get_value("rainbow"):
