@@ -6,9 +6,9 @@
 [ext_resource type="Texture2D" uid="uid://dst8ervfhipkm" path="res://UI/Assets/ZoominButton.png" id="4_4rvn6"]
 [ext_resource type="Texture2D" uid="uid://bxuqwqa2tk5j8" path="res://UI/Assets/ZoomOutButton.png" id="5_w5yqn"]
 [ext_resource type="Script" uid="uid://dy1cd6xda1pu5" path="res://UI/BetterSlider/BetterToggles.gd" id="6_w5yqn"]
-[ext_resource type="Script" path="res://Scripts/UI/RightPanel/CycleToggles.gd" id="7_hf4n0"]
-[ext_resource type="Script" path="res://Scripts/UI/RightPanel/CycleForward.gd" id="8_u22l2"]
-[ext_resource type="Script" path="res://Scripts/UI/RightPanel/CycleBackward.gd" id="9_olugq"]
+[ext_resource type="Script" uid="uid://dp6m7k27uygdf" path="res://Scripts/UI/RightPanel/CycleToggles.gd" id="7_hf4n0"]
+[ext_resource type="Script" uid="uid://bq0jinc7th4h0" path="res://Scripts/UI/RightPanel/CycleForward.gd" id="8_u22l2"]
+[ext_resource type="Script" uid="uid://cglby66eahspg" path="res://Scripts/UI/RightPanel/CycleBackward.gd" id="9_olugq"]
 
 [node name="AssetsBox" type="VBoxContainer"]
 anchors_preset = 15
@@ -87,10 +87,8 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="ShouldDisLabel" type="Label" parent="ShouldDisListContainer"]
-visible = false
 layout_mode = 2
-text = "List of Keys for Disappearence.
-(Key must correspond to existing asset's)"
+text = "TR_SHOULD_DIS_LABEL"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -231,7 +229,7 @@ columns = 2
 [node name="Label" type="Label" parent="CycleMargin/CycleData/Margin2/Grid"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Cycle Toggle : "
+text = "TR_CYCLE_TOGGLE_LABEL"
 
 [node name="HBoxAsset" type="HBoxContainer" parent="CycleMargin/CycleData/Margin2/Grid"]
 layout_mode = 2
@@ -263,7 +261,7 @@ expand_icon = true
 [node name="Label2" type="Label" parent="CycleMargin/CycleData/Margin2/Grid"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Cycle Forward : "
+text = "TR_CYCLE_FORWARD_LABEL"
 
 [node name="HBoxAsset2" type="HBoxContainer" parent="CycleMargin/CycleData/Margin2/Grid"]
 layout_mode = 2
@@ -296,7 +294,7 @@ expand_icon = true
 [node name="Label3" type="Label" parent="CycleMargin/CycleData/Margin2/Grid"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Cycle Backward : "
+text = "TR_CYCLE_BACKWARD_LABEL"
 
 [node name="HBoxAsset3" type="HBoxContainer" parent="CycleMargin/CycleData/Margin2/Grid"]
 layout_mode = 2

@@ -52,7 +52,7 @@ size_flags_vertical = 3
 
 [node name="Label5" type="Label" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Movement"
+text = "TR_MOVEMENT"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -75,7 +75,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "Editing Values :"
+text = "TR_EDIT_VALUES_FOR_LABEL"
 
 [node name="EditValuesForMenu" type="MenuButton" parent="ScrollContainer3/MarginContainer/VBoxContainer/EditValuesFor"]
 unique_name_in_owner = true
@@ -288,7 +288,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
-text = "Follow Option (Position) :"
+text = "TR_FOLLOW_POSITION_LABEL"
 
 [node name="FollowOption" type="OptionButton" parent="ScrollContainer3/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
@@ -297,23 +297,23 @@ size_flags_horizontal = 3
 focus_mode = 0
 selected = 0
 item_count = 9
-popup/item_0/text = "Mouse"
+popup/item_0/text = "TR_MOUSE"
 popup/item_0/id = 0
-popup/item_1/text = "Controller (Left)"
+popup/item_1/text = "TR_CONTROLLER_LEFT"
 popup/item_1/id = 1
-popup/item_2/text = "Controller (Right)"
+popup/item_2/text = "TR_CONTROLLER_RIGHT"
 popup/item_2/id = 2
-popup/item_3/text = "WASD (WS)"
+popup/item_3/text = "TR_WASD_WS"
 popup/item_3/id = 3
-popup/item_4/text = "WASD (AD)"
+popup/item_4/text = "TR_WASD_AD"
 popup/item_4/id = 4
-popup/item_5/text = "WASD"
+popup/item_5/text = "TR_WASD"
 popup/item_5/id = 5
-popup/item_6/text = "Arrow Keys (UD)"
+popup/item_6/text = "TR_ARROW_KEYS_UD"
 popup/item_6/id = 6
-popup/item_7/text = "Arrow Keys (LR)"
+popup/item_7/text = "TR_ARROW_KEYS_LR"
 popup/item_7/id = 7
-popup/item_8/text = "Arrow Keys"
+popup/item_8/text = "TR_ARROW_KEYS"
 popup/item_8/id = 8
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
@@ -323,7 +323,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
-text = "Follow Option (Rotation) :"
+text = "TR_FOLLOW_ROTATION_LABEL"
 
 [node name="FollowOption2" type="OptionButton" parent="ScrollContainer3/MarginContainer/VBoxContainer/HBoxContainer2"]
 unique_name_in_owner = true
@@ -332,23 +332,23 @@ size_flags_horizontal = 3
 focus_mode = 0
 selected = 0
 item_count = 9
-popup/item_0/text = "Mouse"
+popup/item_0/text = "TR_MOUSE"
 popup/item_0/id = 0
-popup/item_1/text = "Controller (Left)"
+popup/item_1/text = "TR_CONTROLLER_LEFT"
 popup/item_1/id = 1
-popup/item_2/text = "Controller (Right)"
+popup/item_2/text = "TR_CONTROLLER_RIGHT"
 popup/item_2/id = 2
-popup/item_3/text = "WASD (WS)"
+popup/item_3/text = "TR_WASD_WS"
 popup/item_3/id = 3
-popup/item_4/text = "WASD (AD)"
+popup/item_4/text = "TR_WASD_AD"
 popup/item_4/id = 4
-popup/item_5/text = "WASD"
+popup/item_5/text = "TR_WASD"
 popup/item_5/id = 5
-popup/item_6/text = "Arrow Keys (UD)"
+popup/item_6/text = "TR_ARROW_KEYS_UD"
 popup/item_6/id = 6
-popup/item_7/text = "Arrow Keys (LR)"
+popup/item_7/text = "TR_ARROW_KEYS_LR"
 popup/item_7/id = 7
-popup/item_8/text = "Arrow Keys"
+popup/item_8/text = "TR_ARROW_KEYS"
 popup/item_8/id = 8
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
@@ -358,7 +358,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
-text = "Follow Option (Scale) :"
+text = "TR_FOLLOW_SCALE_LABEL"
 
 [node name="FollowOption3" type="OptionButton" parent="ScrollContainer3/MarginContainer/VBoxContainer/HBoxContainer3"]
 unique_name_in_owner = true
@@ -367,23 +367,23 @@ size_flags_horizontal = 3
 focus_mode = 0
 selected = 0
 item_count = 9
-popup/item_0/text = "Mouse"
+popup/item_0/text = "TR_MOUSE"
 popup/item_0/id = 0
-popup/item_1/text = "Controller (Left)"
+popup/item_1/text = "TR_CONTROLLER_LEFT"
 popup/item_1/id = 1
-popup/item_2/text = "Controller (Right)"
+popup/item_2/text = "TR_CONTROLLER_RIGHT"
 popup/item_2/id = 2
-popup/item_3/text = "WASD (WS)"
+popup/item_3/text = "TR_WASD_WS"
 popup/item_3/id = 3
-popup/item_4/text = "WASD (AD)"
+popup/item_4/text = "TR_WASD_AD"
 popup/item_4/id = 4
-popup/item_5/text = "WASD"
+popup/item_5/text = "TR_WASD"
 popup/item_5/id = 5
-popup/item_6/text = "Arrow Keys (UD)"
+popup/item_6/text = "TR_ARROW_KEYS_UD"
 popup/item_6/id = 6
-popup/item_7/text = "Arrow Keys (LR)"
+popup/item_7/text = "TR_ARROW_KEYS_LR"
 popup/item_7/id = 7
-popup/item_8/text = "Arrow Keys"
+popup/item_8/text = "TR_ARROW_KEYS"
 popup/item_8/id = 8
 
 [node name="FMDBSlider2" parent="ScrollContainer3/MarginContainer/VBoxContainer" instance=ExtResource("1_h5u6y")]
@@ -469,10 +469,7 @@ visible = false
 self_modulate = Color(1, 1, 1, 0.686275)
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
-text = "Small note
-the scale change depending on mouse
-position still needs some work, it may feel
-or look a little different in later releases."
+text = "TR_FOLLOW_SCALE_NOT"
 
 [node name="ShouldSnap" type="CheckBox" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true

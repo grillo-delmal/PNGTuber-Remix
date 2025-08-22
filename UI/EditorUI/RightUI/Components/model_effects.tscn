@@ -152,7 +152,7 @@ metadata/_tab_index = 1
 [node name="Label2" type="Label" parent="PanelContainer/Margin/TabContainer/Grid3"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Effect size : "
+text = "TR_EFFECT_SIZE_LABEL"
 
 [node name="SizeSlider2" type="HSlider" parent="PanelContainer/Margin/TabContainer/Grid3"]
 unique_name_in_owner = true
@@ -173,7 +173,7 @@ metadata/_tab_index = 2
 [node name="Label" type="Label" parent="PanelContainer/Margin/TabContainer/Grid4"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Effect Color : "
+text = "TR_EFFECT_COLOR_LABEL"
 
 [node name="EffectColor2" type="ColorPickerButton" parent="PanelContainer/Margin/TabContainer/Grid4"]
 unique_name_in_owner = true

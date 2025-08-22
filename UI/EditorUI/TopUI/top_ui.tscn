@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://buog53mcsao0g" path="res://Scripts/UI/TopPanel/top_ui.gd" id="2_fpnkx"]
 [ext_resource type="Script" uid="uid://bafvsv0wf438w" path="res://Scripts/Misc/OnlineLinks.gd" id="3_tep3f"]
-[ext_resource type="Script" path="res://Scripts/UI/FormattedLocalizedLabel.gd" id="4_mle18"]
+[ext_resource type="Script" uid="uid://caf875hofgogu" path="res://Scripts/UI/FormattedLocalizedLabel.gd" id="4_mle18"]
 [ext_resource type="Script" uid="uid://qy3riyrj7tll" path="res://Scripts/UI/TopPanel/TopBarInput.gd" id="4_r6evh"]
 [ext_resource type="Texture2D" uid="uid://bq4tg8ia2crwh" path="res://UI/Assets/LinksButtonImages/GithubLogo.png" id="6_0f73e"]
 [ext_resource type="Texture2D" uid="uid://whhnbdvw3i1j" path="res://UI/Assets/LinksButtonImages/TumblrLogo.png" id="7_ja8k8"]

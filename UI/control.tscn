@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://ngta1o5yiqxs"]
+[gd_scene load_steps=31 format=3 uid="uid://ngta1o5yiqxs"]
 
 [ext_resource type="Script" uid="uid://dvpyywoct4riy" path="res://Scripts/UI/control.gd" id="1_1r6xj"]
 [ext_resource type="Script" uid="uid://bpegrg5a15v2v" path="res://Scripts/UI/UIInput.gd" id="3_1eur5"]
@@ -22,6 +22,7 @@
 [ext_resource type="Script" uid="uid://c6mnetrbitmkr" path="res://addons/dockable_container/layout_split.gd" id="10_y3a4k"]
 [ext_resource type="Script" uid="uid://o3g1heay5br" path="res://addons/dockable_container/layout.gd" id="11_3vweu"]
 [ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="11_ejqfc"]
+[ext_resource type="Script" uid="uid://caf875hofgogu" path="res://Scripts/UI/FormattedLocalizedLabel.gd" id="14_y3a4k"]
 
 [sub_resource type="Resource" id="Resource_dockn"]
 resource_name = "Tabs"
@@ -220,13 +221,14 @@ self_modulate = Color(1, 1, 1, 0.686275)
 material = SubResource("CanvasItemMaterial_1r6xj")
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "*Multi-State Editing On"
+text = "TR_MULTISTATE_EDITING_CUE_LABEL"
 
 [node name="SpriteID" type="Label" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Properties"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 8
-text = "Sprite ID : 0"
+text = "TR_SPRITE_ID_LABEL{0}"
+script = ExtResource("14_y3a4k")
 
 [node name="Inspector" type="TabContainer" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer"]
 unique_name_in_owner = true
@@ -353,7 +355,7 @@ layout_mode = 2
 
 [node name="FrameLabel" type="Label" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox"]
 layout_mode = 2
-text = "Frame : "
+text = "TR_FRAME_LABEL"
 
 [node name="FrameSpinbox" type="SpinBox" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox"]
 unique_name_in_owner = true

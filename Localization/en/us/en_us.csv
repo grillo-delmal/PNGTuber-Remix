@@ -28,6 +28,7 @@ TR_ADVANCED_LIP_SYNC_TOOLTIP,Only works if your mouth shapes are in a sprite-she
 TR_ADVANCED_LIP_SYNC,Advanced Lipsync
 TR_ALWAYS_ON_TOP,Always on Top
 TR_AMOUNT,Amount
+TR_ANCHOR_LABEL,Anchor : 
 TR_ANIMATE_TO_MOUSE_TOOLTIP,Animates SpriteSheet depending on mouse position (Horizontally and Vertically)
 TR_ANIMATE_TO_MOUSE,Animate to Mouse
 TR_ANIMATION_BOUNCY,Bouncy
@@ -42,6 +43,9 @@ TR_ANIMATION_SQUISH,Squish
 TR_ANIMATION_WOBBLE,Wobble
 TR_ANIMATION,Animation
 TR_ANTI_ALIASING,Anti-Aliasing
+TR_ARROW_KEYS_LR,Arrow Keys (LR)
+TR_ARROW_KEYS_UD,Arrow Keys (UD)
+TR_ARROW_KEYS,Arrow Keys
 TR_ASSET_MODEL_DEMO,Asset Model Demo
 TR_ASSETS,Assets
 TR_AURA,Aura
@@ -56,6 +60,7 @@ TR_BLEND_ADD,Add
 TR_BLEND_BURN,Burn
 TR_BLEND_CURSED,Cursed
 TR_BLEND_HARDMIX,HardMix
+TR_BLEND_LABEL,Blend:
 TR_BLEND_MULTIPLY,Multiply
 TR_BLEND_NORMAL,Normal
 TR_BLEND_SUBTRACT,Subtract
@@ -66,7 +71,9 @@ TR_BLINK_SPEED,Blink Speed :
 TR_BLUE,Blue
 TR_BOUNCE_AMOUNT_TOOLTIP,Affects Model Bouncing
 TR_BOUNCE_AMOUNT,Bounce Amount
+TR_BOUNCE_GRAVITY_LABEL,Bounce Gravity : 
 TR_BOUNCE_GRAVITY,Bounce Gravity
+TR_BOUNCE_LABEL,Bounce Amount : 
 TR_BOUNCE_WHEN_CHANGING_STATES,Bounce when changing states
 TR_CANCEL,Cancel
 TR_CENTER_WINDOW,Center Window
@@ -76,9 +83,17 @@ TR_CLOSED,Closed
 TR_COLOR_BLINDNESS_HELPER_TOOLTIP,An Accessibility feature aimed at helping users and viewers with Color-blindness with viewing the Model.
 TR_COLOR_BLINDNESS_HELPER,Color-Blindness Helper :
 TR_COLOR,Color :
+TR_COMEBACK_LABEL,Comeback : 
+TR_CONTROLLER_LEFT,Controller (Left)
+TR_CONTROLLER_RIGHT,Controller (Right)
 TR_CREDITS,Credits
+TR_CURVATURE_LABEL,Curvature : 
 TR_CUSTOM,Custom
+TR_CYCLE_BACKWARD_LABEL,Cycle Backward : 
+TR_CYCLE_FORWARD_LABEL,Cycle Forward : 
 TR_CYCLE_LABEL,Cycle :
+TR_CYCLE_TOGGLE_LABEL,Cycle Toggle : 
+TR_DAMP_LABEL,Damp : 
 TR_DARKEN,Darken
 TR_DELAY,Delay
 TR_DELETE_STATE,Delete State
@@ -91,11 +106,14 @@ TR_DISABLED,Disabled
 TR_DISAPPEAR_KEYS,Disappear Key(s)
 TR_DONT_HIDE,Don't Hide
 TR_DUPLICATE_STATE,Duplicate State
+TR_EDIT_VALUES_FOR_LABEL,Editing Values :
 TR_EDITOR,Editor
+TR_EFFECT_COLOR_LABEL,Effect Color : 
 TR_EFFECT_COLOR,Effect Color :
 TR_EFFECT_HYPER,Hyper
 TR_EFFECT_RAINBOW_SPEED,Rainbow Speed :
 TR_EFFECT_SELF_RAINBOW,Self-Rainbow
+TR_EFFECT_SIZE_LABEL,Effect size : 
 TR_EFFECT_SIZE,Effect Size :
 TR_EFFECTS,Effects
 TR_EXPORT_MODEL_PARTS,Export Model Parts
@@ -119,10 +137,18 @@ TR_FOLLOW_APPENDAGE,Follow Appendage
 TR_FOLLOW_MOUSE_DEMO,Follow Mouse Demo
 TR_FOLLOW_MOUSE_SCREEN_LABEL,Follow Mouse Screen :
 TR_FOLLOW_MOUSE,Follow Mouse
+TR_FOLLOW_POSITION_LABEL,Follow Option (Position) :
+TR_FOLLOW_ROTATION_LABEL,Follow Option (Rotation) :
+TR_FOLLOW_SCALE_LABEL,Follow Option (Scale) :
+TR_FOLLOW_SCALE_NOT,"Small note\nthe scale change depending on mouse\nposition still needs some work, it may feel\nor look a little different in later releases."
 TR_FOLLOW_THROUGH,Follow Through
+TR_FOR_TESTING_LABEL,For testing only
+TR_FRAME_LABEL,Frame : 
 TR_FT_DRAG,Drag :
 TR_FT_STRETCH,Stretch :
 TR_FULL_CREDITS,"PNGTuber Remix by TheMime (MudkipWorld)\nOriginal PNGTuber+ Code by kaiakairos. Better UI by LeoRson.\n\nV1.3.4"
+TR_GRAVITY_X_LABEL,Gravity-X : 
+TR_GRAVITY_Y_LABEL,Gravity-Y : 
 TR_GRAY,Gray
 TR_GREEN,Green
 TR_HATCHES,Hatches
@@ -133,8 +159,10 @@ TR_IMAGE,Image
 TR_IS_ASSET,Is Asset
 TR_LANGUAGE_LABEL,Language :
 TR_LAYOUT,Layout
+TR_LENGTH_LABEL,Length : 
 TR_LIGHT_COLOR,Light Color :
 TR_LIGHT_ENERGY,Light Energy :
+TR_LIGHT_SETTINGS,Light Settings
 TR_LIGHT_SETTINGS,Light Settings
 TR_LIGHT_SHAPE_VISIBLE,Light Shape Visible
 TR_LIGHT_SIZE,Light Size :
@@ -142,18 +170,27 @@ TR_LIGHT_VISIBLE,Light Visible
 TR_LIP_SYNC_CONFIG,LipSync Configuration
 TR_LS_DARKEN_TOOLTIP,Darkens Your model when not speaking.
 TR_MAGENTA,Magenta
+TR_MAX_ANGLE_LABEL,Max Angle : 
+TR_MAX_CURVE_LABEL,Max-Curve : 
 TR_MAX_FPS,Max FPS
+TR_MAX_ROTATION_LABEL,Max Rotation : 
 TR_MICROPHONE_LABEL,Microphone :
+TR_MIN_CURVE_LABEL,Mini-Curve : 
+TR_MIN_ROTATION_LABEL,Mini Rotation : 
 TR_MINI_TUTORIAL,Mini Tutorial (WIP)
 TR_MINUTE_ABBREVIATION,min
 TR_MODE,Mode
 TR_MODEL_ANIMATIONS,Model Animations
 TR_MODEL_EFFECT,Model Effect :
+TR_MOMENTUM_LABEL,Momentum : 
 TR_MOUSE_VELOCITY,Mouse Velocity
+TR_MOUSE,Mouse
 TR_MOUTH_CLOSED,Mouth Closed :
 TR_MOUTH_OPEN_LABEL,Mouth Open :
 TR_MOVE_WITH_MOUSE_TOOLTIP,"Animate to Mouse must be turned on in order for this feature to work when toggled off, it stops the sprite from moving on the x and y axis, but keeps the Animate to Mouse working."
 TR_MOVE_WITH_MOUSE,Move with Mouse
+TR_MOVEMENT,Movement
+TR_MULTISTATE_EDITING_CUE_LABEL,*Multi-State Editing On
 TR_NAME,Name
 TR_NEW_PNGTUBER_TEXT,Do you want to make a new PNGTuber model?
 TR_NEW,New
@@ -169,6 +206,7 @@ TR_OPEN,Open
 TR_OUTLINE,Outline
 TR_PAUSE_MOVEMENT_TOOLTIP,Turns your model Static.\nUncheck to preview your model's movement.\nThis automatically gets unchecked when changing modes.
 TR_PAUSE_MOVEMENT,Pause Movement
+TR_PHYS_STIFFNESS_LABEL,Phys-Stiff :
 TR_PHYSICS,Enable Physics
 TR_PLEASE_CONFIRM,Please Confirm...
 TR_POS_X,Pos-X :
@@ -199,25 +237,33 @@ TR_SAVE_WARNING,Did you make sure to save?
 TR_SAVE_WINDOW_POSITIONS,"Save Window (position, size, etc..)"
 TR_SAVE,Save
 TR_SCREEN_CRT,Screen CRT
+TR_SEGMENTS_LABEL,Segments : 
 TR_SETTINGS,Settings
 TR_SHORTCUTS_FULL,"* Mouse Controls\n- Rotation : Ctrl+MouseWheel (Up, Down)\n- Camera Zoom : MouseWheel (Up, Down)\n- Camera Drag : MouseWheel (Pressed)\n\n*Keyboard Controls \n- Moving Sprite : \n> Ctrl+W (Up)\n> Ctrl+S (Down)\n> Ctrl+A (Left)\n> Ctrl+D (Right)\n\n- Moving Offset : \n> Arrow-Up (Up)\n> Arrow-Down (Down)\n> Arrow-Left (Left)\n> Arrow-Right (Right)\n\n- Quick Save : Ctrl+S\n- Quick Deselect : Alt+D\n- Quick Window Centering : Ctrl+ Kp -"
 TR_SHOULD_BLINK,Should Blink :
+TR_SHOULD_DIS_LABEL,"List of Keys for Disappearence.\n(Key must correspond to existing asset's)"
 TR_SHOULD_TALK,Should Talk :
 TR_SHOW_UI,Show UI
 TR_SIZE_X,Size-X :
 TR_SIZE_Y,Size-Y :
 TR_SOCIALS,Socials :
 TR_SOURCE_CODE,Source Code :
+TR_SPRITE_ID_LABEL,Sprite ID : 
 TR_SPRITES,Sprites
 TR_SQUISH_AMOUNT,Squish Amount
 TR_SQUISH_ON_BLINK,Squish on Blink
 TR_STATE_REMAP,State Remap
 TR_STATIC_OBJECT,Static Object
+TR_STIFFNESS_LABEL,Stiffness : 
 TR_STREAMER_WIP,Streamer (WIP)
+TR_STRETCH,Stretch
+TR_SUB_DIVISION_LABEL,Sub-Division :
 TR_SWITCH_SESSION_FULL,Make sure to save your Model first before switching modes since this takes you to a completely separate session of the software.
 TR_SWITCH_SESSION,Which Session type do you want to switch to?
 TR_SYNC_EFFECT,Sync Effect
 TR_TEST_FRAME,Frame :
+TR_TEXTURE_MODE_LABEL,Texture Mode : 
+TR_TILE,Tile
 TR_TINT,Tint :
 TR_TOGGLE_BORDERS,Toggle Borders
 TR_TOOLTIP_ADD_APPENDAGE,Add Appendage
@@ -243,7 +289,14 @@ TR_VISIBILITY,Visibility
 TR_VISIBLE,Visible :
 TR_VOLUME_SENSITIVITY,Vol. Sensitivity
 TR_VOLUME,Volume
+TR_WAG_FREQ_LABEL,Wag Freq : 
+TR_WAG_SPEED_SLIDER,Wag Speed : 
+TR_WASD_AD,WASD (AD)
+TR_WASD_WS,WASD (WS)
+TR_WASD,WASD
 TR_WHAT_IS_PNG_TUBING_FULL,"PNGTubing is a form of Vtubing. However, unlike Vtubing, it is much simpler and less costly. This is why it gained popularity in recent years. There are some different types of PNGTubing, this includes Static (like the model shown), Toon and Rigged. In this software -PNGTube-Remix, you can create both Static and Rigged! Even mix them up if needed. Hope you have fun!"
+TR_WIDTH,Width : 
+TR_WIGGLE_APPENDAGE,Wiggle Appendage
 TR_WIGGLE_PHYSICS,Wiggle Physics
 TR_WIGGLE_SPRITE,Wiggle Sprite
 TR_WINDOW_SIZE,Window Size

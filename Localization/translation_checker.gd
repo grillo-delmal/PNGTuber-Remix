@@ -8,8 +8,29 @@ func _run():
 	for node in get_all_children(get_scene()):
 		if node is Label:
 			var text = node.text;
-			if !text.begins_with("TR_"):
-				print_rich("- [color=yellow]Label: %s may be untranslated[/color]\n" % node.get_path());
+			if node.get_parent() is BetterSlider:
+				if !node.get_parent().label_text.contains("TR_"):
+					untranslated_warning_label(node.get_parent());
+			elif node is FormattedLocalizedLabel:
+				if !text.contains("{") and !text.contains("TR_"):
+					untranslated_warning_label(node);
+			elif !text.begins_with("TR_"):
+				untranslated_warning_label(node);
+		elif node is OptionButton:
+			for i in node.get_popup().item_count:
+				if !node.get_popup().get_item_text(i).begins_with("TR_"):
+					untranslated_warning_option_item(node, i);
+	
+	print("Done searching for untranslated keys.")
+
+
+static func untranslated_warning_label(node: Node):
+	print_rich("- [color=yellow]Label: %s may be untranslated[/color]\n" % node.get_path());
+
+
+static func untranslated_warning_option_item(node: Node, item_id: int):
+	print_rich("- [color=yellow]Lable: %s item %d may be untranslated[/color]\n" % [node.get_path(), item_id]);
+
 
 func get_all_children(in_node, children_accumulater = []) -> Array:
 	children_accumulater.push_back(in_node);

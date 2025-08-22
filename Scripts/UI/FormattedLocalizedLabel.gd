@@ -1,3 +1,4 @@
+class_name FormattedLocalizedLabel
 extends Label
 
 @export var localizations: Array[String] = []
