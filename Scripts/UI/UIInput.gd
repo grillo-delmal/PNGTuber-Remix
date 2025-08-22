@@ -13,6 +13,7 @@ func _ready():
 
 #region Update Slider info
 func held_sprite_is_null():
+	%SpriteID.text = "Sprite ID : 0"
 	%Name.editable = false
 	%Name.text = ""
 	%NonAnimatedSheetCheck.disabled = true
@@ -28,6 +29,7 @@ func held_sprite_is_true():
 				%AdvancedLipSync.disabled = false
 				%NonAnimatedSheetCheck.disabled = false
 				%FrameSpinbox.editable = true
+				%SpriteID.text = "Sprite ID : " + str(i.sprite_id)
 
 func reinfo():
 	held_sprite_is_null()

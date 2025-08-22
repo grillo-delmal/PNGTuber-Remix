@@ -103,7 +103,7 @@ func _on_duplicate_button_pressed():
 			
 			obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		#	Global.update_layers.emit(0, obj, obj.sprite_type)
-			obj.sprite_id = sprite.treeitem.get_instance_id()
+			obj.sprite_id = randi()
 			obj.parent_id = sprite.parent_id
 			sprites.append(obj)
 			Global.update_layers.emit(0, obj, obj.sprite_type)
@@ -136,21 +136,22 @@ func _on_duplicate_button_pressed():
 					obj_to_spawn.anim_texture = i.child.get_metadata(0).sprite_object.anim_texture
 					obj_to_spawn.anim_texture_normal = i.child.get_metadata(0).sprite_object.anim_texture_normal 
 				
-				obj_to_spawn.sprite_data = i.sprite_data.duplicate(true)
-				obj_to_spawn.states = i.states.duplicate(true)
-				obj_to_spawn.saved_keys = i.saved_keys.duplicate(true)
-				obj_to_spawn.should_disappear = i.should_disappear
-				obj_to_spawn.show_only = i.show_only
-				obj_to_spawn.is_asset = i.is_asset
-				obj_to_spawn.saved_event = i.saved_event
-				obj_to_spawn.was_active_before = i.was_active_before
+				var t = i.child.get_metadata(0).sprite_object
+				obj_to_spawn.sprite_data = t.sprite_data.duplicate(true)
+				obj_to_spawn.states = t.states.duplicate(true)
+				obj_to_spawn.saved_keys = t.saved_keys.duplicate(true)
+				obj_to_spawn.should_disappear = t.should_disappear
+				obj_to_spawn.show_only = t.show_only
+				obj_to_spawn.is_asset = t.is_asset
+				obj_to_spawn.saved_event = t.saved_event
+				obj_to_spawn.was_active_before = t.was_active_before
 				obj_to_spawn.visible = obj_to_spawn.was_active_before
-				obj_to_spawn.is_collapsed = i.is_collapsed
-				obj_to_spawn.played_once = i.played_once
-				obj_to_spawn.layer_color = i.layer_color
+				obj_to_spawn.is_collapsed = t.is_collapsed
+				obj_to_spawn.played_once = t.played_once
+				obj_to_spawn.layer_color = t.layer_color
 				obj_to_spawn.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 				obj_to_spawn.sprite_id = i.child.get_instance_id()
-				obj_to_spawn.parent_id = i.parent.get_instance_id()
+				obj_to_spawn.parent_id = obj.sprite_id
 				sprites.append(obj_to_spawn)
 				Global.update_layers.emit(0, obj_to_spawn, obj_to_spawn.sprite_type)
 				obj_to_spawn.get_state(Global.current_state)
