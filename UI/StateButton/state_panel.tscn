@@ -39,7 +39,7 @@ size_flags_horizontal = 3
 tooltip_text = "TR_DUPLICATE_STATE"
 focus_mode = 0
 theme_override_font_sizes/font_size = 14
-text = TR_ADD"
+text = "TR_ADD"
 metadata/_edit_use_anchors_ = true
 
 [node name="StateRemap" type="Button" parent="HBoxContainer"]
