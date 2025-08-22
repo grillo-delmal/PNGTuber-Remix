@@ -122,7 +122,7 @@ visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
-text = " Bounce "
+text = "TR_BOUNCE"
 
 [node name="InputsButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
@@ -138,8 +138,7 @@ custom_minimum_size = Vector2(79, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 15
-text = "Collab
-"
+text = "TR_COLLAB"
 
 [node name="WindowButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
@@ -215,7 +214,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 14
-text = "Deselect"
+text = "TR_DESELECT"
 flat = true
 icon_alignment = 1
 
@@ -332,7 +331,7 @@ visible = false
 custom_minimum_size = Vector2(320, 50)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Model With Background Demo"
+text = "TR_BG_TEMP_BUTTON"
 icon = ExtResource("10_apeyf")
 expand_icon = true
 

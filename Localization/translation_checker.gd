@@ -23,6 +23,9 @@ func _run():
 			for i in node.get_popup().item_count:
 				if !node.get_popup().get_item_text(i).begins_with("TR_"):
 					untranslated_warning_option_item(node, i);
+		elif node is Button:
+			if !node.text.is_empty() and !node.text.begins_with("TR_"):
+				untranslated_warning_button(node);
 	
 	print("Done searching for untranslated keys.")
 
@@ -33,6 +36,10 @@ static func untranslated_tooltip(node: Node):
 
 static func untranslated_warning_label(node: Node):
 	print_rich("- [color=yellow]Label: %s may be untranslated[/color]\n" % node.get_path());
+
+
+static func untranslated_warning_button(node: Node):
+	print_rich("- [color=yellow]Button: %s may be untranslated[/color]\n" % node.get_path());
 
 
 static func untranslated_warning_option_item(node: Node, item_id: int):

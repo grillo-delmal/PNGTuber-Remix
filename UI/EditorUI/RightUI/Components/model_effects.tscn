@@ -136,7 +136,7 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 focus_mode = 0
-text = " Rainbow Effect"
+text = "TR_RAINBOW_EFFECT"
 
 [node name="Control" type="Control" parent="PanelContainer/Margin/TabContainer/Grid2"]
 visible = false

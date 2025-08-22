@@ -51,7 +51,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "TRANSLATION_BLIND_KEY"
+text = "TR_BLIND_KEY"
 script = ExtResource("2_dpute")
 
 [node name="RemoveAssetButton" type="Button" parent="Buttons/HBoxAsset"]
@@ -102,7 +102,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 focus_mode = 0
-text = "Add Key"
+text = "TR_ADD_KEY"
 
 [node name="ShouldDisDelButton" type="Button" parent="ShouldDisListContainer/HBoxContainer"]
 unique_name_in_owner = true
@@ -111,7 +111,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 3
 focus_mode = 0
 disabled = true
-text = "Delete Key"
+text = "TR_DELETE_KEY"
 
 [node name="ShouldDisRemapButton" type="Button" parent="ShouldDisListContainer/HBoxContainer"]
 unique_name_in_owner = true
@@ -121,7 +121,7 @@ size_flags_vertical = 3
 focus_mode = 0
 disabled = true
 toggle_mode = true
-text = "Remap Key"
+text = "TR_REMAP_KEY"
 
 [node name="ShouldDisList" type="ItemList" parent="ShouldDisListContainer"]
 unique_name_in_owner = true
@@ -146,7 +146,7 @@ columns = 2
 [node name="CheckBox" type="CheckBox" parent="CycleGrid"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Is Cycle Asset"
+text = "TR_IS_CYCLE_ASSET"
 script = ExtResource("6_w5yqn")
 sp_type = ""
 value_to_update = "is_cycle"
@@ -278,7 +278,7 @@ size_flags_horizontal = 3
 focus_mode = 0
 theme_override_font_sizes/font_size = 14
 toggle_mode = true
-text = "Bind Key"
+text = "TR_BIND_KEY"
 script = ExtResource("8_u22l2")
 
 [node name="CycleForDel" type="Button" parent="CycleMargin/CycleData/Margin2/Grid/HBoxAsset2"]
@@ -311,7 +311,7 @@ size_flags_horizontal = 3
 focus_mode = 0
 theme_override_font_sizes/font_size = 14
 toggle_mode = true
-text = "Bind Key"
+text = "TR_BIND_KEY"
 script = ExtResource("9_olugq")
 
 [node name="CycleBackDel" type="Button" parent="CycleMargin/CycleData/Margin2/Grid/HBoxAsset3"]

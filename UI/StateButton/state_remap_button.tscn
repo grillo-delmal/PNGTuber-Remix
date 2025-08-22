@@ -17,7 +17,7 @@ text = "TR_HOT_KEY_LABEL"
 custom_minimum_size = Vector2(120, 20)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "kp 0"
+text = "TR_"
 script = ExtResource("2_ih08l")
 
 [node name="Remove" type="Button" parent="."]
