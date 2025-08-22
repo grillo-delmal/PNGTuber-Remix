@@ -3,6 +3,7 @@ extends Node
 var sprite = preload("res://Misc/SpriteObject/sprite_object.tscn")
 var appendage = preload("res://Misc/AppendageObject/Appendage_object.tscn")
 var trim : bool = false
+var should_offset : bool = true
 
 func import_sprite(path : String):
 	var spawn = sprite.instantiate()
@@ -96,17 +97,18 @@ func import_png(img: Image, spawn) -> CanvasTexture:
 	var og_image = img.duplicate(true)
 	if trim:
 		img = ImageTrimmer.trim_image(img)
-		var original_width = og_image.get_width()
-		var original_height = og_image.get_height()
-		var trimmed_width = img.get_width()
-		var trimmed_height = img.get_height()
-		# Calculate offset to maintain visual position
-		var trim_info = ImageTrimmer.calculate_trim_info(og_image)
-		var center_shift_x = trim_info.min_x - ((original_width - trimmed_width) / 2.0)
-		var center_shift_y = trim_info.min_y - ((original_height - trimmed_height) / 2.0)
-		# Adjust position to keep image visually stable
-		spawn.sprite_data.offset += Vector2(center_shift_x, center_shift_y)
-		spawn.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
+		if should_offset:
+			var original_width = og_image.get_width()
+			var original_height = og_image.get_height()
+			var trimmed_width = img.get_width()
+			var trimmed_height = img.get_height()
+			# Calculate offset to maintain visual position
+			var trim_info = ImageTrimmer.calculate_trim_info(og_image)
+			var center_shift_x = trim_info.min_x - ((original_width - trimmed_width) / 2.0)
+			var center_shift_y = trim_info.min_y - ((original_height - trimmed_height) / 2.0)
+			# Adjust position to keep image visually stable
+			spawn.sprite_data.offset += Vector2(center_shift_x, center_shift_y)
+			spawn.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
 
 	img.fix_alpha_edges()
 	var texture = ImageTexture.create_from_image(img)
@@ -226,26 +228,27 @@ func replace_texture(path : String):
 			var og_image = img.duplicate(true)
 			if trim:
 				img = ImageTrimmer.trim_image(img)
-				var original_width = og_image.get_width()
-				var original_height = og_image.get_height()
-				var trimmed_width = img.get_width()
-				var trimmed_height = img.get_height()
-				# Calculate offset to maintain visual position
-				var trim_info = ImageTrimmer.calculate_trim_info(og_image)
-				var center_shift_x = trim_info.min_x - ((original_width - trimmed_width) / 2.0)
-				var center_shift_y = trim_info.min_y - ((original_height - trimmed_height) / 2.0)
-				# Adjust position to keep image visually stable
-				var glob_pos : Array = []
-				for i in Global.held_sprites[0].get_node("%Sprite2D").get_children():
-					if i is SpriteObject:
-						glob_pos.append({obj = i,
-						og_pos = i.global_position})
-				Global.held_sprites[0].sprite_data.offset += Vector2(center_shift_x, center_shift_y)
-				Global.held_sprites[0].get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
-				for i in glob_pos:
-					i.obj.global_position = i.og_pos
-					i.obj.sprite_data.position = i.obj.position
-					i.obj.save_state(Global.current_state)
+				if should_offset:
+					var original_width = og_image.get_width()
+					var original_height = og_image.get_height()
+					var trimmed_width = img.get_width()
+					var trimmed_height = img.get_height()
+					# Calculate offset to maintain visual position
+					var trim_info = ImageTrimmer.calculate_trim_info(og_image)
+					var center_shift_x = trim_info.min_x - ((original_width - trimmed_width) / 2.0)
+					var center_shift_y = trim_info.min_y - ((original_height - trimmed_height) / 2.0)
+					# Adjust position to keep image visually stable
+					var glob_pos : Array = []
+					for i in Global.held_sprites[0].get_node("%Sprite2D").get_children():
+						if i is SpriteObject:
+							glob_pos.append({obj = i,
+							og_pos = i.global_position})
+					Global.held_sprites[0].sprite_data.offset += Vector2(center_shift_x, center_shift_y)
+					Global.held_sprites[0].get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
+					for i in glob_pos:
+						i.obj.global_position = i.og_pos
+						i.obj.sprite_data.position = i.obj.position
+						i.obj.save_state(Global.current_state)
 					
 				Global.update_offset_spins.emit()
 			if trim:
@@ -324,3 +327,7 @@ func import_png_from_buffer(buffer, spawn) -> CanvasTexture:
 	var img_can = CanvasTexture.new()
 	img_can.diffuse_texture = texture
 	return img_can
+
+
+func _on_offset_sprite_toggled(toggled_on: bool) -> void:
+	should_offset = toggled_on

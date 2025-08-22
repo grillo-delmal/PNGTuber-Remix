@@ -89,6 +89,8 @@ func _verlet_integration(delta):
 		var prev_pos = point[PREVIOUS_POSITION] if point.size() > 4 else current_pos
 		
 		var velocity = current_pos - prev_pos
+		if velocity.length() < 0.01:
+			velocity = Vector2.ZERO
 		var new_pos = current_pos + velocity + gravity * delta * delta + velocity * 5.0 * delta * delta
 		
 		point[PREVIOUS_POSITION] = current_pos

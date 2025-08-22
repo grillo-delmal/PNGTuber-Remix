@@ -416,21 +416,22 @@ func load_gif(sprite_obj, sprite):
 	
 	
 	if sprite.has("normal"):
-		var gif_normal : SpriteFrames = GifManager.sprite_frames_from_buffer(sprite.normal)
-		
-		for n in gif_normal.get_frame_count(gif_normal.get_animation_names()[0]):
-			gif_normal.get_frame_texture(gif_normal.get_animation_names()[0], n).get_image().fix_alpha_edges()
-		
-		sprite_obj.anim_texture_normal = sprite.normal
-		var text_normal = ImageTexture.create_from_image(gif_normal.get_frame_texture(gif_normal.get_animation_names()[0], 0).get_image())
-		img_can.normal_texture = text_normal
-		sprite_obj.get_node("%AnimatedSpriteTexture").frames2.clear()
-		for i in gif_normal.get_frame_count(gif_normal.get_animation_names()[0]):
-			var new_frame : AnimatedFrame = AnimatedFrame.new()
-			new_frame.texture = ImageTexture.create_from_image(gif_normal.get_frame_texture(gif_normal.get_animation_names()[0], i).get_image())
-			new_frame.duration = gif_normal.get_frame_duration(gif_normal.get_animation_names()[0], i)/24
-			sprite_obj.get_node("%AnimatedSpriteTexture").frames2.append(new_frame)
+		if sprite.normal != null:
+			var gif_normal : SpriteFrames = GifManager.sprite_frames_from_buffer(sprite.normal)
 			
+			for n in gif_normal.get_frame_count(gif_normal.get_animation_names()[0]):
+				gif_normal.get_frame_texture(gif_normal.get_animation_names()[0], n).get_image().fix_alpha_edges()
+			
+			sprite_obj.anim_texture_normal = sprite.normal
+			var text_normal = ImageTexture.create_from_image(gif_normal.get_frame_texture(gif_normal.get_animation_names()[0], 0).get_image())
+			img_can.normal_texture = text_normal
+			sprite_obj.get_node("%AnimatedSpriteTexture").frames2.clear()
+			for i in gif_normal.get_frame_count(gif_normal.get_animation_names()[0]):
+				var new_frame : AnimatedFrame = AnimatedFrame.new()
+				new_frame.texture = ImageTexture.create_from_image(gif_normal.get_frame_texture(gif_normal.get_animation_names()[0], i).get_image())
+				new_frame.duration = gif_normal.get_frame_duration(gif_normal.get_animation_names()[0], i)/24
+				sprite_obj.get_node("%AnimatedSpriteTexture").frames2.append(new_frame)
+				
 	sprite_obj.get_node("%Sprite2D").texture = img_can
 
 func load_pngplus_file(path):

@@ -29,12 +29,12 @@ func _physics_process(delta):
 				dt -= cframe.duration
 				index += 1
 			# yes this does this every _process, oh well
-			sprite_node.texture.diffuse_texture = cframe.texture
-			if sprite_node.texture.normal_texture:
+			sprite_node.texture.set_diffuse_texture.call_deferred(cframe.texture)
+			if sprite_node.texture.normal_texture != null:
 				if frames2.size() != frames.size():
 					frames2.resize(frames.size())
 				if cframe2 != null:
-					sprite_node.texture.normal_texture = cframe2.texture
+					sprite_node.texture.set_normal_texture.call_deferred(cframe2.texture)
 
 
 func proper_apng_one_shot():
