@@ -51,6 +51,7 @@ var save_location = OS.get_executable_path().get_base_dir() + "/Preferences.pRDa
 	set(value):
 		save_location = value + "/Preferences.pRDat"
 		theme_settings.lipsync_file_path = value + "/DefaultTraining.tres"
+var autosave_location = OS.get_executable_path().get_base_dir() + "/autosaves"
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
 var additional_output = RefCounted.new()
@@ -64,8 +65,8 @@ func save_before_closing():
 		if FileAccess.file_exists(Global.save_path):
 			SaveAndLoad.save_file(Global.save_path)
 		else:
-			DirAccess.make_dir_absolute("user://AutoSaves")
-			SaveAndLoad.save_file("user://AutoSaves/" + str(randi()))
+			DirAccess.make_dir_absolute(autosave_location)
+			SaveAndLoad.save_file(autosave_location + "/" + str(randi()))
 		window_size_changed()
 		save()
 	await get_tree().create_timer(0.1).timeout
@@ -93,8 +94,8 @@ func auto_save():
 	if FileAccess.file_exists(Global.save_path):
 		SaveAndLoad.save_file(Global.save_path)
 	else:
-		DirAccess.make_dir_absolute("user://AutoSaves")
-		SaveAndLoad.save_file("user://AutoSaves/" + str(randi()))
+		DirAccess.make_dir_absolute(autosave_location)
+		SaveAndLoad.save_file(autosave_location + "/" + str(randi()))
 	window_size_changed()
 	save()
 	if Global.settings_dict.auto_save:

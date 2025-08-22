@@ -9,3 +9,5 @@ func _ready():
                 Settings.save_location = key_value[1];
                 print("Settings path set to: ", Settings.save_location);
                 print("DefaultTraining.tres path set to: ", Settings.theme_settings.lipsync_file_path);
+                Settings.autosave_location = key_value[1] + "/autosaves";
+                print("Autosave location set to: ", Settings.autosave_location);
