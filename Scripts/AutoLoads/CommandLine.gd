@@ -7,3 +7,5 @@ func _ready():
             if key_value[0].trim_prefix("--") == "save-data-path":
                 print("Custom save data path provided: ", key_value[1]);
                 Settings.save_location = key_value[1];
+                print("Settings path set to: ", Settings.save_location);
+                print("DefaultTraining.tres path set to: ", Settings.theme_settings.lipsync_file_path);

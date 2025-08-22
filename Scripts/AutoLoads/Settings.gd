@@ -50,6 +50,7 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 var save_location = OS.get_executable_path().get_base_dir() + "/Preferences.pRDat" :
 	set(value):
 		save_location = value + "/Preferences.pRDat"
+		theme_settings.lipsync_file_path = value + "/DefaultTraining.tres"
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
 var additional_output = RefCounted.new()
@@ -71,11 +72,11 @@ func save_before_closing():
 	get_tree().quit()
 
 func save():
-	var parent_slash_index = save_location.rfind("/");
-	if parent_slash_index < 0:
+	var parent_path = Util.get_parent_path(save_location)
+	if parent_path == save_location:
 		file_error.emit("INVALID_PATH")
 		return
-	var error = DirAccess.make_dir_absolute(save_location.substr(0, parent_slash_index));
+	var error = DirAccess.make_dir_absolute(parent_path)
 	if error != OK:
 		file_error.emit("COULD_NOT_MAKE_PATH", error)
 	
@@ -180,9 +181,13 @@ func _ready():
 		TranslationServer.set_locale(locale)
 
 func lipsync_set_up():
+	var parent_path = Util.get_parent_path(save_location);
+	if parent_path != save_location:
+		theme_settings.lipsync_file_path = parent_path + "/DefaultTraining.tres"
+	else:
+		file_error.emit("INVALID_LIP_SYNC_PATH")
 	if !FileAccess.file_exists(theme_settings.lipsync_file_path):
 		#ResourceSaver.save(preload("res://UI/Lipsync stuff/PrebuildFile/DefaultTraining.tres") ,OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres")
-		theme_settings.lipsync_file_path = OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres"
 		LipSyncGlobals.file_data = preload("res://UI/Lipsync stuff/DefaultTraining.tres")
 		LipSyncGlobals.save_file_as(theme_settings.lipsync_file_path)
 		
