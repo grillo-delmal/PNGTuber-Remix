@@ -31,6 +31,7 @@ func get_default_object_data() -> Dictionary:
 		
 		tile = 2,
 		anchor_id = null,
+		keep_length_anchor = true,
 	}
 
 # Called when the node enters the scene tree for the first time.
@@ -129,6 +130,8 @@ func get_state(id):
 		%Sprite2D.gravity = get_value("wiggle_gravity")
 		
 		%Sprite2D.texture_mode = get_value("tile")
+		%Sprite2D.keep_length = get_value("keep_length_anchor")
+		
 		
 		%Sprite2D.set_clip_children_mode(get_value("clip"))
 		rotation = get_value("rotation")
@@ -161,6 +164,7 @@ func get_state(id):
 				
 	elif states[id].is_empty():
 		states[id] = sprite_data.duplicate(true)
+
 
 func set_anchor_sprite(_placeholder = null):
 	if get_value("anchor_id") == null:

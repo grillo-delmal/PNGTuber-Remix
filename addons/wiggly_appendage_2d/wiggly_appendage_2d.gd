@@ -46,6 +46,11 @@ enum {
 @export var subdivide_additional_start_segment := true
 ## If true, only process when this node and all parents aren't hidden
 @export var only_process_when_visible := true
+
+@export var flip_direction: bool = false
+
+@export var keep_length : bool = false
+
 var current_segment_length: float = 1.0
 const PREVIOUS_POSITION = 1
 var physics_points: Array
@@ -54,10 +59,10 @@ var physics_points: Array
 func _ready():
 	reset()
 
+
 func _physics_process(delta):
 	if only_process_when_visible and not is_visible_in_tree():
 		return
-
 	if anchor_target != null && is_instance_valid(anchor_target):
 		var root_pos = get_global_position()
 		var anchor_pos = anchor_target.global_position
@@ -69,11 +74,9 @@ func _physics_process(delta):
 			_process_root_point(physics_points[i], delta)
 		else:
 			_process_point(physics_points[i], delta, i)
-
 	# Stick constraints
 	if anchor_target != null && is_instance_valid(anchor_target):
 		_apply_verlet_anchor(delta)
-
 	_update_line()
 
 
@@ -101,45 +104,48 @@ func _verlet_integration(delta):
 func _apply_verlet_anchor(delta):
 	_verlet_integration(delta)
 
-	# Hard anchor the root to global_position (not soft)
+	# Root fixed
 	var root = physics_points[0]
 	root[POSITION] = global_position
 	physics_points[0] = root
 
-	# Hard anchor the tail to anchor_target
 	if anchor_target != null and is_instance_valid(anchor_target):
-		physics_points[-1][POSITION] = anchor_target.global_position
+		var anchor_pos = anchor_target.global_position
+		var root_pos = global_position
+		var max_reach = segment_length * (physics_points.size() - 1)
 
-	# Then apply constraints as usual...
-	# (rest of the function)
+		if keep_length:
+			# Check if anchor is too far away
+			var to_anchor = anchor_pos - root_pos
+			if to_anchor.length() > max_reach:
+				# Too far → "look at" anchor, but keep length
+				var dir = to_anchor.normalized()
+				physics_points[-1][POSITION] = root_pos + dir * max_reach
+			else:
+				# Within reach → allow normal following
+				physics_points[-1][POSITION] = anchor_pos
+		else:
+			# Stretchy mode — always snap to anchor
+			physics_points[-1][POSITION] = anchor_pos
 
-
-	# Enforce distance constraints between points
+	# Apply distance constraints
 	for l in range(5):
 		for i in range(physics_points.size() - 1):
 			var p1 = physics_points[i]
 			var p2 = physics_points[i + 1]
-
 			var delta_vec = p2[POSITION] - p1[POSITION]
 			var dist = delta_vec.length()
 
-			if dist < current_segment_length:
-				# Fold by pushing points perpendicular to the segment
-				var perp = Vector2(-delta_vec.y, delta_vec.x).normalized()
-				var fold_strength = 0.5  # tune this for folding effect strength
+			if dist == 0:
+				continue
 
-				if i != 0:
-					p1[POSITION] += perp * fold_strength
-				if i + 1 != physics_points.size() - 1:
-					p2[POSITION] -= perp * fold_strength
-			else:
-				var diff = ((dist - segment_length) / dist)
-				var correction = delta_vec * 0.5 * diff
+			var diff = (dist - segment_length) / dist
+			var correction = delta_vec * 0.5 * diff
 
-				if i != 0:
-					p1[POSITION] += correction
-				if i + 1 != physics_points.size() - 1:
-					p2[POSITION] -= correction
+			if i != 0:
+				p1[POSITION] += correction
+			if i + 1 != physics_points.size() - 1:
+				p2[POSITION] -= correction
 
 			physics_points[i] = p1
 			physics_points[i + 1] = p2
@@ -151,24 +157,26 @@ func _apply_constraints():
 		for i in range(physics_points.size() - 1):
 			var p1 = physics_points[i]
 			var p2 = physics_points[i + 1]
-
 			var delta = p2[POSITION] - p1[POSITION]
 			var dist = delta.length()
 			var diff = (dist - current_segment_length) / dist
 			var correction = delta * 0.5 * diff
-
 			if i != 0:
 				p1[POSITION] += correction
 			p2[POSITION] -= correction
-
 			physics_points[i] = p1
 			physics_points[i + 1] = p2
 
-## Deletes all existing physics points and add the specified amount of new ones
+
+
 func reset(point_count: int = segment_count + 1) -> void:
 	physics_points = []
 	var starting_pos := get_global_position()
+	
+	# Base direction, flipped if toggle is true
 	var direction := Vector2(1, 0)
+	if flip_direction:
+		direction = -direction
 	
 	if anchor_target != null and is_instance_valid(anchor_target):
 		var total_length = starting_pos.distance_to(anchor_target.global_position)
@@ -187,6 +195,7 @@ func reset(point_count: int = segment_count + 1) -> void:
 		if i != 0:
 			new_point[PREVIOUS_POINT] = physics_points[-1]
 		physics_points.append(new_point)
+
 
 
 

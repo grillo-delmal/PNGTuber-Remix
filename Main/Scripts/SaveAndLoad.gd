@@ -122,6 +122,8 @@ func save_model(path):
 	file.close()
 	if Settings.theme_settings.use_threading:
 		thread.call_deferred("wait_to_finish")
+	
+	Global.project_updates.emit("Project Saved!")
 
 func load_file(path: String, autoload : bool = false):
 	if autoload:
@@ -290,6 +292,8 @@ func load_model(path : String):
 	Global.load_model.emit()
 	if Settings.theme_settings.use_threading:
 		thread.call_deferred("wait_to_finish")
+	Global.project_updates.emit("Project Loaded!")
+
 
 func save_backup(data: Dictionary, previous_path: String) -> void:
 	var base_path := previous_path.get_basename()
@@ -567,3 +571,4 @@ func load_pngplus_file(path):
 	Global.load_model.emit()
 	if Settings.theme_settings.use_threading:
 		thread.call_deferred("wait_to_finish")
+	Global.project_updates.emit("Plus Project Loaded!")
