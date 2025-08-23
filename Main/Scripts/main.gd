@@ -180,6 +180,7 @@ func _on_confirmation_dialog_confirmed():
 	%TopUI.update_fps(241)
 	Global.main.get_node("%Marker").current_screen = Monitor.ALL_SCREENS
 	Global.settings_dict.monitor = Monitor.ALL_SCREENS
+	%ConfirmationDialog.hide()
 
 func clear_sprites():
 	Global.held_sprite = null
@@ -252,3 +253,6 @@ func _notification(what):
 		rec_inp = false
 	elif what == MainLoop.NOTIFICATION_APPLICATION_FOCUS_OUT:
 		rec_inp = true
+
+func _on_confirmation_dialog_canceled() -> void:
+	%ConfirmationDialog.hide()

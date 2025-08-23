@@ -170,7 +170,7 @@ theme_override_constants/separation = 5
 
 [node name="Label3" type="Label" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "TR_FOLLOW_TRHOUGH"
+text = "TR_FOLLOW_THROUGH"
 horizontal_alignment = 1
 vertical_alignment = 1
 

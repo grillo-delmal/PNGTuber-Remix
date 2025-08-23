@@ -47,18 +47,30 @@ enum {
 ## If true, only process when this node and all parents aren't hidden
 @export var only_process_when_visible := true
 
-@export var flip_direction: bool = false
-
 @export var keep_length : bool = false
+
+var _rest_direction_angle : float = 0.0
+
+## If true, the first few segments will be stiffer and blend with root rotation
+@export var stiff_root_segments: bool = false
+
+## How many of the first segments should be stiffened (only used if stiff_root_segments = true)
+@export_range(1, 5) var stiff_root_count: int = 5
+
+@export_range(-360, 360, 0.01) var rest_direction_angle: float:
+	set(value):
+		rest_direction_angle = value
+		_rest_direction_angle = deg_to_rad(value)
+		if is_inside_tree(): reset()
+
+@export var max_length_stretch : float = 500
 
 var current_segment_length: float = 1.0
 const PREVIOUS_POSITION = 1
 var physics_points: Array
 
-
 func _ready():
 	reset()
-
 
 func _physics_process(delta):
 	if only_process_when_visible and not is_visible_in_tree():
@@ -125,8 +137,14 @@ func _apply_verlet_anchor(delta):
 				# Within reach → allow normal following
 				physics_points[-1][POSITION] = anchor_pos
 		else:
-			# Stretchy mode — always snap to anchor
-			physics_points[-1][POSITION] = anchor_pos
+			var to_anchor = anchor_pos - root_pos
+			if to_anchor.length() > max_length_stretch:
+				# Too far → "look at" anchor, but keep length
+				var dir = to_anchor.normalized()
+				physics_points[-1][POSITION] = root_pos + dir * max_length_stretch
+			else:
+				# Within reach → allow normal following
+				physics_points[-1][POSITION] = anchor_pos
 
 	# Apply distance constraints
 	for l in range(5):
@@ -173,19 +191,24 @@ func reset(point_count: int = segment_count + 1) -> void:
 	physics_points = []
 	var starting_pos := get_global_position()
 	
-	# Base direction, flipped if toggle is true
-	var direction := Vector2(1, 0)
-	if flip_direction:
-		direction = -direction
-	
+	var direction : Vector2 = Vector2.RIGHT.rotated(_rest_direction_angle)
+
+	# Decide base position
+	var root_pos := starting_pos
+	if additional_start_segment:
+		# Back-shift the root by the extra segment length
+		root_pos -= direction * additional_start_segment_length
+
+	# Segment length setup
 	if anchor_target != null and is_instance_valid(anchor_target):
 		var total_length = starting_pos.distance_to(anchor_target.global_position)
 		current_segment_length = total_length / segment_count
 	else:
 		current_segment_length = segment_length
 
+	# Create chain
 	for i in range(point_count):
-		var pos = starting_pos + direction * current_segment_length * i
+		var pos = root_pos + direction * current_segment_length * i
 		var new_point := [
 			null,
 			pos,
@@ -197,8 +220,6 @@ func reset(point_count: int = segment_count + 1) -> void:
 		physics_points.append(new_point)
 
 
-
-
 ## Returns the global positions of all points in the appendage
 func get_global_point_positions() -> PackedVector2Array:
 	var output := PackedVector2Array()
@@ -206,50 +227,75 @@ func get_global_point_positions() -> PackedVector2Array:
 		output.append(point[POSITION])
 	return output
 
+
 func _process_point(point: Array, delta: float, index: int):
-	# Calculate the desired direction and rotation.
-	var direction: Vector2 = point[PREVIOUS_POINT][POSITION].direction_to(point[POSITION])
+	var prev_point = point[PREVIOUS_POINT]
+
+	var direction: Vector2 = prev_point[POSITION].direction_to(point[POSITION])
 	var point_rotation: float = direction.angle()
-	var ideal_rotation: float = point[PREVIOUS_POINT][ROTATION] + _get_true_curvature() * pow(float(index), curvature_exponent)
+
+	var ideal_rotation: float = prev_point[ROTATION] + _get_true_curvature() * pow(float(index), curvature_exponent)
 	ideal_rotation = fmod(ideal_rotation, TAU)
+
 	var rotation_diff: float = _angle_difference(ideal_rotation, point_rotation)
-	# Caclulate the stiffness, gravity, and damping forces.
-	var actual_stiffness = (stiffness - pow(float(index), stiffness_decay_exponent) * stiffness_decay)
-	actual_stiffness = max(0, actual_stiffness)
+	var actual_stiffness = max(0, stiffness - pow(float(index), stiffness_decay_exponent) * stiffness_decay)
+
 	var force: float = _signed_sqrt(rotation_diff) * actual_stiffness
 	force += gravity.length() * cos(point_rotation - gravity.angle() + TAU / 4)
+
 	if sign(force) != sign(point[ANGULAR_MOMENTUM]):
 		force *= damping
-	# Update the angular momentum using the forces.
+
 	point[ANGULAR_MOMENTUM] += force * delta
-	point[ANGULAR_MOMENTUM] = clamp(point[ANGULAR_MOMENTUM], - max_angular_momentum, max_angular_momentum)
+	point[ANGULAR_MOMENTUM] = clamp(point[ANGULAR_MOMENTUM], -max_angular_momentum, max_angular_momentum)
+
 	point_rotation += point[ANGULAR_MOMENTUM] * delta
-	# Clamp rotation, and if beyond the max angle, apply comeback speed.
+
 	if abs(rotation_diff) > max_angle:
 		point_rotation += rotation_diff - abs(max_angle) * sign(rotation_diff)
 		if sign(point[ANGULAR_MOMENTUM]) != sign(rotation_diff) or abs(point[ANGULAR_MOMENTUM]) < comeback_speed:
 			point[ANGULAR_MOMENTUM] = comeback_speed * sign(rotation_diff)
-	# Write what we calculated back to the point.
+
+	# Optional stiff root segment behavior
+	if stiff_root_segments and index < stiff_root_count:
+		var t = 1.0 - float(index) / float(stiff_root_count)
+		point_rotation = lerp_angle(point_rotation, prev_point[ROTATION], t)
+
+
 	point[ROTATION] = point_rotation
-	point[POSITION] = point[PREVIOUS_POINT][POSITION] + Vector2(current_segment_length, 0).rotated(point_rotation)
+	point[POSITION] = prev_point[POSITION] + Vector2(current_segment_length, 0).rotated(point_rotation)
+
 
 
 func _process_root_point(point: Array, delta: float):
 	point[POSITION] = get_global_position()
-	point[ROTATION] = get_global_rotation()
-
+	# Use node's rotation + rest offset so "rest direction" works in any orientation.
+	point[ROTATION] = get_global_rotation() + _rest_direction_angle
 
 
 func _update_line():
 	var new_line_points := PackedVector2Array()
-	if additional_start_segment and subdivide_additional_start_segment:
-		new_line_points.append(Vector2(-additional_start_segment_length, 0))
+
+	# base array from physics
 	for point in physics_points:
 		new_line_points.append(to_local(point[POSITION]))
-	new_line_points = _bezier_interpolate(new_line_points, subdivision)
-	if additional_start_segment and not subdivide_additional_start_segment:
-		new_line_points.insert(0, Vector2(-additional_start_segment_length, 0))
-	points = new_line_points
+
+	# insert a dynamic "extra start segment" before the root
+	if additional_start_segment:
+		if new_line_points.size() > 1:
+			var dir := (new_line_points[1] - new_line_points[0]).normalized()
+			var extra_point := new_line_points[0] - dir * additional_start_segment_length
+
+			if subdivide_additional_start_segment:
+				new_line_points.insert(0, extra_point)
+			else:
+				# just prepend after bezier
+				points = _bezier_interpolate(new_line_points, subdivision)
+				points.insert(0, extra_point)
+				return
+
+	# run bezier normally if no special-case insert happened above
+	points = _bezier_interpolate(new_line_points, subdivision)
 
 
 func _bezier_interpolate(line: PackedVector2Array, subdivision: int) -> PackedVector2Array:

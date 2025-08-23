@@ -267,6 +267,8 @@ wait_time = 0.05
 [connection signal="toggled" from="FileImporter/ConfirmTrim/Node/OffsetSprite" to="FileImporter" method="_on_offset_sprite_toggled"]
 [connection signal="mouse_entered" from="SubViewportContainer" to="." method="_on_sub_viewport_container_mouse_entered"]
 [connection signal="mouse_exited" from="SubViewportContainer" to="." method="_on_sub_viewport_container_mouse_exited"]
+[connection signal="canceled" from="ConfirmationDialog" to="." method="_on_confirmation_dialog_canceled"]
+[connection signal="close_requested" from="ConfirmationDialog" to="." method="_on_confirmation_dialog_canceled"]
 [connection signal="confirmed" from="ConfirmationDialog" to="." method="_on_confirmation_dialog_confirmed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
 [connection signal="files_selected" from="FileDialog" to="." method="_on_file_dialog_files_selected"]

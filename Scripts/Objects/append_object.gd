@@ -31,7 +31,9 @@ func get_default_object_data() -> Dictionary:
 		
 		tile = 2,
 		anchor_id = null,
-		keep_length_anchor = true,
+		keep_length_anchor = false,
+		appendage_angle = 0.0,
+		max_anchor_stretch = 500,
 	}
 
 # Called when the node enters the scene tree for the first time.
@@ -178,7 +180,6 @@ func set_anchor_sprite(_placeholder = null):
 				%Sprite2D.anchor_target = null
 
 
-
 func update_wiggle_parts():
 	if %Sprite2D.segment_count != get_value("wiggle_segm"):
 		%Sprite2D.segment_count = get_value("wiggle_segm")
@@ -204,6 +205,13 @@ func update_wiggle_parts():
 		
 	if %Sprite2D.damping!= get_value("damping"):
 		%Sprite2D.damping = get_value("damping")
+		
+	if %Sprite2D.rest_direction_angle!= get_value("appendage_angle"):
+		%Sprite2D.rest_direction_angle = get_value("appendage_angle")
+		
+	if %Sprite2D.max_length_stretch!= get_value("max_anchor_stretch"):
+		%Sprite2D.max_length_stretch = get_value("max_anchor_stretch")
+		
 
 func check_talk():
 	if get_value("should_talk"):

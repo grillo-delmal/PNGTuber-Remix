@@ -50,12 +50,16 @@ func ready_type(typ):
 		Type.Spin:
 			%SliderValue.hide()
 			%SliderValue.editable = false
+			%SpinBoxValue.set_h_size_flags(Control.SIZE_EXPAND_FILL)
+			%SpinBoxValue.set_horizontal_alignment(HORIZONTAL_ALIGNMENT_FILL)
 		Type.Slide:
 			%SpinBoxValue.hide()
 			%SpinBoxValue.editable = false
 		Type.NoLabel:
 			%BetterSliderLabel.hide()
 		Type.NoLabelSpin:
+			%SpinBoxValue.set_h_size_flags(Control.SIZE_EXPAND_FILL)
+			%SpinBoxValue.set_horizontal_alignment(HORIZONTAL_ALIGNMENT_FILL)
 			%SpinBoxValue.hide()
 			%SpinBoxValue.editable = false
 			%BetterSliderLabel.hide()

@@ -4,6 +4,7 @@ var sprite = preload("res://Misc/SpriteObject/sprite_object.tscn")
 var appendage = preload("res://Misc/AppendageObject/Appendage_object.tscn")
 var trim : bool = false
 var should_offset : bool = true
+var import_flippd : bool = false
 
 func import_sprite(path : String):
 	var spawn = sprite.instantiate()
