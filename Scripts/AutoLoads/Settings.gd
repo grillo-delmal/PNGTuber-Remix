@@ -1,6 +1,7 @@
 extends Node
 
 signal theme_changed
+signal file_error
 
 var top_bar = null
 var ui_theme
@@ -44,7 +45,13 @@ var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
 	hide_mini_view = false,
 	hide_sprite_view = true,
 	use_threading = false,
+	language = "automatic",
 }
+var save_location = OS.get_executable_path().get_base_dir() + "/Preferences.pRDat" :
+	set(value):
+		save_location = value + "/Preferences.pRDat"
+		theme_settings.lipsync_file_path = value + "/DefaultTraining.tres"
+var autosave_location = OS.get_executable_path().get_base_dir() + "/autosaves"
 @onready var os_path = OS.get_executable_path().get_base_dir()
 
 var additional_output = RefCounted.new()
@@ -58,24 +65,37 @@ func save_before_closing():
 		if FileAccess.file_exists(Global.save_path):
 			SaveAndLoad.save_file(Global.save_path)
 		else:
-			DirAccess.make_dir_absolute(os_path + "/AutoSaves")
-			SaveAndLoad.save_file(OS.get_executable_path().get_base_dir() + "/AutoSaves" + "/" + str(randi()))
+			DirAccess.make_dir_absolute(autosave_location)
+			SaveAndLoad.save_file(autosave_location + "/" + str(randi()))
 		window_size_changed()
 		save()
 	await get_tree().create_timer(0.1).timeout
 	get_tree().quit()
 
 func save():
-	var save_file = FileAccess.open(OS.get_executable_path().get_base_dir() + "/Preferences.pRDat", FileAccess.WRITE)
-	save_file.store_var(theme_settings)
-	save_file.close()
+	var parent_path = Util.get_parent_path(save_location)
+	if parent_path == save_location:
+		file_error.emit("INVALID_PATH")
+		return
+	var error = DirAccess.make_dir_absolute(parent_path)
+	if error != OK:
+		file_error.emit("COULD_NOT_MAKE_PATH", error)
+	
+	var save_file = FileAccess.open(save_location, FileAccess.WRITE)
+	if (save_file):
+		save_file.store_var(theme_settings)
+		save_file.close()
+	else:
+		push_error("Could not save settings to \"" + save_location + "\"\n" + str(FileAccess.get_open_error()))
+		file_error.emit("SAVE_ERROR", FileAccess.get_open_error())
+
 
 func auto_save():
 	if FileAccess.file_exists(Global.save_path):
 		SaveAndLoad.save_file(Global.save_path)
 	else:
-		DirAccess.make_dir_absolute(os_path + "/AutoSaves")
-		SaveAndLoad.save_file(OS.get_executable_path().get_base_dir() + "/AutoSaves" + "/" + str(randi()))
+		DirAccess.make_dir_absolute(autosave_location)
+		SaveAndLoad.save_file(autosave_location + "/" + str(randi()))
 	window_size_changed()
 	save()
 	if Global.settings_dict.auto_save:
@@ -94,8 +114,8 @@ func _ready():
 		top_bar = get_tree().get_root().get_node("Main/%TopUI")
 	
 	var file = FileAccess
-	if file.file_exists(OS.get_executable_path().get_base_dir() + "/Preferences.pRDat"):
-		var load_file = file.open(OS.get_executable_path().get_base_dir() + "/Preferences.pRDat", FileAccess.READ)
+	if file.file_exists(save_location):
+		var load_file = file.open(save_location, FileAccess.READ)
 		var info = load_file.get_var()
 		if info is Dictionary:
 			theme_settings.merge(info, true)
@@ -125,16 +145,20 @@ func _ready():
 		load_file.close()
 		
 	else:
-		var create_file = file.open(OS.get_executable_path().get_base_dir() + "/Preferences.pRDat", FileAccess.WRITE)
+		var create_file = file.open(save_location, FileAccess.WRITE)
 		theme_settings.theme_id = 0
-		create_file.store_var(theme_settings)
-		create_file.close()
+		if (create_file):
+			create_file.store_var(theme_settings)
+			create_file.close()
+		else:
+			push_error(file.get_open_error())
+			file_error.emit("INITIAL_SAVE_ERROR", file.get_open_error())
 		loaded_UI(theme_settings.theme_id)
 	
 	get_window().size_changed.connect(window_size_changed)
 	
 	await get_tree().create_timer(0.05).timeout
-	get_window().size = theme_settings.screen_size
+	get_window().size = Settings.theme_settings.screen_size
 	check_ui()
 #	top_bar.check_data()
 
@@ -150,10 +174,21 @@ func _ready():
 	
 	change_cursor()
 
+	# Load language
+	var locale = Util.get_locale(theme_settings.language)
+	if locale == "automatic":
+		TranslationServer.set_locale(OS.get_locale_language())
+	else:
+		TranslationServer.set_locale(locale)
+
 func lipsync_set_up():
+	var parent_path = Util.get_parent_path(save_location);
+	if parent_path != save_location:
+		theme_settings.lipsync_file_path = parent_path + "/DefaultTraining.tres"
+	else:
+		file_error.emit("INVALID_LIP_SYNC_PATH")
 	if !FileAccess.file_exists(theme_settings.lipsync_file_path):
 		#ResourceSaver.save(preload("res://UI/Lipsync stuff/PrebuildFile/DefaultTraining.tres") ,OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres")
-		theme_settings.lipsync_file_path = OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres"
 		LipSyncGlobals.file_data = preload("res://UI/Lipsync stuff/DefaultTraining.tres")
 		LipSyncGlobals.save_file_as(theme_settings.lipsync_file_path)
 		
@@ -165,22 +200,22 @@ func scale_window():
 	get_tree().root.content_scale_factor = theme_settings.ui_scaling
 
 func window_size_changed():
-	theme_settings.screen_size = get_window().size
-	theme_settings.screen_pos = get_window().position
+	Settings.theme_settings.screen_size = get_window().size
+	Settings.theme_settings.screen_pos = get_window().position
 	if get_window().mode == get_window().MODE_MAXIMIZED:
-		theme_settings.screen_window = 1
+		Settings.theme_settings.screen_window = 1
 	elif get_window().mode == get_window().MODE_MINIMIZED:
-		theme_settings.screen_window = 2
+		Settings.theme_settings.screen_window = 2
 	else:
-		theme_settings.screen_window = 0
+		Settings.theme_settings.screen_window = 0
 		
 	if top_bar != null && is_instance_valid(top_bar):
-		top_bar.get_node("%WindowSize").text = "Window Size " + str(theme_settings.screen_size)
+		top_bar.get_node("%WindowSize").text = "Window Size " + str(Settings.theme_settings.screen_size)
 	save()
 
 func check_ui():
 	if top_bar != null && is_instance_valid(top_bar):
-		if theme_settings.mode == 0:
+		if Settings.theme_settings.mode == 0:
 			top_bar.get_node("%TopBarInput").choosing_mode(0)
 		else:
 			top_bar.get_node("%TopBarInput").choosing_mode(1)
@@ -206,28 +241,27 @@ func _on_ui_theme_button_item_selected(index):
 			current_theme = preload("res://Themes/FunkyTheme/Funkytheme.tres")
 		7:
 			current_theme = preload("res://Themes/FrutigerAeroTheme/FrutigerAero.tres")
-			
 	
 	popup.theme = current_theme
-	theme_settings.theme_id = index
+	Settings.theme_settings.theme_id = index
 	Global.theme_update.emit(current_theme)
 	save()
 
 func _on_auto_load_check_toggled(toggled_on):
-	theme_settings.auto_load = toggled_on
+	Settings.theme_settings.auto_load = toggled_on
 	save()
 
 func _on_save_on_exit_check_toggled(toggled_on):
-	theme_settings.save_on_exit = toggled_on
+	Settings.theme_settings.save_on_exit = toggled_on
 	save()
 
 func toggle_borders():
-	theme_settings.borders = !theme_settings.borders
-	var s = theme_settings.screen_size
-	if theme_settings.borders:
+	Settings.theme_settings.borders = !Settings.theme_settings.borders
+	var s = Settings.theme_settings.screen_size
+	if Settings.theme_settings.borders:
 		get_window().borderless = false
 		get_window().size = s
-	elif !theme_settings.borders:
+	elif !Settings.theme_settings.borders:
 		get_window().borderless = true
 		get_window().size = s
 	save()
@@ -247,16 +281,16 @@ func center_window():
 	window_size_changed()
 
 func set_always_on_top(toggle):
-	theme_settings.always_on_top = toggle
-	get_window().always_on_top = theme_settings.always_on_top
+	Settings.theme_settings.always_on_top = toggle
+	get_window().always_on_top = Settings.theme_settings.always_on_top
 	save()
 
 func _on_h_split_container_dragged(offset: int) -> void:
-	theme_settings.left = offset
+	Settings.theme_settings.left = offset
 	save()
 
 func _on_h_split_dragged(offset: int) -> void:
-	theme_settings.right = offset
+	Settings.theme_settings.right = offset
 	save()
 
 

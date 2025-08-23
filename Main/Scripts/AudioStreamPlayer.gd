@@ -50,7 +50,8 @@ func global_lipsync():
 	_fingerprint.populate(LipSyncGlobals.speech_spectrum)
 
 	# Calculate the matches
-	LipSyncGlobals.file_data.match_phonemes(_fingerprint.values, _matches)
+	if LipSyncGlobals.file_data:
+		LipSyncGlobals.file_data.match_phonemes(_fingerprint.values, _matches)
 
 	# Populate the bars
 	t = {

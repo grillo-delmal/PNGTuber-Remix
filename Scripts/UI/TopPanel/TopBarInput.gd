@@ -31,6 +31,7 @@ func _ready():
 	await get_tree().physics_frame
 	choosing_mode(Settings.theme_settings.mode)
 
+
 func update_window_button() -> void:
 	var menu := %WindowButton.get_popup() as PopupMenu
 	menu.set_item_checked(2, Settings.theme_settings.always_on_top)

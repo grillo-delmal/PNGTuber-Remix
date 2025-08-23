@@ -17,7 +17,7 @@ script = ExtResource("1_vb5lh")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
-text = "Light Settings"
+text = "TR_LIGHT_SETTINGS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -31,7 +31,7 @@ custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Light Visible            "
+text = "TR_LIGHT_VISIBLE"
 
 [node name="LSShapeVis" type="CheckBox" parent="Grid"]
 unique_name_in_owner = true
@@ -39,7 +39,7 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Light Shape Visible"
+text = "TR_LIGHT_SHAPE_VISIBLE"
 
 [node name="LSShapeVisLabel" type="Label" parent="Grid/LSShapeVis"]
 unique_name_in_owner = true
@@ -50,7 +50,7 @@ offset_top = 21.0
 offset_right = 150.0
 offset_bottom = 44.0
 theme_override_font_sizes/font_size = 12
-text = "For testing only"
+text = "TR_FOR_TESTING_LABEL"
 horizontal_alignment = 1
 
 [node name="HBox17" type="HBoxContainer" parent="Grid"]
@@ -59,7 +59,7 @@ layout_mode = 2
 [node name="LightColorLabel" type="Label" parent="Grid/HBox17"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Light Color :"
+text = "TR_LIGHT_COLOR"
 
 [node name="LightColor" type="ColorPickerButton" parent="Grid/HBox17"]
 unique_name_in_owner = true
@@ -75,9 +75,9 @@ layout_mode = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
-tooltip_text = "Darkens Your model when not speaking."
+tooltip_text = "TR_LS_DARKEN_TOOLTIP"
 theme_override_font_sizes/font_size = 16
-text = "Darken"
+text = "TR_DARKEN"
 
 [node name="DarkenColor" type="ColorPickerButton" parent="Grid/HBox20"]
 unique_name_in_owner = true
@@ -94,7 +94,7 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Pos-X :  "
+text = "TR_POS_X"
 
 [node name="LightPosXSpinBox" type="SpinBox" parent="Grid/HBox"]
 unique_name_in_owner = true
@@ -116,7 +116,7 @@ custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 16
-text = "Pos-Y : "
+text = "TR_POS_Y"
 
 [node name="LightPosYSpinBox" type="SpinBox" parent="Grid/HBox25"]
 unique_name_in_owner = true
@@ -130,14 +130,14 @@ script = ExtResource("2_fqqfc")
 [node name="LightEnergyBSlider" parent="." instance=ExtResource("3_27oy3")]
 unique_name_in_owner = true
 layout_mode = 2
-label_text = "Light Energy :"
+label_text = "TR_LIGHT_ENERGY"
 max_value = 16.0
 step = 0.1
 
 [node name="LightSizeBSlider" parent="." instance=ExtResource("3_27oy3")]
 unique_name_in_owner = true
 layout_mode = 2
-label_text = "Light Size :"
+label_text = "TR_LIGHT_SIZE"
 mini_value = 0.1
 max_value = 16.0
 step = 0.1

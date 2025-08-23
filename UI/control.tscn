@@ -23,6 +23,7 @@
 [ext_resource type="Script" uid="uid://c6mnetrbitmkr" path="res://addons/dockable_container/layout_split.gd" id="10_y3a4k"]
 [ext_resource type="Script" uid="uid://o3g1heay5br" path="res://addons/dockable_container/layout.gd" id="11_3vweu"]
 [ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="11_ejqfc"]
+[ext_resource type="Script" uid="uid://caf875hofgogu" path="res://Scripts/UI/FormattedLocalizedLabel.gd" id="14_y3a4k"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_y3a4k"]
 blend_mode = 1
@@ -135,7 +136,7 @@ script = ExtResource("4_epu7g")
 unique_name_in_owner = true
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-tooltip_text = "Mini-View Zoom In"
+tooltip_text = "TR_MINI_VIEW_ZOOM_IN"
 focus_mode = 0
 icon = ExtResource("4_in571")
 icon_alignment = 1
@@ -145,7 +146,7 @@ expand_icon = true
 unique_name_in_owner = true
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-tooltip_text = "Mini-View Zoom Out"
+tooltip_text = "TR_MINI_VIEW_ZOOM_OUT"
 focus_mode = 0
 icon = ExtResource("5_epu7g")
 icon_alignment = 1
@@ -155,7 +156,7 @@ expand_icon = true
 unique_name_in_owner = true
 custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
-tooltip_text = "Main-View Zoom Reset"
+tooltip_text = "TR_MAIN_VIEW_ZOOM_RESET"
 focus_mode = 0
 icon = ExtResource("6_seimj")
 icon_alignment = 1
@@ -217,7 +218,7 @@ layout_mode = 2
 focus_mode = 1
 mouse_force_pass_scroll_events = false
 theme_override_font_sizes/font_size = 20
-placeholder_text = "Name"
+placeholder_text = "TR_NAME"
 alignment = 1
 
 [node name="RenameTexture" type="TextureRect" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Properties/Name"]
@@ -241,13 +242,14 @@ self_modulate = Color(1, 1, 1, 0.686275)
 material = SubResource("CanvasItemMaterial_1r6xj")
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "*Multi-State Editing On"
+text = "TR_MULTISTATE_EDITING_CUE_LABEL"
 
 [node name="SpriteID" type="Label" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Properties"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 8
-text = "Sprite ID : 0"
+text = "TR_SPRITE_ID_LABEL{0}"
+script = ExtResource("14_y3a4k")
 
 [node name="Inspector" type="TabContainer" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer"]
 unique_name_in_owner = true
@@ -330,7 +332,7 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 2
 theme_override_font_sizes/font_size = 16
-text = "Advanced Lipsync"
+text = "TR_ADVANCED_LIP_SYNC"
 
 [node name="AdvancedLipSyncLabel" type="Label" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -340,8 +342,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 1
 theme_override_font_sizes/font_size = 14
-text = "Only works if your mouth shapes are in a sprite-sheet. 14 frames
-(Check the Lipsync configuration)"
+text = "TR_ADVANCED_LIP_SYNC_TOOLTIP"
 autowrap_mode = 3
 justification_flags = 169
 max_lines_visible = 3
@@ -365,9 +366,9 @@ theme_override_constants/separation = -10
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
-tooltip_text = "Turns a SpriteSheet into Static Frames that you can choose from."
+tooltip_text = "TR_NONE_ANIMATED_SHEET_TOOLTIP"
 theme_override_font_sizes/font_size = 16
-text = "None Animated Sheet"
+text = "TR_NONE_ANIMATED_SHEET"
 
 [node name="FrameHBox" type="HBoxContainer" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -375,7 +376,7 @@ layout_mode = 2
 
 [node name="FrameLabel" type="Label" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox"]
 layout_mode = 2
-text = "Frame : "
+text = "TR_FRAME_LABEL"
 
 [node name="FrameSpinbox" type="SpinBox" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox"]
 unique_name_in_owner = true
@@ -384,8 +385,8 @@ max_value = 12.0
 
 [node name="AnimateToMouse" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 layout_mode = 2
-tooltip_text = "Animates SpriteSheet depending on mouse position (Horizontally and Vertically)"
-text = "Animate to Mouse"
+tooltip_text = "TR_ANIMATE_TO_MOUSE_TOOLTIP"
+text = "TR_ANIMATE_TO_MOUSE"
 script = ExtResource("10_ncust")
 sp_type = "Sprite2D"
 value_to_update = "animate_to_mouse"
@@ -393,7 +394,7 @@ value_to_update = "animate_to_mouse"
 [node name="BetterSlider" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer" instance=ExtResource("11_ejqfc")]
 layout_mode = 2
 sp_type = "Sprite2D"
-label_text = "Anim-Speed : "
+label_text = "TR_ANIMATION_SPEED"
 mini_value = 0.01
 max_value = 250.0
 step = 0.01
@@ -402,8 +403,8 @@ value_to_update = "animate_to_mouse_speed"
 
 [node name="AnimateToMouse2" type="CheckBox" parent="HSplitContainer/HSplit/RightPanel/Margin/DockableContainer/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 layout_mode = 2
-tooltip_text = "Animate to Mouse must be turned on in order for this feature to work when toggled off, it stops the sprite from moving on the x and y axis, but keeps the Animate to Mouse working."
-text = "Move with Mouse"
+tooltip_text = "TR_MOVE_WITH_MOUSE_TOOLTIP"
+text = "TR_MOVE_WITH_MOUSE"
 script = ExtResource("10_ncust")
 sp_type = "Sprite2D"
 value_to_update = "animate_to_mouse_track_pos"
