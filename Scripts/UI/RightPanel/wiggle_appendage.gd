@@ -24,6 +24,7 @@ func enable():
 				%AutoWagCheck.disabled = false
 				%TextureModeOption.disabled = false
 				%AnchorSprite.disabled = false
+				%StretchToAnchor.disabled = false
 			else:
 				sprite_selected = true
 				nullfy()
@@ -40,6 +41,7 @@ func nullfy():
 	%ClosedLoopCheck.disabled = true
 	%TextureModeOption.disabled = true
 	%AnchorSprite.disabled = true
+	%StretchToAnchor.disabled = true
 
 func set_data():
 	should_change = false
@@ -55,6 +57,7 @@ func set_data():
 					%WAGravityY.value = i.get_value("wiggle_gravity").y
 					%ClosedLoopCheck.button_pressed = i.get_value("wiggle_closed_loop")
 					%AutoWagCheck.button_pressed = i.get_value("auto_wag")
+					%StretchToAnchor.button_pressed = i.get_value("stretch_to_anchor")
 					populate_anchor_data()
 					match i.get_value("tile"):
 						1:
@@ -189,4 +192,15 @@ func _on_anchor_sprite_item_selected(index: int) -> void:
 					i.sprite_data.anchor_id = %AnchorSprite.get_item_metadata(index).sprite_id
 					StateButton.multi_edit(i.sprite_data.anchor_id, "anchor_id", i, i.states)
 					i.get_node("%Sprite2D").anchor_target = %AnchorSprite.get_item_metadata(index).get_node("%Sprite2D")
+					i.save_state(Global.current_state)
+
+
+func _on_stretch_to_anchor_toggled(toggled_on: bool) -> void:
+	if should_change:
+		for i in Global.held_sprites:
+			if i != null && is_instance_valid(i):
+				if i.sprite_type == "WiggleApp":
+					i.sprite_data.keep_length_anchor = toggled_on
+					StateButton.multi_edit(i.sprite_data.keep_length_anchor , "keep_length_anchor", i, i.states)
+					i.get_node("%Sprite2D").keep_length = i.sprite_data.keep_length_anchor 
 					i.save_state(Global.current_state)

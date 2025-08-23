@@ -27,6 +27,7 @@ signal reparent_layers
 
 signal new_file
 signal load_model
+signal project_updates
 
 signal mode_changed
 signal deselect
