@@ -57,7 +57,7 @@ func set_data():
 					%WAGravityY.value = i.get_value("wiggle_gravity").y
 					%ClosedLoopCheck.button_pressed = i.get_value("wiggle_closed_loop")
 					%AutoWagCheck.button_pressed = i.get_value("auto_wag")
-					%StretchToAnchor.button_pressed = i.get_value("stretch_to_anchor")
+					%StretchToAnchor.button_pressed = i.get_value("keep_length_anchor")
 					populate_anchor_data()
 					match i.get_value("tile"):
 						1:
