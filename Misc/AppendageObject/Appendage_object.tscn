@@ -92,7 +92,6 @@ stiffness_decay_exponent = 5.0
 max_angular_momentum = 20.0
 subdivision = 5
 additional_start_segment = true
-max_length_stretch = null
 
 [node name="Grab" type="TextureButton" parent="Pos/MouseRot/Drag/Rotation/Sprite2D"]
 unique_name_in_owner = true

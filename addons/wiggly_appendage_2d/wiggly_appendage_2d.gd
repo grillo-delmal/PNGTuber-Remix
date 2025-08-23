@@ -68,6 +68,7 @@ var _rest_direction_angle : float = 0.0
 var current_segment_length: float = 1.0
 const PREVIOUS_POSITION = 1
 var physics_points: Array
+var current_dir : Vector2 
 
 func _ready():
 	reset()
@@ -191,8 +192,8 @@ func reset(point_count: int = segment_count + 1) -> void:
 	physics_points = []
 	var starting_pos := get_global_position()
 	
-	var direction : Vector2 = Vector2.RIGHT.rotated(_rest_direction_angle)
-
+	var direction : Vector2 = Vector2.ZERO.rotated(_rest_direction_angle)
+	current_dir = direction
 	# Decide base position
 	var root_pos := starting_pos
 	if additional_start_segment:

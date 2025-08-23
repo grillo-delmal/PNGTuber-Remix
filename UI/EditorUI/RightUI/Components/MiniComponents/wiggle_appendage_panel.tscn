@@ -315,7 +315,7 @@ popup/item_0/id = 0
 custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 14
 text = "TR_TEXTURE_MODE_LABEL"
 
 [node name="TextureModeOption" type="OptionButton" parent="WiggleAppStuff/Grid"]

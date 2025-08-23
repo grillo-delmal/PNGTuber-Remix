@@ -164,7 +164,6 @@ func static_prev():
 	%Drag.scale = Vector2(1,1)
 	%MouseRot.rotation = 0.0
 
-
 func follow_wiggle(delta: float):
 	if not actor.get_value("follow_wa_tip"):
 		return
@@ -174,24 +173,34 @@ func follow_wiggle(delta: float):
 	
 	var tip_index = clamp(actor.get_value("tip_point"), 0, parent.points.size() - 1)
 	var raw_tip = parent.points[tip_index]
-	
+
 	var smoothed_pos = actor.position.lerp(raw_tip, 0.6)
 	actor.position = smoothed_pos.snapped(Vector2(1.0, 1.0))
-	
+	var base_length: float = 1.0
+	var point_count = parent.points.size()
+	if point_count > 1:
+		var first_p: Vector2 = parent.points[0]
+		var last_p: Vector2 = parent.points[point_count - 1]
+		base_length = first_p.distance_to(last_p)
+		if base_length < 0.001:
+			base_length = 1.0
 	var strength := 0.0
 	if has_prev:
 		var movement = smoothed_pos - prev_smoothed_pos
-		strength = max(movement.length() * max(delta, 0.0001), 0.0001) # pixels per second
+		strength = movement.length() / (base_length * max(delta, 0.0001))
+		strength = clamp(strength, 0.0, 1.0)
 	prev_smoothed_pos = smoothed_pos
 	has_prev = true
-	var dir = smoothed_pos - raw_tip
-	if dir.length() > 0.55:
-		target_angle = atan2(dir.y, dir.x)
-		var min_ang = deg_to_rad(actor.get_value("follow_wa_mini"))
-		var max_ang = deg_to_rad(actor.get_value("follow_wa_max"))
-		clamped_angle = clamp(target_angle * min(strength, 1.0), min_ang, max_ang)
 	
-	applied_rotation += lerp_angle(applied_rotation, clamped_angle, 0.15)
+	var dir = smoothed_pos - raw_tip
+	var dir_strength = dir.length() / base_length
+	target_angle = atan2(dir.y, dir.x)
+	var min_ang = deg_to_rad(actor.get_value("follow_wa_mini"))
+	var max_ang = deg_to_rad(actor.get_value("follow_wa_max"))
+	clamped_angle = clamp(target_angle * strength, min_ang, max_ang)
+	
+	applied_rotation += lerp_angle(applied_rotation, clamped_angle, 0.125)
+
 
 
 
