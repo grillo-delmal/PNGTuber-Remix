@@ -45,7 +45,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Label4" type="Label" parent="Scroll/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Animation"
+text = "TR_ANIMATION"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -60,7 +60,7 @@ theme_override_constants/separation = 5
 
 [node name="Label" type="Label" parent="Scroll/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Animation Reset"
+text = "TR_ANIMATION_RESET"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -73,25 +73,25 @@ columns = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Resets animation on changing the current State."
+tooltip_text = "TR_RESET_ANIMATION_TOOLTIP"
 theme_override_font_sizes/font_size = 16
-text = "Reset Animation"
+text = "TR_RESET_ANIMATION"
 
 [node name="AnimationOneShot" type="CheckBox" parent="Scroll/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Sets any animation type (APNG, GIF or SpriteSheet) to only play once."
+tooltip_text = "TR_ANIMATION_ONE_SHOT_TOOLTIP"
 theme_override_font_sizes/font_size = 16
-text = "One Shot "
+text = "TR_ANIMATION_ONE_SHOT"
 
 [node name="ResetonStateChange" type="CheckBox" parent="Scroll/MarginContainer/VBoxContainer/GridContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Resets the animaton of (APNG, GIF or SpriteSheet) when changing States."
+tooltip_text = "TR_RESET_ON_STATE_CHANGE_TOOLTIP"
 theme_override_font_sizes/font_size = 14
-text = "Reset on State Change"
+text = "TR_RESET_ON_STATE_CHANGE"
 
 [node name="Sp4" type="HSeparator" parent="Scroll/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -99,7 +99,7 @@ theme_override_constants/separation = 5
 
 [node name="Effects" type="Label" parent="Scroll/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Effects"
+text = "TR_EFFECTS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -113,7 +113,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Rainbow"
+text = "TR_RAINBOW"
 script = ExtResource("4_ryas8")
 sp_type = ""
 value_to_update = "rainbow"
@@ -123,7 +123,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Self-Rainbow"
+text = "TR_EFFECT_SELF_RAINBOW"
 script = ExtResource("4_ryas8")
 sp_type = ""
 value_to_update = "rainbow_self"
@@ -134,7 +134,7 @@ custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
-text = "Rainbow Speed : "
+text = "TR_EFFECT_RAINBOW_SPEED"
 
 [node name="RSSlider" type="HSlider" parent="Scroll/MarginContainer/VBoxContainer/EffectsGrid"]
 unique_name_in_owner = true

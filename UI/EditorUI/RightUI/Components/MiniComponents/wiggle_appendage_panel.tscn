@@ -22,7 +22,7 @@ theme_override_constants/separation = 6
 
 [node name="Label" type="Label" parent="WiggleAppStuff"]
 layout_mode = 2
-text = "Wiggle Appendage"
+text = "TR_WIGGLE_APPENDAGE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -31,7 +31,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 14
-text = "Auto Wag "
+text = "TR_AUTO_WAG"
 
 [node name="AutoWagSettings" type="PanelContainer" parent="WiggleAppStuff"]
 unique_name_in_owner = true
@@ -45,7 +45,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 sp_type = "WiggleApp"
-label_text = "Wag Speed : "
+label_text = "TR_WAG_SPEED_SLIDER"
 mini_value = 0.1
 max_value = 50.0
 step = 0.01
@@ -55,7 +55,7 @@ value_to_update = "wag_speed"
 unique_name_in_owner = true
 layout_mode = 2
 sp_type = "WiggleApp"
-label_text = "Wag Freq : "
+label_text = "TR_WAG_FREQ_LABEL"
 mini_value = -50.0
 max_value = 50.0
 step = 0.01
@@ -65,7 +65,7 @@ value_to_update = "wag_freq"
 unique_name_in_owner = true
 layout_mode = 2
 sp_type = "WiggleApp"
-label_text = "Mini-Curve : "
+label_text = "TR_MIN_CURVE_LABEL"
 mini_value = -180.0
 step = 0.01
 value_to_update = "wag_mini"
@@ -74,7 +74,7 @@ value_to_update = "wag_mini"
 unique_name_in_owner = true
 layout_mode = 2
 sp_type = "WiggleApp"
-label_text = "Max-Curve : "
+label_text = "TR_MAX_CURVE_LABEL"
 max_value = 180.0
 step = 0.01
 value_to_update = "wag_max"
@@ -83,7 +83,7 @@ value_to_update = "wag_max"
 unique_name_in_owner = true
 layout_mode = 2
 sp_type = "WiggleApp"
-label_text = "Curvature : "
+label_text = "TR_CURVATURE_LABEL"
 mini_value = -10.0
 max_value = 10.0
 step = 0.01
@@ -93,7 +93,7 @@ value_to_update = "wiggle_curve"
 unique_name_in_owner = true
 layout_mode = 2
 sp_type = "WiggleApp"
-label_text = "Segments : "
+label_text = "TR_SEGMENTS_LABEL"
 mini_value = 1.0
 max_value = 15.0
 step = 1.0
@@ -103,7 +103,7 @@ value_to_update = "wiggle_segm"
 unique_name_in_owner = true
 layout_mode = 2
 sp_type = "WiggleApp"
-label_text = "Stiffness : "
+label_text = "TR_STIFFNESS_LABEL"
 max_value = 50.0
 step = 1.0
 value_to_update = "wiggle_stiff"
@@ -112,7 +112,7 @@ value_to_update = "wiggle_stiff"
 unique_name_in_owner = true
 layout_mode = 2
 sp_type = "WiggleApp"
-label_text = "Max Angle : "
+label_text = "TR_MAX_ANGLE_LABEL"
 max_value = 180.0
 step = 0.1
 value_to_update = "wiggle_max_angle"
@@ -120,9 +120,9 @@ value_to_update = "wiggle_max_angle"
 [node name="WiggleAppsPhysStiffBSlider" parent="WiggleAppStuff" instance=ExtResource("2_cimjc")]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Physics/ Reaction to parent's movement stiffness."
+tooltip_text = "TR_PHYS_STIFFNESS_TOOLTIP"
 sp_type = "WiggleApp"
-label_text = "Phys-Stiff :"
+label_text = "TR_PHYS_STIFFNESS_LABEL"
 mini_value = 0.5
 max_value = 10.0
 step = 0.1
@@ -131,7 +131,7 @@ value_to_update = "wiggle_physics_stiffness"
 [node name="ComeBackSpeedBSlider" parent="WiggleAppStuff" instance=ExtResource("2_cimjc")]
 layout_mode = 2
 sp_type = "WiggleApp"
-label_text = "Comeback : "
+label_text = "TR_COMEBACK_LABEL"
 max_value = 6.28
 step = 0.01
 value_to_update = "comeback_speed"
@@ -140,7 +140,7 @@ value_to_update = "comeback_speed"
 unique_name_in_owner = true
 layout_mode = 2
 sp_type = "WiggleApp"
-label_text = "Momentum : "
+label_text = "TR_MOMENTUM_LABEL"
 max_value = 10000.0
 step = 0.01
 ui_type = 1
@@ -149,7 +149,7 @@ value_to_update = "max_angular_momentum"
 [node name="DampBSlider" parent="WiggleAppStuff" instance=ExtResource("2_cimjc")]
 layout_mode = 2
 sp_type = "WiggleApp"
-label_text = "Damp : "
+label_text = "TR_DAMP_LABEL"
 max_value = 1000.0
 step = 0.01
 ui_type = 1
@@ -171,7 +171,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
-text = "Width : "
+text = "TR_WIDTH"
 
 [node name="WiggleWidthSpin" type="SpinBox" parent="WiggleAppStuff/Grid/HBox30"]
 unique_name_in_owner = true
@@ -190,7 +190,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
-text = "Length : "
+text = "TR_LENGTH_LABEL"
 
 [node name="WiggleLengthSpin" type="SpinBox" parent="WiggleAppStuff/Grid/HBox31"]
 unique_name_in_owner = true
@@ -206,7 +206,7 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
-text = "Gravity-X : "
+text = "TR_GRAVITY_X_LABEL"
 
 [node name="WAGravityX" type="SpinBox" parent="WiggleAppStuff/Grid/HBox"]
 unique_name_in_owner = true
@@ -226,7 +226,7 @@ theme_override_constants/separation = 4
 custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
-text = "Gravity-Y : "
+text = "TR_GRAVITY_Y_LABEL"
 
 [node name="WAGravityY" type="SpinBox" parent="WiggleAppStuff/Grid/HBox33"]
 unique_name_in_owner = true
@@ -247,7 +247,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "Sub-Division :"
+text = "TR_SUB_DIVISION_LABEL"
 
 [node name="WiggleSubDSpin" type="SpinBox" parent="WiggleAppStuff/Grid/HBox32"]
 unique_name_in_owner = true
@@ -260,14 +260,14 @@ value = 1.0
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Closed Loop    "
+text = "TR_CLOSED_LOOP"
 
 [node name="Label2" type="Label" parent="WiggleAppStuff/Grid"]
 custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 14
-text = "Anchor : "
+text = "TR_ANCHOR_LABEL"
 
 [node name="AnchorSprite" type="OptionButton" parent="WiggleAppStuff/Grid"]
 unique_name_in_owner = true
@@ -275,7 +275,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 selected = 0
 item_count = 1
-popup/item_0/text = "None"
+popup/item_0/text = "TR_NONE"
 popup/item_0/id = 0
 
 [node name="Label" type="Label" parent="WiggleAppStuff/Grid"]
@@ -283,7 +283,7 @@ custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 12
-text = "Texture Mode : "
+text = "TR_TEXTURE_MODE_LABEL"
 
 [node name="TextureModeOption" type="OptionButton" parent="WiggleAppStuff/Grid"]
 unique_name_in_owner = true
@@ -291,9 +291,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 selected = 0
 item_count = 2
-popup/item_0/text = "Stretch"
+popup/item_0/text = "TR_STRETCH"
 popup/item_0/id = 0
-popup/item_1/text = "Tile"
+popup/item_1/text = "TR_TILE"
 popup/item_1/id = 1
 
 [connection signal="toggled" from="WiggleAppStuff/AutoWagCheck" to="WiggleAppendage" method="_on_auto_wag_check_toggled"]

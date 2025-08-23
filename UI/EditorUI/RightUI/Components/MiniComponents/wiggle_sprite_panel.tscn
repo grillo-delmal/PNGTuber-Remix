@@ -18,7 +18,7 @@ script = ExtResource("1_00ydi")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
-text = "Follow Appendage Tip"
+text = "TR_FOLLOW_APPENDAGE_TIP"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -31,7 +31,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 15
-text = "Follow Appendage"
+text = "TR_FOLLOW_APPENDAGE"
 
 [node name="HBox34" type="HBoxContainer" parent="Grid"]
 unique_name_in_owner = true
@@ -41,7 +41,7 @@ size_flags_horizontal = 3
 [node name="TipLabel" type="Label" parent="Grid/HBox34"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "Point :  "
+text = "TR_FAT_POINT"
 
 [node name="TipSpin" type="SpinBox" parent="Grid/HBox34"]
 unique_name_in_owner = true
@@ -53,7 +53,7 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 sp_type = ""
-label_text = "Mini Rotation : "
+label_text = "TR_MIN_ROTATION_LABEL"
 mini_value = -360.0
 step = 0.5
 value_to_update = "follow_wa_mini"
@@ -63,7 +63,7 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 sp_type = ""
-label_text = "Max Rotation : "
+label_text = "TR_MAX_ROTATION_LABEL"
 max_value = 360.0
 step = 0.5
 value_to_update = "follow_wa_max"
@@ -78,7 +78,7 @@ theme_override_constants/separation = 9
 
 [node name="Label2" type="Label" parent="WiggleStuff"]
 layout_mode = 2
-text = "Wiggle Sprite"
+text = "TR_WIGGLE_SPRITE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -91,14 +91,14 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Wiggle Sprite"
+text = "TR_WIGGLE_SPRITE"
 
 [node name="WigglePhysicsCheck" type="CheckBox" parent="WiggleStuff/Grid"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
-text = "Wiggle Physics"
+text = "TR_WIGGLE_PHYSICS"
 script = ExtResource("3_ru4gk")
 sp_type = "Sprite2D"
 value_to_update = "wiggle_physics"
@@ -107,9 +107,9 @@ value_to_update = "wiggle_physics"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Syncs the wiggle effect of the Sprite with the Parent's Wiggle effect (Both must be Sprite Objects)"
+tooltip_text = "TR_WS_SYNC_EFFECT_TOOLTIP"
 theme_override_font_sizes/font_size = 16
-text = "Sync Effect"
+text = "TR_SYNC_EFFECT"
 
 [node name="Grid2" type="GridContainer" parent="WiggleStuff"]
 layout_mode = 2
@@ -124,7 +124,7 @@ custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 16
-text = "X offset : "
+text = "TR_X_OFFSET"
 
 [node name="XoffsetSpinBox" type="SpinBox" parent="WiggleStuff/Grid2/HBoxContainer"]
 unique_name_in_owner = true
@@ -145,7 +145,7 @@ custom_minimum_size = Vector2(93, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_font_sizes/font_size = 16
-text = "Y offset : "
+text = "TR_Y_OFFSET"
 
 [node name="YoffsetSpinBox" type="SpinBox" parent="WiggleStuff/Grid2/HBox"]
 unique_name_in_owner = true
@@ -159,7 +159,7 @@ step = 0.1
 unique_name_in_owner = true
 layout_mode = 2
 sp_type = "Sprite2D"
-label_text = "Wiggle-Amp : "
+label_text = "TR_WS_WIGGLE_AMP"
 mini_value = -50.0
 max_value = 50.0
 step = 0.01
@@ -169,7 +169,7 @@ value_to_update = "wiggle_amp"
 unique_name_in_owner = true
 layout_mode = 2
 sp_type = "Sprite2D"
-label_text = "Wiggle-Freq : "
+label_text = "TR_WS_WIGGLE_FREQUENCY"
 mini_value = -10.0
 max_value = 10.0
 step = 0.01

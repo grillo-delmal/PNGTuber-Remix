@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://bpmlfhv30o08l"]
+[gd_scene load_steps=13 format=3 uid="uid://bpmlfhv30o08l"]
 
 [ext_resource type="Script" uid="uid://buog53mcsao0g" path="res://Scripts/UI/TopPanel/top_ui.gd" id="2_fpnkx"]
 [ext_resource type="Script" uid="uid://bafvsv0wf438w" path="res://Scripts/Misc/OnlineLinks.gd" id="3_tep3f"]
+[ext_resource type="Script" uid="uid://caf875hofgogu" path="res://Scripts/UI/FormattedLocalizedLabel.gd" id="4_mle18"]
 [ext_resource type="Script" uid="uid://qy3riyrj7tll" path="res://Scripts/UI/TopPanel/TopBarInput.gd" id="4_r6evh"]
 [ext_resource type="Texture2D" uid="uid://bq4tg8ia2crwh" path="res://UI/Assets/LinksButtonImages/GithubLogo.png" id="6_0f73e"]
 [ext_resource type="Texture2D" uid="uid://whhnbdvw3i1j" path="res://UI/Assets/LinksButtonImages/TumblrLogo.png" id="7_ja8k8"]
@@ -39,7 +40,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBox" type="HBoxContainer" parent="TopBar"]
+[node name="MarginContainer" type="MarginContainer" parent="TopBar"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 1
 anchors_preset = 15
@@ -47,110 +48,113 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 2
+theme_override_constants/margin_left = 10
 
-[node name="FilesButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="HBox" type="HBoxContainer" parent="TopBar/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="FilesButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
-text = "   Files "
+text = "TR_FILES"
 item_count = 10
-popup/item_0/text = "New"
+popup/item_0/text = "TR_NEW"
 popup/item_0/id = 0
-popup/item_1/text = "Open"
+popup/item_1/text = "TR_OPEN"
 popup/item_1/id = 1
-popup/item_2/text = "Save"
+popup/item_2/text = "TR_SAVE"
 popup/item_2/id = 8
-popup/item_3/text = "Save As"
+popup/item_3/text = "TR_SAVE_AS"
 popup/item_3/id = 3
-popup/item_4/text = "Add Images"
+popup/item_4/text = "TR_ADD_IMAGE"
 popup/item_4/id = 4
-popup/item_5/text = "Add Appendage Based Image"
+popup/item_5/text = "TR_ADD_APPENDAGE"
 popup/item_5/id = 6
-popup/item_6/text = "Export Model Parts"
+popup/item_6/text = "TR_EXPORT_MODEL_PARTS"
 popup/item_6/id = 9
-popup/item_7/text = "Demo Model"
+popup/item_7/text = "TR_DEMO_MODEL"
 popup/item_7/id = 5
-popup/item_8/text = "LipSync Configuration"
+popup/item_8/text = "TR_LIP_SYNC_CONFIG"
 popup/item_8/id = 10
 popup/item_9/text = "Switch Session"
 popup/item_9/id = 11
 
-[node name="ModeButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="ModeButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
-text = " Mode "
+text = "TR_MODE"
 item_count = 2
-popup/item_0/text = "Editor"
+popup/item_0/text = "TR_EDITOR"
 popup/item_0/id = 0
-popup/item_1/text = "Preview"
+popup/item_1/text = "TR_PREVIEW"
 popup/item_1/id = 1
 
-[node name="BGButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="BGButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
-text = " BG Color "
+text = "TR_BG_COLOR"
 item_count = 7
-popup/item_0/text = "Red"
+popup/item_0/text = "TR_RED"
 popup/item_0/id = 0
-popup/item_1/text = "Blue"
+popup/item_1/text = "TR_BLUE"
 popup/item_1/id = 1
-popup/item_2/text = "Green"
+popup/item_2/text = "TR_GREEN"
 popup/item_2/id = 2
-popup/item_3/text = "Magenta"
+popup/item_3/text = "TR_MAGENTA"
 popup/item_3/id = 3
-popup/item_4/text = "Transparent"
+popup/item_4/text = "TR_TRANSPARENT"
 popup/item_4/id = 4
-popup/item_5/text = "Gray"
+popup/item_5/text = "TR_GRAY"
 popup/item_5/id = 5
-popup/item_6/text = "Custom"
+popup/item_6/text = "TR_CUSTOM"
 popup/item_6/id = 6
 
-[node name="BounceControlButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="BounceControlButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
-text = " Bounce "
+text = "TR_BOUNCE"
 
-[node name="InputsButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="InputsButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
-text = " Settings "
+text = "TR_SETTINGS"
 
-[node name="CollabButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="CollabButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(79, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 15
-text = "Collab
-"
+text = "TR_COLLAB"
 
-[node name="WindowButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="WindowButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
-text = " Window "
+text = "TR_WINDOW"
 item_count = 7
-popup/item_0/text = "Toggle Borders"
+popup/item_0/text = "TR_TOGGLE_BORDERS"
 popup/item_0/id = 0
-popup/item_1/text = "Save Window (position, size, etc..)"
+popup/item_1/text = "TR_SAVE_WINDOW_POSITIONS"
 popup/item_1/id = 1
-popup/item_2/text = "Always on top"
+popup/item_2/text = "TR_ALWAYS_ON_TOP"
 popup/item_2/checkable = 1
 popup/item_2/id = 2
-popup/item_3/text = "Center Window"
+popup/item_3/text = "TR_CENTER_WINDOW"
 popup/item_3/id = 3
 popup/item_4/text = "Add Window"
 popup/item_4/id = 4
@@ -163,45 +167,42 @@ popup/item_6/checkable = 1
 popup/item_6/checked = true
 popup/item_6/id = 6
 
-[node name="AboutButton" type="MenuButton" parent="TopBar/HBox"]
+[node name="AboutButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
-text = " About "
+text = "TR_ABOUT"
 item_count = 3
-popup/item_0/text = "Credits"
+popup/item_0/text = "TR_CREDITS"
 popup/item_0/id = 0
-popup/item_1/text = "About"
+popup/item_1/text = "TR_ABOUT"
 popup/item_1/id = 1
-popup/item_2/text = "Mini Tutorial (Wip)"
+popup/item_2/text = "TR_MINI_TUTORIAL"
 popup/item_2/id = 2
 
-[node name="PreviewModeCheck" type="CheckBox" parent="TopBar/HBox"]
+[node name="PreviewModeCheck" type="CheckBox" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(79, 0)
 layout_mode = 2
 size_flags_vertical = 4
-tooltip_text = "Turns your model Static.
-Uncheck to preview your model's movement. 
-This automatically gets unchecked when changing modes.
-"
+tooltip_text = "TR_PREVIEW_MODE_TOOLTIP"
 focus_mode = 0
 theme_override_font_sizes/font_size = 14
-text = "Pause Movement   "
+text = "TR_PAUSE_MOVEMENT"
 flat = true
 
-[node name="HideUIButton" type="CheckBox" parent="TopBar/HBox"]
+[node name="HideUIButton" type="CheckBox" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(79, 0)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 14
 button_pressed = true
-text = "Show UI"
+text = "TR_SHOW_UI"
 flat = true
 
-[node name="DeselectButton" type="Button" parent="TopBar/HBox"]
+[node name="DeselectButton" type="Button" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(79, 0)
@@ -213,20 +214,22 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 14
-text = "Deselect"
+text = "TR_DESELECT"
 flat = true
 icon_alignment = 1
 
-[node name="WindowSize" type="Label" parent="TopBar/HBox"]
+[node name="WindowSize" type="Label" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 0)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 1
 theme_override_font_sizes/font_size = 11
-text = "Window Size (0,0)"
+text = "{0} (0,0)"
 horizontal_alignment = 1
 vertical_alignment = 1
+script = ExtResource("4_mle18")
+localizations = Array[String](["TR_WINDOW_SIZE"])
 
 [node name="AboutPopUp" type="PopupPanel" parent="."]
 unique_name_in_owner = true
@@ -239,15 +242,13 @@ wrap_controls = false
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 396.0
-offset_bottom = 525.0
+offset_bottom = 247.0
 
 [node name="CreditLabel" type="Label" parent="AboutPopUp/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(350, 10)
 layout_mode = 2
-text = "PNGTuber Remix by TheMime (MudkipWorld)
-Original PNGTuber+ Code by kaiakairos. Better UI by LeoRson.
-
-V1.3.4"
+text = "TR_FULL_CREDITS"
 horizontal_alignment = 1
 autowrap_mode = 2
 
@@ -257,7 +258,7 @@ columns = 3
 
 [node name="SourceLabel" type="Label" parent="AboutPopUp/VBoxContainer/GridContainer"]
 layout_mode = 2
-text = "Source code : "
+text = "TR_SOURCE_CODE"
 
 [node name="GitHubButton" type="TextureButton" parent="AboutPopUp/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(50, 50)
@@ -274,7 +275,7 @@ layout_mode = 2
 
 [node name="SocialLabel" type="Label" parent="AboutPopUp/VBoxContainer/GridContainer"]
 layout_mode = 2
-text = "Social : "
+text = "TR_SOCIALS"
 
 [node name="TumblrButton" type="TextureButton" parent="AboutPopUp/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(50, 50)
@@ -300,17 +301,17 @@ stretch_mode = 0
 unique_name_in_owner = true
 auto_translate_mode = 1
 initial_position = 2
-size = Vector2i(571, 147)
+size = Vector2i(571, 195)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TempPopUp"]
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 567.0
-offset_bottom = 143.0
+offset_bottom = 191.0
 
 [node name="TempLabel" type="Label" parent="TempPopUp/VBoxContainer"]
 layout_mode = 2
-text = "Choose Demo :"
+text = "TR_CHOOSE_DEMO"
 horizontal_alignment = 1
 
 [node name="GridContainer" type="GridContainer" parent="TempPopUp/VBoxContainer"]
@@ -321,7 +322,7 @@ columns = 2
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Basic Demo"
+text = "TR_BASIC_DEMO"
 icon = ExtResource("9_hrvuv")
 expand_icon = true
 
@@ -330,7 +331,7 @@ visible = false
 custom_minimum_size = Vector2(320, 50)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Model With Background Demo"
+text = "TR_BG_TEMP_BUTTON"
 icon = ExtResource("10_apeyf")
 expand_icon = true
 
@@ -338,7 +339,7 @@ expand_icon = true
 custom_minimum_size = Vector2(220, 50)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "NormalMap Demo"
+text = "TR_NORMAL_MAP_DEMO"
 icon = ExtResource("11_bgxcq")
 expand_icon = true
 
@@ -346,7 +347,7 @@ expand_icon = true
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Follow Mouse Demo"
+text = "TR_FOLLOW_MOUSE_DEMO"
 icon = ExtResource("12_bmktp")
 expand_icon = true
 
@@ -355,35 +356,35 @@ custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/icon_max_width = 37
-text = "Asset Model Demo"
+text = "TR_ASSET_MODEL_DEMO"
 icon = ExtResource("13_f2y74")
 
 [node name="CreditPopUp" type="PopupPanel" parent="."]
 unique_name_in_owner = true
 auto_translate_mode = 1
 initial_position = 2
-size = Vector2i(435, 207)
+size = Vector2i(438, 249)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CreditPopUp"]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 431.0
-offset_bottom = 222.0
+offset_right = 434.0
+offset_bottom = 245.0
 
 [node name="AboutLabel" type="Label" parent="CreditPopUp/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
-text = "About
+text = "{0}
 "
 horizontal_alignment = 1
+script = ExtResource("4_mle18")
+localizations = Array[String](["TR_ABOUT"])
 
 [node name="Label" type="Label" parent="CreditPopUp/VBoxContainer"]
+custom_minimum_size = Vector2(430, 150)
 layout_mode = 2
-text = "This is a PNGTubing App made to be as lightweight 
-and easy to use as possible.
-This app is based off PNGTuber+.
-Main goal is to implement new features as fix bugs 
-from the original software and improve existing ones."
+text = "TR_ABOUT_FULL"
+autowrap_mode = 3
 
 [node name="Background" type="PopupPanel" parent="."]
 unique_name_in_owner = true
@@ -406,11 +407,11 @@ sampler_visible = false
 color_modes_visible = false
 presets_visible = false
 
-[connection signal="pressed" from="TopBar/HBox/InputsButton" to="TopBarInput" method="_on_inputs_button_pressed"]
-[connection signal="about_to_popup" from="TopBar/HBox/WindowButton" to="TopBarInput" method="_on_window_button_about_to_popup"]
-[connection signal="toggled" from="TopBar/HBox/PreviewModeCheck" to="TopBarInput" method="_on_preview_mode_check_toggled"]
-[connection signal="toggled" from="TopBar/HBox/HideUIButton" to="TopBarInput" method="_on_hide_ui_button_toggled"]
-[connection signal="pressed" from="TopBar/HBox/DeselectButton" to="TopBarInput" method="_on_deselect_button_pressed"]
+[connection signal="pressed" from="TopBar/MarginContainer/HBox/InputsButton" to="TopBarInput" method="_on_inputs_button_pressed"]
+[connection signal="about_to_popup" from="TopBar/MarginContainer/HBox/WindowButton" to="TopBarInput" method="_on_window_button_about_to_popup"]
+[connection signal="toggled" from="TopBar/MarginContainer/HBox/PreviewModeCheck" to="TopBarInput" method="_on_preview_mode_check_toggled"]
+[connection signal="toggled" from="TopBar/MarginContainer/HBox/HideUIButton" to="TopBarInput" method="_on_hide_ui_button_toggled"]
+[connection signal="pressed" from="TopBar/MarginContainer/HBox/DeselectButton" to="TopBarInput" method="_on_deselect_button_pressed"]
 [connection signal="pressed" from="AboutPopUp/VBoxContainer/GridContainer/GitHubButton" to="OnlineLinks" method="_on_git_hub_button_pressed"]
 [connection signal="pressed" from="AboutPopUp/VBoxContainer/GridContainer/TumblrButton" to="OnlineLinks" method="_on_tumblr_button_pressed"]
 [connection signal="pressed" from="AboutPopUp/VBoxContainer/GridContainer/RedditButton" to="OnlineLinks" method="_on_reddit_button_pressed"]

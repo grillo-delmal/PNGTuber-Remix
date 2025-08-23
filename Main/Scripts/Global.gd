@@ -90,6 +90,9 @@ var settings_dict : Dictionary = {
 	max_fps = 241,
 	monitor = Monitor.ALL_SCREENS,
 	cycles = [],
+
+	language = "automatic",
+	preferred_language = null,
 }
 
 var mode: int = 0: set = set_mode
@@ -131,6 +134,7 @@ func _ready():
 	current_state = 0
 	key_pressed.connect(update_cycles)
 
+
 func set_mode(new_mode) -> void:
 	if new_mode == mode: return
 	mode = new_mode
@@ -156,7 +160,6 @@ func set_mode(new_mode) -> void:
 	Settings.theme_settings.mode = mode
 	Settings.save()
 	mode_changed.emit(mode)
-
 
 func blinking():
 	blink_timer.wait_time = settings_dict.blink_speed
@@ -357,3 +360,12 @@ func update_cycles(key):
 func update_camera_smoothing() -> void:
 	if !is_instance_valid(camera): return
 	camera.position_smoothing_enabled = Settings.theme_settings.floaty_panning
+
+func set_language(language: String) -> void:
+	var locale = Util.get_locale(language)
+	Settings.theme_settings.language = language
+	Settings.save()
+	if locale == "automatic":
+		TranslationServer.set_locale(OS.get_locale_language())
+	else:
+		TranslationServer.set_locale(locale)
