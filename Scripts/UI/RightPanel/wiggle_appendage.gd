@@ -25,6 +25,9 @@ func enable():
 				%TextureModeOption.disabled = false
 				%AnchorSprite.disabled = false
 				%StretchToAnchor.disabled = false
+				%MirrorMovementAnchor.disabled = false
+				%MirrorMovementVAnchor2.disabled = false
+				
 			else:
 				sprite_selected = true
 				nullfy()
@@ -42,6 +45,8 @@ func nullfy():
 	%TextureModeOption.disabled = true
 	%AnchorSprite.disabled = true
 	%StretchToAnchor.disabled = true
+	%MirrorMovementAnchor.disabled = true
+	%MirrorMovementVAnchor2.disabled = true
 
 func set_data():
 	should_change = false
@@ -58,6 +63,9 @@ func set_data():
 					%ClosedLoopCheck.button_pressed = i.get_value("wiggle_closed_loop")
 					%AutoWagCheck.button_pressed = i.get_value("auto_wag")
 					%StretchToAnchor.button_pressed = i.get_value("keep_length_anchor")
+					%MirrorMovementAnchor.button_pressed = i.get_value("mirror_anchor_movement_h")
+					%MirrorMovementVAnchor2.button_pressed = i.get_value("mirror_anchor_movement_v")
+					
 					populate_anchor_data()
 					match i.get_value("tile"):
 						1:
@@ -203,4 +211,26 @@ func _on_stretch_to_anchor_toggled(toggled_on: bool) -> void:
 					i.sprite_data.keep_length_anchor = toggled_on
 					StateButton.multi_edit(i.sprite_data.keep_length_anchor , "keep_length_anchor", i, i.states)
 					i.get_node("%Sprite2D").keep_length = i.sprite_data.keep_length_anchor 
+					i.save_state(Global.current_state)
+
+
+func _on_mirror_movement_anchor_toggled(toggled_on: bool) -> void:
+	if should_change:
+		for i in Global.held_sprites:
+			if i != null && is_instance_valid(i):
+				if i.sprite_type == "WiggleApp":
+					i.sprite_data.mirror_anchor_movement_h = toggled_on
+					StateButton.multi_edit(i.sprite_data.mirror_anchor_movement_h , "mirror_anchor_movement_h", i, i.states)
+					i.get_node("%Sprite2D").mirror_anchor_movement_h = i.sprite_data.mirror_anchor_movement_h 
+					i.save_state(Global.current_state)
+
+
+func _on_mirror_movement_v_anchor_2_toggled(toggled_on: bool) -> void:
+	if should_change:
+		for i in Global.held_sprites:
+			if i != null && is_instance_valid(i):
+				if i.sprite_type == "WiggleApp":
+					i.sprite_data.mirror_anchor_movement_v = toggled_on
+					StateButton.multi_edit(i.sprite_data.mirror_anchor_movement_v , "mirror_anchor_movement_v", i, i.states)
+					i.get_node("%Sprite2D").mirror_anchor_movement_v = i.sprite_data.mirror_anchor_movement_v 
 					i.save_state(Global.current_state)

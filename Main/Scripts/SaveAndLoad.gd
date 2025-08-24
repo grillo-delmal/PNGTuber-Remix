@@ -129,6 +129,7 @@ func load_file(path: String, autoload : bool = false):
 	if autoload:
 		Settings.theme_settings.path = path
 		Settings.save()
+	Global.save_path = path
 	if Settings.theme_settings.use_threading:
 		if !thread.is_alive():
 			if path.get_extension() == "save":
@@ -293,7 +294,6 @@ func load_model(path : String):
 	if Settings.theme_settings.use_threading:
 		thread.call_deferred("wait_to_finish")
 	Global.project_updates.emit("Project Loaded!")
-
 
 func save_backup(data: Dictionary, previous_path: String) -> void:
 	var base_path := previous_path.get_basename()

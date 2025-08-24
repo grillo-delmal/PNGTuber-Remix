@@ -181,6 +181,7 @@ func _ready():
 	else:
 		TranslationServer.set_locale(locale)
 
+
 func lipsync_set_up():
 	var parent_path = Util.get_parent_path(save_location);
 	if parent_path != save_location:

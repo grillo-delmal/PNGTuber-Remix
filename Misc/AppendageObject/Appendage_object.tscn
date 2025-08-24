@@ -76,15 +76,16 @@ visible = false
 z_index = 4096
 texture = ExtResource("2_rjec0")
 
-[node name="Sprite2D" type="Line2D" parent="Pos/MouseRot/Drag/Rotation"]
+[node name="Sprite2D" type="Line2D" parent="Pos/MouseRot/Drag/Rotation" node_paths=PackedStringArray("actor")]
 unique_name_in_owner = true
 physics_interpolation_mode = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_1tqhp")
-points = PackedVector2Array(-10, 0, -4.96, 0, 2.16, 0, 11.36, 0, 22.64, 0, 36, 0, 50.4, 0.000121673, 64.8, 0.000486693, 79.2, 0.00109506, 93.6, 0.00194677, 108, 0.00304183, 122.4, 0.00419338, 136.8, 0.00521457, 151.2, 0.00610539, 165.6, 0.00686585, 180, 0.00749594, 194.4, 0.00730675, 208.8, 0.00560934, 223.2, 0.00240372, 237.6, -0.00231012, 252, -0.00853217, 266.4, -0.0151395, 280.8, -0.0210094, 295.2, -0.0261416, 309.6, -0.0305363, 324, -0.0341934, 338.4, -0.037113, 352.8, -0.039295)
+points = PackedVector2Array(-10, 0, -4.96, 0, 2.16, 0, 11.36, 0, 22.64, 0, 36, 0, 50.4, -4.38464e-05, 64.8, -0.000175386, 79.2, -0.000394618, 93.6, -0.000701542, 108, -0.00109616, 122.4, -0.00172433, 136.8, -0.00273192, 151.2, -0.00411893, 165.6, -0.00588535, 180, -0.00803119, 194.4, -0.0102638, 208.8, -0.0122904, 223.2, -0.0141111, 237.6, -0.0157259, 252, -0.0171347, 266.4, -0.0181488, 280.8, -0.0185794, 295.2, -0.0184265, 309.6, -0.01769, 324, -0.0163701, 338.4, -0.0144666, 352.8, -0.0119796)
 texture = SubResource("CanvasTexture_swft8")
 texture_mode = 2
 script = ExtResource("4_e6x1l")
+actor = NodePath("../../../../..")
 segment_length = 72.0
 max_angle = 0.523599
 comeback_speed = 0.419
@@ -92,6 +93,7 @@ stiffness_decay_exponent = 5.0
 max_angular_momentum = 20.0
 subdivision = 5
 additional_start_segment = true
+mirror_anchor_movement = null
 
 [node name="Grab" type="TextureButton" parent="Pos/MouseRot/Drag/Rotation/Sprite2D"]
 unique_name_in_owner = true

@@ -34,6 +34,8 @@ func get_default_object_data() -> Dictionary:
 		keep_length_anchor = false,
 		appendage_angle = 0.0,
 		max_anchor_stretch = 500,
+		mirror_anchor_movement_h = false,
+		mirror_anchor_movement_v = false,
 	}
 
 # Called when the node enters the scene tree for the first time.
@@ -215,6 +217,12 @@ func update_wiggle_parts():
 		
 	if %Sprite2D.max_length_stretch!= get_value("max_anchor_stretch"):
 		%Sprite2D.max_length_stretch = get_value("max_anchor_stretch")
+		
+	if %Sprite2D.mirror_anchor_movement_h!= get_value("mirror_anchor_movement_h"):
+		%Sprite2D.mirror_anchor_movement_h = get_value("mirror_anchor_movement_h")
+		
+	if %Sprite2D.mirror_anchor_movement_v!= get_value("mirror_anchor_movement_v"):
+		%Sprite2D.mirror_anchor_movement_v = get_value("mirror_anchor_movement_v")
 		
 
 func check_talk():

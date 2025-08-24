@@ -10,6 +10,7 @@ enum {
 	ANGULAR_MOMENTUM = 3,
 }
 
+@export var actor : SpriteObject
 
 @export var anchor_target: Node2D
 ## Amout of segments
@@ -57,7 +58,7 @@ var _rest_direction_angle : float = 0.0
 ## How many of the first segments should be stiffened (only used if stiff_root_segments = true)
 @export_range(1, 5) var stiff_root_count: int = 5
 
-@export_range(-180, 180, 0.01) var rest_direction_angle: float:
+@export_range(-360, 360, 0.01) var rest_direction_angle: float:
 	set(value):
 		rest_direction_angle = value
 		_rest_direction_angle = deg_to_rad(value)
@@ -65,10 +66,19 @@ var _rest_direction_angle : float = 0.0
 
 @export var max_length_stretch : float = 500
 
+
+@export var mirror_anchor_movement_h : bool = false
+
+@export var mirror_anchor_movement_v : bool = false
+
+
 var current_segment_length: float = 1.0
 const PREVIOUS_POSITION = 1
 var physics_points: Array
-var current_dir : Vector2 
+var current_dir : Vector2
+var prev_pos : Array = []
+var stretch_seg : float = 0.0
+var test : Vector2 = Vector2.ZERO
 
 func _ready():
 	reset()
@@ -78,7 +88,7 @@ func _physics_process(delta):
 		return
 	if anchor_target != null && is_instance_valid(anchor_target):
 		var root_pos = get_global_position()
-		var anchor_pos = anchor_target.global_position
+		var anchor_pos = anchor_target.position
 		var total_length = root_pos.distance_to(anchor_pos)
 	current_segment_length = _get_true_segment_length()
 	# Physics pass
@@ -94,8 +104,6 @@ func _physics_process(delta):
 
 
 func _verlet_integration(delta):
-	var gravity = Vector2(0, 1960)  # stronger gravity
-	
 	for i in range(physics_points.size()):
 		if i == 0:
 			continue
@@ -114,78 +122,153 @@ func _verlet_integration(delta):
 		
 		physics_points[i] = point
 
+
 func _apply_verlet_anchor(delta):
 	_verlet_integration(delta)
-
-	# Root fixed
 	var root = physics_points[0]
 	root[POSITION] = global_position
 	physics_points[0] = root
-
 	if anchor_target != null and is_instance_valid(anchor_target):
-		var anchor_pos = anchor_target.global_position
+		var anchor = anchor_target.global_transform.get_origin()
 		var root_pos = global_position
 		var max_reach = segment_length * (physics_points.size() - 1)
-
+		var max_stretch_reached = max_length_stretch * (physics_points.size() - 1)
 		if keep_length:
 			# Check if anchor is too far away
-			var to_anchor = anchor_pos - root_pos
-			if to_anchor.length() > max_reach:
-				# Too far → "look at" anchor, but keep length
-				var dir = to_anchor.normalized()
-				physics_points[-1][POSITION] = root_pos + dir * max_reach
-			else:
-				# Within reach → allow normal following
-				physics_points[-1][POSITION] = anchor_pos
+			var to_anchor = anchor - root_pos
+			var dir = to_anchor.normalized()
+			physics_points[-1][POSITION] = root_pos + dir * current_segment_length
 		else:
+			var anchor_pos = anchor
 			var to_anchor = anchor_pos - root_pos
-			if to_anchor.length() > max_length_stretch:
-				# Too far → "look at" anchor, but keep length
-				var dir = to_anchor.normalized()
-				physics_points[-1][POSITION] = root_pos + dir * max_length_stretch
+			var distance_to_anchor = to_anchor.length()
+			max_reach = segment_length * (physics_points.size() - 1)
+			var stretch_factor = clamp(distance_to_anchor / max_reach, 1.0, max_length_stretch / segment_length)
+			var stretched_segment_length = segment_length * stretch_factor
+			stretch_seg = stretched_segment_length
+
+						
+			if to_anchor.length() > current_segment_length &&  max_length_stretch != 999999.0:
+				var dir = Vector2.ZERO
+				if distance_to_anchor > 0:
+					dir = to_anchor.normalized()
+
+				for i in range(physics_points.size()):
+					physics_points[i][POSITION] = root_pos + dir * (stretched_segment_length * i)
+
 			else:
 				# Within reach → allow normal following
-				physics_points[-1][POSITION] = anchor_pos
+				physics_points[-1][POSITION] = anchor
+	_apply_constraints()
+	
 
-	# Apply distance constraints
+func _apply_constraints():
+	var min_angle = deg_to_rad(actor.get_value("follow_wa_mini"))
+	var max_angle = deg_to_rad(actor.get_value("follow_wa_max"))
+	var rest_dir = _rest_direction_angle
+	if anchor_target == null or not is_instance_valid(anchor_target):
+		return
+	var root_pos = physics_points[0][POSITION]
+	var anchor_pos = anchor_target.global_position
+	var to_anchor = anchor_pos - root_pos
+	var to_anchor_dir = (anchor_pos - root_pos).angle()
+	var target_dir = 0.0
+	for l in range(5):
+		for i in range(physics_points.size() - 1):
+			var p1 = physics_points[i]
+			var p2 = physics_points[i + 1]
+			var delta_vec = p2[POSITION] - p1[POSITION]
+			var dist = max(delta_vec.length(), 1.0)
+			if dist == 0:
+				continue
+			var length = dist
+			if keep_length:
+				length = current_segment_length
+			
+			var target_angle = to_anchor_dir
+			var rel_angle = wrapf(target_angle - rest_dir, -PI, PI)
+			rel_angle = clamp(rel_angle, min_angle, max_angle)
+			target_angle = rest_dir + rel_angle
+			var dir_vec = Vector2(cos(target_angle), sin(target_angle))
+			
+			var h = dir_vec.normalized()
+			var backup = dir_vec.normalized()
+			if mirror_anchor_movement_h:
+				var norm_x = clamp(abs(h.x), 0.0, 1.0)
+				dir_vec.x = max(norm_x, 0.001)
+			else:
+				dir_vec.x = backup.x
+			if mirror_anchor_movement_v:
+				var norm_y = clamp(abs(h.y), 0.0, 1.0)
+				dir_vec.y = max(norm_y, 0.001)
+			else:
+				dir_vec.y = backup.y
+			var new_pos = p1[POSITION] + dir_vec * length
+			p2[POSITION] = new_pos
+			physics_points[i] = p1
+			physics_points[i + 1] = p2
+
+'''
+
+		var center = screen_size * 0.5
+		var dist_from_center = mouse
+		var norm_x = clamp(abs(dist_from_center.x) / center.x, 0.0, 1.0)
+		var norm_y = clamp(abs(dist_from_center.y) / center.y, 0.0, 1.0)
+		var target_scale_x = lerp(1.0, 1.0 - actor.sprite_data.mouse_scale_x , max(norm_x, 0.001))
+		var target_scale_y = lerp(1.0, 1.0 - actor.sprite_data.mouse_scale_y, max(norm_y, 0.001))
+		%Drag.scale.x = lerp(%Drag.scale.x, target_scale_x, actor.sprite_data.mouse_delay)
+		%Drag.scale.y = lerp(%Drag.scale.y, target_scale_y, actor.sprite_data.mouse_delay)
+
+	for l in range(5):
+		for i in range(physics_points.size() - 1):
+			var p1 = physics_points[i]
+			var p2 = physics_points[i + 1]
+
+			var delta_vec = p2[POSITION] - p1[POSITION]
+			var dist = delta_vec.length()
+			if dist == 0:
+				continue
+
+			var length = dist
+			if keep_length:
+				length = current_segment_length
+
+		# current segment direction
+			var seg_dir = delta_vec.normalized()
+			# angle relative to rest
+			var seg_angle = atan2(seg_dir.y, seg_dir.x) - rest_dir
+			# clamp angle
+			var clamped_angle = clamp(seg_angle, min_angle, max_angle)
+
+			# calculate target direction based on clamped angle
+			target_dir = Vector2(cos(rest_dir + clamped_angle), sin(rest_dir + clamped_angle))
+
+			# soft interpolation from current direction to target
+			var smooth_dir = target_dir
+
+			# apply length
+			p2[POSITION] = p1[POSITION] + smooth_dir * length
+
+			physics_points[i] = p1
+			physics_points[i + 1] = p2
+
 	for l in range(5):
 		for i in range(physics_points.size() - 1):
 			var p1 = physics_points[i]
 			var p2 = physics_points[i + 1]
 			var delta_vec = p2[POSITION] - p1[POSITION]
 			var dist = delta_vec.length()
-
 			if dist == 0:
 				continue
-
-			var diff = (dist - segment_length) / dist
-			var correction = delta_vec * 0.5 * diff
-
-			if i != 0:
-				p1[POSITION] += correction
-			if i + 1 != physics_points.size() - 1:
-				p2[POSITION] -= correction
-
+			var length = dist
+			if keep_length:
+				length = current_segment_length
+			var new_pos = p1[POSITION] + target_dir.normalized() * length
+			p2[POSITION] = new_pos
 			physics_points[i] = p1
 			physics_points[i + 1] = p2
 
-
-
-func _apply_constraints():
-	for l in range(5): # Run multiple times for stability
-		for i in range(physics_points.size() - 1):
-			var p1 = physics_points[i]
-			var p2 = physics_points[i + 1]
-			var delta = p2[POSITION] - p1[POSITION]
-			var dist = delta.length()
-			var diff = (dist - current_segment_length) / dist
-			var correction = delta * 0.5 * diff
-			if i != 0:
-				p1[POSITION] += correction
-			p2[POSITION] -= correction
-			physics_points[i] = p1
-			physics_points[i + 1] = p2
-
+'''
 
 
 func reset(point_count: int = segment_count + 1) -> void:
@@ -271,7 +354,10 @@ func _process_point(point: Array, delta: float, index: int):
 func _process_root_point(point: Array, delta: float):
 	point[POSITION] = get_global_position()
 	# Use node's rotation + rest offset so "rest direction" works in any orientation.
-	point[ROTATION] = get_global_rotation() + _rest_direction_angle
+	if anchor_target != null and is_instance_valid(anchor_target):
+		point[ROTATION] = 0.0
+	else:
+		point[ROTATION] = _rest_direction_angle + global_transform.get_rotation()
 
 
 func _update_line():

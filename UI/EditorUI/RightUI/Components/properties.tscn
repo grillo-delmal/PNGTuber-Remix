@@ -321,6 +321,17 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
 text = "TR_CLIP_CHILDREN"
 
+[node name="HiddenItem" type="CheckBox" parent="Scroll/MarginContainer/VBoxContainer/Visibilty"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "If toggled, the current Object will be hidden when viewed outside the editor."
+theme_override_font_sizes/font_size = 16
+text = "Hidden Item"
+script = ExtResource("2_7ymxr")
+sp_type = ""
+value_to_update = "hidden_item"
+
 [node name="HSeparator" type="HSeparator" parent="Scroll/MarginContainer/VBoxContainer"]
 layout_mode = 2
 

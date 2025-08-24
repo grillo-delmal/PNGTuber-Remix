@@ -202,27 +202,50 @@ size_flags_vertical = 3
 mouse_filter = 2
 script = ExtResource("5_rj11h")
 
-[node name="UIHolder" type="VBoxContainer" parent="UICanvas"]
+[node name="UIHold" type="VBoxContainer" parent="UICanvas"]
 unique_name_in_owner = true
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("5_4hh1t")
+theme_override_constants/separation = 0
+
+[node name="UIHolder" type="VBoxContainer" parent="UICanvas/UIHold"]
+unique_name_in_owner = true
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 2
-theme = ExtResource("5_4hh1t")
 theme_override_constants/separation = -1
 
-[node name="TopUI" parent="UICanvas/UIHolder" instance=ExtResource("7_qwnpc")]
+[node name="TopUI" parent="UICanvas/UIHold/UIHolder" instance=ExtResource("7_qwnpc")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="Control" parent="UICanvas/UIHolder" instance=ExtResource("2_micm1")]
+[node name="Control" parent="UICanvas/UIHold/UIHolder" instance=ExtResource("2_micm1")]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="ProjectNamePanel" type="Panel" parent="UICanvas/UIHold"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="ProjectNameLabel" type="Label" parent="UICanvas/UIHold/ProjectNamePanel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 11
+text = "jkkk"
 
 [node name="Pointer" type="ColorRect" parent="UICanvas"]
 visible = false

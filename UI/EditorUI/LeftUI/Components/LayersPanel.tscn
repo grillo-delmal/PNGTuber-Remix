@@ -77,8 +77,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_vertical = 4
-tooltip_text = "Flip Sprite Horizontally.
-Note : This resets the Appendage Dimensions."
+tooltip_text = "Flip Sprite Image Horizontally."
 focus_mode = 0
 mouse_default_cursor_shape = 2
 icon = ExtResource("2_1ikkj")
@@ -89,8 +88,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_vertical = 4
-tooltip_text = "Flip Sprite Vertically.
-Note : This resets the Appendage Dimensions."
+tooltip_text = "Flip Sprite Image Vertically."
 focus_mode = 0
 mouse_default_cursor_shape = 2
 icon = ExtResource("3_bwdjw")

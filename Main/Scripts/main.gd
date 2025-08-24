@@ -40,9 +40,10 @@ func _ready():
 	await get_tree().create_timer(0.1).timeout
 	Global.update_ui_pieces.emit()
 	Global.update_camera_smoothing()
+	Global.project_updates.connect(update_text)
 
 func update_theme(new_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")):
-	%UIHolder.theme = new_theme
+	%UIHold.theme = new_theme
 	%ConfirmTrim.theme = new_theme
 	%ConfirmationDialog.theme = new_theme
 	%Control.set_values()
@@ -256,3 +257,7 @@ func _notification(what):
 
 func _on_confirmation_dialog_canceled() -> void:
 	%ConfirmationDialog.hide()
+
+func update_text(arg):
+	if arg is String:
+		%ProjectNameLabel.text = Global.save_path

@@ -38,6 +38,7 @@ var last_target_angle : float= 0.0
 var has_last_target : float = false
 var biased : float = 0.0
 var strength = 0.0
+var b : float = 0.0
 
 
 func _ready() -> void:
@@ -60,6 +61,7 @@ func _physics_process(delta: float) -> void:
 	
 	follow_wiggle(delta)
 	
+
 	%Rotation.rotation = is_nan_or_inf(applied_rotation + rot_drag + follow_point_rot)
 	%Pos.position += is_nan_or_inf(applied_pos)
 	placeholder_position = %Pos.global_position
@@ -181,6 +183,7 @@ func follow_wiggle(delta: float) -> void:
 	if !is_instance_valid(parent) or !(parent is WigglyAppendage2D):
 		follow_point_rot = 0.0
 		return
+	
 	var tip_index = clamp(actor.get_value("tip_point"), 0, parent.points.size() - 1)
 	var raw_tip: Vector2 = parent.points[tip_index]
 	var rest_angle: float = parent._rest_direction_angle
@@ -195,26 +198,30 @@ func follow_wiggle(delta: float) -> void:
 		strength = lerp(strength, clamp(raw_strength, 0.0, 1.0), 0.1)
 	prev_smoothed_pos = smoothed_pos
 	has_prev = true
-	var dir = actor.position - raw_tip
-	if dir.length() <= 0.05:
-		return
+	var dir = prev_smoothed_pos  - raw_tip
 	var min_angle = deg_to_rad(actor.get_value("follow_wa_mini"))
 	var max_angle = deg_to_rad(actor.get_value("follow_wa_max"))
 	var dir_angle = atan2(dir.y, dir.x)
-	if actor.get_value("follow_range"):
-		var rel_angle = wrapf(dir_angle - rest_angle, -PI, PI)
-		var target_rel: float = rel_angle * strength
-		var target_ang: float = rest_angle + target_rel  
-		biased = lerp_angle(follow_point_rot, target_ang, actor.get_value("follow_strength"))
-		min_angle += rest_angle 
-		max_angle += rest_angle  
-	else:
-		var rel_angle = wrapf(dir_angle, -PI, PI)
-		var target_rel: float = rel_angle * strength
-		var target_ang: float = rest_angle + target_rel  
-		biased = lerp_angle(follow_point_rot, target_ang, actor.get_value("follow_strength"))
+	
+	if dir.length() > actor.get_value("rotation_threshold"):
+		if actor.get_value("anchor_id") == null:
+			if actor.get_value("follow_range"):
+				var rel_angle = wrapf(dir_angle - rest_angle, -PI, PI)
+				var target_rel: float = rel_angle * strength
+				var target_ang: float = rest_angle + target_rel  
+				min_angle += rest_angle 
+				max_angle += rest_angle  
+				b = target_ang
+			else:
+				var rel_angle = wrapf(dir_angle, -PI, PI)
+				var target_rel: float = rel_angle * strength
+				var target_ang: float = rest_angle + target_rel  
+				b = target_ang
+		
+		biased = lerp_angle(wrap(biased, -PI, PI), wrap(b, -PI, PI), actor.get_value("follow_strength"))
 
 	follow_point_rot = clamp_angle(biased, min_angle, max_angle)
+	
 
 func clamp_angle(value: float, min_angle: float, max_angle: float, rest: float = 0.0) -> float:
 	var v = value + rest
@@ -238,18 +245,21 @@ func _get_distance(a: float, b: float) -> float:
 	#printt(min_ang, max_ang)
 
 func rainbow():
-	if actor.get_value("rainbow"):
-		if not actor.get_value("rainbow_self"):
-			%Sprite2D.self_modulate.s = 0
-			%Pos.modulate.s = 1
-			%Pos.modulate.h = wrap(%Pos.modulate.h + actor.get_value("rainbow_speed"), 0, 1)
-		else:
-			%Pos.modulate.s = 0
-			%Sprite2D.self_modulate.s = 1
-			%Sprite2D.self_modulate.h = wrap(%Sprite2D.self_modulate.h + actor.get_value("rainbow_speed"), 0, 1)
+	if actor.get_value("hidden_item") && Global.mode != 0:
+		%Sprite2D.self_modulate.a = 0.0
 	else:
-		%Sprite2D.self_modulate = actor.get_value("tint")
-		%Pos.modulate.s = 0
+		if actor.get_value("rainbow"):
+			if not actor.get_value("rainbow_self"):
+				%Sprite2D.self_modulate.s = 0
+				%Pos.modulate.s = 1
+				%Pos.modulate.h = wrap(%Pos.modulate.h + actor.get_value("rainbow_speed"), 0, 1)
+			else:
+				%Pos.modulate.s = 0
+				%Sprite2D.self_modulate.s = 1
+				%Sprite2D.self_modulate.h = wrap(%Sprite2D.self_modulate.h + actor.get_value("rainbow_speed"), 0, 1)
+		else:
+			%Sprite2D.self_modulate = actor.get_value("tint")
+			%Pos.modulate.s = 0
 
 #endregion
 
@@ -436,24 +446,28 @@ func follow_controller():
 	var axis_right = Input.get_vector("ControllerFour", "ControllerTwo", "ControllerOne", "ControllerThree")
 	
 	if actor.get_value("follow_type") == 1:
-		if axis_left != Vector2.ZERO && actor.get_value("snap_pos"):
-			target_x = axis_left.x * actor.get_value("look_at_mouse_pos")
-			target_y = axis_left.y * actor.get_value("look_at_mouse_pos_y")
+		if actor.get_value("snap_pos"):
+			if axis_left.x != 0:
+				target_x = lerp(target_x, axis_left.x * actor.get_value("look_at_mouse_pos"),actor.get_value("mouse_delay"))
+			if axis_left.y != 0 && actor.get_value("snap_pos"):
+				target_y = lerp(target_y, axis_left.y * actor.get_value("look_at_mouse_pos_y"), actor.get_value("mouse_delay"))
 		else:
 			target_x = axis_left.x * actor.get_value("look_at_mouse_pos")
 			target_y = axis_left.y * actor.get_value("look_at_mouse_pos_y")
 		var dist = Vector2(target_x, target_y).length()
-		follow_controller_position(axis_left)
+		follow_controller_position(axis_left, target_x, target_y)
 		follow_sprite_anim(axis_left, dist)
 	elif actor.get_value("follow_type") == 2:
-		if axis_right != Vector2.ZERO && actor.get_value("snap_pos"):
-			target_x = axis_right.x * actor.get_value("look_at_mouse_pos")
-			target_y = axis_right.y * actor.get_value("look_at_mouse_pos_y")
+		if actor.get_value("snap_pos"):
+			if axis_right.x != 0:
+				target_x = lerp(target_x, (axis_right.x * actor.get_value("look_at_mouse_pos")), actor.get_value("mouse_delay"))
+			if axis_right.y != 0 && actor.get_value("snap_pos"):
+				target_y = lerp(target_y, axis_right.y * actor.get_value("look_at_mouse_pos_y"), actor.get_value("mouse_delay"))
 		else:
 			target_x = axis_right.x * actor.get_value("look_at_mouse_pos")
 			target_y = axis_right.y * actor.get_value("look_at_mouse_pos_y")
 		var dist = Vector2(target_x, target_y).length()
-		follow_controller_position(axis_right)
+		follow_controller_position(axis_right, target_x, target_y)
 		follow_sprite_anim(axis_right, dist)
 	
 	if actor.get_value("follow_type2") == 1:
@@ -466,22 +480,18 @@ func follow_controller():
 	elif actor.get_value("follow_type3") == 2:
 		follow_controller_scale(axis_right)
 
-func follow_controller_position(axis):
+func follow_controller_position(axis, t_x, t_y):
 	if actor.sprite_type == "Sprite2D":
 		if actor.get_value("non_animated_sheet") && actor.get_value("animate_to_mouse") && !actor.get_value("animate_to_mouse_track_pos"):
 			%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, 0.0, actor.get_value("mouse_delay")))
 			%Pos.position.y = is_nan_or_inf(lerp(%Pos.position.y, 0.0, actor.get_value("mouse_delay")))
 		else:
-			if axis != Vector2.ZERO:
-				target_x = axis.x * actor.get_value("look_at_mouse_pos")
-				target_y = axis.y * actor.get_value("look_at_mouse_pos_y")
+			%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, t_x, actor.get_value("mouse_delay")))
+			%Pos.position.y = is_nan_or_inf(lerp(%Pos.position.y, t_y, actor.get_value("mouse_delay")))
 	else:
-		if axis != Vector2.ZERO:
-			target_x = axis.x * actor.get_value("look_at_mouse_pos")
-			target_y = axis.y * actor.get_value("look_at_mouse_pos_y")
 			
-	%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, target_x, actor.get_value("mouse_delay")))
-	%Pos.position.y = is_nan_or_inf(lerp(%Pos.position.y, target_y, actor.get_value("mouse_delay")))
+		%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, t_x, actor.get_value("mouse_delay")))
+		%Pos.position.y = is_nan_or_inf(lerp(%Pos.position.y, t_y, actor.get_value("mouse_delay")))
 
 	if actor.get_value("look_at_mouse_pos") == 0:
 		%Pos.position.x = 0.0
@@ -512,14 +522,16 @@ func follow_keyboard():
 	if actor.get_value("follow_type") in [3,4,5,6,7,8]:
 		var pos_axis = some_keyboard_calc_wasd()
 	
-		if pos_axis != Vector2.ZERO && actor.get_value("snap_pos"):
-			target_x = pos_axis.x * actor.get_value("look_at_mouse_pos")
-			target_y = pos_axis.y * actor.get_value("look_at_mouse_pos_y")
+		if actor.get_value("snap_pos"):
+			if pos_axis.x != 0:
+				target_x = lerp(target_x, pos_axis.x * actor.get_value("look_at_mouse_pos"), actor.get_value("mouse_delay"))
+			if pos_axis.y != 0 && actor.get_value("snap_pos"):
+				target_y = lerp(target_y, pos_axis.y * actor.get_value("look_at_mouse_pos_y"), actor.get_value("mouse_delay"))
 		else:
 			target_x = pos_axis.x * actor.get_value("look_at_mouse_pos")
 			target_y = pos_axis.y * actor.get_value("look_at_mouse_pos_y")
 		var dist = Vector2(target_x, target_y).length()
-		follow_controller_position(pos_axis)
+		follow_controller_position(pos_axis , target_x, target_y)
 		follow_sprite_anim(pos_axis, dist)
 
 	if actor.get_value("follow_type2") in [3,4,5,6,7,8]:
@@ -571,8 +583,6 @@ func some_keyboard_calc_wasd(type_name : String = "follow_type") -> Vector2:
 			normal = Vector2(ad.x - ad.y, ws.x - ws.y)
 
 	return normal
-
-
 
 func follow_sprite_anim(dir, dist):
 	if actor.sprite_type == "Sprite2D":

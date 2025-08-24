@@ -259,8 +259,8 @@ value = 1.0
 layout_mode = 2
 sp_type = "WiggleApp"
 label_text = "Angle : "
-mini_value = -180.0
-max_value = 180.0
+mini_value = -360.0
+max_value = 360.0
 step = 0.01
 ui_type = 1
 value_to_update = "appendage_angle"
@@ -276,6 +276,14 @@ layout_mode = 2
 theme_override_constants/v_separation = 6
 columns = 2
 
+[node name="StretchToAnchor" type="CheckBox" parent="WiggleAppStuff/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Keeps its length when linked to an anchor."
+theme_override_font_sizes/font_size = 14
+text = "Keep length"
+
 [node name="MaxStretchBSlider3" parent="WiggleAppStuff/Grid" instance=ExtResource("2_cimjc")]
 unique_name_in_owner = true
 layout_mode = 2
@@ -286,14 +294,6 @@ max_value = 999999.0
 step = 0.1
 ui_type = 1
 value_to_update = "max_anchor_stretch"
-
-[node name="StretchToAnchor" type="CheckBox" parent="WiggleAppStuff/Grid"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "Keeps its length when linked to an anchor."
-theme_override_font_sizes/font_size = 14
-text = "Keep length"
 
 [node name="Label2" type="Label" parent="WiggleAppStuff/Grid"]
 custom_minimum_size = Vector2(93, 0)
@@ -329,6 +329,22 @@ popup/item_0/id = 0
 popup/item_1/text = "TR_TILE"
 popup/item_1/id = 1
 
+[node name="MirrorMovementAnchor" type="CheckBox" parent="WiggleAppStuff/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Keeps its length when linked to an anchor."
+theme_override_font_sizes/font_size = 14
+text = "Reaction H"
+
+[node name="MirrorMovementVAnchor2" type="CheckBox" parent="WiggleAppStuff/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Keeps its length when linked to an anchor."
+theme_override_font_sizes/font_size = 14
+text = "Reaction V"
+
 [connection signal="toggled" from="WiggleAppStuff/AutoWagCheck" to="WiggleAppendage" method="_on_auto_wag_check_toggled"]
 [connection signal="value_changed" from="WiggleAppStuff/GridContainer/HBox30/WiggleWidthSpin" to="WiggleAppendage" method="_on_wiggle_width_spin_value_changed"]
 [connection signal="value_changed" from="WiggleAppStuff/GridContainer/HBox31/WiggleLengthSpin" to="WiggleAppendage" method="_on_wiggle_length_spin_value_changed"]
@@ -339,3 +355,5 @@ popup/item_1/id = 1
 [connection signal="toggled" from="WiggleAppStuff/Grid/StretchToAnchor" to="WiggleAppendage" method="_on_stretch_to_anchor_toggled"]
 [connection signal="item_selected" from="WiggleAppStuff/Grid/AnchorSprite" to="WiggleAppendage" method="_on_anchor_sprite_item_selected"]
 [connection signal="item_selected" from="WiggleAppStuff/Grid/TextureModeOption" to="WiggleAppendage" method="_on_texture_mode_option_item_selected"]
+[connection signal="toggled" from="WiggleAppStuff/Grid/MirrorMovementAnchor" to="WiggleAppendage" method="_on_mirror_movement_anchor_toggled"]
+[connection signal="toggled" from="WiggleAppStuff/Grid/MirrorMovementVAnchor2" to="WiggleAppendage" method="_on_mirror_movement_v_anchor_2_toggled"]

@@ -57,7 +57,7 @@ script = ExtResource("3_ru4gk")
 sp_type = ""
 value_to_update = "follow_range"
 
-[node name="MiniFWBSlider2" parent="Grid" instance=ExtResource("2_dcw28")]
+[node name="StrngthBSlider" parent="Grid" instance=ExtResource("2_dcw28")]
 unique_name_in_owner = true
 layout_mode = 2
 sp_type = ""
@@ -68,13 +68,22 @@ step = 0.001
 ui_type = 1
 value_to_update = "follow_strength"
 
+[node name="ThresholdBSlider" parent="Grid" instance=ExtResource("2_dcw28")]
+unique_name_in_owner = true
+layout_mode = 2
+sp_type = ""
+label_text = "Rot-Threshold :"
+max_value = 1.0
+ui_type = 1
+value_to_update = "rotation_threshold"
+
 [node name="MiniFWBSlider" parent="." instance=ExtResource("2_dcw28")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 sp_type = ""
 label_text = "TR_MIN_ROTATION_LABEL"
-mini_value = -180.0
+mini_value = -360.0
 step = 0.5
 value_to_update = "follow_wa_mini"
 
@@ -84,7 +93,7 @@ visible = false
 layout_mode = 2
 sp_type = ""
 label_text = "TR_MAX_ROTATION_LABEL"
-max_value = 180.0
+max_value = 360.0
 step = 0.5
 value_to_update = "follow_wa_max"
 

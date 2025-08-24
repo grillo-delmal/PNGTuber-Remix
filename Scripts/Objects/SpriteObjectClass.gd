@@ -113,6 +113,8 @@ const DEFAULT_DATA := {
 	snap_pos = false,
 	follow_range = true,
 	follow_strength = 0.155,
+	rotation_threshold = 0.01,
+	hidden_item = false,
 	}
 
 
