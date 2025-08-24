@@ -33,10 +33,20 @@ func nullfy():
 	%DeleteButton.disabled = true
 	%AddNormalButton.disabled = true
 	%DelNormalButton.disabled = true
+	%RotateImage.disabled = false
+	%FlipH.disabled = false
+	%FlipV.disabled = false
+	%RotateImage.disabled = true
+	%FlipH.disabled = true
+	%FlipV.disabled = true
 
 func enable():
 	%DuplicateButton.disabled = false
 	%DeleteButton.disabled = false
+	%RotateImage.disabled = true
+	%FlipH.disabled = true
+	%FlipV.disabled = true
+	
 	has_folder = false
 	for i in Global.held_sprites:
 		if i.get_value("folder") or Global.held_sprites.size() > 1:
@@ -52,6 +62,16 @@ func enable():
 			%AddNormalButton.disabled = false
 			%DelNormalButton.disabled = false
 			%ReplaceButton.disabled = false
+		if (i.is_apng or i.img_animated) or has_folder:
+			%RotateImage.disabled = true
+			%FlipH.disabled = true
+			%FlipV.disabled = true
+		else:
+			%RotateImage.disabled = false
+			%FlipH.disabled = false
+			%FlipV.disabled = false
+
+
 
 func _on_delete_button_pressed():
 	for i in Global.held_sprites:
@@ -210,3 +230,90 @@ func _on_del_normal_button_pressed():
 
 func _on_add_appendage_pressed() -> void:
 	Global.main.load_append_sprites()
+
+func _on_flip_h_pressed() -> void:
+	if check_valid():
+		var obj = Global.held_sprites[0]
+		var sprite = obj.get_node("%Sprite2D")
+		
+		var diff_img : Image = sprite.texture.diffuse_texture.get_image()
+		diff_img.flip_x()
+		var diff_texture = ImageTexture.create_from_image(diff_img)
+		sprite.texture.diffuse_texture = diff_texture
+		
+		if sprite.texture.normal_texture != null && is_instance_valid(sprite.texture.normal_texture):
+			var normal_img : Image = sprite.texture.diffuse_texture.get_image()
+			normal_img.flip_x()
+			var normal_texture = ImageTexture.create_from_image(normal_img)
+			sprite.texture.normal_texture = normal_texture
+		ImageTrimmer.set_thumbnail(Global.held_sprites[0].treeitem)
+		if obj.sprite_type == "WiggleApp":
+			var size = obj.correct_sprite_size(true)
+			StateButton.multi_edit(size[0], "width", obj, obj.states)
+			StateButton.multi_edit(size[1], "segm_length", obj, obj.states)
+		Global.reinfo.emit()
+		
+	else:
+		return
+
+func _on_flip_v_pressed() -> void:
+	if check_valid():
+		var obj = Global.held_sprites[0]
+		var sprite = obj.get_node("%Sprite2D")
+		
+		var diff_img : Image = sprite.texture.diffuse_texture.get_image()
+		diff_img.flip_y()
+		var diff_texture = ImageTexture.create_from_image(diff_img)
+		sprite.texture.diffuse_texture = diff_texture
+		
+		if sprite.texture.normal_texture != null && is_instance_valid(sprite.texture.normal_texture):
+			var normal_img : Image = sprite.texture.diffuse_texture.get_image()
+			normal_img.flip_y()
+			var normal_texture = ImageTexture.create_from_image(normal_img)
+			sprite.texture.normal_texture = normal_texture
+		ImageTrimmer.set_thumbnail(Global.held_sprites[0].treeitem)
+		if obj.sprite_type == "WiggleApp":
+			var size = obj.correct_sprite_size(true)
+			StateButton.multi_edit(size[0], "width", obj, obj.states)
+			StateButton.multi_edit(size[1], "segm_length", obj, obj.states)
+		
+		Global.reinfo.emit()
+	else:
+		return
+
+func _on_rotate_image_pressed() -> void:
+	if check_valid():
+		var obj = Global.held_sprites[0]
+		var sprite = obj.get_node("%Sprite2D")
+		
+		var diff_img : Image = sprite.texture.diffuse_texture.get_image()
+		diff_img.rotate_90(CLOCKWISE)
+		var diff_texture = ImageTexture.create_from_image(diff_img)
+		sprite.texture.diffuse_texture = diff_texture
+		
+		if sprite.texture.normal_texture != null && is_instance_valid(sprite.texture.normal_texture):
+			var normal_img : Image = sprite.texture.diffuse_texture.get_image()
+			normal_img.rotate_90(CLOCKWISE)
+			var normal_texture = ImageTexture.create_from_image(normal_img)
+			sprite.texture.normal_texture = normal_texture
+		if obj.sprite_type == "WiggleApp":
+			var size = obj.correct_sprite_size(true)
+			StateButton.multi_edit(size[0], "width", obj, obj.states)
+			StateButton.multi_edit(size[1], "segm_length", obj, obj.states)
+		ImageTrimmer.set_thumbnail(Global.held_sprites[0].treeitem)
+		Global.reinfo.emit()
+		
+	else:
+		return
+
+
+func check_valid() -> bool:
+	if Global.held_sprites.size() > 0:
+		if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
+			if (Global.held_sprites[0].is_apng or Global.held_sprites[0].img_animated) or Global.held_sprites[0].get_value("folder"):
+				return false
+			return true
+		else:
+			return false
+	else:
+		return false

@@ -31,10 +31,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/side_margin = 1
-current_tab = 3
+current_tab = 0
 
 [node name="Model Settings" type="ScrollContainer" parent="SettingVbox/SettingsTab"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -478,6 +477,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Use multi-threading for actions like saving and loading."
 text = "Use Threads"
+
 [node name="LanguageContainer" type="HBoxContainer" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox"]
 layout_mode = 2
 

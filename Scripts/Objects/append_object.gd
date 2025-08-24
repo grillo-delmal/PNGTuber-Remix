@@ -65,12 +65,15 @@ func desel():
 	selected = false
 
 
-func correct_sprite_size():
+func correct_sprite_size(ret : bool = false):
 	var w = %Sprite2D.texture.get_image().get_size().y / 0.98
 	var l = %Sprite2D.texture.get_image().get_size().x / 5
 	
 	sprite_data.width = w
 	sprite_data.segm_length = l
+	if ret:
+		return [w, l]
+
 
 func _process(_delta):
 	if selected:
@@ -96,6 +99,7 @@ func _process(_delta):
 			%Sprite2D.curvature = 0.0
 		
 	%Grab.anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
+
 
 func wiggle_sprite():
 	var wiggle_val = sin(Global.tick*get_value("wiggle_freq"))*get_value("wiggle_amp")

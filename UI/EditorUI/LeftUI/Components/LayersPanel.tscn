@@ -1,10 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://7r3v4vohf4at"]
+[gd_scene load_steps=15 format=3 uid="uid://7r3v4vohf4at"]
 
 [ext_resource type="Script" uid="uid://sipcpctah7rf" path="res://Scripts/UI/LeftPanel/layers_panel_scripts.gd" id="1_jg6ph"]
+[ext_resource type="Texture2D" uid="uid://b1mau3t40axff" path="res://UI/Assets/FlipHButton.png" id="2_1ikkj"]
 [ext_resource type="Texture2D" uid="uid://dst8ervfhipkm" path="res://UI/Assets/ZoominButton.png" id="2_r48vs"]
 [ext_resource type="Texture2D" uid="uid://bobj6c6goa1d3" path="res://UI/Assets/FolderButton.png" id="3_4imd6"]
 [ext_resource type="Texture2D" uid="uid://bl0hqylj4sn5e" path="res://UI/Assets/AddAppendage.png" id="3_bjklo"]
+[ext_resource type="Texture2D" uid="uid://bdn1lqcsryehy" path="res://UI/Assets/FlipVButton.png" id="3_bwdjw"]
 [ext_resource type="Texture2D" uid="uid://dkly2qhfs7vd8" path="res://UI/Assets/ReplaceButton.png" id="4_fs6qq"]
+[ext_resource type="Texture2D" uid="uid://db71o0x7h6duq" path="res://UI/Assets/RotateClockWiseButton.png" id="4_rijo6"]
 [ext_resource type="Texture2D" uid="uid://bv1t65n5ha20j" path="res://UI/Assets/DupButton.png" id="5_rccg0"]
 [ext_resource type="Texture2D" uid="uid://8rb6kumug0p5" path="res://UI/Assets/DeleteButton.png" id="6_jo6pm"]
 [ext_resource type="Texture2D" uid="uid://diyx30a4yqalc" path="res://UI/Assets/NormalMapButton.png" id="7_q36il"]
@@ -25,17 +28,21 @@ size_flags_vertical = 3
 [node name="LayersPanelScripts" type="Node" parent="."]
 script = ExtResource("1_jg6ph")
 
-[node name="LabelPanel" type="Panel" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LabelPanel" type="Panel" parent="VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(210, 28)
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 28.0
-grow_horizontal = 2
+layout_mode = 2
 mouse_filter = 1
 
-[node name="Sprites" type="Label" parent="LabelPanel"]
+[node name="Sprites" type="Label" parent="VBoxContainer/LabelPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -48,28 +55,68 @@ text = "TR_SPRITES"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ButtonsPanel" type="Panel" parent="."]
-custom_minimum_size = Vector2(210, 36)
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-offset_top = 26.0
-offset_bottom = 62.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="ButtonsPanel" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(210, 62)
+layout_mode = 2
 
-[node name="LayersButtons" type="HBoxContainer" parent="ButtonsPanel"]
-unique_name_in_owner = true
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ButtonsPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/ButtonsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="FlipH" type="Button" parent="VBoxContainer/ButtonsPanel/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Flip Sprite Horizontally.
+Note : This resets the Appendage Dimensions."
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("2_1ikkj")
+expand_icon = true
+
+[node name="FlipV" type="Button" parent="VBoxContainer/ButtonsPanel/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Flip Sprite Vertically.
+Note : This resets the Appendage Dimensions."
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("3_bwdjw")
+expand_icon = true
+
+[node name="RotateImage" type="Button" parent="VBoxContainer/ButtonsPanel/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+tooltip_text = "Rotate Sprite Image 90 (Degree)
+Note : This resets the Appendage Dimensions."
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("4_rijo6")
+expand_icon = true
+
+[node name="LayersButtons" type="HBoxContainer" parent="VBoxContainer/ButtonsPanel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 10
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="AddSpriteButton" type="Button" parent="ButtonsPanel/LayersButtons"]
+[node name="AddSpriteButton" type="Button" parent="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
@@ -80,7 +127,7 @@ mouse_default_cursor_shape = 2
 icon = ExtResource("2_r48vs")
 expand_icon = true
 
-[node name="AddAppendage" type="Button" parent="ButtonsPanel/LayersButtons"]
+[node name="AddAppendage" type="Button" parent="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
@@ -91,7 +138,7 @@ mouse_default_cursor_shape = 2
 icon = ExtResource("3_bjklo")
 expand_icon = true
 
-[node name="FolderButton" type="Button" parent="ButtonsPanel/LayersButtons"]
+[node name="FolderButton" type="Button" parent="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
@@ -103,7 +150,7 @@ icon = ExtResource("3_4imd6")
 icon_alignment = 1
 expand_icon = true
 
-[node name="ReplaceButton" type="Button" parent="ButtonsPanel/LayersButtons"]
+[node name="ReplaceButton" type="Button" parent="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
@@ -114,29 +161,29 @@ focus_mode = 0
 icon = ExtResource("4_fs6qq")
 expand_icon = true
 
-[node name="DuplicateButton" type="Button" parent="ButtonsPanel/LayersButtons"]
+[node name="DuplicateButton" type="Button" parent="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 8
 size_flags_vertical = 4
 tooltip_text = "TR_TOOLTIP_DUPLICATE_SPRITE"
 focus_mode = 0
 icon = ExtResource("5_rccg0")
 expand_icon = true
 
-[node name="DeleteButton" type="Button" parent="ButtonsPanel/LayersButtons"]
+[node name="DeleteButton" type="Button" parent="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 2
 size_flags_vertical = 4
 tooltip_text = "TR_TOOLTIP_DELETE_SPRITE"
 focus_mode = 0
 icon = ExtResource("6_jo6pm")
 expand_icon = true
 
-[node name="AddNormalButton" type="Button" parent="ButtonsPanel/LayersButtons"]
+[node name="AddNormalButton" type="Button" parent="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
@@ -147,7 +194,7 @@ focus_mode = 0
 icon = ExtResource("7_q36il")
 expand_icon = true
 
-[node name="DelNormalButton" type="Button" parent="ButtonsPanel/LayersButtons"]
+[node name="DelNormalButton" type="Button" parent="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
@@ -158,28 +205,21 @@ focus_mode = 0
 icon = ExtResource("8_x22hm")
 expand_icon = true
 
-[node name="Layers" type="PanelContainer" parent="."]
+[node name="Layers" type="PanelContainer" parent="VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(210, 70)
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.989
-offset_top = 60.0
-offset_bottom = 0.0469971
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 1
 
-[node name="LayersScripts" type="Node" parent="Layers" node_paths=PackedStringArray("layers_popup", "tree", "layer_buttons")]
+[node name="LayersScripts" type="Node" parent="VBoxContainer/Layers" node_paths=PackedStringArray("layers_popup", "tree", "layer_buttons")]
 unique_name_in_owner = true
 script = ExtResource("9_bjklo")
 layers_popup = NodePath("LayerPopup")
 tree = NodePath("../LayersTree")
-layer_buttons = NodePath("../../LayersPanelScripts")
+layer_buttons = NodePath("../../../LayersPanelScripts")
 
-[node name="LayerPopup" type="PopupMenu" parent="Layers/LayersScripts"]
+[node name="LayerPopup" type="PopupMenu" parent="VBoxContainer/Layers/LayersScripts"]
 unique_name_in_owner = true
 size = Vector2i(133, 224)
 item_count = 8
@@ -200,11 +240,11 @@ item_6/id = 7
 item_7/text = "Recolor Layer"
 item_7/id = 8
 
-[node name="PopupColor" type="PopupPanel" parent="Layers/LayersScripts"]
+[node name="PopupColor" type="PopupPanel" parent="VBoxContainer/Layers/LayersScripts"]
 unique_name_in_owner = true
 size = Vector2i(272, 377)
 
-[node name="LayerColor" type="ColorPicker" parent="Layers/LayersScripts/PopupColor"]
+[node name="LayerColor" type="ColorPicker" parent="VBoxContainer/Layers/LayersScripts/PopupColor"]
 unique_name_in_owner = true
 offset_left = 4.0
 offset_top = 4.0
@@ -218,7 +258,7 @@ color_modes_visible = false
 hex_visible = false
 presets_visible = false
 
-[node name="LayersTree" type="Tree" parent="Layers"]
+[node name="LayersTree" type="Tree" parent="VBoxContainer/Layers"]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
@@ -244,17 +284,20 @@ allow_reselect = true
 select_mode = 2
 script = ExtResource("11_hewhr")
 
-[connection signal="pressed" from="ButtonsPanel/LayersButtons/AddSpriteButton" to="LayersPanelScripts" method="_on_add_sprite_button_pressed"]
-[connection signal="pressed" from="ButtonsPanel/LayersButtons/AddAppendage" to="LayersPanelScripts" method="_on_add_appendage_pressed"]
-[connection signal="pressed" from="ButtonsPanel/LayersButtons/FolderButton" to="LayersPanelScripts" method="_on_folder_button_pressed"]
-[connection signal="pressed" from="ButtonsPanel/LayersButtons/ReplaceButton" to="LayersPanelScripts" method="_on_replace_button_pressed"]
-[connection signal="pressed" from="ButtonsPanel/LayersButtons/DuplicateButton" to="LayersPanelScripts" method="_on_duplicate_button_pressed"]
-[connection signal="pressed" from="ButtonsPanel/LayersButtons/DeleteButton" to="LayersPanelScripts" method="_on_delete_button_pressed"]
-[connection signal="pressed" from="ButtonsPanel/LayersButtons/AddNormalButton" to="LayersPanelScripts" method="_on_add_normal_button_pressed"]
-[connection signal="pressed" from="ButtonsPanel/LayersButtons/DelNormalButton" to="LayersPanelScripts" method="_on_del_normal_button_pressed"]
-[connection signal="color_changed" from="Layers/LayersScripts/PopupColor/LayerColor" to="Layers/LayersScripts" method="_on_layer_color_color_changed"]
-[connection signal="button_clicked" from="Layers/LayersTree" to="Layers/LayersScripts" method="_on_layers_tree_button_clicked"]
-[connection signal="empty_clicked" from="Layers/LayersTree" to="Layers/LayersScripts" method="_on_layers_tree_empty_clicked"]
-[connection signal="gui_input" from="Layers/LayersTree" to="Layers/LayersScripts" method="_on_layers_tree_gui_input"]
-[connection signal="item_collapsed" from="Layers/LayersTree" to="Layers/LayersScripts" method="_on_layers_tree_item_collapsed"]
-[connection signal="multi_selected" from="Layers/LayersTree" to="Layers/LayersScripts" method="_on_layers_tree_multi_selected"]
+[connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/HBoxContainer/FlipH" to="LayersPanelScripts" method="_on_flip_h_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/HBoxContainer/FlipV" to="LayersPanelScripts" method="_on_flip_v_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/HBoxContainer/RotateImage" to="LayersPanelScripts" method="_on_rotate_image_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons/AddSpriteButton" to="LayersPanelScripts" method="_on_add_sprite_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons/AddAppendage" to="LayersPanelScripts" method="_on_add_appendage_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons/FolderButton" to="LayersPanelScripts" method="_on_folder_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons/ReplaceButton" to="LayersPanelScripts" method="_on_replace_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons/DuplicateButton" to="LayersPanelScripts" method="_on_duplicate_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons/DeleteButton" to="LayersPanelScripts" method="_on_delete_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons/AddNormalButton" to="LayersPanelScripts" method="_on_add_normal_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/LayersButtons/DelNormalButton" to="LayersPanelScripts" method="_on_del_normal_button_pressed"]
+[connection signal="color_changed" from="VBoxContainer/Layers/LayersScripts/PopupColor/LayerColor" to="VBoxContainer/Layers/LayersScripts" method="_on_layer_color_color_changed"]
+[connection signal="button_clicked" from="VBoxContainer/Layers/LayersTree" to="VBoxContainer/Layers/LayersScripts" method="_on_layers_tree_button_clicked"]
+[connection signal="empty_clicked" from="VBoxContainer/Layers/LayersTree" to="VBoxContainer/Layers/LayersScripts" method="_on_layers_tree_empty_clicked"]
+[connection signal="gui_input" from="VBoxContainer/Layers/LayersTree" to="VBoxContainer/Layers/LayersScripts" method="_on_layers_tree_gui_input"]
+[connection signal="item_collapsed" from="VBoxContainer/Layers/LayersTree" to="VBoxContainer/Layers/LayersScripts" method="_on_layers_tree_item_collapsed"]
+[connection signal="multi_selected" from="VBoxContainer/Layers/LayersTree" to="VBoxContainer/Layers/LayersScripts" method="_on_layers_tree_multi_selected"]

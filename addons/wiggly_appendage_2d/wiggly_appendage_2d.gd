@@ -57,7 +57,7 @@ var _rest_direction_angle : float = 0.0
 ## How many of the first segments should be stiffened (only used if stiff_root_segments = true)
 @export_range(1, 5) var stiff_root_count: int = 5
 
-@export_range(-360, 360, 0.01) var rest_direction_angle: float:
+@export_range(-180, 180, 0.01) var rest_direction_angle: float:
 	set(value):
 		rest_direction_angle = value
 		_rest_direction_angle = deg_to_rad(value)

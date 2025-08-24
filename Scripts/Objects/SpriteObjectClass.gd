@@ -111,6 +111,8 @@ const DEFAULT_DATA := {
 	follow_type2 = 0,
 	follow_type3 = 0,
 	snap_pos = false,
+	follow_range = true,
+	follow_strength = 0.155,
 	}
 
 

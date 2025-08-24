@@ -31,10 +31,19 @@ var old_dir : Vector2 = Vector2.ZERO
 var prev_smoothed_pos: Vector2 = Vector2.ZERO
 var has_prev := false
 
+#pls work, 
+var rot_drag : float = 0.0
+var follow_point_rot : float = 0.0
+var last_target_angle : float= 0.0 
+var has_last_target : float = false
+var biased : float = 0.0
+var strength = 0.0
+
+
 func _ready() -> void:
 	Global.update_mouse_vel_pos.connect(mouse_delay)
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	applied_pos = Vector2(0.0,0.0)
 	applied_rotation = 0.0
 	applied_scale = Vector2(1.0, 1.0)
@@ -51,7 +60,7 @@ func _process(delta: float) -> void:
 	
 	follow_wiggle(delta)
 	
-	%Rotation.rotation += is_nan_or_inf(clamp(applied_rotation, deg_to_rad(-360), deg_to_rad(360)))
+	%Rotation.rotation = is_nan_or_inf(applied_rotation + rot_drag + follow_point_rot)
 	%Pos.position += is_nan_or_inf(applied_pos)
 	placeholder_position = %Pos.global_position
 
@@ -144,7 +153,7 @@ func rotationalDrag(length, delta: float):
 	
 	yvel = clamp(yvel,actor.get_value("rLimitMin"),actor.get_value("rLimitMax"))
 	
-	%Rotation.rotation = is_nan_or_inf(lerp_angle(%Rotation.rotation,deg_to_rad(yvel),0.15))
+	rot_drag = is_nan_or_inf(lerp_angle(rot_drag,deg_to_rad(yvel),0.15))
 
 func stretch(length):
 	var yvel = (length * actor.get_value("stretchAmount") * 0.01)
@@ -164,46 +173,69 @@ func static_prev():
 	%Drag.scale = Vector2(1,1)
 	%MouseRot.rotation = 0.0
 
-func follow_wiggle(delta: float):
+func follow_wiggle(delta: float) -> void:
 	if not actor.get_value("follow_wa_tip"):
+		follow_point_rot = 0.0
 		return
-	var parent = actor.get_parent()
-	if !(parent is WigglyAppendage2D) or !is_instance_valid(parent):
+	var parent := actor.get_parent()
+	if !is_instance_valid(parent) or !(parent is WigglyAppendage2D):
+		follow_point_rot = 0.0
 		return
-	
 	var tip_index = clamp(actor.get_value("tip_point"), 0, parent.points.size() - 1)
-	var raw_tip = parent.points[tip_index]
-
+	var raw_tip: Vector2 = parent.points[tip_index]
+	var rest_angle: float = parent._rest_direction_angle
 	var smoothed_pos = actor.position.lerp(raw_tip, 0.6)
-	actor.position = smoothed_pos.snapped(Vector2(1.0, 1.0))
+	actor.position = smoothed_pos
 	var base_length: float = 1.0
-	var point_count = parent.points.size()
-	if point_count > 1:
-		var first_p: Vector2 = parent.points[0]
-		var last_p: Vector2 = parent.points[point_count - 1]
-		base_length = first_p.distance_to(last_p)
-		if base_length < 0.001:
-			base_length = 1.0
-	var strength := 0.0
+	if parent.points.size() > 1:
+		base_length = max(parent.points[0].distance_to(parent.points[-1]), 0.001)
 	if has_prev:
 		var movement = smoothed_pos - prev_smoothed_pos
-		strength = movement.length() / (base_length * max(delta, 0.0001))
-		strength = clamp(strength, 0.0, 1.0)
+		var raw_strength = movement.length() / (base_length * max(delta, 0.0001))
+		strength = lerp(strength, clamp(raw_strength, 0.0, 1.0), 0.1)
 	prev_smoothed_pos = smoothed_pos
 	has_prev = true
-	
-	var dir = smoothed_pos - raw_tip
-	var dir_strength = dir.length() / base_length
-	target_angle = atan2(dir.y, dir.x)
-	var min_ang = deg_to_rad(actor.get_value("follow_wa_mini"))
-	var max_ang = deg_to_rad(actor.get_value("follow_wa_max"))
-	clamped_angle = clamp(target_angle * strength, min_ang, max_ang)
-	
-	applied_rotation += lerp_angle(applied_rotation, clamped_angle, 0.125)
+	var dir = actor.position - raw_tip
+	if dir.length() <= 0.05:
+		return
+	var min_angle = deg_to_rad(actor.get_value("follow_wa_mini"))
+	var max_angle = deg_to_rad(actor.get_value("follow_wa_max"))
+	var dir_angle = atan2(dir.y, dir.x)
+	if actor.get_value("follow_range"):
+		var rel_angle = wrapf(dir_angle - rest_angle, -PI, PI)
+		var target_rel: float = rel_angle * strength
+		var target_ang: float = rest_angle + target_rel  
+		biased = lerp_angle(follow_point_rot, target_ang, actor.get_value("follow_strength"))
+		min_angle += rest_angle 
+		max_angle += rest_angle  
+	else:
+		var rel_angle = wrapf(dir_angle, -PI, PI)
+		var target_rel: float = rel_angle * strength
+		var target_ang: float = rest_angle + target_rel  
+		biased = lerp_angle(follow_point_rot, target_ang, actor.get_value("follow_strength"))
 
+	follow_point_rot = clamp_angle(biased, min_angle, max_angle)
 
+func clamp_angle(value: float, min_angle: float, max_angle: float, rest: float = 0.0) -> float:
+	var v = value + rest
+	var n = min_angle + rest
+	var m = max_angle + rest
+	if n <= m:
+		if v < n: return n
+		if v > m: return m
+		return v
+	else:
+		if v > m and v < n:
+			var dist_min = abs(_get_distance(v, n))
+			var dist_max = abs(_get_distance(v, m))
+			return n if dist_min < dist_max else m
+		return v
 
+func _get_distance(a: float, b: float) -> float:
+	return a - b
 
+#if actor.is_visible_in_tree():
+	#printt(min_ang, max_ang)
 
 func rainbow():
 	if actor.get_value("rainbow"):
