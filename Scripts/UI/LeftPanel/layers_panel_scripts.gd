@@ -236,7 +236,7 @@ func _on_flip_h_pressed() -> void:
 		var obj = Global.held_sprites[0]
 		var sprite = obj.get_node("%Sprite2D")
 		
-		var diff_img : Image = sprite.texture.diffuse_texture.get_image().duplicate()
+		var diff_img : Image = sprite.texture.diffuse_texture.get_image().duplicate(true)
 		diff_img.flip_x()
 		var diff_texture = ImageTexture.create_from_image(diff_img)
 		sprite.texture.diffuse_texture = diff_texture
@@ -257,7 +257,7 @@ func _on_flip_v_pressed() -> void:
 		var obj = Global.held_sprites[0]
 		var sprite = obj.get_node("%Sprite2D")
 		
-		var diff_img : Image = sprite.texture.diffuse_texture.get_image().duplicate()
+		var diff_img : Image = sprite.texture.diffuse_texture.get_image().duplicate(true)
 		diff_img.flip_y()
 		var diff_texture = ImageTexture.create_from_image(diff_img)
 		sprite.texture.diffuse_texture = diff_texture
@@ -277,7 +277,7 @@ func _on_rotate_image_pressed() -> void:
 		var obj = Global.held_sprites[0]
 		var sprite = obj.get_node("%Sprite2D")
 		
-		var diff_img : Image = sprite.texture.diffuse_texture.get_image().duplicate()
+		var diff_img : Image = sprite.texture.diffuse_texture.get_image().duplicate(true)
 		diff_img.rotate_90(CLOCKWISE)
 		var diff_texture = ImageTexture.create_from_image(diff_img)
 		sprite.texture.diffuse_texture = diff_texture

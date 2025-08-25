@@ -339,6 +339,7 @@ text = "Reaction H"
 
 [node name="MirrorMovementVAnchor2" type="CheckBox" parent="WiggleAppStuff/Grid"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Keeps its length when linked to an anchor."
