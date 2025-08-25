@@ -335,7 +335,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Keeps its length when linked to an anchor."
 theme_override_font_sizes/font_size = 14
-text = "Reaction H"
+text = "Mirror Reaction H"
 
 [node name="MirrorMovementVAnchor2" type="CheckBox" parent="WiggleAppStuff/Grid"]
 unique_name_in_owner = true

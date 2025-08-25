@@ -48,10 +48,10 @@ func choosing_layers_popup(id):
 						pass
 					else:
 						return
-					
-					
 					%PopupColor.position = get_viewport().get_mouse_position() + Vector2(0,%PopupColor.size.y/2)
 					%PopupColor.popup()
+		9:
+			SaveAndLoad.export_images(Global.held_sprites)
 
 func update_layers(update_type : int, new_item = null, type : String = "Sprite"):
 	match update_type:

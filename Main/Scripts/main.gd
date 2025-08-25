@@ -41,6 +41,19 @@ func _ready():
 	Global.update_ui_pieces.emit()
 	Global.update_camera_smoothing()
 	Global.project_updates.connect(update_text)
+	Global.mode_changed.connect(mode_changed)
+	Global.update_ui_pieces.connect(update_pieces)
+	update_pieces()
+
+func update_pieces():
+	%ProjectNamePanel.visible = Settings.theme_settings.hide_bottom_bar
+
+func mode_changed(mode : int):
+	if Settings.theme_settings.hide_bottom_bar:
+		if mode == 0:
+			%ProjectNamePanel.show()
+		else:
+			%ProjectNamePanel.hide()
 
 func update_theme(new_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")):
 	%UIHold.theme = new_theme

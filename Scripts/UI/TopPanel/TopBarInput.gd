@@ -37,6 +37,7 @@ func update_window_button() -> void:
 	menu.set_item_checked(2, Settings.theme_settings.always_on_top)
 	menu.set_item_checked(5, Settings.theme_settings.hide_mini_view)
 	menu.set_item_checked(6, Settings.theme_settings.hide_sprite_view)
+	menu.set_item_checked(7, Settings.theme_settings.hide_bottom_bar)
 	var i := menu.get_item_index(100)
 	if i >= 0: menu.remove_item(i)
 	
@@ -66,6 +67,10 @@ func choosing_window(id):
 			%WindowButton.get_popup().toggle_item_checked(6)
 			Settings.set_ui_pieces(%WindowButton.get_popup().is_item_checked(6), 6)
 			Global.update_ui_pieces.emit()
+		7:
+			%WindowButton.get_popup().toggle_item_checked(7)
+			Settings.set_ui_pieces(%WindowButton.get_popup().is_item_checked(7), 7)
+			Global.update_ui_pieces.emit()
 			
 		100:
 			Global.edit_windows.emit()
@@ -91,8 +96,7 @@ func choosing_files(id):
 			else:
 				main.save_as_file()
 		9:
-			export_images(get_tree().get_nodes_in_group("Sprites"))
-			
+			SaveAndLoad.export_images(get_tree().get_nodes_in_group("Sprites"))
 		10:
 			add_a_lipsync_config()
 		11:
@@ -224,60 +228,7 @@ func desel_everything():
 func _on_preview_mode_check_toggled(toggled_on: bool) -> void:
 	Global.static_view = toggled_on
 
-func export_images(images = get_tree().get_nodes_in_group("Sprites")):
-	#OS.get_executable_path().get_base_dir() + "/ExportedAssets" + "/" + str(randi())
-	var dire = OS.get_executable_path().get_base_dir() + "/ExportedAssets"
-	if !DirAccess.dir_exists_absolute(dire):
-		DirAccess.make_dir_absolute(dire)
-		
-	for sprite in images:
-		if !sprite.get_value("folder"):
-			if sprite.img_animated:
-				var file = FileAccess.open(dire +"/" + sprite.sprite_name + str(randi()) + ".gif", FileAccess.WRITE)
-				file.store_buffer(sprite.anim_texture)
-				file.close()
-				file = null
-				if sprite.anim_texture_normal != null:
-					var filenormal = FileAccess.open(dire +"/" + sprite.sprite_name + str(randi()) + "Normal" + ".gif", FileAccess.WRITE)
-					filenormal.store_buffer(sprite.anim_texture_normal)
-					filenormal.close()
-					filenormal = null
-					
-			elif sprite.is_apng:
-				var file = FileAccess.open(dire +"/" + sprite.sprite_name + str(randi()) + ".apng", FileAccess.WRITE)
-				var exp_image = AImgIOAPNGExporter.new().export_animation(sprite.frames, 10, self, "_progress_report", [])
-				file.store_buffer(exp_image)
-				file.close()
-				file = null
-				if !sprite.frames2.is_empty():
-					var filenormal = FileAccess.open(dire +"/" + sprite.sprite_name + "Normal" + str(randi()) + ".apng", FileAccess.WRITE)
-					var exp2 = AImgIOAPNGExporter.new().export_animation(sprite.frames2, 10, self, "_progress_report", [])
-					filenormal.store_buffer(exp2)
-					filenormal.close()
-					filenormal = null
-				
-			elif !sprite.img_animated && !sprite.is_apng:
-				var img = Image.new()
-				img = sprite.get_node("%Sprite2D").texture.diffuse_texture.get_image()
-				img.save_png(dire +"/" + sprite.sprite_name + str(randi()) + ".png")
-				img = null
-				
-				if sprite.get_node("%Sprite2D").texture.normal_texture != null:
-					var normimg = Image.new()
-					normimg = sprite.get_node("%Sprite2D").texture.normal_texture.get_image()
-					normimg.save_png(dire +"/" + sprite.sprite_name + "Normal" + str(randi()) + ".png")
-					normimg = null
-				
-				if !sprite.image_data.is_empty():
-					var img_d = Image.new()
-					img_d.load_png_from_buffer(sprite.image_data)
-					img_d.save_png(dire +"/" + sprite.sprite_name + str(randi()) + ".png")
-					img_d = null
-				if !sprite.normal_data.is_empty():
-					var img_d = Image.new()
-					img_d.load_png_from_buffer(sprite.normal_data)
-					img_d.save_png(dire +"/" + sprite.sprite_name + str(randi()) + ".png")
-					img_d = null
+
 
 func _on_background_focus_entered() -> void:
 	Global.spinbox_held = true

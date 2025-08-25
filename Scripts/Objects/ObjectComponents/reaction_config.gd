@@ -18,7 +18,7 @@ func _ready() -> void:
 	await  get_tree().physics_frame
 	not_speaking()
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if actor.saved_event is InputEventJoypadButton or actor.saved_event is InputEventJoypadMotion:
 		if actor.is_asset && InputMap.action_get_events(str(actor.sprite_id)).size() > 0:
 			if Input.is_action_just_pressed(str(actor.sprite_id)):

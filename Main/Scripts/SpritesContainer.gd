@@ -10,6 +10,7 @@ var current_mo_anim = "Idle"
 var should_squish : bool = false
 var squish_amount : float = 1.0
 var bounce_state : bool = false
+var dim_color : Color = Color.WHITE
 
 var prev : int = 0
 
@@ -121,7 +122,7 @@ func _process(delta):
 
 
 	if Global.settings_dict.darken && !currenly_speaking:
-		modulate = lerp(modulate, Global.settings_dict.dim_color, 0.08)
+		modulate = lerp(modulate, dim_color, 0.08)
 	else:
 		modulate = Color.WHITE
 
@@ -137,6 +138,7 @@ func save_state(id):
 		state_param_mo = state_param_mo.duplicate(),
 		state_param_mc = state_param_mc.duplicate(),
 		model_effects = model_effects.duplicate(),
+		dim_color = dim_color,
 	}
 	Global.settings_dict.states[id] = dict
 	
@@ -152,6 +154,7 @@ func get_state(state):
 		mouth_open = dict.mouth_open
 		current_mc_anim = dict.current_mc_anim
 		current_mo_anim = dict.current_mo_anim
+		dim_color = dict.get("dim_color", Global.settings_dict.dim_color)
 		if dict.has("state_param_mo"):
 			bounce_state = dict.bounce_state
 			state_param_mo.merge(dict.state_param_mo, true)

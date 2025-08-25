@@ -127,6 +127,24 @@ max_value = 9999.0
 step = 0.1
 script = ExtResource("2_fqqfc")
 
+[node name="Label" type="Label" parent="Grid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Blend Mode :"
+
+[node name="BlendMode" type="OptionButton" parent="Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 3
+popup/item_0/text = "Add"
+popup/item_0/id = 0
+popup/item_1/text = "Subtract"
+popup/item_1/id = 1
+popup/item_2/text = "Normal"
+popup/item_2/id = 2
+
 [node name="LightEnergyBSlider" parent="." instance=ExtResource("3_27oy3")]
 unique_name_in_owner = true
 layout_mode = 2
@@ -149,3 +167,4 @@ step = 0.1
 [connection signal="color_changed" from="Grid/HBox20/DarkenColor" to="LightControl" method="_on_darken_color_color_changed"]
 [connection signal="value_changed" from="Grid/HBox/LightPosXSpinBox" to="LightControl" method="_on_light_pos_x_spin_box_value_changed"]
 [connection signal="value_changed" from="Grid/HBox25/LightPosYSpinBox" to="LightControl" method="_on_light_pos_y_spin_box_value_changed"]
+[connection signal="item_selected" from="Grid/BlendMode" to="LightControl" method="_on_blend_mode_item_selected"]

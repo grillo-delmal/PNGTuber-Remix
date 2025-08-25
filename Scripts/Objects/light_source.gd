@@ -12,7 +12,6 @@ func _ready():
 		light_control_node = get_tree().get_root().get_node("Main/%Control/LightControl")
 	Global.light_info.connect(get_state)
 
-
 func _process(_delta):
 	if dragging && $Grab.visible:
 		global_position = get_global_mouse_position() - of
@@ -27,20 +26,22 @@ func save_state(id):
 		color = color,
 		global_position = global_position,
 		scale = scale,
+		blend = blend_mode,
 	}
 	Global.settings_dict.light_states[id] = dict
 
 func get_state(state):
 	if not Global.settings_dict.light_states[state].is_empty():
-		var dict = Global.settings_dict.light_states[state]
+		var dict: Dictionary = Global.settings_dict.light_states[state]
 		energy = dict.energy
 		color = dict.color
+		%LightTexture.self_modulate = color
 		global_position = dict.global_position
 		scale = dict.scale
 		visible = dict.visible
 		$Grab.modulate = color
+		blend_mode = dict.get("blend", 0)
 	else:
-		
 		energy = 2
 		color = Color.WHITE
 		global_position = Vector2(0,0)
@@ -48,6 +49,7 @@ func get_state(state):
 		visible = false
 		$Grab.modulate = color
 		$Grab.hide()
+		blend_mode = 0
 		
 		if light_control_node != null && is_instance_valid(light_control_node):
 			light_control_node.reset_info(self)

@@ -45,6 +45,7 @@ const SAVED_LAYOUT_PATH := "user://layout.tres"
 	floaty_panning = true,
 	hide_mini_view = false,
 	hide_sprite_view = true,
+	hide_bottom_bar = true,
 	use_threading = false,
 	language = "automatic",
 }
@@ -315,4 +316,6 @@ func set_ui_pieces(val : int, id : int):
 		theme_settings.hide_mini_view = val
 	elif id == 6:
 		theme_settings.hide_sprite_view = val
+	elif 7:
+		theme_settings.hide_bottom_bar = val
 	save()

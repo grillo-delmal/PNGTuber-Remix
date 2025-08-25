@@ -480,7 +480,7 @@ func follow_controller():
 	elif actor.get_value("follow_type3") == 2:
 		follow_controller_scale(axis_right)
 
-func follow_controller_position(axis, t_x, t_y):
+func follow_controller_position(_axis, t_x, t_y):
 	if actor.sprite_type == "Sprite2D":
 		if actor.get_value("non_animated_sheet") && actor.get_value("animate_to_mouse") && !actor.get_value("animate_to_mouse_track_pos"):
 			%Pos.position.x = is_nan_or_inf(lerp(%Pos.position.x, 0.0, actor.get_value("mouse_delay")))

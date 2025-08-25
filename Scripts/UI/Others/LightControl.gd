@@ -24,6 +24,7 @@ func _on_light_energy_slider_value_changed(value):
 func _on_light_color_color_changed(color):
 	if Global.light != null && is_instance_valid(Global.light):
 		Global.light.color = color
+		Global.light.get_node("LightTexture").self_modulate = color
 		Global.light.save_state(Global.current_state)
 
 func _on_light_source_vis_toggled(toggled_on):
@@ -50,7 +51,7 @@ func get_info(state):
 		%LightPosXSpinBox.value = Global.light.global_position.x
 		%LightPosYSpinBox.value = Global.light.global_position.y
 	%DarkenCheck.button_pressed = Global.settings_dict.darken
-	%DarkenColor.color = Global.settings_dict.dim_color
+	%DarkenColor.color = Global.sprite_container.dim_color
 
 func reset_info(light_source):
 		%LightSourceVis.button_pressed = light_source.visible
@@ -77,4 +78,11 @@ func _on_light_pos_y_spin_box_value_changed(value):
 
 func _on_darken_color_color_changed(color):
 	if Global.light != null && is_instance_valid(Global.light):
-		Global.settings_dict.dim_color = color
+		Global.sprite_container.dim_color = color
+		Global.sprite_container.save_state(Global.current_state)
+
+
+func _on_blend_mode_item_selected(index: int) -> void:
+	if Global.light != null && is_instance_valid(Global.light):
+		Global.light.blend_mode = index
+		Global.light.save_state(Global.current_state)
