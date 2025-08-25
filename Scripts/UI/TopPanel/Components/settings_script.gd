@@ -71,6 +71,7 @@ func sliders_revalue(settings_dict):
 	%DelaySlider.value = settings_dict.volume_delay
 	%DeltaTimeCheck.button_pressed = settings_dict.should_delta
 	%MaxFPSlider.value = settings_dict.max_fps
+	%OutOfBounds.button_pressed = settings_dict.snap_out_of_bounds
 	
 
 
@@ -232,12 +233,10 @@ func _on_floaty_panning_toggled(toggled_on: bool) -> void:
 func _on_fix_mic_delay_toggled(toggled_on: bool) -> void:
 	GlobalAudioStreamPlayer.change_mic_restart_time(toggled_on)
 
-
 func _on_use_threads_toggled(toggled_on: bool) -> void:
 	if !change_setting: return
 	Settings.theme_settings.use_threading = toggled_on
 	Settings.save()
-
 
 func _on_keep_old_trim_data_toggled(toggled_on: bool) -> void:
 	Settings.theme_settings.save_raw_sprite = toggled_on
@@ -245,3 +244,10 @@ func _on_keep_old_trim_data_toggled(toggled_on: bool) -> void:
 
 func _on_remix_language_set(index: int) -> void:
 	Global.set_language(%LanguageOptions.get_item_text(index))
+
+func _on_out_of_bounds_toggled(toggled_on: bool) -> void:
+	Global.settings_dict.snap_out_of_bounds = toggled_on
+
+
+func _on_fix_mic_delay_pressed() -> void:
+	GlobalAudioStreamPlayer.restart_mic_and_timer()

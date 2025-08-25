@@ -39,10 +39,12 @@ func nullfy():
 	%RotateImage.disabled = true
 	%FlipH.disabled = true
 	%FlipV.disabled = true
+	%UnlinkButton.disabled = true
 
 func enable():
 	%DuplicateButton.disabled = false
 	%DeleteButton.disabled = false
+	%UnlinkButton.disabled = false
 	%RotateImage.disabled = true
 	%FlipH.disabled = true
 	%FlipV.disabled = true
@@ -70,8 +72,6 @@ func enable():
 			%RotateImage.disabled = false
 			%FlipH.disabled = false
 			%FlipV.disabled = false
-
-
 
 func _on_delete_button_pressed():
 	for i in Global.held_sprites:
@@ -133,6 +133,9 @@ func _on_duplicate_button_pressed():
 			Global.update_layers.emit(0, obj, obj.sprite_type)
 			obj.get_state(Global.current_state)
 			obj.global_position = sprite.global_position
+			if obj.sprite_type == "WiggleApp":
+				obj.update_wiggle_parts()
+
 
 			for i in layers_to_dup:
 				var t : SpriteObject = i.child.get_metadata(0).sprite_object
@@ -179,7 +182,10 @@ func _on_duplicate_button_pressed():
 					obj_to_spawn.parent_id = id_map[t.parent_id]
 				else:
 					obj_to_spawn.parent_id = obj.sprite_id
-
+				
+				if t.sprite_type == "WiggleApp":
+					obj_to_spawn.update_wiggle_parts()
+				
 				sprites.append(obj_to_spawn)
 				Global.update_layers.emit(0, obj_to_spawn, obj_to_spawn.sprite_type)
 				obj_to_spawn.get_state(Global.current_state)
@@ -190,7 +196,6 @@ func _on_duplicate_button_pressed():
 
 	Global.reparent_layers.emit(sprites)
 	Global.reparent_objects.emit(sprites)
-
 
 func _on_replace_button_pressed():
 	Global.main.replacing_sprite()
@@ -297,7 +302,6 @@ func _on_rotate_image_pressed() -> void:
 	else:
 		return
 
-
 func check_valid() -> bool:
 	if Global.held_sprites.size() > 0:
 		if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
@@ -308,3 +312,23 @@ func check_valid() -> bool:
 			return false
 	else:
 		return false
+
+func _on_unlink_button_pressed() -> void:
+	var has_unlinked : bool = false
+	for sprite in Global.held_sprites:
+		if sprite != null and is_instance_valid(sprite):
+			if sprite.get_parent() == Global.sprite_container or sprite.parent_id == 0:
+				continue
+			else:
+				has_unlinked = true
+				var og_pos = sprite.global_position
+				sprite.get_parent().remove_child(sprite)
+				sprite.parent_id = 0
+				Global.sprite_container.add_child(sprite)
+				await get_tree().physics_frame
+				sprite.global_position = og_pos
+				sprite.sprite_data.position = sprite.position
+				sprite.save_state(Global.current_state)
+	if has_unlinked:
+		Global.remake_layers.emit()
+	

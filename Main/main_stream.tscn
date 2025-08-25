@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://c1ekr4qs5l516"]
+[gd_scene load_steps=16 format=3 uid="uid://c1ekr4qs5l516"]
 
 [ext_resource type="Script" uid="uid://bdn6kp0ldq1ck" path="res://Main/Scripts/main_stream.gd" id="1_sw3on"]
 [ext_resource type="Script" uid="uid://b6atx7ybrp5sq" path="res://Main/Scripts/SpritesContainer.gd" id="1_u32ad"]
 [ext_resource type="PackedScene" uid="uid://dw4brgrpdpurf" path="res://Misc/LightSource/light_source.tscn" id="2_cj4vf"]
 [ext_resource type="Texture2D" uid="uid://c23flfaie3uxb" path="res://Misc/TestAssets/32x32grid.png" id="2_sw3on"]
+[ext_resource type="Script" uid="uid://qgnk6t8mi76s" path="res://Scripts/UI/WindowHandler/window_handler.gd" id="2_y56ai"]
 [ext_resource type="Shader" uid="uid://brpv37x267rmr" path="res://Scripts/Shaders/ColorBlindness.gdshader" id="3_me1oy"]
 [ext_resource type="PackedScene" uid="uid://cnq8tddqwvy07" path="res://UI/StreamUI/stream_ui.tscn" id="5_h43to"]
 [ext_resource type="Script" uid="uid://by4pbr6yeut1c" path="res://Main/Scripts/monitor_tracking.gd" id="5_me1oy"]
@@ -83,6 +84,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_sw3on")
+
+[node name="WindowHandler" type="Node" parent="."]
+script = ExtResource("2_y56ai")
 
 [node name="BG" type="TextureRect" parent="."]
 unique_name_in_owner = true

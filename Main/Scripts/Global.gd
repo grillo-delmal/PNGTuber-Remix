@@ -90,6 +90,7 @@ var settings_dict : Dictionary = {
 	should_delta = true,
 	max_fps = 241,
 	monitor = Monitor.ALL_SCREENS,
+	snap_out_of_bounds = true,
 	cycles = [],
 
 	language = "automatic",

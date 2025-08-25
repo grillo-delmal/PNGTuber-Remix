@@ -11,6 +11,7 @@ func _ready():
 	Global.deselect.connect(held_sprite_is_null)
 	
 
+
 #region Update Slider info
 func held_sprite_is_null():
 	%SpriteID.text = "Sprite ID : 0"

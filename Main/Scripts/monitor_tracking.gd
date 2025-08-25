@@ -22,7 +22,12 @@ func _process(_delta):
 			var relative_pos = Vector2i(global_mouse_pos) - screen_pos
 			coords = Vector2i(relative_pos)
 		else:
-			coords = Vector2i(0,0)
+			if Global.settings_dict.snap_out_of_bounds:
+				coords = Vector2i(0,0)
+			else:
+				var screen_pos = DisplayServer.screen_get_position(current_screen)
+				var relative_pos = Vector2i(global_mouse_pos) - screen_pos
+				coords = Vector2i(relative_pos)
 
 func mouse_in_current_screen():
 	var screen_pos = DisplayServer.screen_get_position(current_screen)

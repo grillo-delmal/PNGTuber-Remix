@@ -44,7 +44,7 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 	
 	#print(true_pos)
 	
-	var og_pos = Global.sprite_container.get_parent().get_parent().to_global(item.get_metadata(0).sprite_object.sprite_data.position)
+	var og_pos = item.get_metadata(0).sprite_object.global_position
 	print(true_pos)
 	if true_pos == 0:
 		item.get_parent().remove_child(item)
@@ -61,6 +61,8 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 		item.get_metadata(0).sprite_object.global_position = og_pos
 		item.get_metadata(0).sprite_object.sprite_data.position = item.get_metadata(0).sprite_object.position
 		item.get_metadata(0).sprite_object.save_state(Global.current_state)
+		await get_tree().physics_frame
+		item.get_metadata(0).sprite_object.get_node("%Dragger").global_position = og_pos
 		recolor_layer()
 		
 	elif true_pos == -1:
@@ -126,6 +128,8 @@ func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
 			var count = item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1
 			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(other_item.get_metadata(0).sprite_object.get_index()+1, 0, count))
 			recolor_layer()
+		
+	Global.reinfo.emit()
 
 func recolor_layer():
 	%LayersScripts.correct_recolor()

@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://7r3v4vohf4at"]
+[gd_scene load_steps=16 format=3 uid="uid://7r3v4vohf4at"]
 
 [ext_resource type="Script" uid="uid://sipcpctah7rf" path="res://Scripts/UI/LeftPanel/layers_panel_scripts.gd" id="1_jg6ph"]
 [ext_resource type="Texture2D" uid="uid://b1mau3t40axff" path="res://UI/Assets/FlipHButton.png" id="2_1ikkj"]
+[ext_resource type="Texture2D" uid="uid://c51ydpelhuyv2" path="res://UI/Assets/UnlinkButton.png" id="2_bwdjw"]
 [ext_resource type="Texture2D" uid="uid://dst8ervfhipkm" path="res://UI/Assets/ZoominButton.png" id="2_r48vs"]
 [ext_resource type="Texture2D" uid="uid://bobj6c6goa1d3" path="res://UI/Assets/FolderButton.png" id="3_4imd6"]
 [ext_resource type="Texture2D" uid="uid://bl0hqylj4sn5e" path="res://UI/Assets/AddAppendage.png" id="3_bjklo"]
@@ -36,25 +37,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LabelPanel" type="Panel" parent="VBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(210, 28)
-layout_mode = 2
-mouse_filter = 1
-
-[node name="Sprites" type="Label" parent="VBoxContainer/LabelPanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = -2.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 18
-text = "TR_SPRITES"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="ButtonsPanel" type="Panel" parent="VBoxContainer"]
 custom_minimum_size = Vector2(210, 62)
 layout_mode = 2
@@ -72,10 +54,23 @@ theme_override_constants/separation = 1
 layout_mode = 2
 theme_override_constants/separation = 2
 
+[node name="UnlinkButton" type="Button" parent="VBoxContainer/ButtonsPanel/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+tooltip_text = "Unlinks a child Object from Parent Object."
+focus_mode = 0
+mouse_default_cursor_shape = 2
+icon = ExtResource("2_bwdjw")
+expand_icon = true
+
 [node name="FlipH" type="Button" parent="VBoxContainer/ButtonsPanel/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
+size_flags_horizontal = 10
 size_flags_vertical = 4
 tooltip_text = "Flip Sprite Image Horizontally."
 focus_mode = 0
@@ -98,7 +93,7 @@ expand_icon = true
 unique_name_in_owner = true
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 8
 size_flags_vertical = 4
 tooltip_text = "Rotate Sprite Image 90 (Degree)
 Note : This resets the Appendage Dimensions."
@@ -203,6 +198,25 @@ focus_mode = 0
 icon = ExtResource("8_x22hm")
 expand_icon = true
 
+[node name="LabelPanel" type="Panel" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(210, 28)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Sprites" type="Label" parent="VBoxContainer/LabelPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "TR_SPRITES"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Layers" type="PanelContainer" parent="VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(210, 70)
@@ -282,6 +296,7 @@ allow_reselect = true
 select_mode = 2
 script = ExtResource("11_hewhr")
 
+[connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/HBoxContainer/UnlinkButton" to="LayersPanelScripts" method="_on_unlink_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/HBoxContainer/FlipH" to="LayersPanelScripts" method="_on_flip_h_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/HBoxContainer/FlipV" to="LayersPanelScripts" method="_on_flip_v_pressed"]
 [connection signal="pressed" from="VBoxContainer/ButtonsPanel/VBoxContainer/HBoxContainer/RotateImage" to="LayersPanelScripts" method="_on_rotate_image_pressed"]

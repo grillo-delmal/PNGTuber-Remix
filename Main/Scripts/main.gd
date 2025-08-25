@@ -46,7 +46,6 @@ func update_theme(new_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme
 	%UIHold.theme = new_theme
 	%ConfirmTrim.theme = new_theme
 	%ConfirmationDialog.theme = new_theme
-	%Control.set_values()
 
 func new_file():
 	%ConfirmationDialog.popup()
@@ -182,6 +181,7 @@ func _on_confirmation_dialog_confirmed():
 	Global.main.get_node("%Marker").current_screen = Monitor.ALL_SCREENS
 	Global.settings_dict.monitor = Monitor.ALL_SCREENS
 	%ConfirmationDialog.hide()
+	Global.project_updates.emit("New Project!")
 
 func clear_sprites():
 	Global.held_sprite = null
@@ -260,4 +260,7 @@ func _on_confirmation_dialog_canceled() -> void:
 
 func update_text(arg):
 	if arg is String:
-		%ProjectNameLabel.text = Global.save_path
+		if arg == "New Project!":
+			%ProjectNameLabel.text = "No Path"
+		else:
+			%ProjectNameLabel.text = Global.save_path

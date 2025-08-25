@@ -8,6 +8,7 @@ var ui_theme
 var popup = preload("res://UI/EditorUI/TopUI/Components/popup_panel.tscn").instantiate()
 var save_timer : Timer = Timer.new()
 var current_theme : Theme = preload("res://Themes/PurpleTheme/GUITheme.tres")
+const SAVED_LAYOUT_PATH := "user://layout.tres"
 
 @warning_ignore("integer_division")
 @onready var theme_settings : Dictionary = {
@@ -286,18 +287,6 @@ func set_always_on_top(toggle):
 	get_window().always_on_top = Settings.theme_settings.always_on_top
 	save()
 
-func _on_h_split_container_dragged(offset: int) -> void:
-	Settings.theme_settings.left = offset
-	save()
-
-func _on_h_split_dragged(offset: int) -> void:
-	Settings.theme_settings.right = offset
-	save()
-
-
-func _on_v_split_container_dragged(offset: int) -> void:
-	theme_settings.properties = offset
-	save()
 
 func get_custom_cursor() -> Image:
 	var cursor := (preload("res://Misc/TestAssets/PicklesCursor.png") as Texture2D).get_image()

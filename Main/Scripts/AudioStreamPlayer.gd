@@ -39,12 +39,20 @@ func change_mic_restart_time(delay_fix := false) -> void:
 	mic_restart_timer.wait_time = MIC_RESTART_TIME_FIX if delay_fix else MIC_RESTART_TIME
 
 func mic_restart_timer_timeout():
+	restart_mic()
+
+func restart_mic():
 	playing = false
 	record_effect.set_recording_active(false)
 	await get_tree().physics_frame
 	await get_tree().physics_frame # Added second frame just to be safe
 	playing = true
 	record_effect.set_recording_active(true)
+
+func restart_mic_and_timer():
+	restart_mic()
+	mic_restart_timer.stop()
+	mic_restart_timer.start()
 
 func global_lipsync():
 	_fingerprint.populate(LipSyncGlobals.speech_spectrum)
