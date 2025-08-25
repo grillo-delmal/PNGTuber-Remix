@@ -186,17 +186,15 @@ func apply_constraints_merged():
 			var rel_angle = wrapf(seg_angle - rest_dir, -PI, PI)
 			if mirror_anchor_movement_h:
 				var to_anchor = anchor_pos - p2[POSITION]
-				if to_anchor != Vector2.ZERO:
+				if to_anchor.length() > 0.25:
 					var local_anchor = to_anchor.rotated(-rest_dir)
 					local_anchor.x = abs(local_anchor.x)
 					var anchor_angle = wrapf(local_anchor.angle(), -PI, PI)
 					var norm = clamp(anchor_angle / max_angle, -1.0, 1.0)
-					var mapped_angle = lerp(min_angle, max_angle, (norm + 1.0) / 2.0)
-					if rel_angle > min_angle and rel_angle < max_angle:
-						rel_angle = (rel_angle + mapped_angle) * 0.5
-					else:
-						rel_angle = mapped_angle
-			var clamped_angle = clamp(rel_angle, min_angle, max_angle)
+					var mapped_angle = lerp(min_angle, max_angle, max((norm + 1.0) / 2.0, 0))
+					rel_angle = (rel_angle + mapped_angle) * 0.5
+				
+			var clamped_angle = rel_angle
 			var target_angle = rest_dir + clamped_angle
 			var dir_vec = Vector2(cos(target_angle), sin(target_angle)).normalized()
 			var new_pos = root_pos + dir_vec * to_p2.length()
