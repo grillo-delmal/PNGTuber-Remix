@@ -38,7 +38,7 @@ var last_target_angle : float= 0.0
 var has_last_target : float = false
 var biased : float = 0.0
 var strength = 0.0
-var b : float = 0.0
+var _b : float = 0.0
 
 
 func _ready() -> void:
@@ -211,14 +211,14 @@ func follow_wiggle(delta: float) -> void:
 				var target_ang: float = rest_angle + target_rel  
 				min_angle += rest_angle 
 				max_angle += rest_angle  
-				b = target_ang
+				_b = target_ang
 			else:
 				var rel_angle = wrapf(dir_angle, -PI, PI)
 				var target_rel: float = rel_angle * strength
-				var target_ang: float = rest_angle + target_rel  
-				b = target_ang
+				var target_ang: float = target_rel  
+				_b = target_ang
 		
-		biased = lerp_angle(wrap(biased, -PI, PI), wrap(b, -PI, PI), actor.get_value("follow_strength"))
+		biased = lerp(biased,_b, actor.get_value("follow_strength"))
 
 	follow_point_rot = clamp_angle(biased, min_angle, max_angle)
 	
