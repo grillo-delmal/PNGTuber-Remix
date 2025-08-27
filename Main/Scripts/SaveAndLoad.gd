@@ -351,7 +351,6 @@ func load_model(path : String):
 	Global.remake_image_manager.emit()
 	await get_tree().physics_frame
 	Global.load_sprite_states(0)
-	
 	if Settings.theme_settings.use_threading:
 		thread.call_deferred("wait_to_finish")
 

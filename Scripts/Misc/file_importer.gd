@@ -45,7 +45,7 @@ func add_normal(path):
 		SaveAndLoad.import_gif(path , image_data)
 	else:
 		var apng_test = AImgIOAPNGImporter.load_from_file(path)
-		if apng_test != ["No frames", null] or apng_test != [null, "Unable to open file: "]:
+		if apng_test != ["No frames", null]:
 			SaveAndLoad.import_apng_sprite(path , image_data)
 		else:
 			var img = Image.load_from_file(path)
