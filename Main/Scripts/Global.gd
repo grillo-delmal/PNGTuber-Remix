@@ -42,13 +42,15 @@ signal remake_for_plus
 signal reset_states
 
 signal update_mouse_vel_pos
-
 signal editing_for_changed
-
 signal add_window
 signal edit_windows
 
 signal update_ui_pieces
+signal image_replaced
+signal add_new_image
+signal delete_image
+signal remake_image_manager
 
 # Remix version
 @onready var version: String = ProjectSettings.get_setting("application/config/version")
@@ -97,6 +99,9 @@ var settings_dict : Dictionary = {
 	preferred_language = null,
 }
 
+var image_manager_data : Array = []
+
+
 var mode: int = 0: set = set_mode
 
 #var undo_redo : UndoRedo = UndoRedo.new()
@@ -116,6 +121,8 @@ var camera : Camera2D = null
 var frame_counter : int = 0
 const FRAME_INTERVAL : int = 3  # Run every 5 frames
 var swtich_session_popup : Node = null
+var over_tex : bool = false
+var over_normal_tex : bool = false
 
 var save_path : String = ""
 var is_editor : bool = true:
@@ -126,15 +133,23 @@ var is_editor : bool = true:
 		is_editor = x
 		Settings.change_cursor()
 
+var image_data = ImageData.new()
+var image_data_normal = ImageData.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	create_placeholders()
 	get_window().min_size = Vector2(720,720)
 	add_child(blink_timer)
 	blinking()
 	get_window().title = "PNGTuber-Remix V" + version
 	current_state = 0
 	key_pressed.connect(update_cycles)
+
+
+func create_placeholders():
+	image_data.runtime_texture = preload("res://Misc/TestAssets/Placeholder.png")
+	image_data_normal.runtime_texture = preload("res://Misc/TestAssets/Placeholder_n.png")
 
 
 func set_mode(new_mode) -> void:

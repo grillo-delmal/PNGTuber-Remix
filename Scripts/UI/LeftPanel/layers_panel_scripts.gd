@@ -64,7 +64,7 @@ func enable():
 			%AddNormalButton.disabled = false
 			%DelNormalButton.disabled = false
 			%ReplaceButton.disabled = false
-		if (i.is_apng or i.img_animated) or has_folder:
+		if (i.referenced_data.is_apng or i.referenced_data.img_animated) or has_folder:
 			%RotateImage.disabled = true
 			%FlipH.disabled = true
 			%FlipV.disabled = true
@@ -93,14 +93,25 @@ func _on_duplicate_button_pressed():
 				obj = append_obj.instantiate()
 			else:
 				obj = sprite_obj.instantiate()
-
+			obj.rotated = sprite.rotated
+			obj.flipped_h = sprite.flipped_h
+			obj.flipped_v = sprite.flipped_v
+			obj.used_image_id = sprite.used_image_id
+			obj.used_image_id_normal = sprite.used_image_id_normal
+			obj.referenced_data = sprite.referenced_data
+			obj.referenced_data_normal = sprite.referenced_data_normal
 			obj.position = sprite.position
 			obj.scale = sprite.scale
 			obj.sprite_data.scale = sprite.scale
 			Global.sprite_container.add_child(obj)
-
-			if obj.sprite_type != "Folder":
-				obj.get_node("%Sprite2D").texture = sprite.get_node("%Sprite2D").texture
+			if !sprite.get_value("folder"):
+				var canv : CanvasTexture= CanvasTexture.new()
+				var diff = SaveAndLoad.check_flips(obj.referenced_data.runtime_texture, obj)
+				canv.diffuse_texture = diff
+				if obj.used_image_id_normal != 0:
+					var norm = SaveAndLoad.check_flips(obj.referenced_data_normal.runtime_texture, obj)
+					canv.normal_texture = norm
+				obj.get_node("%Sprite2D").texture = canv
 
 			obj.sprite_name = "Duplicate" + sprite.sprite_name 
 			if sprite.get_value("folder"):
@@ -132,10 +143,8 @@ func _on_duplicate_button_pressed():
 			sprites.append(obj)
 			Global.update_layers.emit(0, obj, obj.sprite_type)
 			obj.get_state(Global.current_state)
-			obj.global_position = sprite.global_position
 			if obj.sprite_type == "WiggleApp":
 				obj.update_wiggle_parts()
-
 
 			for i in layers_to_dup:
 				var t : SpriteObject = i.child.get_metadata(0).sprite_object
@@ -149,9 +158,24 @@ func _on_duplicate_button_pressed():
 				obj_to_spawn.scale = t.scale
 				obj_to_spawn.sprite_data.scale = t.scale
 				Global.sprite_container.add_child(obj_to_spawn)
-
-				if obj_to_spawn.sprite_type != "Folder":
-					obj_to_spawn.get_node("%Sprite2D").texture = t.get_node("%Sprite2D").texture
+				obj_to_spawn.rotated = t.rotated
+				obj_to_spawn.flipped_h = t.flipped_h
+				obj_to_spawn.flipped_v = t.flipped_v
+				
+				obj_to_spawn.used_image_id = t.used_image_id
+				obj_to_spawn.used_image_id_normal = t.used_image_id_normal
+				obj_to_spawn.referenced_data = t.referenced_data
+				obj_to_spawn.referenced_data_normal = t.referenced_data_normal
+				
+				if !t.get_value("folder"):
+					var canv : CanvasTexture= CanvasTexture.new()
+					var diff = SaveAndLoad.check_flips(obj_to_spawn.referenced_data.runtime_texture, obj_to_spawn)
+					canv.diffuse_texture = diff
+					if obj_to_spawn.used_image_id_normal != 0:
+						var norm = SaveAndLoad.check_flips(obj_to_spawn.referenced_data_normal.runtime_texture, obj_to_spawn)
+						canv.normal_texture = norm
+						
+					obj_to_spawn.get_node("%Sprite2D").texture = canv
 
 				obj_to_spawn.sprite_name = "Duplicate" + t.sprite_name
 				if t.get_value("folder"):
@@ -174,10 +198,8 @@ func _on_duplicate_button_pressed():
 				obj_to_spawn.played_once = t.played_once
 				obj_to_spawn.layer_color = t.layer_color
 				obj_to_spawn.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
-
 				obj_to_spawn.sprite_id = randi()
 				id_map[t.sprite_id] = obj_to_spawn.sprite_id
-
 				if t.parent_id in id_map:
 					obj_to_spawn.parent_id = id_map[t.parent_id]
 				else:
@@ -190,10 +212,9 @@ func _on_duplicate_button_pressed():
 				Global.update_layers.emit(0, obj_to_spawn, obj_to_spawn.sprite_type)
 				obj_to_spawn.get_state(Global.current_state)
 				obj_to_spawn.global_position = t.global_position
-
 	if sprites.is_empty():
 		return
-
+	Global.get_sprite_states(Global.current_state)
 	Global.reparent_layers.emit(sprites)
 	Global.reparent_objects.emit(sprites)
 
@@ -223,95 +244,46 @@ func _on_add_normal_button_pressed():
 func _on_del_normal_button_pressed():
 	for sprite in Global.held_sprites:
 		if sprite != null && is_instance_valid(sprite):
-			if !sprite.is_apng:
-				if not sprite.get_value("folder"):
-					sprite.get_node("%Sprite2D").texture.normal_texture = null
-					Global.reinfo.emit()
-			elif sprite.is_apng or sprite.img_animated:
-				if not sprite.get_value("folder"):
-					sprite.get_node("%AnimatedSpriteTexture").frames2.clear()
-					sprite.get_node("%Sprite2D").texture.normal_texture = null
-					Global.reinfo.emit()
+			if not sprite.get_value("folder"):
+				sprite.used_image_id_normal = 0
+				sprite.referenced_data_normal = null
+				sprite.get_node("%Sprite2D").texture.normal_texture = null
+				Global.reinfo.emit()
 
 func _on_add_appendage_pressed() -> void:
 	Global.main.load_append_sprites()
 
 func _on_flip_h_pressed() -> void:
-	if check_valid():
-		var obj = Global.held_sprites[0]
-		var sprite = obj.get_node("%Sprite2D")
-		
-		var diff_img : Image = sprite.texture.diffuse_texture.get_image().duplicate(true)
-		diff_img.flip_x()
-		var diff_texture = ImageTexture.create_from_image(diff_img)
-		sprite.texture.diffuse_texture = diff_texture
-		
-		if sprite.texture.normal_texture != null && is_instance_valid(sprite.texture.normal_texture):
-			var normal_img : Image = sprite.texture.diffuse_texture.get_image()
-			normal_img.flip_x()
-			var normal_texture = ImageTexture.create_from_image(normal_img)
-			sprite.texture.normal_texture = normal_texture
+	var obj = Global.held_sprites[0]
+	if SaveAndLoad.check_valid(obj, obj.referenced_data):
+		print("d")
+		obj.flipped_h = !obj.flipped_h
+		print(obj.flipped_h)
+		check_flips(obj)
 		ImageTrimmer.set_thumbnail(Global.held_sprites[0].treeitem)
 		Global.reinfo.emit()
-		
 	else:
 		return
 
 func _on_flip_v_pressed() -> void:
-	if check_valid():
-		var obj = Global.held_sprites[0]
-		var sprite = obj.get_node("%Sprite2D")
-		
-		var diff_img : Image = sprite.texture.diffuse_texture.get_image().duplicate(true)
-		diff_img.flip_y()
-		var diff_texture = ImageTexture.create_from_image(diff_img)
-		sprite.texture.diffuse_texture = diff_texture
-		
-		if sprite.texture.normal_texture != null && is_instance_valid(sprite.texture.normal_texture):
-			var normal_img : Image = sprite.texture.diffuse_texture.get_image()
-			normal_img.flip_y()
-			var normal_texture = ImageTexture.create_from_image(normal_img)
-			sprite.texture.normal_texture = normal_texture
+	var obj = Global.held_sprites[0]
+	if SaveAndLoad.check_valid(obj, obj.referenced_data):
+		obj.flipped_v = !obj.flipped_v
+		check_flips(obj)
 		ImageTrimmer.set_thumbnail(Global.held_sprites[0].treeitem)
 		Global.reinfo.emit()
 	else:
 		return
 
 func _on_rotate_image_pressed() -> void:
-	if check_valid():
-		var obj = Global.held_sprites[0]
-		var sprite = obj.get_node("%Sprite2D")
-		
-		var diff_img : Image = sprite.texture.diffuse_texture.get_image().duplicate(true)
-		diff_img.rotate_90(CLOCKWISE)
-		var diff_texture = ImageTexture.create_from_image(diff_img)
-		sprite.texture.diffuse_texture = diff_texture
-		
-		if sprite.texture.normal_texture != null && is_instance_valid(sprite.texture.normal_texture):
-			var normal_img : Image = sprite.texture.diffuse_texture.get_image()
-			normal_img.rotate_90(CLOCKWISE)
-			var normal_texture = ImageTexture.create_from_image(normal_img)
-			sprite.texture.normal_texture = normal_texture
-		if obj.sprite_type == "WiggleApp":
-			var size = obj.correct_sprite_size(true)
-			StateButton.multi_edit(size[0], "width", obj, obj.states)
-			StateButton.multi_edit(size[1], "segm_length", obj, obj.states)
+	var obj = Global.held_sprites[0]
+	if SaveAndLoad.check_valid(obj, obj.referenced_data):
+		obj.rotated = wrap(obj.rotated + 1, 0, 4)
+		check_flips(obj)
 		ImageTrimmer.set_thumbnail(Global.held_sprites[0].treeitem)
 		Global.reinfo.emit()
-		
 	else:
 		return
-
-func check_valid() -> bool:
-	if Global.held_sprites.size() > 0:
-		if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
-			if (Global.held_sprites[0].is_apng or Global.held_sprites[0].img_animated) or Global.held_sprites[0].get_value("folder"):
-				return false
-			return true
-		else:
-			return false
-	else:
-		return false
 
 func _on_unlink_button_pressed() -> void:
 	var has_unlinked : bool = false
@@ -331,4 +303,11 @@ func _on_unlink_button_pressed() -> void:
 				sprite.save_state(Global.current_state)
 	if has_unlinked:
 		Global.remake_layers.emit()
-	
+
+func check_flips(obj):
+	var sprite = obj.get_node("%Sprite2D")
+	var diffused = SaveAndLoad.check_flips(obj.referenced_data.runtime_texture,obj )
+	sprite.texture.diffuse_texture = diffused
+	if obj.used_image_id_normal != 0:
+		var normal = SaveAndLoad.check_flips(obj.referenced_data_normal.runtime_texture, obj)
+		sprite.texture.normal_texture = normal

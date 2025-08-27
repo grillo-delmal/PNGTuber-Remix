@@ -184,6 +184,17 @@ step = 1.0
 value_to_update = "dragSpeed"
 has_alt_values = true
 
+[node name="DragSnapBSlider" parent="ScrollContainer3/MarginContainer/VBoxContainer" instance=ExtResource("1_h5u6y")]
+unique_name_in_owner = true
+layout_mode = 2
+sp_type = ""
+label_text = "TR_SNAP_DRAG"
+mini_value = 1.0
+max_value = 999999.0
+step = 1.0
+value_to_update = "drag_snap"
+has_alt_values = true
+
 [node name="StretchBSlider" parent="ScrollContainer3/MarginContainer/VBoxContainer" instance=ExtResource("1_h5u6y")]
 unique_name_in_owner = true
 layout_mode = 2
@@ -471,7 +482,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 15
 text = "TR_FOLLOW_SCALE_NOT"
 
-[node name="ShouldSnap" type="CheckBox" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
+[node name="Grid" type="GridContainer" parent="ScrollContainer3/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="ShouldSnap" type="CheckBox" parent="ScrollContainer3/MarginContainer/VBoxContainer/Grid"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
@@ -481,6 +496,28 @@ text = "TR_POSITION_SNAP_BUTTON"
 script = ExtResource("2_qiucb")
 sp_type = ""
 value_to_update = "snap_pos"
+
+[node name="ShouldSnap2" type="CheckBox" parent="ScrollContainer3/MarginContainer/VBoxContainer/Grid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+tooltip_text = "TR_POSITION_SNAP_BUTTON_TOOLTIP"
+theme_override_font_sizes/font_size = 14
+text = "Snap Rotation"
+script = ExtResource("2_qiucb")
+sp_type = ""
+value_to_update = "snap_rot"
+
+[node name="ShouldSnap3" type="CheckBox" parent="ScrollContainer3/MarginContainer/VBoxContainer/Grid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+tooltip_text = "TR_POSITION_SNAP_BUTTON_TOOLTIP"
+theme_override_font_sizes/font_size = 14
+text = "Snap Scale"
+script = ExtResource("2_qiucb")
+sp_type = ""
+value_to_update = "snap_scale"
 
 [connection signal="changed" from="ScrollContainer3/MarginContainer/VBoxContainer/SharedMovement" to="MovementTab" method="_on_shared_movement_changed"]
 [connection signal="changed" from="ScrollContainer3/MarginContainer/VBoxContainer/SharedMovement" to="ScrollContainer3/MarginContainer/VBoxContainer/EditValuesFor" method="set_visible"]

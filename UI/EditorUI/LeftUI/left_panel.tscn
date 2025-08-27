@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cpcj4o080w37m"]
+[gd_scene load_steps=6 format=3 uid="uid://cpcj4o080w37m"]
 
 [ext_resource type="PackedScene" uid="uid://bidkgcxxq68n6" path="res://UI/EditorUI/LeftUI/Components/camera_panel.tscn" id="1_kxhh7"]
 [ext_resource type="Script" uid="uid://b2h705vpr64xt" path="res://Scripts/UI/LeftPanel/left_panel.gd" id="1_v5jxx"]
 [ext_resource type="PackedScene" uid="uid://g6paooy6tpxy" path="res://UI/EditorUI/LeftUI/Components/SpritePreview.tscn" id="3_2g333"]
 [ext_resource type="PackedScene" uid="uid://7r3v4vohf4at" path="res://UI/EditorUI/LeftUI/Components/LayersPanel.tscn" id="3_fepe2"]
+[ext_resource type="PackedScene" uid="uid://bdb2jod38fulx" path="res://UI/FileManager/image_manager.tscn" id="5_r4ymd"]
 
 [node name="LeftPanel" type="Panel"]
 custom_minimum_size = Vector2(270, 600)
@@ -44,8 +45,17 @@ split_offset = -1000
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="LayersPanel" parent="MarginContainer/VBox/VSplit" instance=ExtResource("3_fepe2")]
+[node name="VSplit2" type="VSplitContainer" parent="MarginContainer/VBox/VSplit"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LayersPanel" parent="MarginContainer/VBox/VSplit/VSplit2" instance=ExtResource("3_fepe2")]
 unique_name_in_owner = true
 layout_mode = 2
 
+[node name="ImageManager" parent="MarginContainer/VBox/VSplit/VSplit2" instance=ExtResource("5_r4ymd")]
+layout_mode = 2
+
 [connection signal="dragged" from="MarginContainer/VBox/VSplit" to="." method="_on_v_split_dragged"]
+[connection signal="dragged" from="MarginContainer/VBox/VSplit/VSplit2" to="." method="_on_v_split_2_dragged"]

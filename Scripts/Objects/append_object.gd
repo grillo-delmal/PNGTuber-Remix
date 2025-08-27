@@ -130,7 +130,12 @@ func get_state(id):
 		if get_value("should_reset_state"):
 			%ReactionConfig.reset_anim()
 	
+		var old_glob = global_position
 		position = get_value("position")
+		if (global_position - old_glob).length() > get_value("drag_snap") && get_value("drag_snap") != 999999.0:
+			%Dragger.global_position = %Pos.global_position
+		
+		
 		%Sprite2D.position = get_value("offset") 
 		%Sprite2D.scale = Vector2(1,1)
 		
@@ -163,7 +168,7 @@ func get_state(id):
 #		animation()
 		set_blend(get_value("blend_mode"))
 		if get_value("one_shot"):
-			if is_apng:
+			if referenced_data.is_apng:
 				%AnimatedSpriteTexture.index = 0
 				%AnimatedSpriteTexture.proper_apng_one_shot()
 				

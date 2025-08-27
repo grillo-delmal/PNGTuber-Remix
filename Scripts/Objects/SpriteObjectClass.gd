@@ -28,6 +28,7 @@ const DEFAULT_DATA := {
 	mouse_rotation_max = 0.0,
 	mouse_scale_x = 0.0,
 	mouse_scale_y = 0.0,
+	drag_snap = 0.0,
 	
 	# Movement when mouth open
 	mo_xAmp = 0,
@@ -49,6 +50,7 @@ const DEFAULT_DATA := {
 	mo_mouse_rotation_max = 0.0,
 	mo_mouse_scale_x = 0.0,
 	mo_mouse_scale_y = 0.0,
+	mo_drag_snap = 0.0,
 	
 	# Movement when screaming
 	scream_xAmp = 0,
@@ -70,7 +72,7 @@ const DEFAULT_DATA := {
 	scream_mouse_rotation_max = 0.0,
 	scream_mouse_scale_x = 0.0,
 	scream_mouse_scale_y = 0.0,
-	
+	scream_drag_snap = 0.0,
 	# Other stuff idk
 	blend_mode = "Normal",
 	visible = true,
@@ -111,6 +113,9 @@ const DEFAULT_DATA := {
 	follow_type2 = 0,
 	follow_type3 = 0,
 	snap_pos = false,
+	snap_rot = false,
+	snap_scale = false,
+	
 	follow_range = true,
 	follow_strength = 0.155,
 	rotation_threshold = 0.01,
@@ -119,6 +124,10 @@ const DEFAULT_DATA := {
 
 
 @export var sprite_object : Node2D
+var used_image_id : int = 0
+var used_image_id_normal : int = 0
+var referenced_data : ImageData = null
+var referenced_data_normal : ImageData = null
 
 #Movement
 var heldTicks = 0
@@ -141,26 +150,18 @@ var glob : Vector2 = Vector2.ZERO
 
 @export var sprite_type : String = "WiggleApp"
 
-var anim_texture 
-var anim_texture_normal 
 var img_animated : bool = false
 var is_plus_first_import : bool = false
-var image_data : PackedByteArray = []
-var normal_data : PackedByteArray = []
-
-
-var is_apng : bool = false
+var rotated : float = 0
+var flipped_h : bool = false
+var flipped_v : bool = false
 var is_collapsed : bool = false
 var played_once : bool = false
-
 
 @onready var og_glob = global_position
 
 var dt = 0.0
-var frames : Array[AImgIOFrame] = []
-var frames2 : Array[AImgIOFrame] = []
 var fidx = 0
-
 var saved_event : InputEvent
 var is_asset : bool = false
 var was_active_before : bool = true
@@ -271,4 +272,5 @@ func reparent_obj(parent):
 		if i.sprite_id == parent_id:
 			var og_pos = global_position
 			reparent(i.sprite_object)
+			await get_tree().physics_frame
 			global_position = og_pos

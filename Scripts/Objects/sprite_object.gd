@@ -162,6 +162,10 @@ func get_state(id):
 		if get_value("should_reset_state"):
 			%ReactionConfig.reset_anim()
 		
+		var old_glob = global_position
+		position = get_value("position")
+		
+		
 		%Sprite2D.position = get_value("offset") 
 		%Sprite2D.scale = Vector2(1,1)
 		
@@ -169,8 +173,11 @@ func get_state(id):
 		modulate = get_value("colored")
 		scale = get_value("scale")
 	#	global_position = get_value("global_position")
-		position = get_value("position")
-
+		
+		
+		if (global_position - old_glob).length() > get_value("drag_snap") && get_value("drag_snap") != 999999.0:
+			%Dragger.global_position = %Pos.global_position
+		
 		%Sprite2D.set_clip_children_mode(get_value("clip"))
 		rotation = get_value("rotation")
 		%Sprite2D.material.set_shader_parameter("wiggle", get_value("wiggle"))

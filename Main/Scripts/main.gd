@@ -100,9 +100,9 @@ func add_normal_sprite():
 	if Global.held_sprites.size() == 1:
 		if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
 			if not Global.held_sprites[0].get_value("folder"):
-				if Global.held_sprites[0].img_animated:
+				if Global.held_sprites[0].referenced_data.img_animated:
 					%FileDialog.filters = ["*.gif"]
-				elif Global.held_sprites[0].is_apng:
+				elif Global.held_sprites[0].referenced_data.is_apng:
 					%FileDialog.filters = ["*.png","*.apng"]
 				else:
 					%FileDialog.filters = ["*.png", "*.jpeg", "*.jpg", "*.svg"]
@@ -113,7 +113,7 @@ func add_normal_sprite():
 func _on_file_dialog_file_selected(path): 
 	match current_state:
 		State.LoadFile:
-			%FileImporter.trim = false
+			SaveAndLoad.trim = false
 			if path.get_extension() == "save":
 				if Settings.theme_settings.enable_trimmer:
 					model_path = path
@@ -129,26 +129,26 @@ func _on_file_dialog_file_selected(path):
 			if Settings.theme_settings.enable_trimmer:
 				var apng_test = AImgIOAPNGImporter.load_from_file(path)
 				if apng_test != ["No frames", null]:
-					%FileImporter.trim = false
+					SaveAndLoad.trim = false
 					%FileImporter.replace_texture(path)
 				else:
 					sprite_path = path
 					%ConfirmTrim.popup_centered()
 			else:
-				%FileImporter.trim = false
+				SaveAndLoad.trim = false
 				%FileImporter.replace_texture(path)
 
 		State.AddNormal:
 			if Settings.theme_settings.enable_trimmer:
 				var apng_test = AImgIOAPNGImporter.load_from_file(path)
 				if apng_test != ["No frames", null]:
-					%FileImporter.trim = false
+					SaveAndLoad.trim = false
 					%FileImporter.add_normal(path)
 				else:
 					sprite_path = path
 					%ConfirmTrim.popup_centered()
 			else:
-				%FileImporter.trim = false
+				SaveAndLoad.trim = false
 				%FileImporter.add_normal(path)
 
 func _on_file_dialog_files_selected(paths):
@@ -185,6 +185,8 @@ func import_objects():
 				Global.update_layers.emit(0, sprte_obj, "Sprite2D")
 
 func _on_confirmation_dialog_confirmed():
+	Global.image_manager_data.clear()
+	Global.remake_image_manager.emit()
 	Global.save_path = ""
 	Global.new_file.emit()
 	clear_sprites()

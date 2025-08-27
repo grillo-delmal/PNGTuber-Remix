@@ -17,6 +17,9 @@ var placeholder_position : Vector2 = Vector2.ZERO
 var controller_vel : Vector2 = Vector2.ZERO
 var target_x : float = 0
 var target_y  : float = 0
+var target_rotation_axis : Vector2 = Vector2.ZERO
+var target_scale_axis : Vector2 = Vector2.ZERO
+
 var dir_vel_anim : Vector2 = Vector2.ZERO
 var dist_vel_anim : float = 0.0
 var frame_h : float = 0.0
@@ -187,7 +190,7 @@ func follow_wiggle(delta: float) -> void:
 	var tip_index = clamp(actor.get_value("tip_point"), 0, parent.points.size() - 1)
 	var raw_tip: Vector2 = parent.points[tip_index]
 	var rest_angle: float = parent._rest_direction_angle
-	var smoothed_pos = actor.position.lerp(raw_tip, 0.6)
+	var smoothed_pos = actor.position.lerp(raw_tip, 0.9)
 	actor.position = smoothed_pos
 	var base_length: float = 1.0
 	if parent.points.size() > 1:
@@ -535,12 +538,23 @@ func follow_keyboard():
 		follow_sprite_anim(pos_axis, dist)
 
 	if actor.get_value("follow_type2") in [3,4,5,6,7,8]:
-		var roation_axis = some_keyboard_calc_wasd("follow_type2")
-		follow_controller_rotation(roation_axis)
-		
+		var rotaion_axis = some_keyboard_calc_wasd("follow_type2")
+		if actor.get_value("snap_rot"):
+			if !rotaion_axis.is_zero_approx():
+				target_rotation_axis = target_rotation_axis.lerp(rotaion_axis, 0.15)
+		else:
+			target_rotation_axis = rotaion_axis
+		follow_controller_rotation(target_rotation_axis)
+
 	if actor.get_value("follow_type3") in [3,4,5,6,7,8]:
 		var scale_axis = some_keyboard_calc_wasd("follow_type3")
-		follow_controller_scale(scale_axis)
+		if actor.get_value("snap_rot"):
+			if scale_axis.is_zero_approx():
+				target_scale_axis = target_scale_axis.lerp(scale_axis, 0.15)
+		else:
+			target_scale_axis = scale_axis
+		
+		follow_controller_scale(target_scale_axis)
 
 func some_keyboard_calc_wasd(type_name : String = "follow_type") -> Vector2:
 	var normal = Vector2(0.0, 0.0)

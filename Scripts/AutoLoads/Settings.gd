@@ -28,6 +28,7 @@ const SAVED_LAYOUT_PATH := "user://layout.tres"
 	left = -2000,
 	properties = 0,
 	layers = -100,
+	file_manager = 0,
 	lipsync_file_path = OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres",
 	microphone = null,
 	enable_trimmer = false,
@@ -48,6 +49,7 @@ const SAVED_LAYOUT_PATH := "user://layout.tres"
 	hide_bottom_bar = true,
 	use_threading = false,
 	language = "automatic",
+	save_unused_files = false,
 }
 var save_location = OS.get_executable_path().get_base_dir() + "/Preferences.pRDat" :
 	set(value):

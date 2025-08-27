@@ -1,0 +1,70 @@
+[gd_scene load_steps=8 format=3 uid="uid://3afwb1wdylg6"]
+
+[ext_resource type="Texture2D" uid="uid://dv27xjbwfkacl" path="res://Misc/TestAssets/Lamp.png" id="1_02rdl"]
+[ext_resource type="Script" uid="uid://c8ho66xhc5a8u" path="res://Scripts/Misc/clipping_test.gd" id="1_ii0y2"]
+[ext_resource type="Shader" uid="uid://cvl7a1se6e13a" path="res://MaskingTest.gdshader" id="2_7uny7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5nsoj"]
+shader = ExtResource("2_7uny7")
+shader_parameter/white_reveals = false
+shader_parameter/clip_blending = true
+shader_parameter/blend_mode = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7uny7"]
+shader = ExtResource("2_7uny7")
+shader_parameter/white_reveals = true
+shader_parameter/clip_blending = true
+shader_parameter/blend_mode = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_83g06"]
+shader = ExtResource("2_7uny7")
+shader_parameter/white_reveals = true
+shader_parameter/clip_blending = true
+shader_parameter/blend_mode = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_majv0"]
+shader = ExtResource("2_7uny7")
+shader_parameter/white_reveals = false
+shader_parameter/clip_blending = true
+shader_parameter/blend_mode = 0
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_ii0y2")
+
+[node name="Node" type="Node" parent="."]
+
+[node name="Node2D" type="Node2D" parent="Node"]
+position = Vector2(603, 306)
+
+[node name="Sprite2D" type="Sprite2D" parent="Node/Node2D"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_5nsoj")
+texture = ExtResource("1_02rdl")
+
+[node name="Node" type="Node" parent="Node/Node2D/Sprite2D"]
+
+[node name="Sprite2D2" type="Sprite2D" parent="Node/Node2D/Sprite2D/Node"]
+unique_name_in_owner = true
+clip_children = 2
+material = SubResource("ShaderMaterial_7uny7")
+position = Vector2(-3, -3)
+texture = ExtResource("1_02rdl")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Node/Node2D/Sprite2D/Node/Sprite2D2"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_83g06")
+texture = ExtResource("1_02rdl")
+
+[node name="Node2" type="Node" parent="Node/Node2D/Sprite2D/Node/Sprite2D2/Sprite2D3"]
+
+[node name="Sprite2D4" type="Sprite2D" parent="Node/Node2D/Sprite2D/Node/Sprite2D2/Sprite2D3/Node2"]
+unique_name_in_owner = true
+clip_children = 2
+material = SubResource("ShaderMaterial_majv0")
+position = Vector2(0, 15)
+texture = ExtResource("1_02rdl")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Node/Node2D/Sprite2D/Node/Sprite2D2/Sprite2D3/Node2/Sprite2D4"]
+unique_name_in_owner = true
+position = Vector2(-3, -18)
+texture = ExtResource("1_02rdl")

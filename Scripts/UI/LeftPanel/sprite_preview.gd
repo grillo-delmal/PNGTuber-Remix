@@ -13,7 +13,7 @@ func nullfy():
 	
 
 func enable():
-	if Global.held_sprites.size() == 1:
+	if Global.held_sprites.size() > 0:
 		if not Global.held_sprites[0].get_value("folder"):
 			%CurrentSelectedNormal.texture = Global.held_sprites[0].get_node("%Sprite2D").texture.normal_texture
 			%CurrentSelected.texture = Global.held_sprites[0].get_node("%Sprite2D").texture.diffuse_texture
@@ -23,3 +23,16 @@ func enable():
 	else:
 		%CurrentSelected.texture = null
 		%CurrentSelectedNormal.texture = null
+
+
+func _on_current_selected_mouse_entered() -> void:
+	Global.over_tex = true
+
+func _on_current_selected_mouse_exited() -> void:
+	Global.over_tex = false
+
+func _on_current_selected_normal_mouse_entered() -> void:
+	Global.over_normal_tex = true
+
+func _on_current_selected_normal_mouse_exited() -> void:
+	Global.over_normal_tex = false

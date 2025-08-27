@@ -24,9 +24,8 @@ func _ready():
 	ProjectSettings.set("audio/driver/mix_rate", AudioServer.get_mix_rate())
 	update_window_button()
 	
-	print(OS.get_executable_path().get_base_dir() + "/autosaves")
-	if !DirAccess.dir_exists_absolute(OS.get_executable_path().get_base_dir() + "/autosaves"):
-		DirAccess.make_dir_absolute(OS.get_executable_path().get_base_dir() + "/autosaves")
+	#print(OS.get_executable_path().get_base_dir() + "/autosaves")
+	check_auto_saves()
 		
 	await get_tree().physics_frame
 	choosing_mode(Settings.theme_settings.mode)
@@ -45,6 +44,12 @@ func update_window_button() -> void:
 		if !window.borderless: continue
 		menu.add_item("Edit Windows", 100)
 		break
+
+
+func check_auto_saves():
+	if !DirAccess.dir_exists_absolute(OS.get_executable_path().get_base_dir() + "/autosaves"):
+		DirAccess.make_dir_absolute(OS.get_executable_path().get_base_dir() + "/autosaves")
+
 
 func choosing_window(id):
 	match id:
@@ -102,6 +107,18 @@ func choosing_files(id):
 		11:
 			if Global.swtich_session_popup != null && is_instance_valid(Global.swtich_session_popup):
 				Global.swtich_session_popup.popup()
+		12:
+			if Global.save_path == null or Global.save_path == "" :
+				check_auto_saves()
+				var save_location = Settings.autosave_location + "ReloadedFileBackup" + "/" + str(randi())
+				SaveAndLoad.save_file(save_location)
+				await get_tree().physics_frame
+				SaveAndLoad.load_file(save_location)
+				
+			else:
+				SaveAndLoad.save_file(Global.save_path)
+				await get_tree().physics_frame
+				SaveAndLoad.load_file(Global.save_path)
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("save"):

@@ -53,6 +53,7 @@ func check_data():
 	%FloatyPanning.button_pressed = Settings.theme_settings.floaty_panning
 	%UseThreads.button_pressed = Settings.theme_settings.use_threading
 	%KeepOldTrimData.button_pressed = Settings.theme_settings.save_raw_sprite
+	%SaveUnusedImages.button_pressed = Settings.theme_settings.save_unused_files
 	
 	change_setting = true
 
@@ -251,3 +252,8 @@ func _on_out_of_bounds_toggled(toggled_on: bool) -> void:
 
 func _on_fix_mic_delay_pressed() -> void:
 	GlobalAudioStreamPlayer.restart_mic_and_timer()
+
+
+func _on_save_unused_images_toggled(toggled_on: bool) -> void:
+	Settings.theme_settings.save_unused_files = toggled_on
+	Settings.save()

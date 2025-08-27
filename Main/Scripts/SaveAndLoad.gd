@@ -3,7 +3,9 @@ extends Node
 
 var save_dict : Dictionary = {}
 var thread : Thread = Thread.new()
-
+var trim : bool = false
+var should_offset : bool = true
+var import_flippd : bool = false
 
 func save_file(path):
 	if Settings.theme_settings.use_threading:
@@ -16,10 +18,24 @@ func save_model(path):
 	Global.save_path = path
 	var sprites = get_tree().get_nodes_in_group("Sprites")
 	var inputs = get_tree().get_nodes_in_group("StateButtons")
-	
-	
 	var sprites_array : Array = []
 	var input_array : Array = []
+	
+	var image_array : Array = []
+	
+
+	for i in Global.image_manager_data:
+		if !Settings.theme_settings.save_unused_files:
+			var used : bool = false
+			for sp in sprites:
+				if sp.used_image_id == i.id or sp.used_image_id_normal == i.id:
+					used = true
+			if !used:
+				continue
+		var dict : Dictionary = i.get_data()
+		image_array.append(dict)
+		
+		
 	for input in inputs:
 		input_array.append({
 			state_name = input.state_name,
@@ -27,27 +43,13 @@ func save_model(path):
 		})
 	for sprt in sprites:
 		sprt.save_state(Global.current_state)
-		var img
-		if sprt.is_apng:
-			var exporter := AImgIOAPNGExporter.new()
-			img = exporter.export_animation(sprt.frames, 10, self, "_progress_report", [])
-			var normal_img
-			if !sprt.frames2.is_empty():
-				normal_img = exporter.export_animation(sprt.frames2, 10, self, "_progress_report", [])
-			
+		if sprt.referenced_data.is_apng:
 			var cleaned_array = []
-			
 			for st in sprt.states:
 				if !st.is_empty():
 					cleaned_array.append(st)
-
-		#	print(cleaned_array)
-			
 			var sprt_dict = {
-				img = img,
-				normal = normal_img,
 				states = cleaned_array,
-				is_apng = sprt.is_apng,
 				sprite_name = sprt.sprite_name,
 				sprite_id = sprt.sprite_id,
 				parent_id = sprt.parent_id,
@@ -61,36 +63,19 @@ func save_model(path):
 				is_collapsed = sprt.is_collapsed,
 				is_premultiplied = true,
 				layer_color = sprt.layer_color,
+				image_id = sprt.used_image_id,
+				normal_id = sprt.used_image_id_normal,
 			}
 			
 			sprites_array.append(sprt_dict)
 		else:
-			if sprt.img_animated:
-				img = sprt.anim_texture
-			else:
-				img = sprt.get_node("%Sprite2D").texture.diffuse_texture.get_image().save_png_to_buffer()
-				
-			var normal_img
-			if sprt.get_node("%Sprite2D").texture.normal_texture:
-				if sprt.img_animated:
-					normal_img = sprt.anim_texture_normal
-				else:
-					normal_img = sprt.get_node("%Sprite2D").texture.normal_texture.get_image().save_png_to_buffer()
-			
 			var cleaned_array = []
 			
 			for st in sprt.states:
 				if !st.is_empty():
 					cleaned_array.append(st)
-
-		#	print(cleaned_array)
 			var sprt_dict = {
-				img = img,
-				normal = normal_img,
-				image_data = sprt.image_data,
-				normal_data = sprt.normal_data,
 				states = cleaned_array,
-				img_animated = sprt.img_animated,
 				sprite_name = sprt.sprite_name,
 				sprite_id = sprt.sprite_id,
 				parent_id = sprt.parent_id,
@@ -104,6 +89,11 @@ func save_model(path):
 				is_collapsed = sprt.is_collapsed,
 				is_premultiplied = true,
 				layer_color = sprt.layer_color,
+				rotated = sprt.rotated,
+				flipped_h = sprt.flipped_h,
+				flipped_v = sprt.flipped_v,
+				image_id = sprt.used_image_id,
+				normal_id = sprt.used_image_id_normal,
 			}
 			sprites_array.append(sprt_dict)
 		
@@ -112,6 +102,7 @@ func save_model(path):
 		sprites_array = sprites_array,
 		settings_dict = Global.settings_dict,
 		input_array = input_array,
+		image_manager_data = image_array,
 	}
 	Settings.save()
 	var file = FileAccess.open(path,FileAccess.WRITE)
@@ -182,6 +173,13 @@ func load_model(path : String):
 	
 	Global.remake_states.emit(load_dict.settings_dict.states)
 	
+	var local_image_manage = load_dict.get("image_manager_data", [])
+	Global.image_manager_data = []
+	for i in local_image_manage:
+		var image_data : ImageData = ImageData.new()
+		image_data.set_data(i)
+		Global.image_manager_data.append(image_data)
+	var has_image_data = load_dict.get("image_manager_data", null)
 	if not path.begins_with("res://"):
 		Global.save_path = path
 	
@@ -210,7 +208,8 @@ func load_model(path : String):
 		sprite_obj.states.clear()
 		sprite_obj.states = cleaned_array
 		sprite_obj.layer_color = sprite.get("layer_color", Color.BLACK)
-		
+		sprite_obj.used_image_id = sprite.get("image_id", 0)
+		sprite_obj.used_image_id_normal = sprite.get("normal_id", 0)
 		
 		if sprite.has("is_asset"):
 			sprite_obj.is_asset = sprite.is_asset
@@ -225,28 +224,85 @@ func load_model(path : String):
 				InputMap.add_action(str(sprite.sprite_id))
 				if sprite_obj.saved_event != null:
 					InputMap.action_add_event(str(sprite.sprite_id), sprite_obj.saved_event)
-				
-		if sprite.has("is_apng"):
-			load_apng(sprite_obj, sprite)
-		else:
-			if sprite.has("img_animated"):
-				if sprite.img_animated:
-					load_gif(sprite_obj, sprite)
-				else:
-					load_sprite(sprite_obj, sprite)
-			else:
-				
-				
-				load_sprite(sprite_obj, sprite)
+		
+		sprite_obj.sprite_name = sprite.sprite_name
+		var image_data : ImageData 
+		var image_data_normal : ImageData
 
-		if sprite.has("image_data"):
-			sprite_obj.image_data = sprite.image_data 
-			sprite_obj.normal_data = sprite.normal_data 
+
+		
+		if !sprite_obj.states[0].get("folder", true):
+			var canv = CanvasTexture.new()
+			sprite_obj.get_node("%Sprite2D").texture = canv
+			var set_text_diff = false
+			var set_text_norm = false
+			if has_image_data == null:
+				image_data = ImageData.new()
+				image_data_normal = ImageData.new()
+				if sprite.has("is_apng"):
+					load_apng(sprite, image_data)
+					load_apng(sprite, image_data_normal, true)
+					
+				else:
+					if sprite.has("img_animated"):
+						if sprite.img_animated:
+							load_gif(sprite_obj, sprite, image_data)
+							load_gif(sprite, image_data_normal, true)
+						else:
+							load_sprite(sprite, image_data)
+							load_sprite(sprite, image_data_normal, true)
+					else:
+						load_sprite(sprite, image_data)
+						load_sprite(sprite, image_data_normal, true)
+				if image_data.has_data:
+					canv.diffuse_texture = image_data.runtime_texture
+					sprite_obj.referenced_data = image_data
+					sprite_obj.used_image_id = image_data.id
+					image_data.image_name = sprite_obj.sprite_name
+					Global.image_manager_data.append(image_data)
+					set_text_diff = true
+				if image_data_normal.has_data:
+					canv.normal_texture = image_data_normal.runtime_texture
+					sprite_obj.referenced_data_normal = image_data_normal
+					sprite_obj.used_image_id_normal = image_data_normal.id
+					image_data_normal.image_name = sprite_obj.sprite_name + "(Normal)"
+					Global.image_manager_data.append(image_data_normal)
+					set_text_norm = true
+			else:
+				sprite_obj.rotated = sprite.get("rotated", 0)
+				sprite_obj.flipped_h = sprite.get("flipped_h", false)
+				sprite_obj.flipped_v = sprite.get("flipped_v", false)
+				for im in Global.image_manager_data:
+					if im.id == sprite_obj.used_image_id:
+						sprite_obj.referenced_data = im
+						var texture = check_flips(im.runtime_texture, sprite_obj)
+						sprite_obj.get_node("%Sprite2D").texture.diffuse_texture = texture
+						set_text_diff = true
+					if im.id == sprite_obj.used_image_id_normal:
+						sprite_obj.referenced_data_normal = im
+						var texture = check_flips(im.runtime_texture, sprite_obj)
+						sprite_obj.get_node("%Sprite2D").texture.normal_texture = texture
+						set_text_norm = true
 			
+			if sprite_obj.used_image_id != 0 && !set_text_diff:
+				sprite_obj.get_node("%Sprite2D").texture.diffused_texure = Global.image_data
+			if sprite_obj.used_image_id_normal != 0 && !set_text_norm:
+				sprite_obj.get_node("%Sprite2D").texture.normal_texure = Global.image_data_normal
+
+		else:
+			sprite_obj.get_node("%Sprite2D").texture = null
+
+		
+		if sprite.has("image_data"):
+			if image_data != null:
+				image_data.image_data = sprite.image_data 
+			if image_data_normal != null:
+				image_data_normal.image_data = sprite.normal_data 
+		
 		sprite_obj.sprite_id = sprite.sprite_id
 		if sprite.parent_id != null:
 			sprite_obj.parent_id = sprite.parent_id
-		sprite_obj.sprite_name = sprite.sprite_name
+		
 		if sprite.has("is_collapsed"):
 			sprite_obj.is_collapsed = sprite.is_collapsed
 		Global.sprite_container.add_child(sprite_obj)
@@ -282,7 +338,6 @@ func load_model(path : String):
 		Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	else:
 		Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
-	
 	if Global.settings_dict.auto_save:
 		Settings.save_timer.wait_time = Global.settings_dict.auto_save_timer * 60
 		Settings.save_timer.start()
@@ -294,6 +349,7 @@ func load_model(path : String):
 	if Settings.theme_settings.use_threading:
 		thread.call_deferred("wait_to_finish")
 	Global.project_updates.emit("Project Loaded!")
+	Global.remake_image_manager.emit()
 
 func save_backup(data: Dictionary, previous_path: String) -> void:
 	var base_path := previous_path.get_basename()
@@ -309,134 +365,98 @@ func save_backup(data: Dictionary, previous_path: String) -> void:
 	var file := FileAccess.open(path, FileAccess.WRITE)
 	file.store_var(data, true)
 
-func load_sprite(sprite_obj, sprite):
+func load_sprite(sprite, image_data = null, normal = false):
 	var img_data
 	var img = Image.new()
-
-	if sprite.img is not PackedByteArray:
-		img_data = Marshalls.base64_to_raw(sprite.img)
+	var type
+	if normal:
+		if sprite.normal == null:
+			return
+		type = sprite.normal
+	else:
+		if sprite.img == null:
+			return
+		type = sprite.img
+		
+	if type is not PackedByteArray:
+		img_data = Marshalls.base64_to_raw(type)
 		img.load_png_from_buffer(img_data)
 	else:
-		img.load_png_from_buffer(sprite.img)
-		
+		img.load_png_from_buffer(type)
 	if sprite.has("is_premultiplied") == false:
 		img.fix_alpha_edges()
 	var img_tex = ImageTexture.new()
 	img_tex.set_image(img)
-	var img_can = CanvasTexture.new()
-	img_can.diffuse_texture = img_tex
-	if sprite.has("normal"):
-		var normalBytes = sprite.normal
-		if normalBytes != null:
-			var nimg = Image.new()
-			if sprite.normal is not PackedByteArray:
-				var img_normal = Marshalls.base64_to_raw(sprite.normal)
-				nimg.load_png_from_buffer(img_normal)
-			else:
-				nimg.load_png_from_buffer(sprite.normal)
-			nimg.fix_alpha_edges()
-			var nimg_tex = ImageTexture.new()
-			nimg_tex.set_image(nimg)
-			img_can.normal_texture = nimg_tex
-	sprite_obj.get_node("%Sprite2D").texture = img_can
+	image_data.runtime_texture = img_tex
+	image_data.has_data = true
 
-func load_trimmed_sprite(sprite_obj, sprite):
-	var img_data
-	
-
-	if sprite.img is not PackedByteArray:
-		img_data = Marshalls.base64_to_raw(sprite.img)
+func load_apng(sprite , image_data = null, normal = false):
+	var buffer = []
+	var img = null
+	if normal:
+		if sprite.normal == null:
+			return
+		img = AImgIOAPNGImporter.load_from_buffer(sprite.normal)
+		buffer = sprite.normal
 	else:
-		img_data = sprite.img
-	
-	Global.main.get_node("%FileImporter").trim = true
-	var img_can = Global.main.get_node("%FileImporter").import_png_from_buffer(img_data, "", sprite_obj)
-
-	# Adjust position to keep image visually stable
-	#sprite_obj.sprite_data.offset += Vector2(center_shift_x, center_shift_y)
-#	sprite_obj.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
-#	for i in sprite_obj.states:
-	#	i.offset += Vector2(center_shift_x, center_shift_y)
-	sprite_obj.get_node("%Sprite2D").texture = img_can
-
-func load_apng(sprite_obj, sprite):
-	var img = AImgIOAPNGImporter.load_from_buffer(sprite.img)
+		if sprite.img == null:
+			return
+		img = AImgIOAPNGImporter.load_from_buffer(sprite.img)
+		buffer = sprite.img
 	var tex = img[1] as Array[AImgIOFrame]
-	sprite_obj.frames = tex
-	
-	for n in sprite_obj.frames:
+	if image_data:
+		image_data.is_apng = true
+		image_data.frames = tex
+		
+	for n in image_data.frames:
 		if sprite.has("is_premultiplied") == false:
 			n.content.fix_alpha_edges()
 	
-	var cframe: AImgIOFrame = sprite_obj.frames[0]
-	
+	var cframe: AImgIOFrame = image_data.frames[0]
+	image_data.is_apng = true
+	image_data.img_animated = false
+	image_data.anim_texture = buffer
 	var text = ImageTexture.create_from_image(cframe.content)
-	var img_can = CanvasTexture.new()
-	img_can.diffuse_texture = text
-	if sprite.normal:
-		var norm = AImgIOAPNGImporter.load_from_buffer(sprite.normal)
-		var texn = norm[1] as Array[AImgIOFrame]
-		sprite_obj.frames2 = texn
-		for n in sprite_obj.frames2:
-			n.content.fix_alpha_edges()
-		#	n.content.premultiply_alpha()
-		
-		var cframe2: AImgIOFrame = sprite_obj.frames2[0]
-		var text2 = ImageTexture.create_from_image(cframe2.content)
-		img_can.normal_texture = text2
-		
-	for i in sprite_obj.frames:
+	image_data.runtime_texture = text
+	image_data.animated_frames.clear()
+	for i in image_data.frames:
 		var new_frame : AnimatedFrame = AnimatedFrame.new()
 		new_frame.texture = ImageTexture.create_from_image(i.content)
 		new_frame.duration = i.duration
-		sprite_obj.get_node("%AnimatedSpriteTexture").frames.append(new_frame)
-	for i in sprite_obj.frames2:
-		var new_frame : AnimatedFrame = AnimatedFrame.new()
-		new_frame.texture = ImageTexture.create_from_image(i.content)
-		new_frame.duration = i.duration
-		sprite_obj.get_node("%AnimatedSpriteTexture").frames2.append(new_frame)
+		image_data.animated_frames.append(new_frame)
+	
+	image_data.has_data = true
 
-	sprite_obj.get_node("%Sprite2D").texture = img_can
-	sprite_obj.is_apng = true
-	sprite_obj.get_node("%Sprite2D").texture = img_can
-
-func load_gif(sprite_obj, sprite):
-	var gif_tex : SpriteFrames = GifManager.sprite_frames_from_buffer(sprite.img)
-	var img_can = CanvasTexture.new()
+func load_gif(sprite, image_data = null, normal = true):
+	var buffer = []
+	var gif_tex
+	if normal:
+		if sprite.normal == null:
+			return
+		gif_tex = GifManager.sprite_frames_from_buffer(sprite.normal)
+		buffer = sprite.normal
+	else:
+		
+		if sprite.img == null:
+			return
+		gif_tex = GifManager.sprite_frames_from_buffer(sprite.img)
+		buffer = sprite.img
+		
 	for n in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
 		gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], n).get_image().fix_alpha_edges()
 		
 	var text = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], 0).get_image())
-	img_can.diffuse_texture = text
-	sprite_obj.get_node("%AnimatedSpriteTexture").frames.clear()
+	image_data.runtime_texture = text
+	image_data.animated_frames.clear()
 	for i in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
 		var new_frame : AnimatedFrame = AnimatedFrame.new()
 		new_frame.texture = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], i).get_image())
 		new_frame.duration = gif_tex.get_frame_duration(gif_tex.get_animation_names()[0], i)/24
-		sprite_obj.get_node("%AnimatedSpriteTexture").frames.append(new_frame)
-	sprite_obj.anim_texture = sprite.img
-	sprite_obj.img_animated = true
-	sprite_obj.is_apng = false
-	
-	
-	if sprite.has("normal"):
-		if sprite.normal != null:
-			var gif_normal : SpriteFrames = GifManager.sprite_frames_from_buffer(sprite.normal)
-			
-			for n in gif_normal.get_frame_count(gif_normal.get_animation_names()[0]):
-				gif_normal.get_frame_texture(gif_normal.get_animation_names()[0], n).get_image().fix_alpha_edges()
-			
-			sprite_obj.anim_texture_normal = sprite.normal
-			var text_normal = ImageTexture.create_from_image(gif_normal.get_frame_texture(gif_normal.get_animation_names()[0], 0).get_image())
-			img_can.normal_texture = text_normal
-			sprite_obj.get_node("%AnimatedSpriteTexture").frames2.clear()
-			for i in gif_normal.get_frame_count(gif_normal.get_animation_names()[0]):
-				var new_frame : AnimatedFrame = AnimatedFrame.new()
-				new_frame.texture = ImageTexture.create_from_image(gif_normal.get_frame_texture(gif_normal.get_animation_names()[0], i).get_image())
-				new_frame.duration = gif_normal.get_frame_duration(gif_normal.get_animation_names()[0], i)/24
-				sprite_obj.get_node("%AnimatedSpriteTexture").frames2.append(new_frame)
-				
-	sprite_obj.get_node("%Sprite2D").texture = img_can
+		image_data.animated_frames.append(new_frame)
+	image_data.anim_texture = buffer
+	image_data.img_animated = true
+	image_data.is_apng = false
+	image_data.has_data = true
 
 func load_pngplus_file(path):
 	Global.delete_states.emit()
@@ -627,3 +647,161 @@ func export_images(images = get_tree().get_nodes_in_group("Sprites")):
 					img_d.load_png_from_buffer(sprite.normal_data)
 					img_d.save_png(dire +"/" + sprite.sprite_name + str(randi()) + ".png")
 					img_d = null
+
+#----------------------------------------------------------------------------
+# Global Image Loading Section
+func import_gif(path : String, image_data):
+	var g_file = FileAccess.get_file_as_bytes(path)
+	var gif_tex : SpriteFrames = GifManager.sprite_frames_from_buffer(g_file)
+	var img_can = CanvasTexture.new()
+	for n in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
+		gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], n).get_image().fix_alpha_edges()
+		
+	var text = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], 0).get_image())
+	img_can.diffuse_texture = text
+	image_data.runtime_texture = text
+	image_data.animated_frames.clear()
+	for i in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
+		var new_frame : AnimatedFrame = AnimatedFrame.new()
+		new_frame.texture = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], i).get_image())
+		new_frame.duration = (gif_tex.get_frame_duration(gif_tex.get_animation_names()[0], i))/24
+		image_data.animated_frames.append(new_frame)
+		
+	image_data.anim_texture = g_file
+	image_data.img_animated = true
+	image_data.is_apng = false
+	image_data.image_name = "(Gif)" + path.get_file().get_basename() 
+
+func import_apng_sprite(path : String ,image_data):
+	var ap_file = FileAccess.get_file_as_bytes(path)
+	var img = AImgIOAPNGImporter.load_from_file(path)
+	var tex = img[1] as Array[AImgIOFrame]
+	image_data.frames = tex
+	
+	for n in image_data.frames:
+		n.content.fix_alpha_edges()
+	
+	var cframe: AImgIOFrame = image_data.frames[0]
+	var text = ImageTexture.create_from_image(cframe.content)
+	image_data.anim_texture = ap_file
+	image_data.runtime_texture = text
+	image_data.is_apng = true
+	image_data.img_animated = false
+	image_data.image_name = "(Apng) " + path.get_file().get_basename()
+	image_data.animated_frames.clear()
+	for i in image_data.frames:
+		var new_frame : AnimatedFrame = AnimatedFrame.new()
+		new_frame.texture = ImageTexture.create_from_image(i.content)
+		new_frame.duration = i.duration
+		image_data.animated_frames.frames.append(new_frame)
+
+func import_png(img: Image, spawn, image_data, _trim, _should_offset):
+	var og_image = img.duplicate(true)
+	if trim:
+		img = ImageTrimmer.trim_image(img)
+		image_data.trimmed = true
+		if should_offset:
+			var original_width = og_image.get_width()
+			var original_height = og_image.get_height()
+			var trimmed_width = img.get_width()
+			var trimmed_height = img.get_height()
+			# Calculate offset to maintain visual position
+			var trim_info = ImageTrimmer.calculate_trim_info(og_image)
+			var center_shift_x = trim_info.min_x - ((original_width - trimmed_width) / 2.0)
+			var center_shift_y = trim_info.min_y - ((original_height - trimmed_height) / 2.0)
+			image_data.offset = Vector2(center_shift_x, center_shift_y)
+			# Adjust position to keep image visually stable
+			if spawn != null:
+				spawn.sprite_data.offset += Vector2(center_shift_x, center_shift_y)
+				spawn.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
+	image_data.is_apng = false
+	image_data.img_animated = false
+	img.fix_alpha_edges()
+	var texture = ImageTexture.create_from_image(img)
+	image_data.runtime_texture = texture
+
+func import_png_from_file(path: String, spawn, image_data):
+	var img = Image.load_from_file(path)
+	SaveAndLoad.import_png(img, spawn, image_data, SaveAndLoad.trim, SaveAndLoad.should_offset)
+	var buffer = FileAccess.get_file_as_bytes(path)
+	if SaveAndLoad.trim:
+		if Settings.theme_settings.save_raw_sprite:
+			image_data.image_data = buffer
+		else:
+			image_data.image_data = []
+	else:
+		image_data.image_data = []
+	image_data.image_name = path.get_file().get_basename()
+
+#----------------------------------------------------------------------------
+# Global Image loading from buffer
+
+func load_apng_from_buffer(buffer , image_data = null, _normal = false):
+	var img = AImgIOAPNGImporter.load_from_buffer(buffer)
+	var tex = img[1] as Array[AImgIOFrame]
+	image_data.frames = tex
+	for n in image_data.frames:
+		n.content.fix_alpha_edges()
+	
+	var cframe: AImgIOFrame = image_data.frames[0]
+	image_data.is_apng = true
+	image_data.img_animated = false
+	var text = ImageTexture.create_from_image(cframe.content)
+	image_data.runtime_texture = text
+	image_data.animated_frames.clear()
+	for i in image_data.frames:
+		var new_frame : AnimatedFrame = AnimatedFrame.new()
+		new_frame.texture = ImageTexture.create_from_image(i.content)
+		new_frame.duration = i.duration
+		image_data.animated_frames.append(new_frame)
+
+func load_gif_from_buffer(buffer, image_data = null):
+	var gif_tex = GifManager.sprite_frames_from_buffer(buffer)
+	for n in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
+		gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], n).get_image().fix_alpha_edges()
+		
+	var text = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], 0).get_image())
+	image_data.runtime_texture = text
+	image_data.animated_frames.clear()
+	for i in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
+		var new_frame : AnimatedFrame = AnimatedFrame.new()
+		new_frame.texture = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], i).get_image())
+		new_frame.duration = gif_tex.get_frame_duration(gif_tex.get_animation_names()[0], i)/24
+		image_data.animated_frames.append(new_frame)
+
+func _on_flip_h(texture) -> Texture2D:
+	var diff_img : Image = texture.get_image().duplicate(true)
+	diff_img.flip_x()
+	var diff_texture = ImageTexture.create_from_image(diff_img)
+	return diff_texture
+
+func _on_flip_v(texture) -> Texture2D:
+	var diff_img : Image = texture.get_image().duplicate(true)
+	diff_img.flip_y()
+	var diff_texture = ImageTexture.create_from_image(diff_img)
+	return diff_texture
+
+func _on_rotate_image(texture, obj = null) -> Texture2D:
+	var diff_img : Image = texture.get_image().duplicate(true)
+	for i in obj.rotated:
+		diff_img.rotate_90(CLOCKWISE)
+	var diff_texture = ImageTexture.create_from_image(diff_img)
+	return diff_texture
+
+func check_flips(og_texture, object) -> Texture2D:
+	var texture = og_texture
+	if object.flipped_h:
+		texture = _on_flip_h(texture)
+	if object.flipped_v:
+		texture = _on_flip_v(texture)
+	if object.rotated != 0:
+		texture = _on_rotate_image(texture, object)
+	return texture
+
+func check_valid(obj, image_data) -> bool:
+	if obj != null && is_instance_valid(obj):
+		if (image_data.is_apng or image_data.img_animated) or obj.get_value("folder"):
+			return false
+		return true
+	else:
+		return false

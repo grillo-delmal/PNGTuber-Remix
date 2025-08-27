@@ -76,10 +76,13 @@ static func trim_normal(image : Image, normal : Image) -> Image:
 
 static func set_thumbnail(item : TreeItem):
 	var img = Image.new()
-	if item.get_metadata(0).sprite_object.img_animated:
-		img = item.get_metadata(0).sprite_object.get_node("%Sprite2D").texture.get_image().duplicate(true)
+	if item.get_metadata(0) is ImageData:
+		img = item.get_metadata(0).runtime_texture.get_image().duplicate(true)
 	else:
-		img = item.get_metadata(0).sprite_object.get_node("%Sprite2D").texture.get_image().duplicate(true)
+		if item.get_metadata(0).sprite_object.img_animated:
+			img = item.get_metadata(0).sprite_object.get_node("%Sprite2D").texture.get_image().duplicate(true)
+		else:
+			img = item.get_metadata(0).sprite_object.get_node("%Sprite2D").texture.get_image().duplicate(true)
 
 	var thumbnail_size = 32
 	

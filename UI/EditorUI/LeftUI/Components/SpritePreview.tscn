@@ -45,6 +45,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(79, 79)
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 0
 expand_mode = 1
 stretch_mode = 5
 metadata/_edit_use_anchors_ = true
@@ -60,6 +61,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(79, 79)
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 0
 expand_mode = 1
 stretch_mode = 5
 metadata/_edit_use_anchors_ = true
@@ -84,3 +86,8 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 14
 text = "TR_NORMAL_MAP"
 horizontal_alignment = 1
+
+[connection signal="mouse_entered" from="MarginContainer/VBoxContainer/SpritePreview/Preview/CurrentSelected" to="MarginContainer/VBoxContainer/SpritePreview" method="_on_current_selected_mouse_entered"]
+[connection signal="mouse_exited" from="MarginContainer/VBoxContainer/SpritePreview/Preview/CurrentSelected" to="MarginContainer/VBoxContainer/SpritePreview" method="_on_current_selected_mouse_exited"]
+[connection signal="mouse_entered" from="MarginContainer/VBoxContainer/SpritePreview/PreviewNormal/CurrentSelectedNormal" to="MarginContainer/VBoxContainer/SpritePreview" method="_on_current_selected_normal_mouse_entered"]
+[connection signal="mouse_exited" from="MarginContainer/VBoxContainer/SpritePreview/PreviewNormal/CurrentSelectedNormal" to="MarginContainer/VBoxContainer/SpritePreview" method="_on_current_selected_normal_mouse_exited"]

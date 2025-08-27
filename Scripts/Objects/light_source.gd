@@ -49,7 +49,7 @@ func get_state(state):
 		visible = false
 		$Grab.modulate = color
 		$Grab.hide()
-		blend_mode = 0
+		blend_mode = Light2D.BLEND_MODE_ADD
 		
 		if light_control_node != null && is_instance_valid(light_control_node):
 			light_control_node.reset_info(self)

@@ -282,13 +282,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Keeps its length when linked to an anchor."
 theme_override_font_sizes/font_size = 14
-text = "Keep length"
+text = "TR_KEEP_LENGTH"
 
 [node name="MaxStretchBSlider3" parent="WiggleAppStuff/Grid" instance=ExtResource("2_cimjc")]
 unique_name_in_owner = true
 layout_mode = 2
 sp_type = "WiggleApp"
-label_text = "Max Stretch :"
+label_text = "TR_MAX_STRETCH"
 mini_value = 1.0
 max_value = 999999.0
 step = 0.1
@@ -335,16 +335,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Keeps its length when linked to an anchor."
 theme_override_font_sizes/font_size = 14
-text = "Mirror Reaction H"
-
-[node name="MirrorMovementVAnchor2" type="CheckBox" parent="WiggleAppStuff/Grid"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "Keeps its length when linked to an anchor."
-theme_override_font_sizes/font_size = 14
-text = "Reaction V"
+text = "TR_MIRROR_REACTION_H"
 
 [connection signal="toggled" from="WiggleAppStuff/AutoWagCheck" to="WiggleAppendage" method="_on_auto_wag_check_toggled"]
 [connection signal="value_changed" from="WiggleAppStuff/GridContainer/HBox30/WiggleWidthSpin" to="WiggleAppendage" method="_on_wiggle_width_spin_value_changed"]
@@ -357,4 +348,3 @@ text = "Reaction V"
 [connection signal="item_selected" from="WiggleAppStuff/Grid/AnchorSprite" to="WiggleAppendage" method="_on_anchor_sprite_item_selected"]
 [connection signal="item_selected" from="WiggleAppStuff/Grid/TextureModeOption" to="WiggleAppendage" method="_on_texture_mode_option_item_selected"]
 [connection signal="toggled" from="WiggleAppStuff/Grid/MirrorMovementAnchor" to="WiggleAppendage" method="_on_mirror_movement_anchor_toggled"]
-[connection signal="toggled" from="WiggleAppStuff/Grid/MirrorMovementVAnchor2" to="WiggleAppendage" method="_on_mirror_movement_v_anchor_2_toggled"]

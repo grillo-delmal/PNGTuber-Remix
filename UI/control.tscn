@@ -207,6 +207,7 @@ script = ExtResource("14_y3a4k")
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 2
 theme_override_constants/separation = 0
 
 [node name="Inspector" type="TabContainer" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit"]

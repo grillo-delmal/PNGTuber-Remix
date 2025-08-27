@@ -26,7 +26,6 @@ func enable():
 				%AnchorSprite.disabled = false
 				%StretchToAnchor.disabled = false
 				%MirrorMovementAnchor.disabled = false
-				%MirrorMovementVAnchor2.disabled = false
 				
 			else:
 				sprite_selected = true
@@ -46,7 +45,6 @@ func nullfy():
 	%AnchorSprite.disabled = true
 	%StretchToAnchor.disabled = true
 	%MirrorMovementAnchor.disabled = true
-	%MirrorMovementVAnchor2.disabled = true
 
 func set_data():
 	should_change = false
@@ -64,7 +62,6 @@ func set_data():
 					%AutoWagCheck.button_pressed = i.get_value("auto_wag")
 					%StretchToAnchor.button_pressed = i.get_value("keep_length_anchor")
 					%MirrorMovementAnchor.button_pressed = i.get_value("mirror_anchor_movement_h")
-					%MirrorMovementVAnchor2.button_pressed = i.get_value("mirror_anchor_movement_v")
 					
 					populate_anchor_data()
 					match i.get_value("tile"):
