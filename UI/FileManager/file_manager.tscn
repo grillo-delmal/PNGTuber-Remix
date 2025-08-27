@@ -1,13 +1,13 @@
 [gd_scene load_steps=7 format=3 uid="uid://bdb2jod38fulx"]
 
-[ext_resource type="Script" uid="uid://dsyowj4lfxwto" path="res://Scripts/UI/ImageManager/image_manager.gd" id="1_0cl55"]
-[ext_resource type="Texture2D" uid="uid://c3enghpddaeg2" path="res://UI/Assets/Collapse2.png" id="2_aua7d"]
-[ext_resource type="Texture2D" uid="uid://dst8ervfhipkm" path="res://UI/Assets/ZoominButton.png" id="3_ersa1"]
-[ext_resource type="Texture2D" uid="uid://dkly2qhfs7vd8" path="res://UI/Assets/ReplaceButton.png" id="4_873gh"]
-[ext_resource type="Texture2D" uid="uid://8rb6kumug0p5" path="res://UI/Assets/DeleteButton.png" id="5_oy68y"]
-[ext_resource type="Script" uid="uid://dpw44kfqgkx7q" path="res://Scripts/UI/ImageManager/file_manager_tree.gd" id="6_6o18m"]
+[ext_resource type="Script" uid="uid://dsyowj4lfxwto" path="res://Scripts/UI/FileManager/file_manager.gd" id="1_4banc"]
+[ext_resource type="Texture2D" uid="uid://c3enghpddaeg2" path="res://UI/Assets/Collapse2.png" id="2_kunan"]
+[ext_resource type="Texture2D" uid="uid://dst8ervfhipkm" path="res://UI/Assets/ZoominButton.png" id="3_bkuq8"]
+[ext_resource type="Texture2D" uid="uid://dkly2qhfs7vd8" path="res://UI/Assets/ReplaceButton.png" id="4_v7138"]
+[ext_resource type="Texture2D" uid="uid://8rb6kumug0p5" path="res://UI/Assets/DeleteButton.png" id="5_43ct5"]
+[ext_resource type="Script" uid="uid://dpw44kfqgkx7q" path="res://Scripts/UI/FileManager/file_manager_tree.gd" id="6_h0um3"]
 
-[node name="ImageManager" type="MarginContainer"]
+[node name="FileManager" type="MarginContainer"]
 clip_contents = true
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,7 +16,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
-script = ExtResource("1_0cl55")
+script = ExtResource("1_4banc")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 2
@@ -33,7 +33,7 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 12
 toggle_mode = true
 text = "Image Manager"
-icon = ExtResource("2_aua7d")
+icon = ExtResource("2_kunan")
 icon_alignment = 2
 expand_icon = true
 
@@ -63,7 +63,7 @@ size_flags_vertical = 4
 tooltip_text = "TR_TOOLTIP_ADD_SPRITE"
 focus_mode = 0
 mouse_default_cursor_shape = 2
-icon = ExtResource("3_ersa1")
+icon = ExtResource("3_bkuq8")
 expand_icon = true
 
 [node name="ReplaceButton" type="Button" parent="PanelContainer/Vbox/ManageContain/HBoxContainer"]
@@ -74,7 +74,8 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 tooltip_text = "TR_TOOLTIP_REPLACE_SPRITE"
 focus_mode = 0
-icon = ExtResource("4_873gh")
+disabled = true
+icon = ExtResource("4_v7138")
 expand_icon = true
 
 [node name="DeleteButton" type="Button" parent="PanelContainer/Vbox/ManageContain/HBoxContainer"]
@@ -85,7 +86,7 @@ size_flags_horizontal = 10
 size_flags_vertical = 4
 tooltip_text = "TR_TOOLTIP_DELETE_SPRITE"
 focus_mode = 0
-icon = ExtResource("5_oy68y")
+icon = ExtResource("5_43ct5")
 expand_icon = true
 
 [node name="Margin" type="MarginContainer" parent="PanelContainer/Vbox/ManageContain"]
@@ -127,7 +128,7 @@ theme_override_font_sizes/font_size = 14
 theme_override_font_sizes/title_button_font_size = 16
 allow_reselect = true
 select_mode = 2
-script = ExtResource("6_6o18m")
+script = ExtResource("6_h0um3")
 
 [node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
 unique_name_in_owner = true
@@ -216,4 +217,5 @@ use_native_dialog = true
 [connection signal="close_requested" from="ConfirmTrim" to="." method="_on_confirm_trim_canceled"]
 [connection signal="confirmed" from="ConfirmTrim" to="." method="_on_confirm_trim_confirmed"]
 [connection signal="toggled" from="ConfirmTrim/Node/OffsetSprite" to="." method="_on_offset_sprite_toggled"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
 [connection signal="files_selected" from="FileDialog" to="." method="_on_file_dialog_files_selected"]

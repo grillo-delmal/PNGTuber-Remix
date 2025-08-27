@@ -21,6 +21,7 @@ func get_default_object_data() -> Dictionary:
 var wiggle_val : float = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Global.image_replaced.connect(image_replaced)
 	Global.reparent_objects.connect(reparent_obj)
 	og_glob = get_value("position")
 	animation()

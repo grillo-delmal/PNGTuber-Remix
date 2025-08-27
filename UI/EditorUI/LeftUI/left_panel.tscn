@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://b2h705vpr64xt" path="res://Scripts/UI/LeftPanel/left_panel.gd" id="1_v5jxx"]
 [ext_resource type="PackedScene" uid="uid://g6paooy6tpxy" path="res://UI/EditorUI/LeftUI/Components/SpritePreview.tscn" id="3_2g333"]
 [ext_resource type="PackedScene" uid="uid://7r3v4vohf4at" path="res://UI/EditorUI/LeftUI/Components/LayersPanel.tscn" id="3_fepe2"]
-[ext_resource type="PackedScene" uid="uid://bdb2jod38fulx" path="res://UI/FileManager/image_manager.tscn" id="5_r4ymd"]
+[ext_resource type="PackedScene" uid="uid://bdb2jod38fulx" path="res://UI/FileManager/file_manager.tscn" id="5_r4ymd"]
 
 [node name="LeftPanel" type="Panel"]
 custom_minimum_size = Vector2(270, 600)

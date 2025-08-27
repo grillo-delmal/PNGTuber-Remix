@@ -157,7 +157,7 @@ func _on_file_dialog_files_selected(paths):
 		if Settings.theme_settings.enable_trimmer:
 			%ConfirmTrim.popup_centered()
 		else:
-			%FileImporter.trim = false
+			SaveAndLoad.trim = false
 			import_objects()
 
 func import_objects():

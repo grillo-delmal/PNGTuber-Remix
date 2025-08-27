@@ -4,7 +4,6 @@ extends SpriteObject
 var smooth_rot = 0.0
 var smooth_glob = Vector2(0.0,0.0)
 
-
 func get_default_object_data() -> Dictionary:
 	return {
 		wiggle_segm = 5,
@@ -37,9 +36,9 @@ func get_default_object_data() -> Dictionary:
 		mirror_anchor_movement_h = false,
 		mirror_anchor_movement_v = false,
 	}
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Global.image_replaced.connect(image_replaced)
 	Global.reparent_objects.connect(reparent_obj)
 	Global.reparent_objects.connect(set_anchor_sprite)
 	%Dragger.top_level = true

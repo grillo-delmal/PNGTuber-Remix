@@ -194,6 +194,7 @@ func load_model(path : String):
 		else:
 			sprite_obj = preload("res://Misc/SpriteObject/sprite_object.tscn").instantiate()
 			
+		Global.sprite_container.add_child(sprite_obj)
 		var cleaned_array = []
 		
 		for st in sprite.states:
@@ -205,7 +206,6 @@ func load_model(path : String):
 			new_dict.merge(st, true)
 			st = new_dict
 			
-		sprite_obj.states.clear()
 		sprite_obj.states = cleaned_array
 		sprite_obj.layer_color = sprite.get("layer_color", Color.BLACK)
 		sprite_obj.used_image_id = sprite.get("image_id", 0)
@@ -230,10 +230,10 @@ func load_model(path : String):
 		var image_data_normal : ImageData
 
 
-		
 		if !sprite_obj.states[0].get("folder", true):
 			var canv = CanvasTexture.new()
 			sprite_obj.get_node("%Sprite2D").texture = canv
+			
 			var set_text_diff = false
 			var set_text_norm = false
 			if has_image_data == null:
@@ -285,10 +285,12 @@ func load_model(path : String):
 						set_text_norm = true
 			
 			if sprite_obj.used_image_id != 0 && !set_text_diff:
-				sprite_obj.get_node("%Sprite2D").texture.diffused_texure = Global.image_data
+				sprite_obj.get_node("%Sprite2D").texture.diffuse_texture = Global.image_data.runtime_texture
+				sprite_obj.referenced_data = Global.image_data
+			
 			if sprite_obj.used_image_id_normal != 0 && !set_text_norm:
-				sprite_obj.get_node("%Sprite2D").texture.normal_texure = Global.image_data_normal
-
+				sprite_obj.get_node("%Sprite2D").texture.normal_texture = Global.image_data_normal.runtime_texture
+				sprite_obj.referenced_data_normal = Global.image_data_normal
 		else:
 			sprite_obj.get_node("%Sprite2D").texture = null
 
@@ -305,8 +307,8 @@ func load_model(path : String):
 		
 		if sprite.has("is_collapsed"):
 			sprite_obj.is_collapsed = sprite.is_collapsed
-		Global.sprite_container.add_child(sprite_obj)
 		sprite_obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
+
 
 	if !load_dict.input_array.is_empty():
 		for input in len(load_dict.input_array):
@@ -325,11 +327,11 @@ func load_model(path : String):
 		if i.states.size() != state_count:
 			for l in abs(i.states.size() - state_count):
 				i.states.append({})
+	
 	Global.load_sprite_states(0)
 	Global.remake_layers.emit()
 	Global.reparent_objects.emit(get_tree().get_nodes_in_group("Sprites"))
 	Global.slider_values.emit(Global.settings_dict)
-	Global.load_sprite_states(0)
 	if Global.main.has_node("%Control"):
 		Global.reinfoanim.emit()
 	Settings.save()
@@ -345,11 +347,14 @@ func load_model(path : String):
 		Settings.save_timer.stop()
 
 	Global.main.get_node("%Marker").current_screen = Global.settings_dict.monitor
-	Global.load_model.emit()
-	if Settings.theme_settings.use_threading:
-		thread.call_deferred("wait_to_finish")
 	Global.project_updates.emit("Project Loaded!")
 	Global.remake_image_manager.emit()
+	await get_tree().physics_frame
+	Global.load_sprite_states(0)
+	
+	if Settings.theme_settings.use_threading:
+		thread.call_deferred("wait_to_finish")
+
 
 func save_backup(data: Dictionary, previous_path: String) -> void:
 	var base_path := previous_path.get_basename()
@@ -735,7 +740,6 @@ func import_png_from_file(path: String, spawn, image_data):
 
 #----------------------------------------------------------------------------
 # Global Image loading from buffer
-
 func load_apng_from_buffer(buffer , image_data = null, _normal = false):
 	var img = AImgIOAPNGImporter.load_from_buffer(buffer)
 	var tex = img[1] as Array[AImgIOFrame]
