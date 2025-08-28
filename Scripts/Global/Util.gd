@@ -5,6 +5,9 @@ static func get_locale(language: String) -> String:
 	match language:
 		"English (US)":
 			return "en_US"
+			
+		"Español":
+			return "es"
 		_:
 			return "automatic"
 

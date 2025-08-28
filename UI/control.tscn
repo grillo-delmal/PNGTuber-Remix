@@ -308,6 +308,7 @@ max_lines_visible = 3
 visible_characters_behavior = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="HSeparator" type="HSeparator" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/VBoxContainer"]

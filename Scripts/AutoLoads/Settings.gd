@@ -93,7 +93,6 @@ func save():
 		push_error("Could not save settings to \"" + save_location + "\"\n" + str(FileAccess.get_open_error()))
 		file_error.emit("SAVE_ERROR", FileAccess.get_open_error())
 
-
 func auto_save():
 	if FileAccess.file_exists(Global.save_path):
 		SaveAndLoad.save_file(Global.save_path)
@@ -184,7 +183,6 @@ func _ready():
 		TranslationServer.set_locale(OS.get_locale_language())
 	else:
 		TranslationServer.set_locale(locale)
-
 
 func lipsync_set_up():
 	var parent_path = Util.get_parent_path(save_location);

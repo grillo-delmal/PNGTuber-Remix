@@ -194,7 +194,7 @@ func load_model(path : String):
 		else:
 			sprite_obj = preload("res://Misc/SpriteObject/sprite_object.tscn").instantiate()
 			
-		Global.sprite_container.add_child(sprite_obj)
+		
 		var cleaned_array = []
 		
 		for st in sprite.states:
@@ -307,6 +307,7 @@ func load_model(path : String):
 		
 		if sprite.has("is_collapsed"):
 			sprite_obj.is_collapsed = sprite.is_collapsed
+		Global.sprite_container.add_child(sprite_obj)
 		sprite_obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 
 
@@ -353,7 +354,6 @@ func load_model(path : String):
 	Global.load_sprite_states(0)
 	if Settings.theme_settings.use_threading:
 		thread.call_deferred("wait_to_finish")
-
 
 func save_backup(data: Dictionary, previous_path: String) -> void:
 	var base_path := previous_path.get_basename()
@@ -597,60 +597,34 @@ func load_pngplus_file(path):
 		thread.call_deferred("wait_to_finish")
 	Global.project_updates.emit("Plus Project Loaded!")
 
-func export_images(images = get_tree().get_nodes_in_group("Sprites")):
+func export_images(_images = get_tree().get_nodes_in_group("Sprites")):
 	#OS.get_executable_path().get_base_dir() + "/ExportedAssets" + "/" + str(randi())
 	var dire = OS.get_executable_path().get_base_dir() + "/ExportedAssets"
 	if !DirAccess.dir_exists_absolute(dire):
 		DirAccess.make_dir_absolute(dire)
 		
-	for sprite in images:
-		if !sprite.get_value("folder"):
-			if sprite.img_animated:
-				var file = FileAccess.open(dire +"/" + sprite.sprite_name + str(randi()) + ".gif", FileAccess.WRITE)
-				file.store_buffer(sprite.anim_texture)
-				file.close()
-				file = null
-				if sprite.anim_texture_normal != null:
-					var filenormal = FileAccess.open(dire +"/" + sprite.sprite_name + str(randi()) + "Normal" + ".gif", FileAccess.WRITE)
-					filenormal.store_buffer(sprite.anim_texture_normal)
-					filenormal.close()
-					filenormal = null
-					
-			elif sprite.is_apng:
-				var file = FileAccess.open(dire +"/" + sprite.sprite_name + str(randi()) + ".apng", FileAccess.WRITE)
-				var exp_image = AImgIOAPNGExporter.new().export_animation(sprite.frames, 10, self, "_progress_report", [])
-				file.store_buffer(exp_image)
-				file.close()
-				file = null
-				if !sprite.frames2.is_empty():
-					var filenormal = FileAccess.open(dire +"/" + sprite.sprite_name + "Normal" + str(randi()) + ".apng", FileAccess.WRITE)
-					var exp2 = AImgIOAPNGExporter.new().export_animation(sprite.frames2, 10, self, "_progress_report", [])
-					filenormal.store_buffer(exp2)
-					filenormal.close()
-					filenormal = null
-				
-			elif !sprite.img_animated && !sprite.is_apng:
-				var img = Image.new()
-				img = sprite.get_node("%Sprite2D").texture.diffuse_texture.get_image()
-				img.save_png(dire +"/" + sprite.sprite_name + str(randi()) + ".png")
-				img = null
-				
-				if sprite.get_node("%Sprite2D").texture.normal_texture != null:
-					var normimg = Image.new()
-					normimg = sprite.get_node("%Sprite2D").texture.normal_texture.get_image()
-					normimg.save_png(dire +"/" + sprite.sprite_name + "Normal" + str(randi()) + ".png")
-					normimg = null
-				
-				if !sprite.image_data.is_empty():
-					var img_d = Image.new()
-					img_d.load_png_from_buffer(sprite.image_data)
-					img_d.save_png(dire +"/" + sprite.sprite_name + str(randi()) + ".png")
-					img_d = null
-				if !sprite.normal_data.is_empty():
-					var img_d = Image.new()
-					img_d.load_png_from_buffer(sprite.normal_data)
-					img_d.save_png(dire +"/" + sprite.sprite_name + str(randi()) + ".png")
-					img_d = null
+	for image in Global.image_manager_data:
+		if image.img_animated:
+			var file = FileAccess.open(dire +"/" + image.image_name + str(randi()) + ".gif", FileAccess.WRITE)
+			file.store_buffer(image.anim_texture)
+			file.close()
+			file = null
+		elif image.is_apng:
+			var file = FileAccess.open(dire +"/" + image.image_name + str(randi()) + ".apng", FileAccess.WRITE)
+			var exp_image = AImgIOAPNGExporter.new().export_animation(image.frames, 10, self, "_progress_report", [])
+			file.store_buffer(exp_image)
+			file.close()
+			file = null
+		elif !image.img_animated && !image.is_apng:
+			var img = Image.new()
+			img = image.runtime_texture.get_image()
+			img.save_png(dire +"/" + image.image_name + str(randi()) + ".png")
+			img = null
+			if !image.image_data.is_empty():
+				var img_d = Image.new()
+				img_d.load_png_from_buffer(image.image_data)
+				img_d.save_png(dire +"/" + image.image_name + str(randi()) + ".png")
+				img_d = null
 
 #----------------------------------------------------------------------------
 # Global Image Loading Section

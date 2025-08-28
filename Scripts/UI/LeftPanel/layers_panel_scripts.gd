@@ -64,7 +64,13 @@ func enable():
 			%AddNormalButton.disabled = false
 			%DelNormalButton.disabled = false
 			%ReplaceButton.disabled = false
-		if (i.referenced_data.is_apng or i.referenced_data.img_animated) or has_folder:
+		
+		if i.get_value("folder") or has_folder:
+			%RotateImage.disabled = true
+			%FlipH.disabled = true
+			%FlipV.disabled = true
+			continue
+		if (i.referenced_data.is_apng or i.referenced_data.img_animated):
 			%RotateImage.disabled = true
 			%FlipH.disabled = true
 			%FlipV.disabled = true

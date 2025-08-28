@@ -182,7 +182,7 @@ func set_anchor_sprite(_placeholder = null):
 	if get_value("anchor_id") == null:
 		%Sprite2D.anchor_target = null
 	else:
-		for i in get_tree().get_nodes_in_group("Sprites"):
+		for i in Global.get_tree().get_nodes_in_group("Sprites"):
 			if i.sprite_id == get_value("anchor_id"):
 				%Sprite2D.anchor_target = i.get_node("%Sprite2D")
 				return
@@ -227,7 +227,6 @@ func update_wiggle_parts():
 		
 	if %Sprite2D.mirror_anchor_movement_v!= get_value("mirror_anchor_movement_v"):
 		%Sprite2D.mirror_anchor_movement_v = get_value("mirror_anchor_movement_v")
-		
 
 func check_talk():
 	if get_value("should_talk"):

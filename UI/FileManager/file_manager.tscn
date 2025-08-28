@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://bdb2jod38fulx"]
+[gd_scene load_steps=6 format=3 uid="uid://bdb2jod38fulx"]
 
 [ext_resource type="Script" uid="uid://dsyowj4lfxwto" path="res://Scripts/UI/FileManager/file_manager.gd" id="1_4banc"]
-[ext_resource type="Texture2D" uid="uid://c3enghpddaeg2" path="res://UI/Assets/Collapse2.png" id="2_kunan"]
 [ext_resource type="Texture2D" uid="uid://dst8ervfhipkm" path="res://UI/Assets/ZoominButton.png" id="3_bkuq8"]
 [ext_resource type="Texture2D" uid="uid://dkly2qhfs7vd8" path="res://UI/Assets/ReplaceButton.png" id="4_v7138"]
 [ext_resource type="Texture2D" uid="uid://8rb6kumug0p5" path="res://UI/Assets/DeleteButton.png" id="5_43ct5"]
@@ -25,22 +24,10 @@ layout_mode = 2
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="CollapseButton" type="Button" parent="PanelContainer/Vbox"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-focus_mode = 0
-theme_override_font_sizes/font_size = 12
-toggle_mode = true
-text = "Image Manager"
-icon = ExtResource("2_kunan")
-icon_alignment = 2
-expand_icon = true
-
 [node name="Label" type="Label" parent="PanelContainer/Vbox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
-text = "File Manager"
+text = "TR_FILE_MANAGER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -199,7 +186,6 @@ access = 2
 filters = PackedStringArray("*.png", "*.jpeg", "*.jpg", "*.svg")
 use_native_dialog = true
 
-[connection signal="toggled" from="PanelContainer/Vbox/CollapseButton" to="." method="_on_collapse_button_toggled"]
 [connection signal="pressed" from="PanelContainer/Vbox/ManageContain/HBoxContainer/AddImageButton" to="." method="_on_add_image_button_pressed"]
 [connection signal="pressed" from="PanelContainer/Vbox/ManageContain/HBoxContainer/ReplaceButton" to="." method="_on_replace_button_pressed"]
 [connection signal="pressed" from="PanelContainer/Vbox/ManageContain/HBoxContainer/DeleteButton" to="." method="_on_delete_button_pressed"]
