@@ -305,6 +305,8 @@ func follow_calculation(_delta):
 	
 	follow_mouse(mouse_coords, main_marker, dir, dist)
 	follow_controller()
+	follow_controller_triggers()
+	follow_controller_misc()
 	follow_keyboard()
 
 func follow_mouse(mouse, main_marker, dir, dist):
@@ -474,14 +476,36 @@ func follow_controller():
 		follow_sprite_anim(axis_right, dist)
 	
 	if actor.get_value("follow_type2") == 1:
-		follow_controller_rotation(axis_left)
+		if actor.get_value("snap_rot"):
+			if !axis_left.is_zero_approx():
+				target_rotation_axis = target_rotation_axis.lerp(axis_left, 0.15)
+		else:
+			target_rotation_axis = axis_left
+
+		follow_controller_rotation(target_rotation_axis)
 	elif actor.get_value("follow_type2") == 2:
-		follow_controller_rotation(axis_right)
+		if actor.get_value("snap_rot"):
+			if !axis_left.is_zero_approx():
+				target_rotation_axis = target_rotation_axis.lerp(axis_right, 0.15)
+		else:
+			target_rotation_axis = axis_right
+		follow_controller_rotation(target_rotation_axis)
 
 	if actor.get_value("follow_type3") == 1:
-		follow_controller_scale(axis_left)
+		if actor.get_value("snap_scale"):
+			if axis_left.is_zero_approx():
+				target_scale_axis = target_scale_axis.lerp(axis_left, 0.15)
+		else:
+			target_scale_axis = axis_left
+		follow_controller_scale(target_scale_axis)
 	elif actor.get_value("follow_type3") == 2:
-		follow_controller_scale(axis_right)
+		if actor.get_value("snap_scale"):
+			if axis_right.is_zero_approx():
+				target_scale_axis = target_scale_axis.lerp(axis_right, 0.15)
+		else:
+			target_scale_axis = axis_right
+		
+		follow_controller_scale(target_scale_axis)
 
 func follow_controller_position(_axis, t_x, t_y):
 	if actor.sprite_type == "Sprite2D":
@@ -519,8 +543,98 @@ func follow_controller_scale(axis):
 	%Drag.scale.x = is_nan_or_inf(lerp(%Drag.scale.x, target_scale_x, actor.get_value("mouse_delay")), true)
 	%Drag.scale.y = is_nan_or_inf(lerp(%Drag.scale.y, target_scale_y, actor.get_value("mouse_delay")), true)
 
-#endregion
+func follow_controller_triggers():
+	var axis_left = Input.get_vector("ShoulderL1", "ShoulderR1", "ShoulderL1", "ShoulderR1")
+	var axis_right = Input.get_vector("ShoulderL2", "ShoulderR2", "ShoulderL2", "ShoulderR2")
+	
+	if actor.get_value("follow_type") == 9:
+		if actor.get_value("snap_pos"):
+			if axis_left.x != 0:
+				target_x = lerp(target_x, axis_left.x * actor.get_value("look_at_mouse_pos"),actor.get_value("mouse_delay"))
+			if axis_left.y != 0 && actor.get_value("snap_pos"):
+				target_y = lerp(target_y, axis_left.y * actor.get_value("look_at_mouse_pos_y"), actor.get_value("mouse_delay"))
+		else:
+			target_x = axis_left.x * actor.get_value("look_at_mouse_pos")
+			target_y = axis_left.y * actor.get_value("look_at_mouse_pos_y")
+		var dist = Vector2(target_x, target_y).length()
+		follow_controller_position(axis_left, target_x, target_y)
+		follow_sprite_anim(axis_left, dist)
+	elif actor.get_value("follow_type") == 10:
+		if actor.get_value("snap_pos"):
+			if axis_right.x != 0:
+				target_x = lerp(target_x, (axis_right.x * actor.get_value("look_at_mouse_pos")), actor.get_value("mouse_delay"))
+			if axis_right.y != 0 && actor.get_value("snap_pos"):
+				target_y = lerp(target_y, axis_right.y * actor.get_value("look_at_mouse_pos_y"), actor.get_value("mouse_delay"))
+		else:
+			target_x = axis_right.x * actor.get_value("look_at_mouse_pos")
+			target_y = axis_right.y * actor.get_value("look_at_mouse_pos_y")
+		var dist = Vector2(target_x, target_y).length()
+		follow_controller_position(axis_right, target_x, target_y)
+		follow_sprite_anim(axis_right, dist)
+	
+	if actor.get_value("follow_type2") == 9:
+		if actor.get_value("snap_rot"):
+			if !axis_left.is_zero_approx():
+				target_rotation_axis = target_rotation_axis.lerp(axis_left, 0.15)
+		else:
+			target_rotation_axis = axis_left
 
+		follow_controller_rotation(target_rotation_axis)
+	elif actor.get_value("follow_type2") == 10:
+		if actor.get_value("snap_rot"):
+			if !axis_left.is_zero_approx():
+				target_rotation_axis = target_rotation_axis.lerp(axis_right, 0.15)
+		else:
+			target_rotation_axis = axis_right
+		follow_controller_rotation(target_rotation_axis)
+
+	if actor.get_value("follow_type3") == 9:
+		if actor.get_value("snap_scale"):
+			if axis_left.is_zero_approx():
+				target_scale_axis = target_scale_axis.lerp(axis_left, 0.15)
+		else:
+			target_scale_axis = axis_left
+		follow_controller_scale(target_scale_axis)
+	elif actor.get_value("follow_type3") == 10:
+		if actor.get_value("snap_scale"):
+			if axis_right.is_zero_approx():
+				target_scale_axis = target_scale_axis.lerp(axis_right, 0.15)
+		else:
+			target_scale_axis = axis_right
+		
+		follow_controller_scale(target_scale_axis)
+
+func follow_controller_misc():
+	var axis_left = Input.get_vector("L3", "R3", "L3", "R3")
+	
+	if actor.get_value("follow_type") == 11:
+		if actor.get_value("snap_pos"):
+			if axis_left.x != 0:
+				target_x = lerp(target_x, axis_left.x * actor.get_value("look_at_mouse_pos"),actor.get_value("mouse_delay"))
+			if axis_left.y != 0 && actor.get_value("snap_pos"):
+				target_y = lerp(target_y, axis_left.y * actor.get_value("look_at_mouse_pos_y"), actor.get_value("mouse_delay"))
+		else:
+			target_x = axis_left.x * actor.get_value("look_at_mouse_pos")
+			target_y = axis_left.y * actor.get_value("look_at_mouse_pos_y")
+		var dist = Vector2(target_x, target_y).length()
+		follow_controller_position(axis_left, target_x, target_y)
+		follow_sprite_anim(axis_left, dist)
+	if actor.get_value("follow_type2") == 11:
+		if actor.get_value("snap_rot"):
+			if !axis_left.is_zero_approx():
+				target_rotation_axis = target_rotation_axis.lerp(axis_left, 0.15)
+		else:
+			target_rotation_axis = axis_left
+		follow_controller_rotation(target_rotation_axis)
+	if actor.get_value("follow_type3") == 11:
+		if actor.get_value("snap_scale"):
+			if axis_left.is_zero_approx():
+				target_scale_axis = target_scale_axis.lerp(axis_left, 0.15)
+		else:
+			target_scale_axis = axis_left
+		follow_controller_scale(target_scale_axis)
+
+#endregion
 func follow_keyboard():
 	if actor.get_value("follow_type") in [3,4,5,6,7,8]:
 		var pos_axis = some_keyboard_calc_wasd()
@@ -548,7 +662,7 @@ func follow_keyboard():
 
 	if actor.get_value("follow_type3") in [3,4,5,6,7,8]:
 		var scale_axis = some_keyboard_calc_wasd("follow_type3")
-		if actor.get_value("snap_rot"):
+		if actor.get_value("snap_scale"):
 			if scale_axis.is_zero_approx():
 				target_scale_axis = target_scale_axis.lerp(scale_axis, 0.15)
 		else:

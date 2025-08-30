@@ -9,16 +9,12 @@ func _ready():
 	held_sprite_is_null()
 	Global.connect("reinfo", reinfo)
 	Global.deselect.connect(held_sprite_is_null)
-	
-
 
 #region Update Slider info
 func held_sprite_is_null():
 	%SpriteID.text = "Sprite ID : 0"
 	%Name.editable = false
 	%Name.text = ""
-	%NonAnimatedSheetCheck.disabled = true
-	%FrameSpinbox.editable = false
 	%AdvancedLipSync.disabled = true
 
 func held_sprite_is_true():
@@ -28,9 +24,7 @@ func held_sprite_is_true():
 		if i != null && is_instance_valid(i):
 			if i.sprite_type == "Sprite2D":
 				%AdvancedLipSync.disabled = false
-				%NonAnimatedSheetCheck.disabled = false
-				%FrameSpinbox.editable = true
-				%SpriteID.text = "Sprite ID : " + str(i.sprite_id)
+			%SpriteID.text = "Sprite ID : " + str(i.sprite_id)
 
 func reinfo():
 	held_sprite_is_null()
@@ -40,9 +34,6 @@ func reinfo():
 			%Name.text = i.sprite_name
 			if i.sprite_type == "Sprite2D":
 				%AdvancedLipSync.button_pressed = i.get_value("advanced_lipsync")
-				%NonAnimatedSheetCheck.button_pressed = i.get_value("non_animated_sheet")
-				%FrameSpinbox.value = i.get_value("frame")
-				%FrameSpinbox.max_value = (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1
 	await get_tree().create_timer(0.01).timeout
 	held_sprite_is_true()
 	should_change = true
@@ -91,35 +82,3 @@ func _on_name_focus_entered() -> void:
 
 func _on_name_focus_exited() -> void:
 	Global.spinbox_held = false
-
-func _on_non_animated_sheet_check_toggled(toggled_on: bool) -> void:
-	if should_change:
-		for i in Global.held_sprites:
-			if i != null && is_instance_valid(i):
-				if i.sprite_type == "Sprite2D":
-					%FrameSpinbox.max_value = (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1
-					i.sprite_data.non_animated_sheet = toggled_on
-					i.animation()
-					if toggled_on:
-						%FrameHBox.show()
-					else:
-						%FrameHBox.hide()
-				else:
-					%FrameHBox.hide()
-
-func _on_frame_spinbox_value_changed(value: float) -> void:
-	if should_change:
-		for i in Global.held_sprites:
-			if i != null && is_instance_valid(i):
-				if i.sprite_type == "Sprite2D":
-					%FrameSpinbox.max_value = (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1
-					i.sprite_data.frame = clamp(value, 0, (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1)
-					i.get_node("%Sprite2D").frame = clamp(value, 0, (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1)
-
-
-func _on_frame_spinbox_mouse_entered() -> void:
-	if should_change:
-		for i in Global.held_sprites:
-			if i != null && is_instance_valid(i):
-				if i.sprite_type == "Sprite2D":
-					%FrameSpinbox.max_value = (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1

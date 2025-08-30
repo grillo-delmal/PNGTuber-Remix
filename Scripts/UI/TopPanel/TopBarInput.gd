@@ -19,6 +19,8 @@ func _ready():
 	bgcolor.get_popup().connect("id_pressed",choosing_bg_color)
 	about.get_popup().connect("id_pressed",choosing_about)
 	%WindowButton.get_popup().connect("id_pressed",choosing_window)
+	%EditButton.get_popup().connect("id_pressed",choosing_edit)
+	
 	Global.mode_changed.connect(on_mode_changed)
 
 	ProjectSettings.set("audio/driver/mix_rate", AudioServer.get_mix_rate())
@@ -50,6 +52,8 @@ func check_auto_saves():
 	if !DirAccess.dir_exists_absolute(OS.get_executable_path().get_base_dir() + "/autosaves"):
 		DirAccess.make_dir_absolute(OS.get_executable_path().get_base_dir() + "/autosaves")
 
+func choosing_edit(_id : int):
+	pass
 
 func choosing_window(id):
 	match id:
@@ -76,6 +80,10 @@ func choosing_window(id):
 			%WindowButton.get_popup().toggle_item_checked(7)
 			Settings.set_ui_pieces(%WindowButton.get_popup().is_item_checked(7), 7)
 			Global.update_ui_pieces.emit()
+		8:
+			get_window().size = Vector2i(1152, 648)
+			Settings.center_window()
+			Settings.window_size_changed()
 			
 		100:
 			Global.edit_windows.emit()
@@ -244,7 +252,6 @@ func desel_everything():
 
 func _on_preview_mode_check_toggled(toggled_on: bool) -> void:
 	Global.static_view = toggled_on
-
 
 
 func _on_background_focus_entered() -> void:

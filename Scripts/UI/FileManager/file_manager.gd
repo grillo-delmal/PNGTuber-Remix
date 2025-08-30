@@ -28,9 +28,10 @@ func create_default():
 	assets.set_text(0, "Assets")
 	assets.set_selectable(0, false)
 	
+	'''
 	var extensions : TreeItem = %Tree.create_item(root)
 	extensions.set_text(0, "Extensions")
-	extensions.set_selectable(0, false)
+	extensions.set_selectable(0, false)'''
 
 func _on_collapse_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:

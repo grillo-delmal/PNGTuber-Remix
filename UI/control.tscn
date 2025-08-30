@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://ngta1o5yiqxs"]
+[gd_scene load_steps=20 format=3 uid="uid://ngta1o5yiqxs"]
 
 [ext_resource type="Script" uid="uid://dvpyywoct4riy" path="res://Scripts/UI/control.gd" id="1_1r6xj"]
 [ext_resource type="Script" uid="uid://bpegrg5a15v2v" path="res://Scripts/UI/UIInput.gd" id="3_1eur5"]
@@ -16,8 +16,6 @@
 [ext_resource type="Script" uid="uid://duopekbdlbjla" path="res://Scripts/UI/Others/project_updates_label.gd" id="8_y3a4k"]
 [ext_resource type="PackedScene" uid="uid://ccvo3k5t6lis6" path="res://UI/EditorUI/RightUI/Components/movement.tscn" id="9_fwbkq"]
 [ext_resource type="PackedScene" uid="uid://bk2xbsvlmq0or" path="res://UI/StateButton/state_panel.tscn" id="10_1r6xj"]
-[ext_resource type="Script" uid="uid://dy1cd6xda1pu5" path="res://UI/BetterSlider/BetterToggles.gd" id="10_ncust"]
-[ext_resource type="PackedScene" uid="uid://clxl1gighe78l" path="res://UI/BetterSlider/better_slider.tscn" id="11_ejqfc"]
 [ext_resource type="Script" uid="uid://caf875hofgogu" path="res://Scripts/UI/FormattedLocalizedLabel.gd" id="14_y3a4k"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_y3a4k"]
@@ -63,9 +61,11 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
+theme_override_constants/separation = 0
 split_offset = 2500
 
 [node name="AspectRatioContainer" type="Control" parent="MainSplit/SecondarySplit"]
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
@@ -77,9 +77,8 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -100.0
+offset_left = -107.0
 offset_top = 6.0
-offset_right = 7.0
 offset_bottom = 34.0
 grow_horizontal = 0
 size_flags_horizontal = 8
@@ -282,10 +281,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 6
 
-[node name="HBox22" type="HBoxContainer" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="AdvancedLipSync" type="CheckBox" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/HBox22"]
+[node name="AdvancedLipSync" type="CheckBox" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
@@ -307,68 +303,6 @@ justification_flags = 169
 max_lines_visible = 3
 visible_characters_behavior = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-
-[node name="HSeparator" type="HSeparator" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="HBoxPhysics2" type="HBoxContainer" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-
-[node name="HBox3" type="HBoxContainer" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = -10
-
-[node name="NonAnimatedSheetCheck" type="CheckBox" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-tooltip_text = "TR_NONE_ANIMATED_SHEET_TOOLTIP"
-theme_override_font_sizes/font_size = 16
-text = "TR_NONE_ANIMATED_SHEET"
-
-[node name="FrameHBox" type="HBoxContainer" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="FrameLabel" type="Label" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox"]
-layout_mode = 2
-text = "TR_FRAME_LABEL"
-
-[node name="FrameSpinbox" type="SpinBox" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox"]
-unique_name_in_owner = true
-layout_mode = 2
-max_value = 12.0
-
-[node name="AnimateToMouse" type="CheckBox" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
-layout_mode = 2
-tooltip_text = "TR_ANIMATE_TO_MOUSE_TOOLTIP"
-text = "TR_ANIMATE_TO_MOUSE"
-script = ExtResource("10_ncust")
-sp_type = "Sprite2D"
-value_to_update = "animate_to_mouse"
-
-[node name="BetterSlider" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer" instance=ExtResource("11_ejqfc")]
-layout_mode = 2
-sp_type = "Sprite2D"
-label_text = "TR_ANIMATION_SPEED"
-mini_value = 0.01
-max_value = 250.0
-step = 0.01
-value = 1.0
-value_to_update = "animate_to_mouse_speed"
-
-[node name="AnimateToMouse2" type="CheckBox" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer"]
-layout_mode = 2
-tooltip_text = "TR_MOVE_WITH_MOUSE_TOOLTIP"
-text = "TR_MOVE_WITH_MOUSE"
-script = ExtResource("10_ncust")
-sp_type = "Sprite2D"
-value_to_update = "animate_to_mouse_track_pos"
-
 [node name="StatePanel" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit" instance=ExtResource("10_1r6xj")]
 layout_mode = 2
 size_flags_vertical = 1
@@ -382,9 +316,6 @@ size_flags_vertical = 1
 [connection signal="focus_exited" from="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/Properties/Name" to="UIInput" method="_on_name_focus_exited"]
 [connection signal="text_submitted" from="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/Properties/Name" to="UIInput" method="_on_name_text_submitted"]
 [connection signal="dragged" from="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit" to="." method="_on_v_split_dragged"]
-[connection signal="mouse_entered" from="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/HBox22/AdvancedLipSync" to="UIInput" method="_on_advanced_lip_sync_mouse_entered"]
-[connection signal="mouse_exited" from="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/HBox22/AdvancedLipSync" to="UIInput" method="_on_advanced_lip_sync_mouse_exited"]
-[connection signal="toggled" from="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/HBox22/AdvancedLipSync" to="UIInput" method="_on_advanced_lip_sync_toggled"]
-[connection signal="toggled" from="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/NonAnimatedSheetCheck" to="UIInput" method="_on_non_animated_sheet_check_toggled"]
-[connection signal="mouse_entered" from="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox/FrameSpinbox" to="UIInput" method="_on_frame_spinbox_mouse_entered"]
-[connection signal="value_changed" from="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/FrameHBox/FrameSpinbox" to="UIInput" method="_on_frame_spinbox_value_changed"]
+[connection signal="mouse_entered" from="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/AdvancedLipSync" to="UIInput" method="_on_advanced_lip_sync_mouse_entered"]
+[connection signal="mouse_exited" from="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/AdvancedLipSync" to="UIInput" method="_on_advanced_lip_sync_mouse_exited"]
+[connection signal="toggled" from="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/VSplit/Inspector/Tests/ScrollContainer6/MarginContainer/VBoxContainer/AdvancedLipSync" to="UIInput" method="_on_advanced_lip_sync_toggled"]

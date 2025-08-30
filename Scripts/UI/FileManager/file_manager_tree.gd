@@ -69,6 +69,9 @@ func add_images_to_scene(image_data):
 	spawn.sprite_name = image_data.image_name
 	spawn.referenced_data = image_data
 	spawn.used_image_id = image_data.id
+	spawn.sprite_id = spawn.get_instance_id()
+	if add_as_appendage:
+		spawn.correct_sprite_size()
 	Global.sprite_container.add_child(spawn)
 	Global.update_layers.emit(0, spawn, "Sprite")
 	ImageTrimmer.set_thumbnail(spawn.treeitem)
