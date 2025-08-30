@@ -272,7 +272,6 @@ func reparent_obj(parent):
 		if i.sprite_id == parent_id:
 			var og_pos = global_position
 			reparent(i.sprite_object)
-			await Global.get_tree().physics_frame
 			global_position = og_pos
 
 func image_replaced(image_date : ImageData):

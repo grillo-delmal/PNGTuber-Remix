@@ -43,31 +43,60 @@ func save_model(path):
 		})
 	for sprt in sprites:
 		sprt.save_state(Global.current_state)
-		if sprt.referenced_data.is_apng:
-			var cleaned_array = []
-			for st in sprt.states:
-				if !st.is_empty():
-					cleaned_array.append(st)
-			var sprt_dict = {
-				states = cleaned_array,
-				sprite_name = sprt.sprite_name,
-				sprite_id = sprt.sprite_id,
-				parent_id = sprt.parent_id,
-				sprite_type = sprt.sprite_type,
-				is_asset = sprt.is_asset,
-				saved_event = sprt.saved_event,
-				was_active_before = sprt.was_active_before,
-				should_disappear = sprt.should_disappear,
-				saved_keys = sprt.saved_keys,
-				show_only = sprt.show_only,
-				is_collapsed = sprt.is_collapsed,
-				is_premultiplied = true,
-				layer_color = sprt.layer_color,
-				image_id = sprt.used_image_id,
-				normal_id = sprt.used_image_id_normal,
-			}
-			
-			sprites_array.append(sprt_dict)
+		if !sprt.get_value("folder"):
+			if sprt.referenced_data.is_apng:
+				var cleaned_array = []
+				for st in sprt.states:
+					if !st.is_empty():
+						cleaned_array.append(st)
+				var sprt_dict = {
+					states = cleaned_array,
+					sprite_name = sprt.sprite_name,
+					sprite_id = sprt.sprite_id,
+					parent_id = sprt.parent_id,
+					sprite_type = sprt.sprite_type,
+					is_asset = sprt.is_asset,
+					saved_event = sprt.saved_event,
+					was_active_before = sprt.was_active_before,
+					should_disappear = sprt.should_disappear,
+					saved_keys = sprt.saved_keys,
+					show_only = sprt.show_only,
+					is_collapsed = sprt.is_collapsed,
+					is_premultiplied = true,
+					layer_color = sprt.layer_color,
+					image_id = sprt.used_image_id,
+					normal_id = sprt.used_image_id_normal,
+				}
+			else:
+				var cleaned_array = []
+				
+				for st in sprt.states:
+					if !st.is_empty():
+						cleaned_array.append(st)
+				var sprt_dict = {
+					states = cleaned_array,
+					sprite_name = sprt.sprite_name,
+					sprite_id = sprt.sprite_id,
+					parent_id = sprt.parent_id,
+					sprite_type = sprt.sprite_type,
+					is_asset = sprt.is_asset,
+					saved_event = sprt.saved_event,
+					was_active_before = sprt.was_active_before,
+					should_disappear = sprt.should_disappear,
+					show_only = sprt.show_only,
+					saved_keys = sprt.saved_keys,
+					is_collapsed = sprt.is_collapsed,
+					is_premultiplied = true,
+					layer_color = sprt.layer_color,
+					rotated = sprt.rotated,
+					flipped_h = sprt.flipped_h,
+					flipped_v = sprt.flipped_v,
+					image_id = sprt.used_image_id,
+					normal_id = sprt.used_image_id_normal,
+				}
+				sprites_array.append(sprt_dict)
+				
+				sprites_array.append(sprt_dict)
 		else:
 			var cleaned_array = []
 			
@@ -195,6 +224,7 @@ func load_model(path : String):
 			sprite_obj = preload("res://Misc/SpriteObject/sprite_object.tscn").instantiate()
 			
 		
+		
 		var cleaned_array = []
 		
 		for st in sprite.states:
@@ -307,8 +337,9 @@ func load_model(path : String):
 		
 		if sprite.has("is_collapsed"):
 			sprite_obj.is_collapsed = sprite.is_collapsed
-		Global.sprite_container.add_child(sprite_obj)
 		sprite_obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
+		Global.sprite_container.add_child(sprite_obj)
+		sprite_obj.get_state(0)
 
 
 	if !load_dict.input_array.is_empty():
@@ -329,14 +360,11 @@ func load_model(path : String):
 			for l in abs(i.states.size() - state_count):
 				i.states.append({})
 	
-	Global.load_sprite_states(0)
 	Global.remake_layers.emit()
 	Global.reparent_objects.emit(get_tree().get_nodes_in_group("Sprites"))
 	Global.slider_values.emit(Global.settings_dict)
 	if Global.main.has_node("%Control"):
 		Global.reinfoanim.emit()
-	Settings.save()
-	
 	if Global.settings_dict.anti_alias:
 		Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	else:
@@ -350,7 +378,7 @@ func load_model(path : String):
 	Global.main.get_node("%Marker").current_screen = Global.settings_dict.monitor
 	Global.project_updates.emit("Project Loaded!")
 	Global.remake_image_manager.emit()
-	await get_tree().physics_frame
+	
 	Global.load_sprite_states(0)
 	if Settings.theme_settings.use_threading:
 		thread.call_deferred("wait_to_finish")
