@@ -20,7 +20,6 @@ func save_model(path):
 	var inputs = get_tree().get_nodes_in_group("StateButtons")
 	var sprites_array : Array = []
 	var input_array : Array = []
-	
 	var image_array : Array = []
 	
 
@@ -67,6 +66,9 @@ func save_model(path):
 					image_id = sprt.used_image_id,
 					normal_id = sprt.used_image_id_normal,
 				}
+				sprites_array.append(sprt_dict)
+				continue
+				
 			else:
 				var cleaned_array = []
 				
@@ -95,8 +97,8 @@ func save_model(path):
 					normal_id = sprt.used_image_id_normal,
 				}
 				sprites_array.append(sprt_dict)
+				continue
 				
-				sprites_array.append(sprt_dict)
 		else:
 			var cleaned_array = []
 			
@@ -125,6 +127,7 @@ func save_model(path):
 				normal_id = sprt.used_image_id_normal,
 			}
 			sprites_array.append(sprt_dict)
+			continue
 		
 	save_dict = {
 		version = Global.version,
