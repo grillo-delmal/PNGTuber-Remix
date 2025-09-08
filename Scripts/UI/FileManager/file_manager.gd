@@ -21,11 +21,11 @@ func _ready() -> void:
 func create_default():
 	%Tree.clear()
 	var root : TreeItem = %Tree.create_item()
-	root.set_text(0, "File System")
+	root.set_text(0, "TR_FILE_SYSTEM")
 	root.set_selectable(0, false)
 	
 	var assets : TreeItem = %Tree.create_item(root)
-	assets.set_text(0, "Assets")
+	assets.set_text(0, "TR_IMAGES")
 	assets.set_selectable(0, false)
 	
 	'''

@@ -6,6 +6,7 @@ var thread : Thread = Thread.new()
 var trim : bool = false
 var should_offset : bool = true
 var import_flippd : bool = false
+var can_load_plus : bool = false
 
 func save_file(path):
 	if Settings.theme_settings.use_threading:
@@ -161,7 +162,8 @@ func load_file(path: String, autoload : bool = false):
 				var _err = thread.start(load_model.bind(path))
 	else:
 		if path.get_extension() == "save":
-			load_pngplus_file(path)
+			return
+			#load_pngplus_file(path)
 		else:
 			load_model(path)
 
@@ -494,6 +496,10 @@ func load_gif(sprite, image_data = null, normal = true):
 	image_data.has_data = true
 
 func load_pngplus_file(path):
+	if !can_load_plus:
+		return
+	
+	
 	Global.delete_states.emit()
 	Global.main.clear_sprites()
 	

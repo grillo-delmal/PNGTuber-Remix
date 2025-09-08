@@ -64,7 +64,8 @@ func new_file():
 	%ConfirmationDialog.popup()
 
 func load_file():
-	%FileDialog.filters = ["*.pngRemix, *.save"]
+	#%FileDialog.filters = ["*.pngRemix, *.save"]
+	%FileDialog.filters = ["*.pngRemix"]
 	$FileDialog.file_mode = 0
 	current_state = State.LoadFile
 	%FileDialog.show()
