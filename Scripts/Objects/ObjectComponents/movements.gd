@@ -56,7 +56,7 @@ func _physics_process(delta: float) -> void:
 			auto_rotate()
 		else:
 			%Pos.rotation = 0.0
-		rainbow()
+		rainbow(delta)
 		follow_calculation(delta)
 		movements(delta)
 	else:
@@ -247,7 +247,7 @@ func _get_distance(a: float, b: float) -> float:
 #if actor.is_visible_in_tree():
 	#printt(min_ang, max_ang)
 
-func rainbow():
+func rainbow(delta):
 	if actor.get_value("hidden_item") && Global.mode != 0:
 		%Sprite2D.self_modulate.a = 0.0
 	else:
@@ -255,11 +255,11 @@ func rainbow():
 			if not actor.get_value("rainbow_self"):
 				%Sprite2D.self_modulate.s = 0
 				%Pos.modulate.s = 1
-				%Pos.modulate.h = wrap(%Pos.modulate.h + actor.get_value("rainbow_speed"), 0, 1)
+				%Pos.modulate.h = wrap(%Pos.modulate.h + (actor.get_value("rainbow_speed")*delta), 0, 1)
 			else:
 				%Pos.modulate.s = 0
 				%Sprite2D.self_modulate.s = 1
-				%Sprite2D.self_modulate.h = wrap(%Sprite2D.self_modulate.h + actor.get_value("rainbow_speed"), 0, 1)
+				%Sprite2D.self_modulate.h = wrap(%Sprite2D.self_modulate.h + (actor.get_value("rainbow_speed")*delta), 0, 1)
 		else:
 			%Sprite2D.self_modulate = actor.get_value("tint")
 			%Pos.modulate.s = 0

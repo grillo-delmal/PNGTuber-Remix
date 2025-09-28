@@ -2,7 +2,7 @@ extends AudioStreamPlayer
 
 const MIN_DB: int = 80
 var record_bus_index 
-var record_effect : AudioEffectRecord
+var record_effect : AudioEffectCapture
 
 const VU_COUNT = 4
 const HEIGHT = 40
@@ -19,8 +19,6 @@ var t = {
 
 var actual_value : float = 0.0
 var mic_restart_timer : Timer = Timer.new()
-
-
 var _fingerprint := LipSyncFingerprint.new()
 var _matches := []
 # Called when the node enters the scene tree for the first time.
@@ -29,7 +27,7 @@ func _ready():
 	mic_restart_timer.one_shot = false
 	add_child(mic_restart_timer)
 	record_bus_index = AudioServer.get_bus_index("Mic")
-	record_effect = AudioServer.get_bus_effect(record_bus_index, 0)
+	record_effect = AudioServer.get_bus_effect(record_bus_index, 2)
 	await get_tree().current_scene.ready
 	mic_restart_timer.wait_time = MIC_RESTART_TIME
 	mic_restart_timer.start()
@@ -39,15 +37,15 @@ func change_mic_restart_time(delay_fix := false) -> void:
 	mic_restart_timer.wait_time = MIC_RESTART_TIME_FIX if delay_fix else MIC_RESTART_TIME
 
 func mic_restart_timer_timeout():
+	pass
 	restart_mic()
 
 func restart_mic():
 	playing = false
-	record_effect.set_recording_active(false)
+	record_effect.clear_buffer()
 	await get_tree().physics_frame
 	await get_tree().physics_frame # Added second frame just to be safe
 	playing = true
-	record_effect.set_recording_active(true)
 
 func restart_mic_and_timer():
 	restart_mic()

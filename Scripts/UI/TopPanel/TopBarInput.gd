@@ -23,7 +23,6 @@ func _ready():
 	
 	Global.mode_changed.connect(on_mode_changed)
 
-	ProjectSettings.set("audio/driver/mix_rate", AudioServer.get_mix_rate())
 	update_window_button()
 	
 	#print(OS.get_executable_path().get_base_dir() + "/autosaves")

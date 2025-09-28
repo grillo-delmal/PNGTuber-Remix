@@ -146,6 +146,8 @@ func replace_texture(path : String):
 		Global.held_sprites[0].correct_sprite_size()
 		Global.held_sprites[0].update_wiggle_parts()
 		
+	Global.held_sprites[0].used_image_id = image_data.id
+	Global.held_sprites[0].referenced_data = image_data
 	Global.held_sprites[0].rotated = 0
 	Global.held_sprites[0].flipped_h = false
 	Global.held_sprites[0].flipped_v = false

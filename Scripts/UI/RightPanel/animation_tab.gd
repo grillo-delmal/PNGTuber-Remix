@@ -78,11 +78,10 @@ func _on_rs_slider_value_changed(value):
 	if should_change:
 		for i in Global.held_sprites:
 			if i != null && is_instance_valid(i):
-				%RSLabel.text = "Rainbow Speed : " + str(snapped(value, 0.001))
+				%RSLabel.text = "Rainbow Speed : " + str(snapped(value*10, 0.001))
 				i.sprite_data.rainbow_speed = value
 				StateButton.multi_edit(value, "rainbow_speed", i, i.states)
 				i.save_state(Global.current_state)
-
 
 func _on_non_animated_sheet_check_toggled(toggled_on: bool) -> void:
 	if should_change:
@@ -107,7 +106,6 @@ func _on_frame_spinbox_value_changed(value: float) -> void:
 					%FrameSpinbox.max_value = (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1
 					i.sprite_data.frame = clamp(value, 0, (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1)
 					i.get_node("%Sprite2D").frame = clamp(value, 0, (i.get_node("%Sprite2D").hframes * i.get_node("%Sprite2D").vframes) - 1)
-
 
 func _on_frame_spinbox_mouse_entered() -> void:
 	if should_change:

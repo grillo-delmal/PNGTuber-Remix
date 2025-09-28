@@ -127,7 +127,6 @@ func _on_reset_mic_button_pressed():
 func reset_mic_list():
 	%MicroPhoneMenu.get_popup().clear()
 	devices = AudioServer.get_input_device_list()
-	devices.append_array(AudioServer.get_output_device_list())
 	for i in devices:
 		%MicroPhoneMenu.get_popup().add_item(i)
 		
