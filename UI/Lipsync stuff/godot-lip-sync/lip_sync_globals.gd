@@ -54,7 +54,21 @@ func load_file(path: String):
 	# Load the data
 	file_name = path
 	Settings.theme_settings.lipsync_file_path = file_name
-	file_data = ResourceLoader.load(file_name)
+	var fake_file_data = ResourceLoader.load(file_name)
+	for viseme in Visemes.VISEME.COUNT:
+		for phoneme in Visemes.VISEME_PHONEME_MAP[viseme]:
+			var indx = 0
+			if phoneme in range(fake_file_data.training.size()):
+				for i in fake_file_data.training[phoneme]:
+					if i is Array:
+						var place_holder = i.duplicate(true)
+						fake_file_data.training[phoneme][indx] = {description = "unnamed", values = place_holder}
+					indx += 1
+			else:
+				break
+	
+	file_data = fake_file_data
+	
 	file_modified = false
 	# Report file changed
 	emit_signal("file_state_changed")

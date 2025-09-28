@@ -57,7 +57,8 @@ func global_lipsync():
 
 	# Calculate the matches
 	if LipSyncGlobals.file_data:
-		LipSyncGlobals.file_data.match_phonemes(_fingerprint.values, _matches)
+		
+		LipSyncGlobals.file_data.match_phonemes({description = _fingerprint.description, values = _fingerprint.values}, _matches)
 
 	# Populate the bars
 	t = {
@@ -78,4 +79,4 @@ func global_lipsync():
 			t.actual_value = actual_value
 			
 	await get_tree().create_timer(0.05).timeout
-	global_lipsync()
+	call_deferred("global_lipsync")

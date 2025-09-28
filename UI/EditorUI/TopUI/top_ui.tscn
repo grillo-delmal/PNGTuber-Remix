@@ -1,11 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://bpmlfhv30o08l"]
+[gd_scene load_steps=12 format=3 uid="uid://bpmlfhv30o08l"]
 
 [ext_resource type="Script" uid="uid://buog53mcsao0g" path="res://Scripts/UI/TopPanel/top_ui.gd" id="2_fpnkx"]
 [ext_resource type="Script" uid="uid://bafvsv0wf438w" path="res://Scripts/Misc/OnlineLinks.gd" id="3_tep3f"]
 [ext_resource type="Script" uid="uid://caf875hofgogu" path="res://Scripts/UI/FormattedLocalizedLabel.gd" id="4_mle18"]
 [ext_resource type="Script" uid="uid://qy3riyrj7tll" path="res://Scripts/UI/TopPanel/TopBarInput.gd" id="4_r6evh"]
 [ext_resource type="Texture2D" uid="uid://bq4tg8ia2crwh" path="res://UI/Assets/LinksButtonImages/GithubLogo.png" id="6_0f73e"]
-[ext_resource type="Texture2D" uid="uid://whhnbdvw3i1j" path="res://UI/Assets/LinksButtonImages/TumblrLogo.png" id="7_ja8k8"]
 [ext_resource type="Texture2D" uid="uid://kmyr2ks7oil4" path="res://UI/Assets/LinksButtonImages/RedditLogo.png" id="8_3p41m"]
 [ext_resource type="Texture2D" uid="uid://dt530lalergk0" path="res://DemoModels/Icons/BasicIcon.png" id="9_hrvuv"]
 [ext_resource type="Texture2D" uid="uid://bhidrbb01hfmq" path="res://DemoModels/Icons/BGIcon.png" id="10_apeyf"]
@@ -238,20 +237,20 @@ text = "TR_DESELECT"
 flat = true
 icon_alignment = 1
 
-[node name="AboutPopUp" type="PopupPanel" parent="."]
+[node name="CreditPopUp" type="PopupPanel" parent="."]
 unique_name_in_owner = true
 auto_translate_mode = 1
 initial_position = 2
 size = Vector2i(400, 251)
 wrap_controls = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="AboutPopUp"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditPopUp"]
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 396.0
 offset_bottom = 247.0
 
-[node name="CreditLabel" type="Label" parent="AboutPopUp/VBoxContainer"]
+[node name="CreditLabel" type="Label" parent="CreditPopUp/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(350, 10)
 layout_mode = 2
@@ -259,15 +258,15 @@ text = "TR_FULL_CREDITS"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="AboutPopUp/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="CreditPopUp/VBoxContainer"]
 layout_mode = 2
 columns = 3
 
-[node name="SourceLabel" type="Label" parent="AboutPopUp/VBoxContainer/GridContainer"]
+[node name="SourceLabel" type="Label" parent="CreditPopUp/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "TR_SOURCE_CODE"
 
-[node name="GitHubButton" type="TextureButton" parent="AboutPopUp/VBoxContainer/GridContainer"]
+[node name="GitHubButton" type="TextureButton" parent="CreditPopUp/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture_normal = ExtResource("6_0f73e")
@@ -277,24 +276,14 @@ texture_disabled = ExtResource("6_0f73e")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="EmptySpace" type="Control" parent="AboutPopUp/VBoxContainer/GridContainer"]
+[node name="EmptySpace" type="Control" parent="CreditPopUp/VBoxContainer/GridContainer"]
 layout_mode = 2
 
-[node name="SocialLabel" type="Label" parent="AboutPopUp/VBoxContainer/GridContainer"]
+[node name="SocialLabel" type="Label" parent="CreditPopUp/VBoxContainer/GridContainer"]
 layout_mode = 2
 text = "TR_SOCIALS"
 
-[node name="TumblrButton" type="TextureButton" parent="AboutPopUp/VBoxContainer/GridContainer"]
-custom_minimum_size = Vector2(50, 50)
-layout_mode = 2
-texture_normal = ExtResource("7_ja8k8")
-texture_pressed = ExtResource("7_ja8k8")
-texture_hover = ExtResource("7_ja8k8")
-texture_disabled = ExtResource("7_ja8k8")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="RedditButton" type="TextureButton" parent="AboutPopUp/VBoxContainer/GridContainer"]
+[node name="RedditButton" type="TextureButton" parent="CreditPopUp/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 texture_normal = ExtResource("8_3p41m")
@@ -366,19 +355,19 @@ theme_override_constants/icon_max_width = 37
 text = "TR_ASSET_MODEL_DEMO"
 icon = ExtResource("13_f2y74")
 
-[node name="CreditPopUp" type="PopupPanel" parent="."]
+[node name="AboutPopUp" type="PopupPanel" parent="."]
 unique_name_in_owner = true
 auto_translate_mode = 1
 initial_position = 2
 size = Vector2i(438, 249)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CreditPopUp"]
+[node name="VBoxContainer" type="VBoxContainer" parent="AboutPopUp"]
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 434.0
 offset_bottom = 245.0
 
-[node name="AboutLabel" type="Label" parent="CreditPopUp/VBoxContainer"]
+[node name="AboutLabel" type="Label" parent="AboutPopUp/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "{0}
@@ -387,7 +376,7 @@ horizontal_alignment = 1
 script = ExtResource("4_mle18")
 localizations = Array[String](["TR_ABOUT"])
 
-[node name="Label" type="Label" parent="CreditPopUp/VBoxContainer"]
+[node name="Label" type="Label" parent="AboutPopUp/VBoxContainer"]
 custom_minimum_size = Vector2(430, 150)
 layout_mode = 2
 text = "TR_ABOUT_FULL"
@@ -419,9 +408,8 @@ presets_visible = false
 [connection signal="toggled" from="TopBar/MarginContainer/HBox/PreviewModeCheck" to="TopBarInput" method="_on_preview_mode_check_toggled"]
 [connection signal="toggled" from="TopBar/MarginContainer/HBox/HideUIButton" to="TopBarInput" method="_on_hide_ui_button_toggled"]
 [connection signal="pressed" from="TopBar/MarginContainer/HBox/DeselectButton" to="TopBarInput" method="_on_deselect_button_pressed"]
-[connection signal="pressed" from="AboutPopUp/VBoxContainer/GridContainer/GitHubButton" to="OnlineLinks" method="_on_git_hub_button_pressed"]
-[connection signal="pressed" from="AboutPopUp/VBoxContainer/GridContainer/TumblrButton" to="OnlineLinks" method="_on_tumblr_button_pressed"]
-[connection signal="pressed" from="AboutPopUp/VBoxContainer/GridContainer/RedditButton" to="OnlineLinks" method="_on_reddit_button_pressed"]
+[connection signal="pressed" from="CreditPopUp/VBoxContainer/GridContainer/GitHubButton" to="OnlineLinks" method="_on_git_hub_button_pressed"]
+[connection signal="pressed" from="CreditPopUp/VBoxContainer/GridContainer/RedditButton" to="OnlineLinks" method="_on_reddit_button_pressed"]
 [connection signal="pressed" from="TempPopUp/VBoxContainer/GridContainer/BasicTempButton" to="TopBarInput" method="_on_basic_temp_button_pressed"]
 [connection signal="pressed" from="TempPopUp/VBoxContainer/GridContainer/BGTempButton" to="TopBarInput" method="_on_bg_temp_button_pressed"]
 [connection signal="pressed" from="TempPopUp/VBoxContainer/GridContainer/NormalmTempButton" to="TopBarInput" method="_on_normalm_temp_button_pressed"]

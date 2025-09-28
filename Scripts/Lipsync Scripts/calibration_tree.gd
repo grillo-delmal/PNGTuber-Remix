@@ -110,15 +110,18 @@ func _on_add_fingerprint(phoneme_node: TreeItem):
 		LipSyncGlobals.file_data.training[phoneme] = []
 
 	# Add fingerprint to training data
-	LipSyncGlobals.file_data.training[phoneme].append(fingerprint.values)
+	#LipSyncGlobals.file_data.training[phoneme].append(fingerprint.values)
+	var test = {description = fingerprint.description, values = fingerprint.values}
+	LipSyncGlobals.file_data.training[phoneme].append(test)
 
 	# Create the new node
 	var fingerprint_node = create_item(phoneme_node)
-	fingerprint_node.set_text(0, str(fingerprint_node.get_index()))
+	fingerprint_node.set_text(0, fingerprint.description)
+	fingerprint_node.set_editable(0, true)
 	fingerprint_node.add_button(1, microphone_icon, BUTTON_RECORD)
 	fingerprint_node.add_button(1, delete_icon, BUTTON_DELETE)
 	fingerprint_node.set_metadata(0, [viseme, phoneme])
-	fingerprint_node.set_metadata(1, fingerprint)
+	fingerprint_node.set_metadata(1, [fingerprint,test])
 
 	# Report modified by tree manipulation
 	LipSyncGlobals.set_modified("tree")
@@ -131,7 +134,7 @@ func _on_add_fingerprint(phoneme_node: TreeItem):
 func _on_record_fingerprint(fingerprint_node: TreeItem):
 	# Get the phoneme and fingerprint
 #	var phoneme: int = fingerprint_node.get_metadata(0)[1]
-	var fingerprint: LipSyncFingerprint = fingerprint_node.get_metadata(1)
+	var fingerprint: LipSyncFingerprint = fingerprint_node.get_metadata(1)[0]
 	# Update the fingerprint from the current audio spectrum
 	fingerprint.populate(LipSyncGlobals.speech_spectrum)
 	# Report modified by tree manipulation
@@ -144,13 +147,13 @@ func _on_record_fingerprint(fingerprint_node: TreeItem):
 func _on_delete_fingerprint(fingerprint_node: TreeItem):
 	# Get the phoneme and fingerprint
 	var phoneme: int = fingerprint_node.get_metadata(0)[1]
-	var fingerprint: LipSyncFingerprint = fingerprint_node.get_metadata(1)
+	var test = fingerprint_node.get_metadata(1)[1]
 
 	# Get the array of fingerprints in the training data
 	var fingerprints: Array = LipSyncGlobals.file_data.training[phoneme]
 
 	# Erase the fingerprint (and possibly the entire phoneme)
-	fingerprints.erase(fingerprint.values)
+	fingerprints.erase(test)
 	if fingerprints.size() == 0:
 		LipSyncGlobals.file_data.training.erase(phoneme)
 		
@@ -164,7 +167,8 @@ func _on_delete_fingerprint(fingerprint_node: TreeItem):
 
 func _on_fingerprint_edited(fingerprint_node: TreeItem):
 	# Get the fingerprint
-	var fingerprint: LipSyncFingerprint = fingerprint_node.get_metadata(1)
+	var fingerprint: LipSyncFingerprint = fingerprint_node.get_metadata(1)[0]
+	var test = fingerprint_node.get_metadata(1)[1]
 
 	# Get the description
 	var description = fingerprint_node.get_text(0)
@@ -175,7 +179,7 @@ func _on_fingerprint_edited(fingerprint_node: TreeItem):
 
 	# Save the description
 	fingerprint.description = description
-
+	test.description = description
 	# Report modified by tree manipulation
 	LipSyncGlobals.set_modified("tree")
 
@@ -231,22 +235,28 @@ func _populate_tree():
 				if fingerprint is RefCounted:
 					index += 1
 					continue
-				
-				elif fingerprint is Resource:
-					var fingerprint_node = create_item(phoneme_node)
-					fingerprint_node.set_text(0, str(index))
-					fingerprint_node.add_button(1, microphone_icon, BUTTON_RECORD)
-					fingerprint_node.add_button(1, delete_icon, BUTTON_DELETE)
-					fingerprint_node.set_metadata(0, [viseme, phoneme])
-					fingerprint_node.set_metadata(1, fingerprint)
-					LipSyncGlobals.file_data.training[phoneme][index - 1] = fingerprint.value
 				elif fingerprint is Array:
 					var fingerprint_node = create_item(phoneme_node)
 					fingerprint_node.set_text(0, str(index))
+					fingerprint_node.set_editable(0, true)
 					fingerprint_node.add_button(1, microphone_icon, BUTTON_RECORD)
 					fingerprint_node.add_button(1, delete_icon, BUTTON_DELETE)
 					fingerprint_node.set_metadata(0, [viseme, phoneme])
 					var fingerprintn: LipSyncFingerprint = LipSyncFingerprint.new()
 					fingerprintn.values = fingerprint
-					fingerprint_node.set_metadata(1, fingerprintn)
+					fingerprintn.description = str(index)
+					var test = {description = fingerprintn.description, values = fingerprintn.values}
+					fingerprint_node.set_metadata(1, [fingerprintn, test])
+					LipSyncGlobals.file_data.training[phoneme][index - 1] = test
+				elif fingerprint is Dictionary:
+					var fingerprint_node = create_item(phoneme_node)
+					fingerprint_node.set_text(0, fingerprint.description)
+					fingerprint_node.set_editable(0, true)
+					fingerprint_node.add_button(1, microphone_icon, BUTTON_RECORD)
+					fingerprint_node.add_button(1, delete_icon, BUTTON_DELETE)
+					fingerprint_node.set_metadata(0, [viseme, phoneme])
+					var fingerprintn: LipSyncFingerprint = LipSyncFingerprint.new()
+					fingerprintn.values = fingerprint.values
+					fingerprintn.description = fingerprint.description
+					fingerprint_node.set_metadata(1, [fingerprintn, fingerprint])
 				index += 1

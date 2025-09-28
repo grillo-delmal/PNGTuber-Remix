@@ -47,7 +47,7 @@ func _unhandled_input(event):
 				button_pressed = false
 	elif current_remap == Remap.Keys:
 		if not event is InputEventMouseMotion:
-			if event.is_pressed():
+			if event.is_released():
 				if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
 					if id in range(Global.held_sprites[0].saved_keys.size() -1):
 						Global.held_sprites[0].saved_keys.remove_at(id)

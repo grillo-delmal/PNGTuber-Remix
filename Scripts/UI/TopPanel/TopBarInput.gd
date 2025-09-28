@@ -263,7 +263,7 @@ func _on_background_focus_exited() -> void:
 func add_a_lipsync_config():
 	var lipsync = preload("res://UI/Lipsync stuff/lipsync_configuration_popup.tscn").instantiate()
 	lipsync.name = "LipsyncConfigurationPopup"
-	Global.main.add_child(lipsync)
+	get_parent().add_child(lipsync)
 
 func _on_window_button_about_to_popup() -> void:
 	update_window_button()

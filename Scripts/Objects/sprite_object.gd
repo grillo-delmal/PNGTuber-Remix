@@ -116,7 +116,7 @@ func _process(_delta):
 	advanced_lipsyc()
 
 func wiggle_sprite():
-	var length : float = 1.0
+	var length : float = 0.0
 	
 	if get_value("wiggle_physics"):
 		if (get_parent() is Sprite2D  or get_parent() is WigglyAppendage2D) && is_instance_valid(get_parent()):
@@ -124,10 +124,10 @@ func wiggle_sprite():
 			if c_parent != null && is_instance_valid(c_parent):
 				var c_parrent_length = (c_parent.get_node("Movements").glob.y - c_parent.get_node("%Drag").global_position.y)
 				var c_parrent_length2 = (c_parent.get_node("%Movements").glob.x - c_parent.get_node("%Drag").global_position.x)
-				length +=((c_parrent_length + c_parrent_length2)/20)
+				length +=((c_parrent_length + c_parrent_length2)/50)
 	
 	
-	wiggle_val = lerp(wiggle_val, sin((Global.tick*length) + get_value("wiggle_freq"))*get_value("wiggle_amp"), 0.05)
+	wiggle_val = lerp(wiggle_val, sin((Global.tick * get_value("wiggle_freq"))+length)*get_value("wiggle_amp"), 0.05)
 	
 	if !get_parent() is Sprite2D:
 		%Sprite2D.material.set_shader_parameter("rotation", wiggle_val )

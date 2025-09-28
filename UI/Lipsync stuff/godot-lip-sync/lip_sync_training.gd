@@ -20,7 +20,7 @@ const MAX_DEVIATION := 1000.0
 
 
 ## Calculate a match between the fingerprint and phonemes
-func match_phonemes(fingerprint: Array, matches: Array):
+func match_phonemes(fingerprint: Dictionary, matches: Array):
 	# Ensure the matches array is the correct size
 	matches.resize(Phonemes.PHONEME.COUNT)
 
@@ -34,7 +34,7 @@ func match_phonemes(fingerprint: Array, matches: Array):
 		# Find minimum deviation in phomene patters
 		var min_deviation := MAX_DEVIATION
 		for pattern in training[phoneme]:
-			var deviation = LipSyncFingerprint.deviation(fingerprint, pattern)
+			var deviation = LipSyncFingerprint.deviation(fingerprint.values, pattern.values)
 			min_deviation = min(deviation, min_deviation)
 
 		# Update match

@@ -1,40 +1,10 @@
-[gd_scene load_steps=58 format=3 uid="uid://r2walrps7ne"]
+[gd_scene load_steps=53 format=3 uid="uid://r2walrps7ne"]
 
-[ext_resource type="Texture2D" uid="uid://byc1nc0xfubaq" path="res://TutorialAssets/Pickles/pickle1.png" id="1_128t5"]
 [ext_resource type="Script" uid="uid://dwa2v8yxe8sff" path="res://Scripts/UI/Others/pop_up.gd" id="1_si4kh"]
-[ext_resource type="Texture2D" uid="uid://4u3y5i46130w" path="res://TutorialAssets/Pickles/pickle2.png" id="2_2ctcb"]
-[ext_resource type="Texture2D" uid="uid://c7wt5f2qinnlu" path="res://TutorialAssets/Pickles/pickle3.png" id="3_oi4po"]
-[ext_resource type="Texture2D" uid="uid://d2jcon746n427" path="res://TutorialAssets/Pickles/pickle4.png" id="4_rqqei"]
 [ext_resource type="Texture2D" uid="uid://c8p2b5v284wjd" path="res://TutorialAssets/Others/FreqAmpTimeGraph.png" id="5_utmvu"]
 [ext_resource type="Texture2D" uid="uid://hrno6rnanx58" path="res://TutorialAssets/Others/FreqAmpTimeGraph2.png" id="6_q7qfu"]
 [ext_resource type="Texture2D" uid="uid://d3djqlup2m5pc" path="res://TutorialAssets/Pickles/HighFrqSheet.png" id="7_awlmb"]
 [ext_resource type="Texture2D" uid="uid://bqnn7ef13mlhn" path="res://TutorialAssets/Pickles/LowFrqSheet.png" id="8_i2xvq"]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_806ej"]
-animations = [{
-"frames": [{
-"duration": 6.0,
-"texture": ExtResource("1_128t5")
-}, {
-"duration": 1.0,
-"texture": ExtResource("2_2ctcb")
-}, {
-"duration": 4.0,
-"texture": ExtResource("1_128t5")
-}, {
-"duration": 5.0,
-"texture": ExtResource("3_oi4po")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_rqqei")
-}, {
-"duration": 1.0,
-"texture": ExtResource("3_oi4po")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6e05t"]
 atlas = ExtResource("7_awlmb")
@@ -370,115 +340,73 @@ animations = [{
 [node name="TutorialPopUp" type="PopupPanel"]
 auto_translate_mode = 1
 initial_position = 2
-size = Vector2i(602, 448)
+size = Vector2i(700, 500)
 visible = true
 script = ExtResource("1_si4kh")
 
 [node name="TabContainer" type="TabContainer" parent="."]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 598.0
-offset_bottom = 444.0
+offset_right = 696.0
+offset_bottom = 496.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/side_margin = 1
 theme_override_constants/icon_separation = 0
 current_tab = 0
 
-[node name="What is PNGTubing?" type="ScrollContainer" parent="TabContainer"]
+[node name="Basic Concepts" type="ScrollContainer" parent="TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="TabContainer/What is PNGTubing?"]
+[node name="GridContainer" type="GridContainer" parent="TabContainer/Basic Concepts"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/h_separation = 10
+columns = 2
 
-[node name="Control" type="Control" parent="TabContainer/What is PNGTubing?/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="TabContainer/What is PNGTubing?/MarginContainer/Control"]
-position = Vector2(461, 109.5)
-scale = Vector2(0.945, 0.945)
-sprite_frames = SubResource("SpriteFrames_806ej")
-autoplay = "default"
-frame_progress = 0.317187
-
-[node name="Label" type="Label" parent="TabContainer/What is PNGTubing?/MarginContainer/Control"]
-custom_minimum_size = Vector2(350, 404)
-layout_mode = 2
-offset_top = -2.0
-offset_right = 350.0
-offset_bottom = 402.0
-text = "TR_WHAT_IS_PNG_TUBING_FULL"
-
-[node name="Basic Concepts" type="ScrollContainer" parent="TabContainer"]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 1
-
-[node name="Control" type="Control" parent="TabContainer/Basic Concepts"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Basic Concepts/Control"]
-custom_minimum_size = Vector2(245, 257)
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Label" type="Label" parent="TabContainer/Basic Concepts/Control/ScrollContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Basic Concepts/GridContainer"]
 custom_minimum_size = Vector2(245, 257)
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="TabContainer/Basic Concepts/GridContainer/ScrollContainer"]
+custom_minimum_size = Vector2(245, 257)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 text = "TR_BASIC_CONCEPTS_FULL"
 autowrap_mode = 3
 
-[node name="TextureRect" type="TextureRect" parent="TabContainer/Basic Concepts/Control"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -301.0
-offset_top = 34.0
-offset_right = -1.0
-offset_bottom = 257.0
-grow_horizontal = 0
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Basic Concepts/GridContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="TabContainer/Basic Concepts/GridContainer/VBoxContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_vertical = 3
 texture = ExtResource("5_utmvu")
 expand_mode = 1
-stretch_mode = 4
+stretch_mode = 5
 
-[node name="TextureRect2" type="TextureRect" parent="TabContainer/Basic Concepts/Control"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -301.0
-offset_top = -165.0
-offset_bottom = 59.0
-grow_horizontal = 0
-grow_vertical = 0
+[node name="TextureRect2" type="TextureRect" parent="TabContainer/Basic Concepts/GridContainer/VBoxContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_vertical = 3
 texture = ExtResource("6_q7qfu")
 expand_mode = 2
-stretch_mode = 4
+stretch_mode = 5
 
-[node name="FreqHigh" type="AnimatedSprite2D" parent="TabContainer/Basic Concepts/Control"]
-position = Vector2(207, 330)
+[node name="FreqHigh" type="AnimatedSprite2D" parent="TabContainer/Basic Concepts/GridContainer"]
+position = Vector2(384.5, 358.5)
 scale = Vector2(0.43, 0.43)
 sprite_frames = SubResource("SpriteFrames_8t4wo")
 autoplay = "default"
 frame_progress = 0.678312
 
-[node name="FrqLow" type="AnimatedSprite2D" parent="TabContainer/Basic Concepts/Control"]
-position = Vector2(68, 330)
+[node name="FrqLow" type="AnimatedSprite2D" parent="TabContainer/Basic Concepts/GridContainer"]
+position = Vector2(245.5, 358.5)
 scale = Vector2(0.43, 0.43)
 sprite_frames = SubResource("SpriteFrames_1uusd")
 autoplay = "default"
@@ -487,7 +415,7 @@ frame_progress = 0.336932
 [node name="Basic Controls" type="ScrollContainer" parent="TabContainer"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 2
+metadata/_tab_index = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Basic Controls"]
 layout_mode = 2
@@ -503,7 +431,7 @@ autowrap_mode = 2
 [node name="Shortcuts" type="ScrollContainer" parent="TabContainer"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 3
+metadata/_tab_index = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Shortcuts"]
 layout_mode = 2
@@ -519,7 +447,7 @@ autowrap_mode = 2
 [node name="FAQ" type="ScrollContainer" parent="TabContainer"]
 visible = false
 layout_mode = 2
-metadata/_tab_index = 4
+metadata/_tab_index = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/FAQ"]
 layout_mode = 2
@@ -532,35 +460,3 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "TR_FAQ_FULL"
 autowrap_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-visible = false
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 598.0
-offset_bottom = 444.0
-
-[node name="TutorialLabel" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-text = "Tutorial!
-"
-horizontal_alignment = 1
-
-[node name="InfoLabel" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-text = "Held Sprite Inputs :
-- Moving Sprite : Click and drag around.
-- Move Origin : Arrow Keys or by holding Ctrl on your keyboard 
-and pressing where you want the origin to be.
-- Scroll mouse wheel on sliders for more accurate results.
-
-Input Remap :
-- Click the button of the state you want. 
-to remap and then add the new button.
-- Change States with input : Captures Input
-when minimized if on.
-
-Control Bounce :
-- Click on bounce top bar to change the bounce
-and gravity to your desire."
-vertical_alignment = 1

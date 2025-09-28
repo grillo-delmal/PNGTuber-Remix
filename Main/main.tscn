@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://b28gjkefgi5bs"]
+[gd_scene load_steps=18 format=3 uid="uid://b28gjkefgi5bs"]
 
 [ext_resource type="Script" uid="uid://bn6wdd2hwqxfp" path="res://Main/Scripts/main.gd" id="1_6pthk"]
 [ext_resource type="Script" uid="uid://u4rstm0uk8wb" path="res://Scripts/Misc/file_importer.gd" id="2_j4lix"]
@@ -8,7 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://dw4brgrpdpurf" path="res://Misc/LightSource/light_source.tscn" id="3_eo07p"]
 [ext_resource type="Shader" uid="uid://brpv37x267rmr" path="res://Scripts/Shaders/ColorBlindness.gdshader" id="3_o60nc"]
 [ext_resource type="Shader" uid="uid://bc5tbhguskdv2" path="res://Scripts/Shaders/ModelEffects.gdshader" id="3_rj11h"]
-[ext_resource type="Theme" uid="uid://c5v4ocnimqa4i" path="res://Themes/WhiteTheme/WhiteTheme.tres" id="5_4hh1t"]
 [ext_resource type="Script" uid="uid://by4pbr6yeut1c" path="res://Main/Scripts/monitor_tracking.gd" id="5_rj11h"]
 [ext_resource type="PackedScene" uid="uid://bpmlfhv30o08l" path="res://UI/EditorUI/TopUI/top_ui.tscn" id="7_qwnpc"]
 [ext_resource type="Script" uid="uid://bixd1q38me8go" path="res://Scripts/Misc/pointerTests.gd" id="12_f3gf5"]
@@ -213,7 +212,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme = ExtResource("5_4hh1t")
 theme_override_constants/separation = 0
 
 [node name="UIHolder" type="VBoxContainer" parent="UICanvas/UIHold"]

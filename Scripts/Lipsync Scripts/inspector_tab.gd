@@ -150,7 +150,7 @@ func _update_inspector():
 	# Get the phoneme and possibly fingerprint
 #	var viseme: int = item.get_metadata(0)[0]
 #	var phoneme: int = item.get_metadata(0)[1]
-	var fingerprint: LipSyncFingerprint = item.get_metadata(1)
+	var fingerprint: LipSyncFingerprint = item.get_metadata(1)[0]
 
 	# Ensure the description is hidden
 
