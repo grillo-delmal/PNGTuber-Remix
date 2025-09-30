@@ -13,6 +13,7 @@ enum State {
 	ReplaceSprite,
 	AddNormal,
 	AddAppend,
+	ImportPSD,
 }
 var current_state : State
 var can_scroll : bool = false
@@ -82,6 +83,12 @@ func load_sprites():
 	current_state = State.LoadSprites
 	%FileDialog.show()
 
+func import_psd():
+	%FileDialog.filters = ["*.psd"]
+	$FileDialog.file_mode = 0
+	current_state = State.ImportPSD
+	%FileDialog.show()
+
 func load_append_sprites():
 	%FileDialog.filters = ["*.png, *.apng, *.gif", "*.png", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
 	$FileDialog.file_mode = 1
@@ -125,7 +132,6 @@ func _on_file_dialog_file_selected(path):
 				SaveAndLoad.load_file(path, true)
 		State.SaveFileAs:
 			SaveAndLoad.save_file(path)
-			
 		State.ReplaceSprite:
 			if Settings.theme_settings.enable_trimmer:
 				var apng_test = AImgIOAPNGImporter.load_from_file(path)
@@ -138,7 +144,6 @@ func _on_file_dialog_file_selected(path):
 			else:
 				SaveAndLoad.trim = false
 				%FileImporter.replace_texture(path)
-
 		State.AddNormal:
 			if Settings.theme_settings.enable_trimmer:
 				var apng_test = AImgIOAPNGImporter.load_from_file(path)
@@ -151,6 +156,8 @@ func _on_file_dialog_file_selected(path):
 			else:
 				SaveAndLoad.trim = false
 				%FileImporter.add_normal(path)
+		State.ImportPSD:
+			SaveAndLoad.load_images_from_psd(path)
 
 func _on_file_dialog_files_selected(paths):
 	if current_state == State.LoadSprites or current_state == State.AddAppend:

@@ -121,11 +121,12 @@ func choosing_files(id):
 				SaveAndLoad.save_file(save_location)
 				await get_tree().physics_frame
 				SaveAndLoad.load_file(save_location)
-				
 			else:
 				SaveAndLoad.save_file(Global.save_path)
 				await get_tree().physics_frame
 				SaveAndLoad.load_file(Global.save_path)
+		13:
+			main.import_psd()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("save"):

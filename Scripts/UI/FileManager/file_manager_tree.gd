@@ -4,8 +4,6 @@ var held_item : Array[TreeItem]
 var hovered = false
 var add_as_appendage = false
 var should_offset = false
-var appendage = preload("res://Misc/AppendageObject/Appendage_object.tscn")
-var sprite = preload("res://Misc/SpriteObject/sprite_object.tscn")
 var has_offsetting = false
 
 func _gui_input(event: InputEvent) -> void:
@@ -51,30 +49,7 @@ func drop_all_data():
 func loop_to_all():
 	for i in held_item:
 		if i.get_metadata(0) is ImageData:
-			add_images_to_scene(i.get_metadata(0))
-
-func add_images_to_scene(image_data):
-	var spawn 
-	if add_as_appendage:
-		spawn = appendage.instantiate()
-	else:
-		spawn = sprite.instantiate()
-	
-	if should_offset:
-		spawn.sprite_data.offset += image_data.offset
-		spawn.get_node("%Sprite2D").position += image_data.offset
-	var img_tex : CanvasTexture = CanvasTexture.new()
-	img_tex.diffuse_texture = image_data.runtime_texture
-	spawn.get_node("%Sprite2D").texture = img_tex
-	spawn.sprite_name = image_data.image_name
-	spawn.referenced_data = image_data
-	spawn.used_image_id = image_data.id
-	spawn.sprite_id = spawn.get_instance_id()
-	if add_as_appendage:
-		spawn.correct_sprite_size()
-	Global.sprite_container.add_child(spawn)
-	Global.update_layers.emit(0, spawn, "Sprite")
-	ImageTrimmer.set_thumbnail(spawn.treeitem)
+			SaveAndLoad.add_object_to_scene(i.get_metadata(0), add_as_appendage)
 
 func _on_as_appednage_confirmed() -> void:
 	add_as_appendage = true

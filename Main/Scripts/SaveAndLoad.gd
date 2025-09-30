@@ -7,6 +7,8 @@ var trim : bool = false
 var should_offset : bool = true
 var import_flippd : bool = false
 var can_load_plus : bool = false
+var appendage_scene = preload("res://Misc/AppendageObject/Appendage_object.tscn")
+var sprite_scene = preload("res://Misc/SpriteObject/sprite_object.tscn")
 
 func save_file(path):
 	if Settings.theme_settings.use_threading:
@@ -819,3 +821,73 @@ func check_valid(obj, image_data) -> bool:
 		return true
 	else:
 		return false
+
+#----------------------------------------------------------------------------
+# Global Image loading from PSD
+func load_images_from_psd(path : String):
+	var loaded_layers : Array = []
+	loaded_layers = PSDParser.open_photoshop_file(path)
+	trim = false
+	should_offset = false
+	for layer in loaded_layers:
+		print(layer)
+		if layer["type"] == "layer":
+			var image_data : ImageData = ImageData.new()
+			import_png(layer["image"], null, image_data, false, false)
+			image_data.image_name = layer["name"]
+			image_data.offset = layer["offset"]
+			image_data.trimmed = true
+			Global.image_manager_data.append(image_data)
+			Global.add_new_image.emit(image_data)
+			add_objects_from_psd_data(layer, image_data)
+		else:
+			add_objects_from_psd_data(layer, null)
+	Global.remake_layers.emit()
+	Global.reparent_objects.emit(get_tree().get_nodes_in_group("Sprites"))
+
+func add_objects_from_psd_data(layer, image_data = null):
+	var spawn
+	if layer["type"] == "layer" && image_data != null:
+		spawn = add_object_to_scene(image_data, false, false, true)
+	else:
+		spawn = add_object_to_scene(null, false, true, false, layer["name"])
+	fix_ids(spawn, layer)
+
+#----------------------------------------------------------------------------
+# Global Simple Object addition
+func add_object_to_scene(image_data, add_as_appendage : bool = false, folder : bool = false, force_offset : bool = false, custom_name : String = ""):
+	var spawn 
+	if add_as_appendage:
+		spawn = appendage_scene.instantiate()
+	else:
+		spawn = sprite_scene.instantiate()
+	if (should_offset or force_offset) && !folder:
+		spawn.sprite_data.offset += image_data.offset
+		spawn.get_node("%Sprite2D").position += image_data.offset
+	if !folder:
+		var img_tex : CanvasTexture = CanvasTexture.new()
+		img_tex.diffuse_texture = image_data.runtime_texture
+		spawn.get_node("%Sprite2D").texture = img_tex
+		spawn.sprite_name = image_data.image_name
+		spawn.referenced_data = image_data
+		spawn.used_image_id = image_data.id
+	else:
+		var canv = CanvasTexture.new()
+		spawn.get_node("%Sprite2D").texture = canv
+		spawn.sprite_name = custom_name
+		spawn.sprite_data.folder = true
+		
+	spawn.sprite_id = spawn.get_instance_id()
+	Global.sprite_container.add_child(spawn)
+	if !force_offset && !folder:
+		Global.update_layers.emit(0, spawn, "Sprite")
+		ImageTrimmer.set_thumbnail(spawn.treeitem)
+	var states = get_tree().get_nodes_in_group("StateButtons").size()
+	for i in states:
+		spawn.states.append(spawn.sprite_data.duplicate(true))
+	 
+	return spawn
+
+func fix_ids(spawn, fixed_ids):
+	spawn.sprite_id = fixed_ids["id"]
+	spawn.parent_id = fixed_ids["parent_id"]
