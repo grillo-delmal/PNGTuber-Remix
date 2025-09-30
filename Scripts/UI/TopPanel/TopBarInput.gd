@@ -11,10 +11,17 @@ var settings = preload("res://UI/EditorUI/TopUI/Components/Settings_popup.tscn")
 
 var tutorial = preload("res://UI/EditorUI/TopUI/Components/tutorial_pop_up.tscn")
 
+var file_submenu_item : PopupMenu = PopupMenu.new()
+
 func _ready():
 	get_viewport().transparent_bg = false
 	RenderingServer.set_default_clear_color(Color.SLATE_GRAY)
 	files.get_popup().connect("id_pressed",choosing_files)
+	var import_file_items = ["TR_ADD_IMAGE", "TR_ADD_APPENDAGE", "TR_PSD_IMPORT"]
+	for i in import_file_items:
+		file_submenu_item.add_item(i)
+	files.get_popup().set_item_submenu_node(4, file_submenu_item)
+	file_submenu_item.connect("id_pressed",choosing_file_import)
 	mode.get_popup().connect("id_pressed",choosing_mode)
 	bgcolor.get_popup().connect("id_pressed",choosing_bg_color)
 	about.get_popup().connect("id_pressed",choosing_about)
@@ -45,7 +52,6 @@ func update_window_button() -> void:
 		if !window.borderless: continue
 		menu.add_item("Edit Windows", 100)
 		break
-
 
 func check_auto_saves():
 	if !DirAccess.dir_exists_absolute(OS.get_executable_path().get_base_dir() + "/autosaves"):
@@ -96,12 +102,8 @@ func choosing_files(id):
 			main.load_file()
 		3:
 			main.save_as_file()
-		4:
-			main.load_sprites()
 		5:
 			%TempPopUp.popup()
-		6:
-			main.load_append_sprites()
 		8:
 			if Global.save_path:
 				SaveAndLoad.save_file(Global.save_path)
@@ -125,8 +127,17 @@ func choosing_files(id):
 				SaveAndLoad.save_file(Global.save_path)
 				await get_tree().physics_frame
 				SaveAndLoad.load_file(Global.save_path)
-		13:
+
+func choosing_file_import(id):
+	var main = Global.main
+	match id:
+		0:
+			main.load_sprites()
+		1:
+			main.load_append_sprites()
+		2:
 			main.import_psd()
+
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("save"):

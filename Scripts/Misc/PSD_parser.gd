@@ -35,13 +35,11 @@ static func open_photoshop_file(path: String) -> Array:
 	if image_resources_length > 0:
 		psd_file.seek(psd_file.get_position() + image_resources_length)
 
-
 	if is_psb:
 		psd_file.get_64()
 	else:
 		psd_file.get_32()
 
-	# Layer info length
 	var _layer_info_length: int
 	if is_psb:
 		_layer_info_length = psd_file.get_64()
@@ -53,11 +51,12 @@ static func open_photoshop_file(path: String) -> Array:
 		layer_count = -layer_count
 
 	var psd_layers: Array[Dictionary] = []
-	
+
+	var cons_rand_id = int(randi()/ 2)
 	for i in layer_count:
 		var layer: Dictionary = {
-			"id": randi(),
-			"parent_id": 0, 
+			"id": 0, # will set from 'lyid'
+			"parent_id": 0,
 			"name": "Layer %s" % i,
 			"type": "layer",
 			"visible": true,
@@ -86,10 +85,10 @@ static func open_photoshop_file(path: String) -> Array:
 		psd_file.seek(psd_file.get_position() + 8)
 
 		layer["opacity"] = psd_file.get_8() / 255.0
-		psd_file.get_8() 
+		psd_file.get_8()
 		var flags := psd_file.get_8()
 		layer["visible"] = flags & 2 != 2
-		psd_file.get_8() 
+		psd_file.get_8()
 
 		var extra_data_field_length := psd_file.get_32()
 		var extra_start := psd_file.get_position()
@@ -125,6 +124,8 @@ static func open_photoshop_file(path: String) -> Array:
 
 			var block_start := psd_file.get_position()
 
+			if key == "lyid":
+				layer["id"] = psd_file.get_32() + cons_rand_id
 			if key == "lsct":
 				var section_type := psd_file.get_32()
 				if section_type == 1 or section_type == 2:
@@ -133,6 +134,7 @@ static func open_photoshop_file(path: String) -> Array:
 					layer["type"] = "end_folder"
 				else:
 					layer["type"] = "layer"
+
 			var to_seek := block_start + ((length + 1) & ~1)
 			if to_seek > extra_end:
 				psd_file.seek(extra_end)
@@ -140,34 +142,38 @@ static func open_photoshop_file(path: String) -> Array:
 			else:
 				psd_file.seek(to_seek)
 
-		psd_layers.append(layer)
+		if layer["id"] == 0:
+			layer["id"] = randi()
 
+		psd_layers.append(layer)
 	var folder_stack: Array[int] = []
 	for idx in range(psd_layers.size() - 1, -1, -1):
 		var entry := psd_layers[idx]
 		var t = entry["type"]
 		if t == "folder":
+			if folder_stack.size() > 0:
+				entry["parent_id"] = folder_stack[folder_stack.size() - 1]
+			else:
+				entry["parent_id"] = 0
 			folder_stack.append(entry["id"])
 		elif t == "end_folder":
 			if folder_stack.size() > 0:
 				folder_stack.pop_back()
 		elif t == "layer":
 			if folder_stack.size() > 0:
-				entry["parent_id"] = folder_stack[-1]
+				entry["parent_id"] = folder_stack[folder_stack.size() - 1]
 			else:
 				entry["parent_id"] = 0
-
 	for layer in psd_layers:
 		for channel in layer["channels"]:
 			channel["data_offset"] = psd_file.get_position()
 			var file_len := psd_file.get_length()
 			if typeof(channel["length"]) != TYPE_INT:
-				push_error("Invalid channel length; setting 0")
 				channel["length"] = 0
 			if channel["length"] < 0 or channel["length"] > file_len:
-				push_error("Suspicious channel length: %s" % str(channel["length"]))
 				channel["length"] = max(0, file_len - psd_file.get_position())
 			psd_file.seek(psd_file.get_position() + channel["length"])
+
 	for layer in psd_layers:
 		if layer["type"] != "layer":
 			continue
@@ -176,28 +182,30 @@ static func open_photoshop_file(path: String) -> Array:
 			layer["image"] = image
 		else:
 			layer["image"] = null
+
 	psd_file.close()
 
 	var result := []
 	for layer in psd_layers:
 		if layer["type"] == "end_folder":
 			continue
-		var offset = Vector2(
-		layer["left"] - doc_width / 2 + (layer["right"] - layer["left"]) / 2,
-		layer["top"] - doc_height / 2 + (layer["bottom"] - layer["top"]) / 2)
+		var offset = Vector2()
+		offset.x = layer["left"] - doc_width / 2 + (layer["right"] - layer["left"]) / 2
+		offset.y = layer["top"] - doc_height / 2 + (layer["bottom"] - layer["top"]) / 2
 		
-		var entry := {
-			"id": layer["id"],
-			"parent_id": layer["parent_id"],
-			"type": layer["type"],
-			"name": layer["name"],
-			"image": layer["image"],
-			"visible": layer["visible"],
-			"opacity": layer["opacity"],
-			"offset": offset,
-		}
+		var entry := {}
+		entry["id"] = layer["id"]
+		entry["parent_id"] = layer["parent_id"]
+		entry["type"] = layer["type"]
+		entry["name"] = layer["name"]
+		entry["image"] = layer["image"]
+		entry["visible"] = layer["visible"]
+		entry["opacity"] = layer["opacity"]
+		entry["offset"] = offset
 		result.append(entry)
+
 	return result
+
 
 static func get_signed_16(file: FileAccess) -> int:
 	var buffer := file.get_buffer(2)
