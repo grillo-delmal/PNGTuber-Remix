@@ -830,7 +830,7 @@ func load_images_from_psd(path : String):
 	trim = false
 	should_offset = false
 	for layer in loaded_layers:
-		print(layer)
+		#print(layer)
 		if layer["type"] == "layer":
 			var image_data : ImageData = ImageData.new()
 			import_png(layer["image"], null, image_data, false, false)

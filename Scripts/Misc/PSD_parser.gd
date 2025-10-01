@@ -181,7 +181,10 @@ static func open_photoshop_file(path: String) -> Array:
 		if image != null and not image.is_empty():
 			layer["image"] = image
 		else:
-			layer["image"] = null
+			var placeholder = Image.create(32, 32, false, Image.FORMAT_RGBA8)
+			placeholder.fill(Color(0, 0, 0, 0))
+			
+			layer["image"] = placeholder
 
 	psd_file.close()
 
@@ -332,6 +335,9 @@ static func decode_psd_layer(psd_file: FileAccess, layer: Dictionary, is_psb: bo
 	var pixel_count = layer["width"] * layer["height"]
 	var img_data := PackedByteArray()
 	img_data.resize(pixel_count * 4)
+
+	var fully_transparent := true
+
 	for p in range(pixel_count):
 		var r := 255
 		var g := 255
@@ -345,10 +351,20 @@ static func decode_psd_layer(psd_file: FileAccess, layer: Dictionary, is_psb: bo
 			b = img_channels[2][p]
 		if img_channels.has(-1):
 			a = img_channels[-1][p]
+
 		var base := p * 4
 		img_data[base + 0] = r
 		img_data[base + 1] = g
 		img_data[base + 2] = b
 		img_data[base + 3] = a
+
+		if a > 0:
+			fully_transparent = false
+
+	# if no channel data OR fully transparent, return tiny placeholder
+	if img_channels.size() == 0 or fully_transparent:
+		var placeholder := Image.create(32, 32, false, Image.FORMAT_RGBA8)
+		placeholder.fill(Color(0, 0, 0, 0))
+		return placeholder
 
 	return Image.create_from_data(layer["width"], layer["height"], false, Image.FORMAT_RGBA8, img_data)
