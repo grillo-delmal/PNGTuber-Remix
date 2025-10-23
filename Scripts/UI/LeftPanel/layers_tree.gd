@@ -1,155 +1,154 @@
 extends Tree
 
-var held_item : Array[TreeItem]
+var held_item: Array[TreeItem] = []
 
 
 func _get_drag_data(_at_position: Vector2) -> Variant:
 	drop_mode_flags = 3
 	if held_item.is_empty():
-		for items in Global.held_sprites:
-			held_item.append(items.treeitem)
-		
-	#	print(held_item)
-		return held_item
-	else:
-		return held_item
-#	else:
-	#	return null
+		for entry in Global.held_sprites:
+			if entry.treeitem:
+				held_item.append(entry.treeitem)
+	return held_item
 
-func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
-	return data is Array[TreeItem]
+
+func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
+	if not (data is Array[TreeItem]):
+		return false
+	drop_mode_flags = 3
+	return true
+
 
 func _drop_data(at_position: Vector2, data: Variant) -> void:
-	if !data.is_empty():
-		var other = get_item_at_position(at_position)
+	if data and not data.is_empty():
+		var other: TreeItem = get_item_at_position(at_position)
 		for item in data:
-			if item != null && is_instance_valid(item):
-				if other != null && is_instance_valid(other):
-					if other is TreeItem:
-						move_stuff(item, other, at_position)
+			if _valid_items(item, other):
+				move_stuff(item, other, at_position)
 	held_item.clear()
 	drop_mode_flags = 3
 
-func move_stuff(item : TreeItem, other_item : TreeItem, at_position):
-	var true_pos = get_drop_section_at_position(at_position)
-	var items = get_all_layeritems(item, true)
-	
-	if other_item in items:
-		print("can't drop")
-		return
-	
-	if other_item == item:
-		print("can't drop")
-		return
-	
-	#print(true_pos)
-	
-	var og_pos = item.get_metadata(0).sprite_object.global_position
-	print(true_pos)
-	if true_pos == 0:
-		item.get_parent().remove_child(item)
-		other_item.add_child(item)
-		if other_item == get_root():
-			item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
-			item.get_metadata(0).sprite_object.parent_id = 0
-			Global.sprite_container.add_child(item.get_metadata(0).sprite_object)
-			recolor_layer()
-		else:
-			item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
-			other_item.get_metadata(0).sprite_object.get_node("%Sprite2D").add_child(item.get_metadata(0).sprite_object)
-			item.get_metadata(0).sprite_object.parent_id = other_item.get_metadata(0).sprite_object.sprite_id
-		item.get_metadata(0).sprite_object.global_position = og_pos
-		item.get_metadata(0).sprite_object.sprite_data.position = item.get_metadata(0).sprite_object.position
-		item.get_metadata(0).sprite_object.save_state(Global.current_state)
-		await get_tree().physics_frame
-		item.get_metadata(0).sprite_object.get_node("%Dragger").global_position = og_pos
-		recolor_layer()
-		
-	elif true_pos == -1:
-		if other_item.get_parent() != item.get_parent():
-			if other_item.get_parent() == get_root():
-				item.get_metadata(0).sprite_object.parent_id = 0
-				item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
-				Global.sprite_container.add_child(item.get_metadata(0).sprite_object)
-			else:
-				if other_item == get_root():
-					item.get_metadata(0).sprite_object.parent_id = 0
-					item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
-					Global.sprite_container.add_child(item.get_metadata(0).sprite_object)
-					item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object,item.get_index())
-				else:
-					item.move_before(other_item)
-					item.get_metadata(0).sprite_object.parent_id = other_item.get_metadata(0).sprite_object.parent_id
-					item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
-					other_item.get_metadata(0).sprite_object.get_parent().add_child(item.get_metadata(0).sprite_object)
-					item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object,item.get_index())
-				
-			item.get_metadata(0).sprite_object.global_position = og_pos
-			item.get_metadata(0).sprite_object.sprite_data.position = item.get_metadata(0).sprite_object.position
-			
-			item.get_metadata(0).sprite_object.save_state(Global.current_state)
-			await get_tree().physics_frame
-			item.get_metadata(0).sprite_object.get_node("%Dragger").global_position = og_pos
-			recolor_layer()
-		else:
-			item.move_before(other_item)
-			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object,item.get_index())
-			recolor_layer()
 
-	elif true_pos == 1:
-		if other_item.get_parent() != item.get_parent():
-			if other_item.get_parent() == get_root():
-				item.get_metadata(0).sprite_object.parent_id = 0
-				item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
-				Global.sprite_container.add_child(item.get_metadata(0).sprite_object)
-				
-			else:
-				if other_item == get_root():
-					item.get_metadata(0).sprite_object.parent_id = 0
-					item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
-					Global.sprite_container.add_child(item.get_metadata(0).sprite_object)
-					item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(item.get_index(), 0, item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1))
-				else:
-					item.move_after(other_item)
-					item.get_metadata(0).sprite_object.parent_id = other_item.get_metadata(0).sprite_object.parent_id
-					item.get_metadata(0).sprite_object.get_parent().remove_child(item.get_metadata(0).sprite_object)
-					other_item.get_metadata(0).sprite_object.get_parent().add_child(item.get_metadata(0).sprite_object)
-					item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(item.get_index()+1, 0, item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1))
-			await get_tree().physics_frame
-			item.get_metadata(0).sprite_object.global_position = og_pos
-			item.get_metadata(0).sprite_object.sprite_data.position = item.get_metadata(0).sprite_object.position
-			item.get_metadata(0).sprite_object.save_state(Global.current_state)
-			
-			item.get_metadata(0).sprite_object.get_node("%Dragger").global_position = og_pos
-			recolor_layer()
-				
-		else:
-			item.move_after(other_item)
-			var count = item.get_metadata(0).sprite_object.get_parent().get_child_count() - 1
-			item.get_metadata(0).sprite_object.get_parent().move_child(item.get_metadata(0).sprite_object, clamp(other_item.get_metadata(0).sprite_object.get_index()+1, 0, count))
-			recolor_layer()
-		
+func move_stuff(item: TreeItem, other_item: TreeItem, at_position: Vector2) -> void:
+	var true_pos := get_drop_section_at_position(at_position)
+	var all_children := get_all_layeritems(item, true)
+
+	if other_item in all_children or other_item == item:
+		print("can't drop")
+		return
+
+	var meta = item.get_metadata(0)
+	if meta == null or meta.sprite_object == null:
+		push_error("move_stuff: missing metadata or sprite_object")
+		return
+
+	var sprite = meta.sprite_object
+	var og_pos: Vector2 = sprite.global_position
+
+	match true_pos:
+		0:
+			_move_into(item, other_item, sprite, og_pos)
+		-1:
+			_move_above(item, other_item, sprite, og_pos)
+		1:
+			_move_below(item, other_item, sprite, og_pos)
+
 	Global.reinfo.emit()
 
-func recolor_layer():
+
+func _move_into(item: TreeItem, other_item: TreeItem, sprite, og_pos: Vector2) -> void:
+	item.get_parent().remove_child(item)
+	other_item.add_child(item)
+
+	if other_item == get_root():
+		_move_sprite_to_root(sprite)
+	else:
+		_attach_sprite_to_parent(sprite, other_item)
+
+	await _finalize_move(sprite, og_pos)
+	recolor_layer()
+
+
+func _move_above(item: TreeItem, other_item: TreeItem, sprite, og_pos: Vector2) -> void:
+	var other_parent := other_item.get_parent()
+	var old_parent := item.get_parent()
+	
+	# Case 1: Different parents — must reparent first
+	if other_parent != old_parent:
+		old_parent.remove_child(item)
+		other_parent.add_child(item)
+		item.move_before(other_item)
+
+		# Sync sprite parent
+		var new_sprite_parent = other_item.get_metadata(0).sprite_object.get_parent()
+		if sprite.get_parent() != new_sprite_parent:
+			sprite.get_parent().remove_child(sprite)
+			new_sprite_parent.add_child(sprite)
+			new_sprite_parent.move_child(sprite, item.get_index())
+		sprite.parent_id = new_sprite_parent.get_instance_id()
+	else:
+		item.move_before(other_item)
+		sprite.get_parent().move_child(sprite, item.get_index())
+
+	await _finalize_move(sprite, og_pos)
+	recolor_layer()
+
+func _move_below(item: TreeItem, other_item: TreeItem, sprite, og_pos: Vector2) -> void:
+	var other_parent := other_item.get_parent()
+	var old_parent := item.get_parent()
+
+	if other_parent != old_parent:
+		old_parent.remove_child(item)
+		other_parent.add_child(item)
+		item.move_after(other_item)
+		var new_sprite_parent = other_item.get_metadata(0).sprite_object.get_parent()
+		if sprite.get_parent() != new_sprite_parent:
+			sprite.get_parent().remove_child(sprite)
+			new_sprite_parent.add_child(sprite)
+			new_sprite_parent.move_child(sprite, item.get_index())
+		sprite.parent_id = new_sprite_parent.get_instance_id()
+	else:
+		item.move_after(other_item)
+		sprite.get_parent().move_child(sprite, item.get_index())
+	await _finalize_move(sprite, og_pos)
+	recolor_layer()
+
+func _valid_items(item: Variant, other: Variant) -> bool:
+	return item != null and is_instance_valid(item) and other != null and is_instance_valid(other) and other is TreeItem
+
+func _move_sprite_to_root(sprite) -> void:
+	if sprite.get_parent():
+		sprite.get_parent().remove_child(sprite)
+	sprite.parent_id = 0
+	Global.sprite_container.add_child(sprite)
+
+
+func _attach_sprite_to_parent(sprite, other_item: TreeItem) -> void:
+	var other_sprite = other_item.get_metadata(0).sprite_object
+	var container = other_sprite.get_node("%Sprite2D")
+	if sprite.get_parent():
+		sprite.get_parent().remove_child(sprite)
+	container.add_child(sprite)
+	sprite.parent_id = other_sprite.sprite_id
+
+
+func _finalize_move(sprite, og_pos: Vector2) -> void:
+	sprite.global_position = og_pos
+	sprite.sprite_data.position = sprite.position
+	sprite.save_state(Global.current_state)
+	await get_tree().physics_frame
+	var dragger = sprite.get_node("%Dragger")
+	if dragger:
+		dragger.global_position = og_pos
+	recolor_layer()
+
+func recolor_layer() -> void:
 	%LayersScripts.correct_recolor()
 
-func get_all_layeritems(layeritem, recursive) -> Array:
-	var children := []
+func get_all_layeritems(layeritem: TreeItem, recursive: bool) -> Array:
+	var children: Array = []
 	for child in layeritem.get_children():
 		children.append(child)
-		
-		if recursive and child.get_child_count():
+		if recursive and child.get_child_count() > 0:
 			children.append_array(get_all_layeritems(child, true))
-		
-	return children
-
-func get_all_layeritems_with_parent(layeritem, recursive) -> Array:
-	var children := []
-	for child in layeritem.get_children():
-		children.append({child = child, parent = layeritem})
-		
-		if recursive and child.get_child_count():
-			children.append_array(get_all_layeritems_with_parent(child, true))
-		
 	return children

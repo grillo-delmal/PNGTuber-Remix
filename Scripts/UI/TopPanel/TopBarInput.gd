@@ -27,9 +27,7 @@ func _ready():
 	about.get_popup().connect("id_pressed",choosing_about)
 	%WindowButton.get_popup().connect("id_pressed",choosing_window)
 	%EditButton.get_popup().connect("id_pressed",choosing_edit)
-	
 	Global.mode_changed.connect(on_mode_changed)
-
 	update_window_button()
 	
 	#print(OS.get_executable_path().get_base_dir() + "/autosaves")
@@ -37,7 +35,6 @@ func _ready():
 		
 	await get_tree().physics_frame
 	choosing_mode(Settings.theme_settings.mode)
-
 
 func update_window_button() -> void:
 	var menu := %WindowButton.get_popup() as PopupMenu
@@ -137,7 +134,6 @@ func choosing_file_import(id):
 			main.load_append_sprites()
 		2:
 			main.import_psd()
-
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("save"):

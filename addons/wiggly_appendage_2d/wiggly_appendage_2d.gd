@@ -80,8 +80,19 @@ var prev_pos : Array = []
 var stretch_seg : float = 0.0
 var test : Vector2 = Vector2.ZERO
 
+
+var prev_root_pos: Vector2
+var smoothed_root_pos: Vector2
+@export_range(0.0, 1.0) var root_follow_smoothness := 0.65
+
+
+
 func _ready():
 	reset()
+	prev_root_pos = global_position
+	smoothed_root_pos = global_position
+
+	
 
 func _physics_process(delta):
 	if only_process_when_visible and not is_visible_in_tree():
@@ -91,37 +102,32 @@ func _physics_process(delta):
 		var anchor_pos = anchor_target.position
 		var total_length = root_pos.distance_to(anchor_pos)
 	current_segment_length = _get_true_segment_length()
-	# Physics pass
+	
 	for i in range(physics_points.size()):
 		if i == 0:
 			_process_root_point(physics_points[i], delta)
 		else:
 			_process_point(physics_points[i], delta, i)
-	# Stick constraints
+	
 	if anchor_target != null && is_instance_valid(anchor_target):
 		_apply_verlet_anchor(delta)
 	_update_line()
-
 
 func _verlet_integration(delta):
 	for i in range(physics_points.size()):
 		if i == 0:
 			continue
-		
 		var point = physics_points[i]
 		var current_pos = point[POSITION]
 		var prev_pos = point[PREVIOUS_POSITION] if point.size() > 4 else current_pos
-		
 		var velocity = current_pos - prev_pos
 		if velocity.length() < 0.01:
 			velocity = Vector2.ZERO
-		var new_pos = current_pos + velocity + Vector2(0, 1650) * delta * delta + velocity * 5.0 * delta * delta
-		
+		var acceleration = gravity
+		var new_pos = current_pos + velocity + acceleration * delta * delta
 		point[PREVIOUS_POSITION] = current_pos
 		point[POSITION] = new_pos
-		
 		physics_points[i] = point
-
 
 func _apply_verlet_anchor(delta):
 	_verlet_integration(delta)
@@ -130,38 +136,28 @@ func _apply_verlet_anchor(delta):
 	physics_points[0] = root
 	if anchor_target != null and is_instance_valid(anchor_target):
 		physics_points[-1][POSITION] = anchor_target.global_position
-		
-		
-		
-		var anchor = anchor_target.global_transform.get_origin()
+		var anchor = anchor_target.global_position
 		var root_pos = global_position
 		var max_reach = segment_length * (physics_points.size() - 1)
 		var max_stretch_reached = max_length_stretch * (physics_points.size() - 1)
 		if keep_length:
-			# Check if anchor is too far away
 			var to_anchor = anchor - root_pos
 			var dir = to_anchor.normalized()
 			physics_points[-1][POSITION] = root_pos + dir * current_segment_length
 		else:
-			var anchor_pos = anchor
-			var to_anchor = anchor_pos - root_pos
+			var to_anchor = anchor - root_pos
 			var distance_to_anchor = to_anchor.length()
 			max_reach = segment_length * (physics_points.size() - 1)
 			var stretch_factor = clamp(distance_to_anchor / max_reach, 1.0, max_length_stretch / segment_length)
 			var stretched_segment_length = segment_length * stretch_factor
 			stretch_seg = stretched_segment_length
-
-						
-			if to_anchor.length() > current_segment_length &&  max_length_stretch != 999999.0:
+			if to_anchor.length() > current_segment_length && max_length_stretch != 999999.0:
 				var dir = Vector2.ZERO
 				if distance_to_anchor > 0:
 					dir = to_anchor.normalized()
-
 				for i in range(physics_points.size()):
 					physics_points[i][POSITION] = root_pos + dir * (stretched_segment_length * i)
-
 			else:
-				# Within reach → allow normal following
 				physics_points[-1][POSITION] = anchor
 	apply_constraints_merged()
 	
@@ -295,10 +291,12 @@ func _process_point(point: Array, delta: float, index: int):
 	point[POSITION] = prev_point[POSITION] + Vector2(current_segment_length, 0).rotated(point_rotation)
 
 
-
 func _process_root_point(point: Array, delta: float):
-	point[POSITION] = get_global_position()
-	# Use node's rotation + rest offset so "rest direction" works in any orientation.
+	var current_pos = get_global_position()
+	smoothed_root_pos = smoothed_root_pos.lerp(current_pos, 1.0 - pow(1.0 - root_follow_smoothness, delta * 60.0))
+	point[POSITION] = smoothed_root_pos
+	prev_root_pos = current_pos
+
 	if anchor_target != null and is_instance_valid(anchor_target):
 		point[ROTATION] = 0.0
 	else:
