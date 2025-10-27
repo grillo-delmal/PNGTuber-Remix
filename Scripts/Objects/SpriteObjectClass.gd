@@ -277,11 +277,11 @@ func reparent_obj(parent):
 func image_replaced(image_date : ImageData):
 	if !get_value("folder"):
 		if image_date == referenced_data:
-			var texture = SaveAndLoad.check_flips(image_date.runtime_texture, self)
+			var texture = ImageTextureLoaderManager.check_flips(image_date.runtime_texture, self)
 			sprite_object.texture.diffuse_texture = texture
 			ImageTrimmer.set_thumbnail(treeitem)
 		if image_date == referenced_data_normal:
-			var texture = SaveAndLoad.check_flips(image_date.runtime_texture, self)
+			var texture = ImageTextureLoaderManager.check_flips(image_date.runtime_texture, self)
 			sprite_object.texture.normal_texture = texture
 	else:
 		return

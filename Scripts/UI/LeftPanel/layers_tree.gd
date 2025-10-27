@@ -152,3 +152,14 @@ func get_all_layeritems(layeritem: TreeItem, recursive: bool) -> Array:
 		if recursive and child.get_child_count() > 0:
 			children.append_array(get_all_layeritems(child, true))
 	return children
+
+
+func get_all_layeritems_with_parent(layeritem, recursive) -> Array:
+	var children := []
+	for child in layeritem.get_children():
+		children.append({child = child, parent = layeritem})
+		
+		if recursive and child.get_child_count():
+			children.append_array(get_all_layeritems_with_parent(child, true))
+		
+	return children

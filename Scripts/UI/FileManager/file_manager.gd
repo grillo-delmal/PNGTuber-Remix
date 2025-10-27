@@ -62,7 +62,7 @@ func _on_add_image_button_pressed() -> void:
 	load_type = LoadType.Images
 	%FileDialog.filters = ["*.png, *.apng, *.gif", "*.png", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
 	$FileDialog.file_mode = 1
-	%OffsetSprite.button_pressed = SaveAndLoad.should_offset
+	%OffsetSprite.button_pressed = ImageTextureLoaderManager.should_offset
 	%FileDialog.popup()
 
 func _on_replace_button_pressed() -> void:
@@ -128,24 +128,24 @@ func check_type(path, image_data):
 func check_image_type(path, image_data):
 	var apng_test = AImgIOAPNGImporter.load_from_file(path)
 	if path.get_extension() == "gif":
-		SaveAndLoad.import_gif(path, image_data)
+		ImageTextureLoaderManager.import_gif(path, image_data)
 	elif apng_test != ["No frames", null]:
-		SaveAndLoad.import_apng_sprite(path, image_data)
+		ImageTextureLoaderManager.import_apng_sprite(path, image_data)
 	else:
-		SaveAndLoad.import_png_from_file(path, null, image_data)
+		ImageTextureLoaderManager.import_png_from_file(path, null, image_data)
 
 func _on_offset_sprite_toggled(toggled_on: bool) -> void:
-	SaveAndLoad.should_offset = toggled_on
+	ImageTextureLoaderManager.should_offset = toggled_on
 
 func _on_confirm_trim_confirmed() -> void:
-	SaveAndLoad.trim = true
+	ImageTextureLoaderManager.trim = true
 	if load_type == LoadType.Images:
 		load_images()
 	elif load_type == LoadType.Replace:
 		replace_image(path_placeholder)
 
 func _on_confirm_trim_canceled() -> void:
-	SaveAndLoad.trim = false
+	ImageTextureLoaderManager.trim = false
 	if load_type == LoadType.Images:
 		load_images()
 	elif load_type == LoadType.Replace:
@@ -157,7 +157,7 @@ func _on_file_dialog_files_selected(paths: PackedStringArray) -> void:
 		%ConfirmTrim.popup_centered()
 	else:
 		load_images()
-		SaveAndLoad.trim = false
+		ImageTextureLoaderManager.trim = false
 
 func _on_file_dialog_file_selected(path: String) -> void:
 	path_placeholder = path
@@ -165,7 +165,7 @@ func _on_file_dialog_file_selected(path: String) -> void:
 		%ConfirmTrim.popup_centered()
 	else:
 		replace_image(path_placeholder)
-		SaveAndLoad.trim = false
+		ImageTextureLoaderManager.trim = false
 
 func replace_image(path):
 	var image_data = held_items_assets[0]

@@ -85,7 +85,7 @@ func replace_texture_image(normal : bool = false):
 				if !i.get_value("folder"):
 					i.used_image_id_normal = meta.id
 					i.referenced_data_normal = meta
-					var norm = SaveAndLoad.check_flips(meta.runtime_texture, i)
+					var norm = ImageTextureLoaderManager.check_flips(meta.runtime_texture, i)
 					i.get_node("%Sprite2D").texture.normal_texture = norm
 					ImageTrimmer.set_thumbnail(i.treeitem)
 		else:
@@ -93,7 +93,7 @@ func replace_texture_image(normal : bool = false):
 				if !i.get_value("folder"):
 					i.used_image_id = meta.id
 					i.referenced_data = meta
-					var diff = SaveAndLoad.check_flips(meta.runtime_texture, i)
+					var diff = ImageTextureLoaderManager.check_flips(meta.runtime_texture, i)
 					i.get_node("%Sprite2D").texture.diffuse_texture = diff
 					ImageTrimmer.set_thumbnail(i.treeitem)
 		Global.reinfo.emit()

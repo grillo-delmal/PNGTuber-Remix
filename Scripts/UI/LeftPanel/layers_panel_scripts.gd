@@ -112,10 +112,10 @@ func _on_duplicate_button_pressed():
 			Global.sprite_container.add_child(obj)
 			if !sprite.get_value("folder"):
 				var canv : CanvasTexture= CanvasTexture.new()
-				var diff = SaveAndLoad.check_flips(obj.referenced_data.runtime_texture, obj)
+				var diff = ImageTextureLoaderManager.check_flips(obj.referenced_data.runtime_texture, obj)
 				canv.diffuse_texture = diff
 				if obj.used_image_id_normal != 0:
-					var norm = SaveAndLoad.check_flips(obj.referenced_data_normal.runtime_texture, obj)
+					var norm = ImageTextureLoaderManager.check_flips(obj.referenced_data_normal.runtime_texture, obj)
 					canv.normal_texture = norm
 				obj.get_node("%Sprite2D").texture = canv
 
@@ -175,10 +175,10 @@ func _on_duplicate_button_pressed():
 				
 				if !t.get_value("folder"):
 					var canv : CanvasTexture= CanvasTexture.new()
-					var diff = SaveAndLoad.check_flips(obj_to_spawn.referenced_data.runtime_texture, obj_to_spawn)
+					var diff = ImageTextureLoaderManager.check_flips(obj_to_spawn.referenced_data.runtime_texture, obj_to_spawn)
 					canv.diffuse_texture = diff
 					if obj_to_spawn.used_image_id_normal != 0:
-						var norm = SaveAndLoad.check_flips(obj_to_spawn.referenced_data_normal.runtime_texture, obj_to_spawn)
+						var norm = ImageTextureLoaderManager.check_flips(obj_to_spawn.referenced_data_normal.runtime_texture, obj_to_spawn)
 						canv.normal_texture = norm
 						
 					obj_to_spawn.get_node("%Sprite2D").texture = canv
@@ -261,7 +261,7 @@ func _on_add_appendage_pressed() -> void:
 
 func _on_flip_h_pressed() -> void:
 	var obj = Global.held_sprites[0]
-	if SaveAndLoad.check_valid(obj, obj.referenced_data):
+	if ImageTextureLoaderManager.check_valid(obj, obj.referenced_data):
 		print("d")
 		obj.flipped_h = !obj.flipped_h
 		print(obj.flipped_h)
@@ -273,7 +273,7 @@ func _on_flip_h_pressed() -> void:
 
 func _on_flip_v_pressed() -> void:
 	var obj = Global.held_sprites[0]
-	if SaveAndLoad.check_valid(obj, obj.referenced_data):
+	if ImageTextureLoaderManager.check_valid(obj, obj.referenced_data):
 		obj.flipped_v = !obj.flipped_v
 		check_flips(obj)
 		ImageTrimmer.set_thumbnail(Global.held_sprites[0].treeitem)
@@ -283,7 +283,7 @@ func _on_flip_v_pressed() -> void:
 
 func _on_rotate_image_pressed() -> void:
 	var obj = Global.held_sprites[0]
-	if SaveAndLoad.check_valid(obj, obj.referenced_data):
+	if ImageTextureLoaderManager.check_valid(obj, obj.referenced_data):
 		obj.rotated = wrap(obj.rotated + 1, 0, 4)
 		check_flips(obj)
 		ImageTrimmer.set_thumbnail(Global.held_sprites[0].treeitem)
@@ -312,8 +312,8 @@ func _on_unlink_button_pressed() -> void:
 
 func check_flips(obj):
 	var sprite = obj.get_node("%Sprite2D")
-	var diffused = SaveAndLoad.check_flips(obj.referenced_data.runtime_texture,obj )
+	var diffused = ImageTextureLoaderManager.check_flips(obj.referenced_data.runtime_texture,obj )
 	sprite.texture.diffuse_texture = diffused
 	if obj.used_image_id_normal != 0:
-		var normal = SaveAndLoad.check_flips(obj.referenced_data_normal.runtime_texture, obj)
+		var normal = ImageTextureLoaderManager.check_flips(obj.referenced_data_normal.runtime_texture, obj)
 		sprite.texture.normal_texture = normal

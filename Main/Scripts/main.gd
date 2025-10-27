@@ -154,7 +154,7 @@ func _on_file_dialog_file_selected(path):
 					sprite_path = path
 					%ConfirmTrim.popup_centered()
 			else:
-				SaveAndLoad.trim = false
+				ImageTextureLoaderManager.trim = false
 				%FileImporter.add_normal(path)
 		State.ImportPSD:
 			SaveAndLoad.load_images_from_psd(path)
