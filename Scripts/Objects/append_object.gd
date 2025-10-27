@@ -65,7 +65,6 @@ func desel():
 	%Origin.hide()
 	selected = false
 
-
 func correct_sprite_size(ret : bool = false):
 	var w = %Sprite2D.texture.get_image().get_size().y / 0.98
 	var l = %Sprite2D.texture.get_image().get_size().x / 5
@@ -74,7 +73,6 @@ func correct_sprite_size(ret : bool = false):
 	sprite_data.segm_length = l
 	if ret:
 		return [w, l]
-
 
 func _process(_delta):
 	if selected:
@@ -100,7 +98,6 @@ func _process(_delta):
 			%Sprite2D.curvature = 0.0
 		
 	%Grab.anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
-
 
 func wiggle_sprite():
 	var wiggle_val = sin(Global.tick*get_value("wiggle_freq"))*get_value("wiggle_amp")
@@ -164,7 +161,6 @@ func get_state(id):
 			
 		update_wiggle_parts()
 		set_anchor_sprite()
-#		animation()
 		set_blend(get_value("blend_mode"))
 		if get_value("one_shot"):
 			if referenced_data.is_apng:
@@ -177,7 +173,6 @@ func get_state(id):
 	elif states[id].is_empty():
 		states[id] = sprite_data.duplicate(true)
 
-
 func set_anchor_sprite(_placeholder = null):
 	if get_value("anchor_id") == null:
 		%Sprite2D.anchor_target = null
@@ -188,7 +183,6 @@ func set_anchor_sprite(_placeholder = null):
 				return
 			else:
 				%Sprite2D.anchor_target = null
-
 
 func update_wiggle_parts():
 	if %Sprite2D.segment_count != get_value("wiggle_segm"):

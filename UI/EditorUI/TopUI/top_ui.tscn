@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://bpmlfhv30o08l"]
+[gd_scene load_steps=13 format=3 uid="uid://bpmlfhv30o08l"]
 
 [ext_resource type="Script" uid="uid://buog53mcsao0g" path="res://Scripts/UI/TopPanel/top_ui.gd" id="2_fpnkx"]
 [ext_resource type="Script" uid="uid://bafvsv0wf438w" path="res://Scripts/Misc/OnlineLinks.gd" id="3_tep3f"]
 [ext_resource type="Script" uid="uid://caf875hofgogu" path="res://Scripts/UI/FormattedLocalizedLabel.gd" id="4_mle18"]
 [ext_resource type="Script" uid="uid://qy3riyrj7tll" path="res://Scripts/UI/TopPanel/TopBarInput.gd" id="4_r6evh"]
 [ext_resource type="Texture2D" uid="uid://bq4tg8ia2crwh" path="res://UI/Assets/LinksButtonImages/GithubLogo.png" id="6_0f73e"]
+[ext_resource type="PackedScene" uid="uid://dafcfpors4fb6" path="res://UI/EditorUI/TopUI/Components/model_optimizer.tscn" id="6_mle18"]
 [ext_resource type="Texture2D" uid="uid://kmyr2ks7oil4" path="res://UI/Assets/LinksButtonImages/RedditLogo.png" id="8_3p41m"]
 [ext_resource type="Texture2D" uid="uid://dt530lalergk0" path="res://DemoModels/Icons/BasicIcon.png" id="9_hrvuv"]
 [ext_resource type="Texture2D" uid="uid://bhidrbb01hfmq" path="res://DemoModels/Icons/BGIcon.png" id="10_apeyf"]
@@ -59,7 +60,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 14
 text = "TR_FILES"
-item_count = 10
+item_count = 11
 popup/item_0/text = "TR_NEW"
 popup/item_0/id = 0
 popup/item_1/text = "TR_OPEN"
@@ -78,8 +79,12 @@ popup/item_7/text = "TR_LIP_SYNC_CONFIG"
 popup/item_7/id = 10
 popup/item_8/text = "Switch Session"
 popup/item_8/id = 11
+popup/item_8/disabled = true
 popup/item_9/text = "TR_SAVE_RELOAD"
 popup/item_9/id = 12
+popup/item_10/text = "Model Optimizer"
+popup/item_10/id = 13
+popup/item_10/disabled = true
 
 [node name="EditButton" type="MenuButton" parent="TopBar/MarginContainer/HBox"]
 unique_name_in_owner = true
@@ -291,6 +296,27 @@ texture_disabled = ExtResource("8_3p41m")
 ignore_texture_size = true
 stretch_mode = 0
 
+[node name="EmptySpace2" type="Control" parent="CreditPopUp/VBoxContainer/GridContainer"]
+layout_mode = 2
+
+[node name="SocialLabel2" type="Label" parent="CreditPopUp/VBoxContainer/GridContainer"]
+layout_mode = 2
+text = "Websocket Doc"
+
+[node name="WebsocketDoc" type="TextureButton" parent="CreditPopUp/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = ExtResource("6_0f73e")
+texture_pressed = ExtResource("6_0f73e")
+texture_hover = ExtResource("6_0f73e")
+texture_disabled = ExtResource("6_0f73e")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="ModelOptimizer" parent="." instance=ExtResource("6_mle18")]
+unique_name_in_owner = true
+visible = false
+
 [node name="TempPopUp" type="PopupPanel" parent="."]
 unique_name_in_owner = true
 auto_translate_mode = 1
@@ -408,6 +434,7 @@ presets_visible = false
 [connection signal="pressed" from="TopBar/MarginContainer/HBox/DeselectButton" to="TopBarInput" method="_on_deselect_button_pressed"]
 [connection signal="pressed" from="CreditPopUp/VBoxContainer/GridContainer/GitHubButton" to="OnlineLinks" method="_on_git_hub_button_pressed"]
 [connection signal="pressed" from="CreditPopUp/VBoxContainer/GridContainer/RedditButton" to="OnlineLinks" method="_on_reddit_button_pressed"]
+[connection signal="pressed" from="CreditPopUp/VBoxContainer/GridContainer/WebsocketDoc" to="OnlineLinks" method="_on_websocket_doc_pressed"]
 [connection signal="pressed" from="TempPopUp/VBoxContainer/GridContainer/BasicTempButton" to="TopBarInput" method="_on_basic_temp_button_pressed"]
 [connection signal="pressed" from="TempPopUp/VBoxContainer/GridContainer/BGTempButton" to="TopBarInput" method="_on_bg_temp_button_pressed"]
 [connection signal="pressed" from="TempPopUp/VBoxContainer/GridContainer/NormalmTempButton" to="TopBarInput" method="_on_normalm_temp_button_pressed"]

@@ -123,10 +123,8 @@ func editor_blink():
 			else:
 				%Pos.modulate.a = 0.2
 		
-		%Blink.wait_time = 0.2 * Global.settings_dict.blink_speed
-		%Blink.start()
 		blinking = true
-		await  %Blink.timeout
+		await get_tree().create_timer(0.2 * Global.settings_dict.blink_speed, false, false).timeout
 		if actor.get_value("should_blink"):
 			if not actor.get_value("open_eyes"):
 				%Pos.modulate.a = 0.2
@@ -147,10 +145,8 @@ func blink():
 			else:
 				%Pos.hide()
 		
-		%Blink.wait_time = 0.2 * Global.settings_dict.blink_speed
-		%Blink.start()
 		blinking = true
-		await  %Blink.timeout
+		await get_tree().create_timer(0.2 * Global.settings_dict.blink_speed, false, false).timeout
 		if actor.get_value("should_blink"):
 			if not actor.get_value("open_eyes"):
 				%Pos.hide()
@@ -194,7 +190,7 @@ func reset_animations(_place_holder : int = 0):
 		reset_anim()
 
 func reset_anim():
-	if actor.is_apng or actor.img_animated:
+	if actor.referenced_data.is_apng or actor.referenced_data.img_animated:
 		animation_handler.index = 0
 		animation_handler.proper_apng_one_shot()
 	animation_handler.played_once = false

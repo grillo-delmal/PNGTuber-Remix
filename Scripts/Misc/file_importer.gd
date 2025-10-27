@@ -31,31 +31,31 @@ func import_appendage(path : String):
 func check_type(path, image_data, spawn):
 	var apng_test = AImgIOAPNGImporter.load_from_file(path)
 	if path.get_extension() == "gif":
-		SaveAndLoad.import_gif(path, image_data)
+		ImageTextureLoaderManager.import_gif(path, image_data)
 	elif apng_test != ["No frames", null]:
-		SaveAndLoad.import_apng_sprite(path, image_data)
+		ImageTextureLoaderManager.import_apng_sprite(path, image_data)
 	else:
-		SaveAndLoad.import_png_from_file(path,spawn,image_data)
+		ImageTextureLoaderManager.import_png_from_file(path,spawn,image_data)
 	Global.image_manager_data.append(image_data)
 	Global.add_new_image.emit(image_data)
 
 func add_normal(path):
 	var image_data :ImageData = ImageData.new()
 	if path.get_extension() == "gif":
-		SaveAndLoad.import_gif(path , image_data)
+		ImageTextureLoaderManager.import_gif(path , image_data)
 	else:
 		var apng_test = AImgIOAPNGImporter.load_from_file(path)
 		if apng_test != ["No frames", null]:
-			SaveAndLoad.import_apng_sprite(path , image_data)
+			ImageTextureLoaderManager.import_apng_sprite(path , image_data)
 		else:
 			var img = Image.load_from_file(path)
-			if SaveAndLoad.trim:
+			if ImageTextureLoaderManager.trim:
 				if !Global.held_sprites[0].referenced_data.image_data.is_empty():
 					var og_image = Image.new()
 					og_image.load_png_from_buffer(Global.held_sprites[0].referenced_data.image_data)
 					img = ImageTrimmer.trim_normal(og_image, img)
 					
-			if SaveAndLoad.trim:
+			if ImageTextureLoaderManager.trim:
 				if Settings.theme_settings.save_raw_sprite:
 					var buffer = FileAccess.get_file_as_bytes(path)
 					image_data.image_data = buffer
@@ -68,8 +68,8 @@ func add_normal(path):
 			image_data.runtime_texture = texture
 	
 	var normal = image_data.runtime_texture
-	if SaveAndLoad.check_valid(Global.held_sprites[0], image_data):
-		normal = SaveAndLoad.check_flips(image_data.runtime_texture, Global.held_sprites[0])
+	if ImageTextureLoaderManager.check_valid(Global.held_sprites[0], image_data):
+		normal = ImageTextureLoaderManager.check_flips(image_data.runtime_texture, Global.held_sprites[0])
 	Global.held_sprites[0].referenced_data_normal = image_data
 	Global.held_sprites[0].used_image_id_normal = image_data.id
 	Global.image_manager_data.append(image_data)
@@ -81,23 +81,23 @@ func add_normal(path):
 func replace_texture(path : String):
 	var image_data :ImageData = ImageData.new()
 	if path.get_extension().to_lower() == "gif":
-		SaveAndLoad.import_gif(path, image_data)
+		ImageTextureLoaderManager.import_gif(path, image_data)
 		Global.held_sprites[0].referenced_data_normal = null
 		Global.held_sprites[0].used_image_id_normal = 0
 		
 	else:
 		var apng_test = AImgIOAPNGImporter.load_from_file(path)
 		if apng_test != ["No frames", null]:
-			SaveAndLoad.import_apng_sprite(path, image_data)
+			ImageTextureLoaderManager.import_apng_sprite(path, image_data)
 			Global.held_sprites[0].referenced_data_normal = null
 			Global.held_sprites[0].used_image_id_normal = 0
 		else:
 			var img = Image.load_from_file(path)
 			var og_image = img.duplicate(true)
 			image_data.trimmed = true
-			if SaveAndLoad.trim:
+			if ImageTextureLoaderManager.trim:
 				img = ImageTrimmer.trim_image(img)
-				if SaveAndLoad.should_offset:
+				if ImageTextureLoaderManager.should_offset:
 					var original_width = og_image.get_width()
 					var original_height = og_image.get_height()
 					var trimmed_width = img.get_width()
@@ -121,7 +121,7 @@ func replace_texture(path : String):
 						i.obj.save_state(Global.current_state)
 					
 				Global.update_offset_spins.emit()
-			if SaveAndLoad.trim:
+			if ImageTextureLoaderManager.trim:
 				if Settings.theme_settings.save_raw_sprite:
 					var buffer = FileAccess.get_file_as_bytes(path)
 					image_data.image_data = buffer
@@ -159,37 +159,37 @@ func replace_texture(path : String):
 
 func _on_confirm_trim_confirmed() -> void:
 	if get_parent().current_state == get_parent().State.AddNormal:
-		SaveAndLoad.trim = true
+		ImageTextureLoaderManager.trim = true
 		add_normal(get_parent().sprite_path)
 	elif get_parent().current_state == get_parent().State.ReplaceSprite:
-		SaveAndLoad.trim = true
+		ImageTextureLoaderManager.trim = true
 		replace_texture(get_parent().sprite_path)
 	elif get_parent().current_state == get_parent().State.LoadFile:
-		SaveAndLoad.trim = true
+		ImageTextureLoaderManager.trim = true
 		SaveAndLoad.load_file(get_parent().model_path)
 	else:
-		SaveAndLoad.trim = true
+		ImageTextureLoaderManager.trim = true
 		get_parent().import_objects()
 
 func _on_confirm_trim_canceled() -> void:
 	if get_parent().current_state == get_parent().State.AddNormal:
-		SaveAndLoad.trim = false
+		ImageTextureLoaderManager.trim = false
 		add_normal(get_parent().sprite_path)
 	elif get_parent().current_state == get_parent().State.ReplaceSprite:
-		SaveAndLoad.trim = false
+		ImageTextureLoaderManager.trim = false
 		replace_texture(get_parent().sprite_path)
 	elif get_parent().current_state == get_parent().State.LoadFile:
-		SaveAndLoad.trim = false
+		ImageTextureLoaderManager.trim = false
 		SaveAndLoad.load_file(get_parent().model_path)
 	else:
-		SaveAndLoad.trim = false
+		ImageTextureLoaderManager.trim = false
 		get_parent().import_objects()
 
 func import_png_from_buffer(buffer, spawn) -> CanvasTexture:
 	var img = Image.new()
 	img.load_png_from_buffer(buffer)
 	var og_image = img.duplicate(true)
-	if SaveAndLoad.trim:
+	if ImageTextureLoaderManager.trim:
 		img = ImageTrimmer.trim_image(img)
 		var original_width = og_image.get_width()
 		var original_height = og_image.get_height()
@@ -209,4 +209,4 @@ func import_png_from_buffer(buffer, spawn) -> CanvasTexture:
 	return img_can
 
 func _on_offset_sprite_toggled(toggled_on: bool) -> void:
-	SaveAndLoad.should_offset = toggled_on
+	ImageTextureLoaderManager.should_offset = toggled_on

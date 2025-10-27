@@ -66,7 +66,7 @@ func new_file():
 
 func load_file():
 	#%FileDialog.filters = ["*.pngRemix, *.save"]
-	%FileDialog.filters = ["*.pngRemix"]
+	%FileDialog.filters = ["*.pngRemix, *.save"]
 	$FileDialog.file_mode = 0
 	current_state = State.LoadFile
 	%FileDialog.show()
@@ -121,7 +121,7 @@ func add_normal_sprite():
 func _on_file_dialog_file_selected(path): 
 	match current_state:
 		State.LoadFile:
-			SaveAndLoad.trim = false
+			ImageTextureLoaderManager.trim = false
 			if path.get_extension() == "save":
 				if Settings.theme_settings.enable_trimmer:
 					model_path = path
@@ -136,19 +136,19 @@ func _on_file_dialog_file_selected(path):
 			if Settings.theme_settings.enable_trimmer:
 				var apng_test = AImgIOAPNGImporter.load_from_file(path)
 				if apng_test != ["No frames", null]:
-					SaveAndLoad.trim = false
+					ImageTextureLoaderManager.trim = false
 					%FileImporter.replace_texture(path)
 				else:
 					sprite_path = path
 					%ConfirmTrim.popup_centered()
 			else:
-				SaveAndLoad.trim = false
+				ImageTextureLoaderManager.trim = false
 				%FileImporter.replace_texture(path)
 		State.AddNormal:
 			if Settings.theme_settings.enable_trimmer:
 				var apng_test = AImgIOAPNGImporter.load_from_file(path)
 				if apng_test != ["No frames", null]:
-					SaveAndLoad.trim = false
+					ImageTextureLoaderManager.trim = false
 					%FileImporter.add_normal(path)
 				else:
 					sprite_path = path
@@ -165,7 +165,7 @@ func _on_file_dialog_files_selected(paths):
 		if Settings.theme_settings.enable_trimmer:
 			%ConfirmTrim.popup_centered()
 		else:
-			SaveAndLoad.trim = false
+			ImageTextureLoaderManager.trim = false
 			import_objects()
 
 func import_objects():

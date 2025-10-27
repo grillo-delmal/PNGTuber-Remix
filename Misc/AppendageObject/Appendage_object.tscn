@@ -81,7 +81,7 @@ unique_name_in_owner = true
 physics_interpolation_mode = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_1tqhp")
-points = PackedVector2Array(-10, 0, -4.96, 0, 2.16, 0, 11.36, 0, 22.64, 0, 36, 0, 50.4, -9.67091e-05, 64.8, -0.000386836, 79.2, -0.000870382, 93.6, -0.00154735, 108, -0.00241773, 122.4, -0.00326976, 136.8, -0.00389168, 151.2, -0.00428349, 165.6, -0.00444518, 180, -0.00437676, 194.4, -0.00401173, 208.8, -0.00328362, 223.2, -0.00219241, 237.6, -0.000738103, 252, 0.00107929, 266.4, 0.00268827, 280.8, 0.00351733, 295.2, 0.00356646, 309.6, 0.00283567, 324, 0.00132496, 338.4, -0.000965673, 352.8, -0.00403623)
+points = PackedVector2Array(-10, 0, -4.96, 0, 2.16, 0, 11.36, 0, 22.64, 0, 36, 0, 50.4, -3.46506e-05, 64.8, -0.000138602, 79.2, -0.000311856, 93.6, -0.00055441, 108, -0.000866265, 122.4, -0.00136437, 136.8, -0.00216566, 151.2, -0.00327016, 165.6, -0.00467784, 180, -0.00638872, 194.4, -0.00795277, 208.8, -0.00891998, 223.2, -0.00929034, 237.6, -0.00906386, 252, -0.00824054, 266.4, -0.00698614, 280.8, -0.00546642, 295.2, -0.00368139, 309.6, -0.00163105, 324, 0.000684616, 338.4, 0.00326559, 352.8, 0.00611189)
 texture = SubResource("CanvasTexture_swft8")
 texture_mode = 2
 script = ExtResource("4_e6x1l")
@@ -122,12 +122,6 @@ grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_pb6tr")
 expand_mode = 1
-
-[node name="Blink" type="Timer" parent="."]
-unique_name_in_owner = true
-wait_time = 0.2
-
-[node name="Animation" type="Timer" parent="."]
 
 [node name="Movements" type="Node" parent="." node_paths=PackedStringArray("actor")]
 unique_name_in_owner = true

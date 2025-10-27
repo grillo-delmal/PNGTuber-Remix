@@ -15,7 +15,6 @@ func _ready() -> void:
 
 	get_parent().close_requested.connect(close)
 	sliders_revalue(Global.settings_dict)
-	check_data()
 	devices = AudioServer.get_input_device_list()
 	
 	for i in devices:
@@ -34,6 +33,8 @@ func _ready() -> void:
 		else:
 			Global.settings_dict.monitor = Monitor.ALL_SCREENS
 			%SelectedScreen.select(0)
+	
+	check_data()
 
 
 func close():

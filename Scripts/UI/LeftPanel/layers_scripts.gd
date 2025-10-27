@@ -107,10 +107,11 @@ func correct_rearrange(sprites : Array = get_tree().get_nodes_in_group("Sprites"
 
 func update_visib_buttons():
 	for i in get_tree().get_nodes_in_group("Sprites"):
-		if i.get_value("visible"):
-			i.treeitem.set_button(0,0, preload("res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/EyeButton.png"))
-		elif not i.get_value("visible"):
-			i.treeitem.set_button(0,0, preload("res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/EyeButton2.png"))
+		if i.treeitem:
+			if i.get_value("visible"):
+				i.treeitem.set_button(0,0, preload("res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/EyeButton.png"))
+			elif not i.get_value("visible"):
+				i.treeitem.set_button(0,0, preload("res://UI/EditorUI/LeftUI/Components/LayerView/Assets/New folder/EyeButton2.png"))
 
 func collapsing(sprites):
 	for i in sprites:

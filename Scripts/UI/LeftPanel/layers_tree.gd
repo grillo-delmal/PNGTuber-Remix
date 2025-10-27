@@ -12,7 +12,7 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 	return held_item
 
 
-func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
+func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if not (data is Array[TreeItem]):
 		return false
 	drop_mode_flags = 3

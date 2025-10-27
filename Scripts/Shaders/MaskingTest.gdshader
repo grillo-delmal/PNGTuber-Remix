@@ -48,14 +48,14 @@ void fragment() {
         vec4 parent_col = texture(m_mask_texture, v_mask_uv);
 		if (has_shader_parent){
 			parent_col = parent_color;
-			
+
 		};
 
         // Masking: multiply child alpha by parent alpha
         child_col.a *= parent_col.a;
 
         COLOR = child_col;
-		current_color =COLOR; 
+		current_color =COLOR;
     }
-	current_color = COLOR; 
+	current_color = COLOR;
 }

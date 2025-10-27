@@ -52,6 +52,8 @@ colors = PackedColorArray(0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_5cd6y"]
 gradient = SubResource("Gradient_4xt5n")
+width = 32
+height = 32
 
 [node name="SpriteObject" type="Node2D" node_paths=PackedStringArray("sprite_object") groups=["Sprites"]]
 physics_interpolation_mode = 1
@@ -131,10 +133,6 @@ self_modulate = Color(1, 0, 0, 1)
 z_index = 4096
 z_as_relative = false
 texture = ExtResource("2_1i6gu")
-
-[node name="Blink" type="Timer" parent="."]
-unique_name_in_owner = true
-wait_time = 0.2
 
 [node name="Animation" type="Timer" parent="."]
 

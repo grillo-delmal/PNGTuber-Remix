@@ -124,6 +124,9 @@ func choosing_files(id):
 				SaveAndLoad.save_file(Global.save_path)
 				await get_tree().physics_frame
 				SaveAndLoad.load_file(Global.save_path)
+				
+		13:
+			%ModelOptimizer.show()
 
 func choosing_file_import(id):
 	var main = Global.main

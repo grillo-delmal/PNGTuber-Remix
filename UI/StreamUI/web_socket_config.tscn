@@ -26,6 +26,12 @@ text = "Websocket"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="AutoStartWebsocket" type="CheckBox" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Auto Start"
+
 [node name="Grid" type="GridContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
@@ -34,6 +40,7 @@ columns = 2
 [node name="PortLabel" type="Label" parent="Grid"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
 text = "Port : "
 
 [node name="PortValue" type="SpinBox" parent="Grid"]
@@ -65,6 +72,7 @@ layout_mode = 2
 focus_mode = 0
 text = "Stop"
 
+[connection signal="toggled" from="AutoStartWebsocket" to="." method="_on_auto_start_websocket_toggled"]
 [connection signal="value_changed" from="Grid/PortValue" to="." method="_on_port_value_value_changed"]
 [connection signal="pressed" from="Grid/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="Grid/StopButton" to="." method="_on_stop_button_pressed"]

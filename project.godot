@@ -308,6 +308,7 @@ locale/translations=PackedStringArray("res://Localization/en/us/en_us.en.transla
 
 [rendering]
 
-renderer/rendering_method="mobile"
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_s3tc_bptc=true
 textures/vram_compression/import_etc2_astc=true
