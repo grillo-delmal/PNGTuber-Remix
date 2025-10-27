@@ -339,6 +339,7 @@ animations = [{
 
 [node name="TutorialPopUp" type="PopupPanel"]
 auto_translate_mode = 1
+oversampling_override = 1.0
 initial_position = 2
 size = Vector2i(700, 500)
 visible = true

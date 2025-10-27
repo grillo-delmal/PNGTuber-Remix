@@ -3,8 +3,6 @@ extends Node
 
 var save_dict : Dictionary = {}
 var can_load_plus : bool = false
-var appendage_scene = preload("res://Misc/AppendageObject/Appendage_object.tscn")
-var sprite_scene = preload("res://Misc/SpriteObject/sprite_object.tscn")
 const YIELD_EVERY : int = 25
 
 var import_trimmed : bool = false
@@ -18,7 +16,6 @@ func save_data():
 	var sprites_array : Array = []
 	var input_array : Array = []
 	var image_array : Array = []
-	
 
 	for i in Global.image_manager_data:
 		if !Settings.theme_settings.save_unused_files:
@@ -236,6 +233,9 @@ func _build_image_manager(load_dict: Dictionary) -> void:
 	for i in local_image_manage:
 		var image_data : ImageData = ImageData.new()
 		image_data.set_data(i)
+		if ImageTextureLoaderManager.trim:
+			image_data.trim_image()
+		
 		Global.image_manager_data.append(image_data)
 
 func _build_and_add_sprites(load_dict: Dictionary) -> void:
@@ -250,25 +250,16 @@ func _build_and_add_sprites(load_dict: Dictionary) -> void:
 		var sprite_obj
 		if sprite.has("sprite_type"):
 			if sprite.sprite_type == "Sprite2D":
-				sprite_obj = sprite_scene.instantiate()
+				sprite_obj = ImageTextureLoaderManager.sprite_scene.instantiate()
 			elif sprite.sprite_type == "WiggleApp":
-				sprite_obj = appendage_scene.instantiate()
+				sprite_obj = ImageTextureLoaderManager.appendage_scene.instantiate()
 			else:
-				sprite_obj = sprite_scene.instantiate()
+				sprite_obj = ImageTextureLoaderManager.sprite_scene.instantiate()
 		else:
-			sprite_obj = sprite_scene.instantiate()
+			sprite_obj = ImageTextureLoaderManager.sprite_scene.instantiate()
 		
-		var cleaned_array := []
-		for st in sprite.states:
-			if not st.is_empty():
-				cleaned_array.append(st)
 		
-		for i in range(cleaned_array.size()):
-			var new_dict = sprite_obj.sprite_data.duplicate()
-			new_dict.merge(cleaned_array[i], true)
-			cleaned_array[i] = new_dict
-		
-		sprite_obj.states = cleaned_array
+
 		sprite_obj.layer_color = sprite.get("layer_color", Color.BLACK)
 		sprite_obj.used_image_id = sprite.get("image_id", 0)
 		sprite_obj.used_image_id_normal = sprite.get("normal_id", 0)
@@ -293,7 +284,7 @@ func _build_and_add_sprites(load_dict: Dictionary) -> void:
 		var image_data : ImageData = null
 		var image_data_normal : ImageData = null
 		
-		if not sprite_obj.states[0].get("folder", true):
+		if not sprite.states[0].get("folder", true):
 			var canv := CanvasTexture.new()
 			var sprite_node = sprite_obj.get_node("%Sprite2D")
 			sprite_node.texture = canv
@@ -378,7 +369,22 @@ func _build_and_add_sprites(load_dict: Dictionary) -> void:
 		
 		sprite_obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		
-		# Prepare to add to scene tree (we add in a second loop for smoother updates)
+		var cleaned_array := []
+		for st in sprite.states:
+			if not st.is_empty():
+				if ImageTextureLoaderManager.trim && not sprite.states[0].get("folder", true):
+					var delta =  sprite_obj.referenced_data.offset - st.offset
+					st.offset += delta
+				cleaned_array.append(st)
+		
+		for i in range(cleaned_array.size()):
+			var new_dict = sprite_obj.sprite_data.duplicate()
+			new_dict.merge(cleaned_array[i], true)
+			cleaned_array[i] = new_dict
+		
+		sprite_obj.states = cleaned_array
+		
+		
 		to_add.append(sprite_obj)
 		
 	# add remaining
@@ -413,6 +419,8 @@ func _fix_sprite_states_to_count() -> void:
 func _finalize_after_load() -> void:
 	Global.remake_layers.emit()
 	Global.reparent_objects.emit(get_tree().get_nodes_in_group("Sprites"))
+	
+
 	Global.slider_values.emit(Global.settings_dict)
 	if Global.main.has_node("%Control"):
 		Global.reinfoanim.emit()
@@ -500,35 +508,58 @@ func load_pngplus_file(path):
 		idx += 1
 
 	entries.sort_custom(func(a, b):
-		if a.ident < b.orig_index:
+		if a.ident + a.zindex < b.orig_index:
 			return 1
 		return 0
 	)
-
 	for i in entries:
 		var data = i.data
 		var sprite_obj = preload("res://Misc/SpriteObject/sprite_object.tscn").instantiate()
+		sprite_obj.sprite_type = "Sprite2D"
 		var img_data = Marshalls.base64_to_raw(data["imageData"])
 		var image_data = ImageData.new()
 		var img = Image.new()
 		img.load_png_from_buffer(img_data)
-		if import_trimmed:
-			var og_image = img.duplicate(true)
-			img = ImageTrimmer.trim_image(img)
-			var original_width = og_image.get_width()
-			var original_height = og_image.get_height()
-			var trimmed_width = img.get_width()
-			var trimmed_height = img.get_height()
-			# Calculate offset to maintain visual position
-			var trim_info = ImageTrimmer.calculate_trim_info(og_image)
-			var center_shift_x = trim_info.min_x - ((original_width - trimmed_width) / 2.0)
-			var center_shift_y = trim_info.min_y - ((original_height - trimmed_height) / 2.0)
-			# Adjust position to keep image visually stable
-			sprite_obj.sprite_data.offset += Vector2(center_shift_x, center_shift_y)
-			sprite_obj.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
+		var animSpeed = data["animSpeed"]
+		if animSpeed != 0.0:
+			image_data.image_data = []
+			image_data.trimmed = false
+		else:
+			if ImageTextureLoaderManager.trim:
+				var og_image = img.duplicate(true)
+				img = ImageTrimmer.trim_image(img)
+				var original_width = og_image.get_width()
+				var original_height = og_image.get_height()
+				var trimmed_width = img.get_width()
+				var trimmed_height = img.get_height()
+				# Calculate offset to maintain visual position
+				var trim_info = ImageTrimmer.calculate_trim_info(og_image)
+				if !trim_info.is_empty():
+					var center_shift_x = trim_info.min_x - ((original_width - trimmed_width) / 2.0)
+					var center_shift_y = trim_info.min_y - ((original_height - trimmed_height) / 2.0)
+					# Adjust position to keep image visually stable
+					sprite_obj.sprite_data.offset += Vector2(center_shift_x, center_shift_y)
+					sprite_obj.get_node("%Sprite2D").position += Vector2(center_shift_x, center_shift_y)
+					image_data.offset += Vector2(center_shift_x, center_shift_y)
+					if Settings.theme_settings.save_raw_sprite:
+						image_data.image_data = img_data
+						image_data.trimmed = true
+					else:
+						image_data.image_data = []
+						image_data.trimmed = false
+				else:
+					img.resize(32,32, Image.INTERPOLATE_BILINEAR)
+					image_data.image_data = []
+					image_data.trimmed = true
+			else:
+				image_data.image_data = []
+				image_data.trimmed = false
 		img.fix_alpha_edges()
 		var tex = ImageTexture.create_from_image(img)
 		image_data.runtime_texture = tex
+		image_data.img_animated = false
+		image_data.is_apng = false
+		image_data.image_name = data["path"].get_file().trim_suffix(".png")
 		Global.image_manager_data.append(image_data)
 
 		var canv = CanvasTexture.new()
@@ -558,7 +589,6 @@ func load_pngplus_file(path):
 		sprite_obj.sprite_data.ignore_bounce = data["ignoreBounce"]
 		sprite_obj.sprite_data.hframes = data["frames"]
 
-		var animSpeed = data["animSpeed"]
 		if animSpeed != 0.0:
 			sprite_obj.sprite_data.animation_speed = 60 / int(360.0 / max(float(animSpeed), 1.0))
 
@@ -606,7 +636,6 @@ func load_pngplus_file(path):
 		Global.sprite_container.add_child(sprite_obj)
 		sprite_obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		sprite_obj.get_state(0)
-
 
 	Global.remake_for_plus.emit()
 	Global.load_sprite_states(0)
@@ -707,9 +736,9 @@ func add_objects_from_psd_data(layer, image_data = null):
 func add_object_to_scene(image_data, add_as_appendage : bool = false, folder : bool = false, force_offset : bool = false, custom_name : String = ""):
 	var spawn 
 	if add_as_appendage:
-		spawn = appendage_scene.instantiate()
+		spawn = ImageTextureLoaderManager.appendage_scene.instantiate()
 	else:
-		spawn = sprite_scene.instantiate()
+		spawn = ImageTextureLoaderManager.sprite_scene.instantiate()
 	if (ImageTextureLoaderManager.should_offset or force_offset) && !folder:
 		spawn.sprite_data.offset += image_data.offset
 		spawn.get_node("%Sprite2D").position += image_data.offset

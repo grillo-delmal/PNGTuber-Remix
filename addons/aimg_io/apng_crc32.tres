@@ -4,5 +4,3 @@
 
 [resource]
 script = ExtResource("1")
-reversed_polynomial = 3988292384
-mask = 4294967295

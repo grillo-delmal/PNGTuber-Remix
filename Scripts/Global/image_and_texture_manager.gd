@@ -5,8 +5,8 @@ class_name ImageTextureLoaderManager
 static var trim : bool = false
 static var should_offset : bool = true
 static var import_flippd : bool = false
-static var appendage_scene = preload("res://Misc/AppendageObject/Appendage_object.tscn")
-static var sprite_scene = preload("res://Misc/SpriteObject/sprite_object.tscn")
+static var appendage_scene = load("res://Misc/AppendageObject/Appendage_object.tscn") as PackedScene
+static var sprite_scene = load("res://Misc/SpriteObject/sprite_object.tscn") as PackedScene
 
 
 static func load_apng(sprite , image_data = null, normal = false):
@@ -122,7 +122,7 @@ static func import_apng_sprite(path : String ,image_data):
 		var new_frame : AnimatedFrame = AnimatedFrame.new()
 		new_frame.texture = ImageTexture.create_from_image(i.content)
 		new_frame.duration = i.duration
-		image_data.animated_frames.frames.append(new_frame)
+		image_data.animated_frames.append(new_frame)
 
 static func import_png(img: Image, spawn, image_data, _trim, _should_offset):
 	var og_image = img.duplicate(true)

@@ -172,6 +172,7 @@ var saved_keys : Array = []
 var last_mouse_position : Vector2 = Vector2(0,0)
 var last_dist : Vector2 = Vector2(0,0)
 var global
+var old_global: Vector2 = Vector2(0,0)
 
 var selected : bool = false
 
@@ -270,9 +271,12 @@ func set_blend(blend):
 func reparent_obj(parent):
 	for i in parent:
 		if i.sprite_id == parent_id:
-			var og_pos = global_position
-			reparent(i.sprite_object)
-			global_position = og_pos
+			old_global = global_position
+			var new_parent = i.sprite_object
+			reparent(new_parent)
+			global_position = old_global
+			break
+
 
 func image_replaced(image_date : ImageData):
 	if !get_value("folder"):
