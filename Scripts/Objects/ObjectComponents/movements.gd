@@ -232,4 +232,5 @@ func auto_rotate():
 
 
 func _on_sprite_object_visibility_changed() -> void:
-	set_physics_process(actor.is_visible_in_tree())
+	pass
+	#set_physics_process(actor.is_visible_in_tree())

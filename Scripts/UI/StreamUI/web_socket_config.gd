@@ -36,8 +36,11 @@ func check_websocket():
 		disable_spinbox(true)
 	else:
 		disable_spinbox(false)
-	
 	can_change = true
+	
+	if Settings.theme_settings.auto_activate_websocket:
+		WebsocketHandler.start_websocket_server()
+		disable_spinbox(true)
 
 func _on_auto_start_websocket_toggled(toggled_on: bool) -> void:
 	Settings.theme_settings.auto_activate_websocket = toggled_on

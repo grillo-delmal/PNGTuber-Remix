@@ -244,7 +244,7 @@ func _build_and_add_sprites(load_dict: Dictionary) -> void:
 		var image_data : ImageData = null
 		var image_data_normal : ImageData = null
 		var sprite_node = sprite_obj.get_node("%Sprite2D")
-		var canv := CanvasTexture.new()
+		var canv : CanvasTexture = CanvasTexture.new()
 		sprite_node.texture = canv
 
 		

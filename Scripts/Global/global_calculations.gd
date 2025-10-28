@@ -32,30 +32,46 @@ static func _get_distance(a: float, b: float) -> float:
 	return a - b
 
 static func some_keyboard_calc_wasd(type_name: String = "follow_type", actor: Node = null) -> Vector2:
-	if actor == null:
-		return Vector2.ZERO
-	var mode = actor.get_value(type_name)
-	if mode not in range(3, 9):
-		return Vector2.ZERO
-	var ws = Vector2.ZERO
-	var ad = Vector2.ZERO
-	if Input.is_action_pressed("KeyMovementW"):
-		ws.y = 1.0
-	if Input.is_action_pressed("KeyMovementS"):
-		ws.x = 1.0
-	if Input.is_action_pressed("KeyMovementA"):
-		ad.y = 1.0
-	if Input.is_action_pressed("KeyMovementD"):
-		ad.x = 1.0
-	match mode:
-		3, 6:
-			return Vector2(ws.x - ws.y, ws.x - ws.y)
-		4, 7:
-			return Vector2(ad.x - ad.y, ad.x - ad.y)
-		5, 8:
-			return Vector2(ad.x - ad.y, ws.x - ws.y)
-	
-	return Vector2.ZERO
+	var normal = Vector2(0.0, 0.0)
+	if actor.get_value(type_name) in [3, 4, 5]:
+		var ws: Vector2 = Vector2.ZERO
+		var ad: Vector2 = Vector2.ZERO
+		if InputMap.action_get_events("KeyMovementW")[0].as_text() in GlobalInputCapture.already_input_keys:
+			ws.y = 1.0
+		if InputMap.action_get_events("KeyMovementS")[0].as_text() in GlobalInputCapture.already_input_keys:
+			ws.x = 1.0
+		if InputMap.action_get_events("KeyMovementA")[0].as_text() in GlobalInputCapture.already_input_keys:
+			ad.y = 1.0
+		if InputMap.action_get_events("KeyMovementD")[0].as_text() in GlobalInputCapture.already_input_keys:
+			ad.x = 1.0
+
+		if actor.get_value(type_name) == 3:
+			normal = Vector2(ws.x - ws.y, ws.x - ws.y)
+		elif actor.get_value(type_name) == 4:
+			normal = Vector2(ad.x - ad.y, ad.x - ad.y)
+		elif actor.get_value(type_name) == 5:
+			normal = Vector2(ad.x - ad.y, ws.x - ws.y)
+
+	elif actor.get_value(type_name) in [6, 7, 8]:
+		var ws: Vector2 = Vector2.ZERO
+		var ad: Vector2 = Vector2.ZERO
+		if InputMap.action_get_events("KeyMovementW")[1].as_text() in GlobalInputCapture.already_input_keys:
+			ws.y = 1.0
+		if InputMap.action_get_events("KeyMovementS")[1].as_text() in GlobalInputCapture.already_input_keys:
+			ws.x = 1.0
+		if InputMap.action_get_events("KeyMovementA")[1].as_text() in GlobalInputCapture.already_input_keys:
+			ad.y = 1.0
+		if InputMap.action_get_events("KeyMovementD")[1].as_text() in GlobalInputCapture.already_input_keys:
+			ad.x = 1.0
+
+		if actor.get_value(type_name) == 6:
+			normal = Vector2(ws.x - ws.y, ws.x - ws.y)
+		elif actor.get_value(type_name) == 7:
+			normal = Vector2(ad.x - ad.y, ad.x - ad.y)
+		elif actor.get_value(type_name) == 8:
+			normal = Vector2(ad.x - ad.y, ws.x - ws.y)
+
+	return normal
 
 
 static func follow_type_helper(type_name : String = "follow_type", actor : Node = null, type = "position", axis_left = Vector2.ZERO, axis_right = Vector2.ZERO, move : Node = null):

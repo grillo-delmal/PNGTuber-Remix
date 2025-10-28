@@ -17,6 +17,7 @@ func enable() -> void:
 	%FollowOption2.disabled = false
 	%FollowOption.disabled = false
 	%FollowOption3.disabled = false
+	
 	%FollowOption2.select(sp.get_value("follow_type2"))
 	%FollowOption.select(sp.get_value("follow_type"))
 	%FollowOption3.select(sp.get_value("follow_type3"))
@@ -25,7 +26,6 @@ func nullify() -> void:
 	%FollowOption2.disabled = true
 	%FollowOption.disabled = true
 	%FollowOption3.disabled = true
-
 
 func _on_follow_option_item_selected(index: int) -> void:
 	for i in Global.held_sprites:

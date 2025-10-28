@@ -52,7 +52,7 @@ func check_data():
 	%CustomCursorEditor.button_pressed = Settings.theme_settings.custom_cursor_editor
 	%CustomCursorPreview.button_pressed = Settings.theme_settings.custom_cursor_preview
 	%FloatyPanning.button_pressed = Settings.theme_settings.floaty_panning
-	%UseThreads.button_pressed = Settings.theme_settings.use_threading
+	#%UseThreads.button_pressed = Settings.theme_settings.use_threading
 	%KeepOldTrimData.button_pressed = Settings.theme_settings.save_raw_sprite
 	%SaveUnusedImages.button_pressed = Settings.theme_settings.save_unused_files
 	
@@ -234,9 +234,9 @@ func _on_floaty_panning_toggled(toggled_on: bool) -> void:
 func _on_fix_mic_delay_toggled(toggled_on: bool) -> void:
 	GlobalAudioStreamPlayer.change_mic_restart_time(toggled_on)
 
-func _on_use_threads_toggled(toggled_on: bool) -> void:
+func _on_use_threads_toggled(_toggled_on: bool) -> void:
 	if !change_setting: return
-	Settings.theme_settings.use_threading = toggled_on
+	Settings.theme_settings.use_threading = false
 	Settings.save()
 
 func _on_keep_old_trim_data_toggled(toggled_on: bool) -> void:
@@ -249,10 +249,8 @@ func _on_remix_language_set(index: int) -> void:
 func _on_out_of_bounds_toggled(toggled_on: bool) -> void:
 	Global.settings_dict.snap_out_of_bounds = toggled_on
 
-
 func _on_fix_mic_delay_pressed() -> void:
 	GlobalAudioStreamPlayer.restart_mic_and_timer()
-
 
 func _on_save_unused_images_toggled(toggled_on: bool) -> void:
 	Settings.theme_settings.save_unused_files = toggled_on

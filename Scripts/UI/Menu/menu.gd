@@ -1,12 +1,10 @@
 extends Control
 
-
 func _ready() -> void:
 	Global.swtich_session_popup = %MenuScreenPopup
 	await get_tree().create_timer(0.1).timeout
 	#init_switch_session()
 	auto_load_model()
-
 
 func init_switch_session():
 	if Settings.theme_settings.session == 1:
@@ -15,7 +13,6 @@ func init_switch_session():
 		for i in %Scene.get_children():
 			i.queue_free()
 		%Scene.add_child(%MenuScreenPopup.streamer_mode.instantiate())
-		
 
 func auto_load_model():
 	if Settings.theme_settings.auto_load:

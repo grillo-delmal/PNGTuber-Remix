@@ -12,7 +12,6 @@
 auto_translate_mode = 1
 transparent_bg = true
 gui_snap_controls_to_pixels = false
-oversampling_override = 1.0
 initial_position = 4
 size = Vector2i(500, 600)
 transient = true
@@ -482,6 +481,7 @@ text = "Remove Custom Cursor"
 
 [node name="UseThreads" type="CheckBox" parent="SettingVbox/SettingsTab/Remix Settings/Margin/VBox/Grid"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Use multi-threading for actions like saving and loading."

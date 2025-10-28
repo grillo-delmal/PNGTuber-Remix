@@ -37,7 +37,11 @@ var pending_peers: Array[PendingPeer] = []
 var peers: Dictionary
 
 func listen(nport: int) -> int:
-	assert(not tcp_server.is_listening())
+	# Stop any existing server before starting new one
+	if tcp_server.is_listening():
+		tcp_server.stop()
+		pending_peers.clear()
+		peers.clear()
 	return tcp_server.listen(nport)
 
 func stop() -> void:
@@ -48,15 +52,19 @@ func stop() -> void:
 	is_working = false
 
 func start_websocket_server():
+	# Ensure clean state before starting
+	if tcp_server.is_listening():
+		stop()
+	
 	var result = listen(port)
 	if result == OK:
 		is_working = true
 		port_state.emit(true)
-		print("Server now listening on port", port)
+		print("Server now listening on port ", port)
 	else:
 		port_state.emit(false)
-		print("Failed to start server")
-
+		is_working = false
+		print("Failed to start server on port ", port, " - Error code: ", result)
 
 func send(peer_id: int, message: String) -> int:
 	var type := typeof(message)
@@ -359,12 +367,9 @@ func load_model_by_path(model_path: String) -> bool:
 	if not (model_path.ends_with(".pngRemix") or model_path.ends_with(".save")):
 		return false
 	
-	# Use Global.main to load the model
-	if Global.main != null:
-		Global.main.load_file(model_path)
-		return true
-	
-	return false
+	# Use SaveAndLoad directly to load the model
+	SaveAndLoad.load_file(model_path)
+	return true
 
 func move_sprite_by_identifier(identifier: String, target_position: Vector2, duration: float, reset: bool = false, reset_delay: float = 0.0) -> bool:
 	"""Move a sprite to a specific position with animation"""
@@ -515,15 +520,15 @@ func _on_message(peer_id: int, message: String):
 					var states_json = JSON.stringify(state_list)
 					send(peer_id,'{"event":"list_states", "result":"success", "states":' + states_json + '}')
 			"load_model":
-				var model_path = json_data.get("model_path", "")
-				if model_path == "":
-					send(peer_id,'{"event":"load_model", "result":"failed", "error":"model_path is required"}')
+				var file_path = json_data.get("file_path", "")
+				if file_path == "":
+					send(peer_id,'{"event":"load_model", "result":"failed", "error":"file_path is required"}')
 				else:
-					var result = load_model_by_path(model_path)
+					var result = load_model_by_path(file_path)
 					if result:
-						send(peer_id,'{"event":"load_model", "result":"success", "model_path":"' + model_path + '"}')
+						send(peer_id,'{"event":"load_model", "result":"success", "file_path":"' + file_path + '"}')
 					else:
-						send(peer_id,'{"event":"load_model", "result":"failed", "model_path":"' + model_path + '", "error":"failed to load model"}')
+						send(peer_id,'{"event":"load_model", "result":"failed", "file_path":"' + file_path + '", "error":"failed to load model"}')
 			"list_groups":
 				var groups = get_all_groups()
 				var groups_json = JSON.stringify(groups)
