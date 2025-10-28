@@ -53,9 +53,10 @@ gradient = SubResource("Gradient_4xt5n")
 width = 32
 height = 32
 
-[node name="SpriteObject" node_paths=PackedStringArray("sprite_object") instance=ExtResource("1_nxel7")]
+[node name="SpriteObject" node_paths=PackedStringArray("sprite_object", "grab_object") instance=ExtResource("1_nxel7")]
 script = ExtResource("1_i7wd5")
 sprite_object = NodePath("Pos/MouseRot/Drag/Rotation/Sprite2D")
+grab_object = NodePath("Pos/MouseRot/Drag/Rotation/Sprite2D/Grab")
 sprite_type = "Sprite2D"
 
 [node name="Sprite2D" type="Sprite2D" parent="Pos/MouseRot/Drag/Rotation" index="1"]
@@ -106,3 +107,5 @@ actor = NodePath("..")
 
 [node name="AnimatedSpriteTexture" parent="." index="4" node_paths=PackedStringArray("sprite_node")]
 sprite_node = NodePath("../Pos/MouseRot/Drag/Rotation/Sprite2D")
+
+[connection signal="timeout" from="Animation" to="." method="animation"]

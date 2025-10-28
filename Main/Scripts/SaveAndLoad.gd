@@ -6,6 +6,9 @@ var can_load_plus : bool = false
 const YIELD_EVERY : int = 25
 
 var import_trimmed : bool = false
+var trimmed_sprites : Array = []
+
+
 
 func save_file(path):
 	save_model(path)
@@ -184,6 +187,7 @@ func _reset_project_state() -> void:
 	Global.main.clear_sprites()
 	Global.main.get_node("Timer").start()
 	Global.delete_states.emit()
+	trimmed_sprites.clear()
 
 func _read_and_maybe_convert_file(path: String) -> Dictionary:
 	var file = FileAccess.open(path, FileAccess.READ)
@@ -229,13 +233,32 @@ func _apply_settings(load_dict: Dictionary, path: String) -> void:
 
 func _build_image_manager(load_dict: Dictionary) -> void:
 	var local_image_manage = load_dict.get("image_manager_data", [])
+	var sprites_array = load_dict.get("sprites_array", [])
 	Global.image_manager_data = []
+	var sheet_textures : Dictionary = {}
+	for sprite in sprites_array:
+		if sprite.has("states"):
+			for st in sprite.states:
+				if not st.is_empty():
+					var hframes = st.get("hframes", 1)
+					var vframes = st.get("vframes", 1)
+					var non_animated_sheet = st.get("non_animated_sheet", false)
+					var advanced_lipsync = st.get("advanced_lipsync", false)
+					if hframes > 1 or vframes > 1 or non_animated_sheet or advanced_lipsync:
+						var tex_name = sprite.get("image_id", 0)
+						if tex_name != 0:
+							sheet_textures[tex_name] = true
 	for i in local_image_manage:
 		var image_data : ImageData = ImageData.new()
 		image_data.set_data(i)
-		if ImageTextureLoaderManager.trim:
-			image_data.trim_image()
-		
+		var img_id = image_data.id
+		if ImageTextureLoaderManager.trim and !Global.settings_dict.trimmed:
+			if img_id in sheet_textures:
+				pass
+				#print("Skipping trim for sprite sheet image:", img_id)
+			else:
+				image_data.trim_image()
+
 		Global.image_manager_data.append(image_data)
 
 func _build_and_add_sprites(load_dict: Dictionary) -> void:
@@ -247,24 +270,15 @@ func _build_and_add_sprites(load_dict: Dictionary) -> void:
 	var has_image_data = load_dict.get("image_manager_data", null)
 	
 	for sprite in load_dict.sprites_array:
-		var sprite_obj
-		if sprite.has("sprite_type"):
-			if sprite.sprite_type == "Sprite2D":
-				sprite_obj = ImageTextureLoaderManager.sprite_scene.instantiate()
-			elif sprite.sprite_type == "WiggleApp":
-				sprite_obj = ImageTextureLoaderManager.appendage_scene.instantiate()
-			else:
-				sprite_obj = ImageTextureLoaderManager.sprite_scene.instantiate()
-		else:
-			sprite_obj = ImageTextureLoaderManager.sprite_scene.instantiate()
+		var sprite_obj = ImageTextureLoaderManager.sprite_scene.instantiate()
+		if sprite.has("sprite_type") and sprite.sprite_type == "WiggleApp":
+			sprite_obj = ImageTextureLoaderManager.appendage_scene.instantiate()
 		
-		
-
 		sprite_obj.layer_color = sprite.get("layer_color", Color.BLACK)
 		sprite_obj.used_image_id = sprite.get("image_id", 0)
 		sprite_obj.used_image_id_normal = sprite.get("normal_id", 0)
 		
-		# asset-related fields
+		# Asset metadata
 		if sprite.has("is_asset"):
 			sprite_obj.is_asset = sprite.is_asset
 			sprite_obj.saved_event = sprite.saved_event
@@ -283,99 +297,59 @@ func _build_and_add_sprites(load_dict: Dictionary) -> void:
 		
 		var image_data : ImageData = null
 		var image_data_normal : ImageData = null
+		var sprite_node = sprite_obj.get_node("%Sprite2D")
+		var canv := CanvasTexture.new()
+		sprite_node.texture = canv
 		
-		if not sprite.states[0].get("folder", true):
-			var canv := CanvasTexture.new()
-			var sprite_node = sprite_obj.get_node("%Sprite2D")
-			sprite_node.texture = canv
+		# --- Load or reuse image ---
+		if has_image_data == null:
+			image_data = ImageData.new()
+			image_data_normal = ImageData.new()
 			
-			var set_text_diff := false
-			var set_text_norm := false
-			
-			if has_image_data == null:
-				image_data = ImageData.new()
-				image_data_normal = ImageData.new()
-				
-				if sprite.has("is_apng"):
-					ImageTextureLoaderManager.load_apng(sprite, image_data)
-					ImageTextureLoaderManager.load_apng(sprite, image_data_normal, true)
-				else:
-					if sprite.has("img_animated"):
-						if sprite.img_animated:
-							ImageTextureLoaderManager.load_gif(sprite_obj, sprite, image_data)
-							ImageTextureLoaderManager.load_gif(sprite, image_data_normal, true)
-						else:
-							load_sprite(sprite, image_data)
-							load_sprite(sprite, image_data_normal, true)
-					else:
-						load_sprite(sprite, image_data)
-						load_sprite(sprite, image_data_normal, true)
-				
-				if image_data.has_data:
-					canv.diffuse_texture = image_data.runtime_texture
-					sprite_obj.referenced_data = image_data
-					sprite_obj.used_image_id = image_data.id
-					image_data.image_name = sprite_obj.sprite_name
-					Global.image_manager_data.append(image_data)
-					image_cache[image_data.id] = image_data
-					set_text_diff = true
-				if image_data_normal.has_data:
-					canv.normal_texture = image_data_normal.runtime_texture
-					sprite_obj.referenced_data_normal = image_data_normal
-					sprite_obj.used_image_id_normal = image_data_normal.id
-					image_data_normal.image_name = sprite_obj.sprite_name + "(Normal)"
-					Global.image_manager_data.append(image_data_normal)
-					image_cache[image_data_normal.id] = image_data_normal
-					set_text_norm = true
+			if sprite.has("is_apng"):
+				ImageTextureLoaderManager.load_apng(sprite, image_data)
+				ImageTextureLoaderManager.load_apng(sprite, image_data_normal, true)
 			else:
-				sprite_obj.rotated = sprite.get("rotated", 0)
-				sprite_obj.flipped_h = sprite.get("flipped_h", false)
-				sprite_obj.flipped_v = sprite.get("flipped_v", false)
-				
-				if image_cache.has(sprite_obj.used_image_id):
-					var im = image_cache[sprite_obj.used_image_id]
-					sprite_obj.referenced_data = im
-					var tex = ImageTextureLoaderManager.check_flips(im.runtime_texture, sprite_obj)
-					sprite_node.texture.diffuse_texture = tex
-					set_text_diff = true
-				if image_cache.has(sprite_obj.used_image_id_normal):
-					var imn = image_cache[sprite_obj.used_image_id_normal]
-					sprite_obj.referenced_data_normal = imn
-					var texn := ImageTextureLoaderManager.check_flips(imn.runtime_texture, sprite_obj)
-					sprite_node.texture.normal_texture = texn
-					set_text_norm = true
-			
-			if sprite_obj.used_image_id != 0 and not set_text_diff:
-				sprite_node.texture.diffuse_texture = Global.image_data.runtime_texture
-				sprite_obj.referenced_data = Global.image_data
-			if sprite_obj.used_image_id_normal != 0 and not set_text_norm:
-				sprite_node.texture.normal_texture = Global.image_data_normal.runtime_texture
-				sprite_obj.referenced_data_normal = Global.image_data_normal
+				if sprite.has("img_animated") and sprite.img_animated:
+					ImageTextureLoaderManager.load_gif(sprite_obj, sprite, image_data)
+					ImageTextureLoaderManager.load_gif(sprite, image_data_normal, true)
+				else:
+					load_sprite(sprite, image_data)
+					load_sprite(sprite, image_data_normal, true)
+
+			if image_data.has_data:
+				canv.diffuse_texture = image_data.runtime_texture
+				sprite_obj.referenced_data = image_data
+				sprite_obj.used_image_id = image_data.id
+				image_data.image_name = sprite_obj.sprite_name
+				Global.image_manager_data.append(image_data)
+				image_cache[image_data.id] = image_data
+			if image_data_normal.has_data:
+				canv.normal_texture = image_data_normal.runtime_texture
+				sprite_obj.referenced_data_normal = image_data_normal
+				sprite_obj.used_image_id_normal = image_data_normal.id
+				image_data_normal.image_name = sprite_obj.sprite_name + "(Normal)"
+				Global.image_manager_data.append(image_data_normal)
+				image_cache[image_data_normal.id] = image_data_normal
 		else:
-			sprite_obj.get_node("%Sprite2D").texture = null
-		
-		if sprite.has("image_data"):
-			if image_data != null:
-				image_data.image_data = sprite.image_data
-			if image_data_normal != null:
-				image_data_normal.image_data = sprite.normal_data
-		
-		# Remaining metadata
-		sprite_obj.sprite_id = sprite.sprite_id
-		if sprite.parent_id != null:
-			sprite_obj.parent_id = sprite.parent_id
-		if sprite.has("is_collapsed"):
-			sprite_obj.is_collapsed = sprite.is_collapsed
-		
-		sprite_obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
-		
+			# --- Reuse cached images safely ---
+			if image_cache.has(sprite_obj.used_image_id):
+				var im = image_cache[sprite_obj.used_image_id]
+				sprite_obj.referenced_data = im
+				sprite_node.texture.diffuse_texture = ImageTextureLoaderManager.check_flips(im.runtime_texture, sprite_obj)
+			if image_cache.has(sprite_obj.used_image_id_normal):
+				var imn = image_cache[sprite_obj.used_image_id_normal]
+				sprite_obj.referenced_data_normal = imn
+				sprite_node.texture.normal_texture = ImageTextureLoaderManager.check_flips(imn.runtime_texture, sprite_obj)
+				
 		var cleaned_array := []
 		for st in sprite.states:
 			if not st.is_empty():
-				if ImageTextureLoaderManager.trim && not sprite.states[0].get("folder", true):
-					var delta =  sprite_obj.referenced_data.offset - st.offset
+				if ImageTextureLoaderManager.trim and ! Global.settings_dict.trimmed:
+					var delta = sprite_obj.referenced_data.offset
 					st.offset += delta
 				cleaned_array.append(st)
+
 		
 		for i in range(cleaned_array.size()):
 			var new_dict = sprite_obj.sprite_data.duplicate()
@@ -383,14 +357,16 @@ func _build_and_add_sprites(load_dict: Dictionary) -> void:
 			cleaned_array[i] = new_dict
 		
 		sprite_obj.states = cleaned_array
+		sprite_obj.sprite_id = sprite.sprite_id
+		if sprite.parent_id != null:
+			sprite_obj.parent_id = sprite.parent_id
+		if sprite.has("is_collapsed"):
+			sprite_obj.is_collapsed = sprite.is_collapsed
 		
-		
+		sprite_node.get_node("Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		to_add.append(sprite_obj)
-		
-	# add remaining
 	for s in to_add:
 		Global.sprite_container.add_child(s)
-		s.get_state(0)
 
 func _apply_inputs(load_dict: Dictionary) -> void:
 	if load_dict.input_array == null:
@@ -417,10 +393,15 @@ func _fix_sprite_states_to_count() -> void:
 				i.states.append({})
 
 func _finalize_after_load() -> void:
+	Global.load_sprite_states(0)
 	Global.remake_layers.emit()
 	Global.reparent_objects.emit(get_tree().get_nodes_in_group("Sprites"))
+	if ImageTextureLoaderManager.trim && !Global.settings_dict.trimmed:
+		for i in get_tree().get_nodes_in_group("Sprites"):
+			i.zazaza_reposition(get_tree().get_nodes_in_group("Sprites"))
+		print("Images Trimmed!")
+		Global.settings_dict.trimmed = true
 	
-
 	Global.slider_values.emit(Global.settings_dict)
 	if Global.main.has_node("%Control"):
 		Global.reinfoanim.emit()
@@ -437,6 +418,7 @@ func _finalize_after_load() -> void:
 	Global.main.get_node("%Marker").current_screen = Global.settings_dict.monitor
 	Global.project_updates.emit("Project Loaded!")
 	Global.remake_image_manager.emit()
+	await get_tree().process_frame
 	Global.load_sprite_states(0)
 
 func load_sprite(sprite, image_data = null, normal = false):
@@ -524,6 +506,7 @@ func load_pngplus_file(path):
 		if animSpeed != 0.0:
 			image_data.image_data = []
 			image_data.trimmed = false
+			image_data.sprite_sheet = true
 		else:
 			if ImageTextureLoaderManager.trim:
 				var og_image = img.duplicate(true)
@@ -647,11 +630,11 @@ func load_pngplus_file(path):
 		spr.zazaza(get_tree().get_nodes_in_group("Sprites"))
 
 	Global.settings_dict.should_delta = false
-	Global.load_sprite_states(0)
 	Global.reinfoanim.emit()
 	Global.remake_image_manager.emit()
 	Global.main.get_node("%Marker").current_screen = Monitor.ALL_SCREENS
 	Global.load_model.emit()
+	Global.load_sprite_states(0)
 	Global.project_updates.emit("Plus Project Loaded!")
 
 #----------------------------------------------------------------------------

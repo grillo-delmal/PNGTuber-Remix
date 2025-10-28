@@ -122,7 +122,7 @@ func _on_file_dialog_file_selected(path):
 	match current_state:
 		State.LoadFile:
 			ImageTextureLoaderManager.trim = false
-			if path.get_extension() == "save":
+			if path.get_extension().to_lower() == "save":
 				if Settings.theme_settings.enable_trimmer:
 					model_path = path
 					%ConfirmTrim.popup_centered()

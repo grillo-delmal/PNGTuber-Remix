@@ -30,6 +30,9 @@ func _ready():
 	%Dragger.global_position = %Pos.global_position
 	Global.reinfo.connect(sel)
 	Global.deselect.connect(desel)
+	grab_object.button_down.connect(_on_grab_button_down)
+	grab_object.button_up.connect(_on_grab_button_up)
+	
 
 func sel():
 	if self in Global.held_sprites:
@@ -163,20 +166,15 @@ func get_state(id):
 		
 		if get_value("should_reset_state"):
 			%ReactionConfig.reset_anim()
-		
-		var old_glob = global_position
+			
 		position = get_value("position")
-		
-		
 		%Sprite2D.position = get_value("offset") 
 		%Sprite2D.scale = Vector2(1,1)
 		
 		%Rotation.z_index = get_value("z_index")
 		modulate = get_value("colored")
 		scale = get_value("scale")
-	#	global_position = get_value("global_position")
-		
-		
+		var old_glob = global_position
 		if (global_position - old_glob).length() > get_value("drag_snap") && get_value("drag_snap") != 999999.0:
 			%Dragger.global_position = %Pos.global_position
 		

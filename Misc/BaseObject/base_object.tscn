@@ -55,5 +55,3 @@ unique_name_in_owner = true
 script = ExtResource("10_lrffp")
 actor = NodePath("..")
 metadata/_custom_type_script = "uid://dfyvj4w18tr1"
-
-[connection signal="timeout" from="Animation" to="." method="animation"]

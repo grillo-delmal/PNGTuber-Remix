@@ -59,24 +59,30 @@ func set_data(_data : Dictionary):
 func image_replaced():
 	Global.image_replaced.emit(self)
 
-
-func trim_image():
-	if !is_apng && !img_animated:
-		var image : Image = runtime_texture.get_image().duplicate(true)
-		var og_image = image.duplicate(true)
-		image = ImageTrimmer.trim_image(image)
-		var original_width = og_image.get_width()
-		var original_height = og_image.get_height()
-		var trimmed_width = image.get_width()
-		var trimmed_height = image.get_height()
-		var trim_info = ImageTrimmer.calculate_trim_info(og_image)
-		if !trim_info.is_empty():
-			var center_shift_x = trim_info.min_x - ((original_width - trimmed_width) / 2.0)
-			var center_shift_y = trim_info.min_y - ((original_height - trimmed_height) / 2.0)
-			offset += Vector2(center_shift_x, center_shift_y)
-		else:
-			image.resize(32,32, Image.INTERPOLATE_BILINEAR)
-		
-		var tex = ImageTexture.create_from_image(image)
-		runtime_texture = tex
-		trimmed = true
+func trim_image(sprite_node: Sprite2D = null):
+	if !sprite_sheet:
+		if !is_apng && !img_animated:
+			var image : Image = runtime_texture.get_image().duplicate(true)
+			var og_image = image.duplicate(true)
+			image = ImageTrimmer.trim_image(image)
+			var original_width = og_image.get_width()
+			var original_height = og_image.get_height()
+			var trimmed_width = image.get_width()
+			var trimmed_height = image.get_height()
+			var trim_info = ImageTrimmer.calculate_trim_info(og_image)
+			if !trim_info.is_empty():
+				var center_shift_x = trim_info.min_x - ((original_width - trimmed_width) / 2.0)
+				var center_shift_y = trim_info.min_y - ((original_height - trimmed_height) / 2.0)
+				offset += Vector2(center_shift_x, center_shift_y)
+				if sprite_node != null:
+					sprite_node.position += Vector2(center_shift_x, center_shift_y)
+			else:
+				image.resize(32,32, Image.INTERPOLATE_BILINEAR)
+			
+			var tex = ImageTexture.create_from_image(image)
+			runtime_texture = tex
+			trimmed = true
+	else:
+		trimmed = false
+		image_data = []
+		sprite_sheet = true

@@ -41,16 +41,17 @@ shader_parameter/ant_speed = 30.0
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_i82gq"]
 gradient = SubResource("Gradient_uswo1")
 
-[node name="SpriteObject" node_paths=PackedStringArray("sprite_object") instance=ExtResource("1_31wc5")]
+[node name="SpriteObject" node_paths=PackedStringArray("sprite_object", "grab_object") instance=ExtResource("1_31wc5")]
 script = ExtResource("1_yuqos")
 sprite_object = NodePath("Pos/MouseRot/Drag/Rotation/Sprite2D")
+grab_object = NodePath("Pos/MouseRot/Drag/Rotation/Sprite2D/Grab")
 
 [node name="Sprite2D" type="Line2D" parent="Pos/MouseRot/Drag/Rotation" index="1"]
 unique_name_in_owner = true
 physics_interpolation_mode = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_lijf4")
-points = PackedVector2Array(-10, 0, -4.96, 0, 2.1600008, 0, 11.360001, 0, 22.640001, 0, 36, 0, 50.305325, -0.513517, 64.4213, -2.054068, 78.34793, -4.6216536, 92.085205, -8.216272, 105.63313, -12.837925, 118.71026, -18.52459, 131.03514, -25.314243, 142.60777, -33.20689, 153.42815, -42.202522, 163.49628, -52.301144, 172.60149, -63.274548, 180.53307, -74.89452, 187.29108, -87.16107, 192.87546, -100.074196, 197.28624, -113.63389, 200.43782, -127.53907, 202.24461, -141.48865, 202.70663, -155.48262, 201.82385, -169.52098, 199.59628, -183.60376, 196.08722, -197.42307, 191.35995, -210.67102)
+points = PackedVector2Array(-10, 0, -4.96, 0, 2.16, 0, 11.36, 0, 22.64, 0, 36, 0, 50.4, -1.73287e-05, 64.8, -6.93148e-05, 79.2, -0.000155958, 93.6, -0.000277259, 108, -0.000433218, 122.4, -0.000655162, 136.8, -0.000974418, 151.2, -0.00139099, 165.6, -0.00190487, 180, -0.00251607, 194.4, -0.00370968, 208.8, -0.0059708, 223.2, -0.00929944, 237.6, -0.0136956, 252, -0.0191592, 266.4, -0.0241608, 280.8, -0.0271707, 295.2, -0.0281889, 309.6, -0.0272154, 324, -0.0242502, 338.4, -0.0192933, 352.8, -0.0123447)
 texture = SubResource("CanvasTexture_6684t")
 texture_mode = 2
 script = ExtResource("4_e6x1l")

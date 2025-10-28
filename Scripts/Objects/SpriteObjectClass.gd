@@ -124,6 +124,7 @@ const DEFAULT_DATA := {
 
 
 @export var sprite_object : Node2D
+@export var grab_object : BaseButton
 var used_image_id : int = 0
 var used_image_id_normal : int = 0
 var referenced_data : ImageData = null
@@ -172,7 +173,7 @@ var saved_keys : Array = []
 var last_mouse_position : Vector2 = Vector2(0,0)
 var last_dist : Vector2 = Vector2(0,0)
 var global
-var old_global: Vector2 = Vector2(0,0)
+var old_global: Vector2 = Vector2(-999999999999,-9999999999)
 
 var selected : bool = false
 
@@ -271,12 +272,10 @@ func set_blend(blend):
 func reparent_obj(parent):
 	for i in parent:
 		if i.sprite_id == parent_id:
-			old_global = global_position
 			var new_parent = i.sprite_object
 			reparent(new_parent)
-			global_position = old_global
 			break
-
+	
 
 func image_replaced(image_date : ImageData):
 	if !get_value("folder"):
@@ -289,3 +288,16 @@ func image_replaced(image_date : ImageData):
 			sprite_object.texture.normal_texture = texture
 	else:
 		return
+
+
+
+func zazaza_reposition(parent):
+	for i in parent:
+		if i.sprite_id == parent_id:
+			for state in states:
+				if !state.is_empty():
+					var contain = i
+					var desired_global = contain.to_global(state.position)
+					var desired_local = contain.to_local(desired_global) +Vector2(640, 360)
+					state.position = get_parent().to_local(desired_local)
+				

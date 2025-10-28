@@ -42,6 +42,7 @@ var has_last_target : bool = false
 var biased : float = 0.0
 var strength = 0.0
 var _b : float = 0.0
+var lock_movement : bool = false
 
 
 func _ready() -> void:
@@ -59,12 +60,11 @@ func _physics_process(delta: float) -> void:
 		rainbow(delta)
 		follow_calculation(delta)
 		movements(delta)
+
 	else:
 		static_prev()
 	
 	follow_wiggle(delta)
-	
-
 	%Rotation.rotation = GlobalCalculations.is_nan_or_inf(applied_rotation + rot_drag + follow_point_rot)
 	%Pos.position += GlobalCalculations.is_nan_or_inf(applied_pos)
 	placeholder_position = %Pos.global_position

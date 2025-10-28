@@ -47,6 +47,8 @@ func _ready():
 	update_wiggle_parts()
 	Global.reinfo.connect(sel)
 	Global.deselect.connect(desel)
+	grab_object.button_down.connect(_on_grab_button_down)
+	grab_object.button_up.connect(_on_grab_button_up)
 
 func sel():
 	if self in Global.held_sprites:

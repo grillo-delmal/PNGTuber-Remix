@@ -97,6 +97,7 @@ var settings_dict : Dictionary = {
 
 	language = "automatic",
 	preferred_language = null,
+	trimmed = false,
 }
 
 var image_manager_data : Array = []
