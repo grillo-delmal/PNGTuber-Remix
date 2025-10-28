@@ -54,7 +54,8 @@ size_flags_vertical = 3
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ImageManager" parent="MarginContainer/VBox/VSplit/VSplit2" instance=ExtResource("5_r4ymd")]
+[node name="FileManager" parent="MarginContainer/VBox/VSplit/VSplit2" instance=ExtResource("5_r4ymd")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [connection signal="dragged" from="MarginContainer/VBox/VSplit" to="." method="_on_v_split_dragged"]

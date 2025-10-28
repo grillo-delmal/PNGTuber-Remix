@@ -7,7 +7,7 @@ var record_effect : AudioEffectCapture
 const VU_COUNT = 4
 const HEIGHT = 40
 const  MAX_FREQ = 11050.0
-const MIC_RESTART_TIME: float = 90
+const MIC_RESTART_TIME: float = 120
 const MIC_RESTART_TIME_FIX: float = 600
 var bar_stuff = []
 var used_bar = 0
@@ -44,7 +44,6 @@ func restart_mic():
 	playing = false
 	record_effect.clear_buffer()
 	await get_tree().physics_frame
-	await get_tree().physics_frame # Added second frame just to be safe
 	playing = true
 
 func restart_mic_and_timer():

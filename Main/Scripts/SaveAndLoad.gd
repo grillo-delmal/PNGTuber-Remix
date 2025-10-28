@@ -6,8 +6,6 @@ var can_load_plus : bool = false
 const YIELD_EVERY : int = 25
 
 var import_trimmed : bool = false
-var trimmed_sprites : Array = []
-
 
 
 func save_file(path):
@@ -19,119 +17,68 @@ func save_data():
 	var sprites_array : Array = []
 	var input_array : Array = []
 	var image_array : Array = []
-
+	var seen_image_ids : Dictionary = {}
 	for i in Global.image_manager_data:
 		if !Settings.theme_settings.save_unused_files:
 			var used : bool = false
 			for sp in sprites:
 				if sp.used_image_id == i.id or sp.used_image_id_normal == i.id:
 					used = true
+					break
 			if !used:
 				continue
+		if seen_image_ids.has(i.id):
+			continue
+		seen_image_ids[i.id] = true
+
 		var dict : Dictionary = i.get_data()
 		image_array.append(dict)
-		
-		
+
 	for input in inputs:
 		input_array.append({
-			state_name = input.state_name,
-			hot_key = input.saved_event,
+			"state_name": input.state_name,
+			"hot_key": input.saved_event,
 		})
 	for sprt in sprites:
 		sprt.save_state(Global.current_state)
-		if !sprt.get_value("folder"):
-			if sprt.referenced_data.is_apng:
-				var cleaned_array = []
-				for st in sprt.states:
-					if !st.is_empty():
-						cleaned_array.append(st)
-				var sprt_dict = {
-					states = cleaned_array,
-					sprite_name = sprt.sprite_name,
-					sprite_id = sprt.sprite_id,
-					parent_id = sprt.parent_id,
-					sprite_type = sprt.sprite_type,
-					is_asset = sprt.is_asset,
-					saved_event = sprt.saved_event,
-					was_active_before = sprt.was_active_before,
-					should_disappear = sprt.should_disappear,
-					saved_keys = sprt.saved_keys,
-					show_only = sprt.show_only,
-					is_collapsed = sprt.is_collapsed,
-					is_premultiplied = true,
-					layer_color = sprt.layer_color,
-					image_id = sprt.used_image_id,
-					normal_id = sprt.used_image_id_normal,
-				}
-				sprites_array.append(sprt_dict)
-				continue
-				
+		var cleaned_array := []
+		for st in sprt.states:
+			if typeof(st) == TYPE_DICTIONARY:
+				if not st.is_empty():
+					cleaned_array.append(st.duplicate(true))
 			else:
-				var cleaned_array = []
-				
-				for st in sprt.states:
-					if !st.is_empty():
-						cleaned_array.append(st)
-				var sprt_dict = {
-					states = cleaned_array,
-					sprite_name = sprt.sprite_name,
-					sprite_id = sprt.sprite_id,
-					parent_id = sprt.parent_id,
-					sprite_type = sprt.sprite_type,
-					is_asset = sprt.is_asset,
-					saved_event = sprt.saved_event,
-					was_active_before = sprt.was_active_before,
-					should_disappear = sprt.should_disappear,
-					show_only = sprt.show_only,
-					saved_keys = sprt.saved_keys,
-					is_collapsed = sprt.is_collapsed,
-					is_premultiplied = true,
-					layer_color = sprt.layer_color,
-					rotated = sprt.rotated,
-					flipped_h = sprt.flipped_h,
-					flipped_v = sprt.flipped_v,
-					image_id = sprt.used_image_id,
-					normal_id = sprt.used_image_id_normal,
-				}
-				sprites_array.append(sprt_dict)
-				continue
-				
+				cleaned_array.append(st)
+		var base = {
+			"states": cleaned_array,
+			"sprite_name": sprt.sprite_name,
+			"sprite_id": sprt.sprite_id,
+			"parent_id": sprt.parent_id,
+			"sprite_type": sprt.sprite_type,
+			"is_asset": sprt.is_asset,
+			"saved_event": sprt.saved_event,
+			"was_active_before": sprt.was_active_before,
+			"should_disappear": sprt.should_disappear,
+			"show_only": sprt.show_only,
+			"saved_keys": sprt.saved_keys,
+			"is_collapsed": sprt.is_collapsed,
+			"is_premultiplied": true,
+			"layer_color": sprt.layer_color,
+			"image_id": sprt.used_image_id,
+			"normal_id": sprt.used_image_id_normal,
+		}
+		if not sprt.get_value("folder"):
+			base["rotated"] = sprt.rotated
+			base["flipped_h"] = sprt.flipped_h
+			base["flipped_v"] = sprt.flipped_v
 		else:
-			var cleaned_array = []
-			
-			for st in sprt.states:
-				if !st.is_empty():
-					cleaned_array.append(st)
-			var sprt_dict = {
-				states = cleaned_array,
-				sprite_name = sprt.sprite_name,
-				sprite_id = sprt.sprite_id,
-				parent_id = sprt.parent_id,
-				sprite_type = sprt.sprite_type,
-				is_asset = sprt.is_asset,
-				saved_event = sprt.saved_event,
-				was_active_before = sprt.was_active_before,
-				should_disappear = sprt.should_disappear,
-				show_only = sprt.show_only,
-				saved_keys = sprt.saved_keys,
-				is_collapsed = sprt.is_collapsed,
-				is_premultiplied = true,
-				layer_color = sprt.layer_color,
-				rotated = sprt.rotated,
-				flipped_h = sprt.flipped_h,
-				flipped_v = sprt.flipped_v,
-				image_id = sprt.used_image_id,
-				normal_id = sprt.used_image_id_normal,
-			}
-			sprites_array.append(sprt_dict)
-			continue
-		
+			pass
+		sprites_array.append(base)
 	save_dict = {
-		version = Global.version,
-		sprites_array = sprites_array,
-		settings_dict = Global.settings_dict,
-		input_array = input_array,
-		image_manager_data = image_array,
+		"version": Global.version,
+		"sprites_array": sprites_array,
+		"settings_dict": Global.settings_dict,
+		"input_array": input_array,
+		"image_manager_data": image_array,
 	}
 
 func save_model(path):
@@ -187,7 +134,6 @@ func _reset_project_state() -> void:
 	Global.main.clear_sprites()
 	Global.main.get_node("Timer").start()
 	Global.delete_states.emit()
-	trimmed_sprites.clear()
 
 func _read_and_maybe_convert_file(path: String) -> Dictionary:
 	var file = FileAccess.open(path, FileAccess.READ)
@@ -234,7 +180,7 @@ func _apply_settings(load_dict: Dictionary, path: String) -> void:
 func _build_image_manager(load_dict: Dictionary) -> void:
 	var local_image_manage = load_dict.get("image_manager_data", [])
 	var sprites_array = load_dict.get("sprites_array", [])
-	Global.image_manager_data = []
+	Global.image_manager_data.clear()
 	var sheet_textures : Dictionary = {}
 	for sprite in sprites_array:
 		if sprite.has("states"):
@@ -248,37 +194,41 @@ func _build_image_manager(load_dict: Dictionary) -> void:
 						var tex_name = sprite.get("image_id", 0)
 						if tex_name != 0:
 							sheet_textures[tex_name] = true
+	var incoming_id
+	var seen_ids := {}
 	for i in local_image_manage:
+		if typeof(i) == TYPE_DICTIONARY and i.has("id"):
+			incoming_id = i.id
+		else:
+			if typeof(i) != TYPE_DICTIONARY:
+				continue
+			incoming_id = i.get("id", null)
+			if incoming_id == null:
+				continue
+		if seen_ids.has(incoming_id):
+			continue
+		seen_ids[incoming_id] = true
 		var image_data : ImageData = ImageData.new()
 		image_data.set_data(i)
 		var img_id = image_data.id
 		if ImageTextureLoaderManager.trim and !Global.settings_dict.trimmed:
 			if img_id in sheet_textures:
 				pass
-				#print("Skipping trim for sprite sheet image:", img_id)
 			else:
 				image_data.trim_image()
-
 		Global.image_manager_data.append(image_data)
 
 func _build_and_add_sprites(load_dict: Dictionary) -> void:
-	var image_cache := {}
-	for im in Global.image_manager_data:
-		image_cache[im.id] = im
-	
 	var to_add : Array = []
-	var has_image_data = load_dict.get("image_manager_data", null)
-	
+	var counter := 0
 	for sprite in load_dict.sprites_array:
+		counter += 1
 		var sprite_obj = ImageTextureLoaderManager.sprite_scene.instantiate()
 		if sprite.has("sprite_type") and sprite.sprite_type == "WiggleApp":
 			sprite_obj = ImageTextureLoaderManager.appendage_scene.instantiate()
-		
 		sprite_obj.layer_color = sprite.get("layer_color", Color.BLACK)
 		sprite_obj.used_image_id = sprite.get("image_id", 0)
 		sprite_obj.used_image_id_normal = sprite.get("normal_id", 0)
-		
-		# Asset metadata
 		if sprite.has("is_asset"):
 			sprite_obj.is_asset = sprite.is_asset
 			sprite_obj.saved_event = sprite.saved_event
@@ -292,20 +242,19 @@ func _build_and_add_sprites(load_dict: Dictionary) -> void:
 				InputMap.add_action(str(sprite.sprite_id))
 				if sprite_obj.saved_event != null:
 					InputMap.action_add_event(str(sprite.sprite_id), sprite_obj.saved_event)
-		
+
 		sprite_obj.sprite_name = sprite.sprite_name
-		
+
 		var image_data : ImageData = null
 		var image_data_normal : ImageData = null
 		var sprite_node = sprite_obj.get_node("%Sprite2D")
 		var canv := CanvasTexture.new()
 		sprite_node.texture = canv
+
 		
-		# --- Load or reuse image ---
-		if has_image_data == null:
+		if Global.image_manager_data.size() == 0:
 			image_data = ImageData.new()
 			image_data_normal = ImageData.new()
-			
 			if sprite.has("is_apng"):
 				ImageTextureLoaderManager.load_apng(sprite, image_data)
 				ImageTextureLoaderManager.load_apng(sprite, image_data_normal, true)
@@ -317,52 +266,50 @@ func _build_and_add_sprites(load_dict: Dictionary) -> void:
 					load_sprite(sprite, image_data)
 					load_sprite(sprite, image_data_normal, true)
 
-			if image_data.has_data:
 				canv.diffuse_texture = image_data.runtime_texture
 				sprite_obj.referenced_data = image_data
 				sprite_obj.used_image_id = image_data.id
 				image_data.image_name = sprite_obj.sprite_name
-				Global.image_manager_data.append(image_data)
-				image_cache[image_data.id] = image_data
-			if image_data_normal.has_data:
 				canv.normal_texture = image_data_normal.runtime_texture
 				sprite_obj.referenced_data_normal = image_data_normal
 				sprite_obj.used_image_id_normal = image_data_normal.id
 				image_data_normal.image_name = sprite_obj.sprite_name + "(Normal)"
-				Global.image_manager_data.append(image_data_normal)
-				image_cache[image_data_normal.id] = image_data_normal
 		else:
-			# --- Reuse cached images safely ---
-			if image_cache.has(sprite_obj.used_image_id):
-				var im = image_cache[sprite_obj.used_image_id]
-				sprite_obj.referenced_data = im
-				sprite_node.texture.diffuse_texture = ImageTextureLoaderManager.check_flips(im.runtime_texture, sprite_obj)
-			if image_cache.has(sprite_obj.used_image_id_normal):
-				var imn = image_cache[sprite_obj.used_image_id_normal]
-				sprite_obj.referenced_data_normal = imn
-				sprite_node.texture.normal_texture = ImageTextureLoaderManager.check_flips(imn.runtime_texture, sprite_obj)
-				
+			for i in Global.image_manager_data:
+				if i.id == sprite_obj.used_image_id:
+					var im = i
+					sprite_obj.referenced_data = im
+					sprite_node.texture.diffuse_texture = ImageTextureLoaderManager.check_flips(im.runtime_texture, sprite_obj)
+					
+				if i.id == sprite_obj.used_image_id_normal:
+					var imn = i
+					sprite_obj.referenced_data_normal = imn
+					sprite_node.texture.normal_texture = ImageTextureLoaderManager.check_flips(imn.runtime_texture, sprite_obj)
 		var cleaned_array := []
 		for st in sprite.states:
 			if not st.is_empty():
-				if ImageTextureLoaderManager.trim and ! Global.settings_dict.trimmed:
+				var st_copy := {}
+				if typeof(st) == TYPE_DICTIONARY:
+					st_copy = st.duplicate(true)
+				else:
+					st_copy = st
+				if ImageTextureLoaderManager.trim and !Global.settings_dict.trimmed and sprite_obj.referenced_data != null:
 					var delta = sprite_obj.referenced_data.offset
-					st.offset += delta
-				cleaned_array.append(st)
-
-		
+					if not st_copy.has("offset"):
+						st_copy["offset"] = Vector2.ZERO
+					st_copy["offset"] = st_copy["offset"] + delta
+				cleaned_array.append(st_copy)
 		for i in range(cleaned_array.size()):
-			var new_dict = sprite_obj.sprite_data.duplicate()
-			new_dict.merge(cleaned_array[i], true)
+			var new_dict = sprite_obj.sprite_data.duplicate(true)
+			if typeof(cleaned_array[i]) == TYPE_DICTIONARY:
+				new_dict.merge(cleaned_array[i], true)
 			cleaned_array[i] = new_dict
-		
 		sprite_obj.states = cleaned_array
 		sprite_obj.sprite_id = sprite.sprite_id
-		if sprite.parent_id != null:
+		if sprite.has("parent_id") and sprite.parent_id != null:
 			sprite_obj.parent_id = sprite.parent_id
 		if sprite.has("is_collapsed"):
 			sprite_obj.is_collapsed = sprite.is_collapsed
-		
 		sprite_node.get_node("Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		to_add.append(sprite_obj)
 	for s in to_add:
@@ -389,8 +336,9 @@ func _fix_sprite_states_to_count() -> void:
 	var state_count = get_tree().get_nodes_in_group("StateButtons").size()
 	for i in get_tree().get_nodes_in_group("Sprites"):
 		if i.states.size() != state_count:
-			for l in range(abs(i.states.size() - state_count)):
-				i.states.append({})
+			var to_add = state_count - i.states.size()
+			for l in range(to_add):
+				i.states.append(i.sprite_data.duplicate(true))
 
 func _finalize_after_load() -> void:
 	Global.load_sprite_states(0)
@@ -420,6 +368,7 @@ func _finalize_after_load() -> void:
 	Global.remake_image_manager.emit()
 	await get_tree().process_frame
 	Global.load_sprite_states(0)
+	
 
 func load_sprite(sprite, image_data = null, normal = false):
 	var img_data
@@ -660,27 +609,29 @@ func export_images(_images = get_tree().get_nodes_in_group("Sprites")):
 		DirAccess.make_dir_absolute(dire)
 		
 	for image in Global.image_manager_data:
-		if image.img_animated:
-			var file = FileAccess.open(dire +"/" + image.image_name + str(randi()) + ".gif", FileAccess.WRITE)
-			file.store_buffer(image.anim_texture)
-			file.close()
-			file = null
-		elif image.is_apng:
-			var file = FileAccess.open(dire +"/" + image.image_name + str(randi()) + ".apng", FileAccess.WRITE)
-			var exp_image = AImgIOAPNGExporter.new().export_animation(image.frames, 10, self, "_progress_report", [])
-			file.store_buffer(exp_image)
-			file.close()
-			file = null
-		elif !image.img_animated && !image.is_apng:
-			var img = Image.new()
-			img = image.runtime_texture.get_image()
-			img.save_png(dire +"/" + image.image_name + str(randi()) + ".png")
-			img = null
-			if !image.image_data.is_empty():
-				var img_d = Image.new()
-				img_d.load_png_from_buffer(image.image_data)
-				img_d.save_png(dire +"/" + image.image_name + str(randi()) + ".png")
-				img_d = null
+		if image != null:
+			if image.img_animated:
+				var file = FileAccess.open(dire +"/" + image.image_name + str(randi()) + ".gif", FileAccess.WRITE)
+				file.store_buffer(image.anim_texture)
+				file.close()
+				file = null
+			elif image.is_apng:
+				var file = FileAccess.open(dire +"/" + image.image_name + str(randi()) + ".apng", FileAccess.WRITE)
+				var exp_image = AImgIOAPNGExporter.new().export_animation(image.frames, 10, self, "_progress_report", [])
+				file.store_buffer(exp_image)
+				file.close()
+				file = null
+			elif !image.img_animated && !image.is_apng:
+				var img = Image.new()
+				img = image.runtime_texture.get_image()
+				img.save_png(dire +"/" + image.image_name + str(randi()) + ".png")
+				img = null
+				if image.image_data != null:
+					if !image.image_data.is_empty():
+						var img_d = Image.new()
+						img_d.load_png_from_buffer(image.image_data)
+						img_d.save_png(dire +"/" + image.image_name + str(randi()) + ".png")
+						img_d = null
 
 #----------------------------------------------------------------------------
 # Global Image loading from PSD

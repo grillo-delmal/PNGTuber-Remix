@@ -23,7 +23,3 @@ unique_name_in_owner = true
 [node name="MenuScreenPopup" parent="." instance=ExtResource("3_ls8lc")]
 unique_name_in_owner = true
 visible = false
-
-[node name="ProjectManager" type="CanvasLayer" parent="."]
-layer = 5
-visible = false

@@ -92,17 +92,10 @@ func _on_spin_box_value_value_changed(nvalue):
 		var undo_redo_data : Array = []
 		for i in Global.held_sprites:
 			if i != null && is_instance_valid(i) && sp_type != "Null":
-				var og_val = i.sprite_data.duplicate()
 				i.sprite_data[value_to_update] = nvalue
 				StateButton.multi_edit(nvalue, value_to_update, i, i.states)
 				i.save_state(Global.current_state)
-				undo_redo_data.append({sprite_object = i, 
-				data = i.sprite_data.duplicate(), 
-				og_data = og_val,
-				data_type = "sprite_data", 
-				state = Global.current_state})
-				
-		UndoRedoManager.add_data_to_manager(undo_redo_data)
+
 
 
 func _on_slider_value_value_changed(nvalue):
@@ -157,4 +150,4 @@ func _on_slider_value_drag_ended(value_changed: bool) -> void:
 			data_type = "sprite_data", 
 			state = Global.current_state})
 			
-		UndoRedoManager.add_data_to_manager(undo_redo_data)
+		

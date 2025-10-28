@@ -8,6 +8,7 @@ var dt : float = 0
 var played_once : bool = false
 
 func _physics_process(delta):
+	return
 	var cframe2
 	
 	if actor.referenced_data == null:

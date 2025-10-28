@@ -127,8 +127,8 @@ const DEFAULT_DATA := {
 @export var grab_object : BaseButton
 var used_image_id : int = 0
 var used_image_id_normal : int = 0
-var referenced_data : ImageData = null
-var referenced_data_normal : ImageData = null
+var referenced_data  = null
+var referenced_data_normal = null
 
 #Movement
 var heldTicks = 0

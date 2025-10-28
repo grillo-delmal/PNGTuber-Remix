@@ -72,5 +72,5 @@ func on_toggle(toggle : bool):
 		data_type = "sprite_data", 
 		state = Global.current_state})
 	
-	UndoRedoManager.add_data_to_manager(undo_redo_data)
+	
 	changed.emit(button_pressed)

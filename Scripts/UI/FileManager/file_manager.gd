@@ -15,8 +15,8 @@ var path_placeholder : String = ""
 func _ready() -> void:
 	Global.remake_image_manager.connect(remake_files)
 	Global.add_new_image.connect(add_file)
-	
 	create_default()
+
 
 func create_default():
 	%Tree.clear()
@@ -51,6 +51,9 @@ func remake_files():
 	create_default()
 	for i in Global.image_manager_data:
 		add_file(i)
+	
+	var assets : TreeItem = %Tree.get_root().get_child(0)
+	assets.set_text(0, str(assets.get_child_count()))
 
 func add_file(file : ImageData):
 		var spawn : TreeItem = %Tree.create_item(%Tree.get_root().get_child(0))
