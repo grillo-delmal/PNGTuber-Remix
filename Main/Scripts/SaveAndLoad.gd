@@ -18,6 +18,7 @@ func save_data():
 	var input_array : Array = []
 	var image_array : Array = []
 	var seen_image_ids : Dictionary = {}
+	save_dict.clear()
 	for i in Global.image_manager_data:
 		if !Settings.theme_settings.save_unused_files:
 			var used : bool = false
@@ -111,19 +112,18 @@ func load_model(path: String) -> void:
 	var load_dict = await _read_and_maybe_convert_file(path)
 	if load_dict == null:
 		return
-	await get_tree().process_frame
 	
 	_apply_settings(load_dict, path)
-	await get_tree().process_frame
+
 	
 	_build_image_manager(load_dict)
-	await get_tree().process_frame
+
 	
 	_build_and_add_sprites(load_dict)
-	await get_tree().process_frame
+
 	
 	_apply_inputs(load_dict)
-	await get_tree().process_frame
+
 	
 	_fix_sprite_states_to_count()
 	
@@ -156,13 +156,11 @@ func _read_and_maybe_convert_file(path: String) -> Dictionary:
 			await get_tree().process_frame
 		
 		load_dict = VersionConverter.convert_save(load_dict, file_version)
-		await get_tree().process_frame
 		
 		if OS.has_feature("editor") or not path.begins_with("res://"):
 			var new_file := FileAccess.open(path, FileAccess.WRITE)
 			new_file.store_var(load_dict, true)
 			new_file.close()
-			await get_tree().process_frame
 	
 	return load_dict
 
@@ -220,9 +218,7 @@ func _build_image_manager(load_dict: Dictionary) -> void:
 
 func _build_and_add_sprites(load_dict: Dictionary) -> void:
 	var to_add : Array = []
-	var counter := 0
 	for sprite in load_dict.sprites_array:
-		counter += 1
 		var sprite_obj = ImageTextureLoaderManager.sprite_scene.instantiate()
 		if sprite.has("sprite_type") and sprite.sprite_type == "WiggleApp":
 			sprite_obj = ImageTextureLoaderManager.appendage_scene.instantiate()
@@ -312,6 +308,7 @@ func _build_and_add_sprites(load_dict: Dictionary) -> void:
 			sprite_obj.is_collapsed = sprite.is_collapsed
 		sprite_node.get_node("Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		to_add.append(sprite_obj)
+		
 	for s in to_add:
 		Global.sprite_container.add_child(s)
 
@@ -366,9 +363,7 @@ func _finalize_after_load() -> void:
 	Global.main.get_node("%Marker").current_screen = Global.settings_dict.monitor
 	Global.project_updates.emit("Project Loaded!")
 	Global.remake_image_manager.emit()
-	await get_tree().process_frame
 	Global.load_sprite_states(0)
-	
 
 func load_sprite(sprite, image_data = null, normal = false):
 	var img_data
@@ -577,6 +572,7 @@ func load_pngplus_file(path):
 
 	for spr in get_tree().get_nodes_in_group("Sprites"):
 		spr.zazaza(get_tree().get_nodes_in_group("Sprites"))
+		spr.set_dragger_pos()
 
 	Global.settings_dict.should_delta = false
 	Global.reinfoanim.emit()

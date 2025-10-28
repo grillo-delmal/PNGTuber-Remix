@@ -24,7 +24,6 @@ func _on_apply_optimization_pressed() -> void:
 
 		await get_tree().process_frame
 		ImageTextureLoaderManager.trim = true
-		await get_tree().process_frame
 		SaveAndLoad.load_file(Global.save_path)
 		check_toggles()
 

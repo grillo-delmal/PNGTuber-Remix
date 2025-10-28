@@ -66,8 +66,8 @@ func _squish():
 		await tween.finished
 		tween.kill()
 
-func _process(delta):
-	tick +=1
+func _physics_process(delta: float) -> void:
+	tick = Global.tick
 	var hold = get_parent().position.y
 	
 	if !Global.static_view:

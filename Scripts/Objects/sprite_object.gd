@@ -26,13 +26,15 @@ func _ready():
 	Global.reparent_objects.connect(reparent_obj)
 	og_glob = get_value("position")
 	animation()
-	%Dragger.top_level = true
-	%Dragger.global_position = %Pos.global_position
 	Global.reinfo.connect(sel)
 	Global.deselect.connect(desel)
 	grab_object.button_down.connect(_on_grab_button_down)
 	grab_object.button_up.connect(_on_grab_button_up)
-	
+
+
+func set_dragger_pos():
+	%Dragger.top_level = true
+	%Dragger.global_position = %Pos.global_position
 
 func sel():
 	if self in Global.held_sprites:

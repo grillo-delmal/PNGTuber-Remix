@@ -196,11 +196,23 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "TR_MULTISTATE_EDITING_CUE_LABEL"
 
-[node name="SpriteID" type="Label" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/Properties"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/Properties"]
+layout_mode = 2
+
+[node name="SpriteID" type="Label" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/Properties/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 8
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
 text = "TR_SPRITE_ID_LABEL{0}"
+script = ExtResource("14_y3a4k")
+
+[node name="ParentID" type="Label" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer/Properties/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "TR_PARENT_ID_LABEL{0}"
 script = ExtResource("14_y3a4k")
 
 [node name="VSplit" type="VSplitContainer" parent="MainSplit/SecondarySplit/RightPanel/Margin/VBoxContainer"]

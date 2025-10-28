@@ -89,14 +89,11 @@ func _on_spin_box_value_value_changed(nvalue):
 	%SliderValue.value = nvalue
 	%SpinBoxValue.get_line_edit().release_focus()
 	if should_change:
-		var undo_redo_data : Array = []
 		for i in Global.held_sprites:
 			if i != null && is_instance_valid(i) && sp_type != "Null":
 				i.sprite_data[value_to_update] = nvalue
 				StateButton.multi_edit(nvalue, value_to_update, i, i.states)
 				i.save_state(Global.current_state)
-
-
 
 func _on_slider_value_value_changed(nvalue):
 	if should_change:
@@ -149,5 +146,3 @@ func _on_slider_value_drag_ended(value_changed: bool) -> void:
 			og_data = og_val,
 			data_type = "sprite_data", 
 			state = Global.current_state})
-			
-		

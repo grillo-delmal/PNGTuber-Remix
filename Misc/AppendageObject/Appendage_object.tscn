@@ -51,7 +51,7 @@ unique_name_in_owner = true
 physics_interpolation_mode = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_lijf4")
-points = PackedVector2Array(-10, 0, -4.96, 0, 2.16, 0, 11.36, 0, 22.64, 0, 36, 0, 50.4, -1.73287e-05, 64.8, -6.93148e-05, 79.2, -0.000155958, 93.6, -0.000277259, 108, -0.000433218, 122.4, -0.000655162, 136.8, -0.000974418, 151.2, -0.00139099, 165.6, -0.00190487, 180, -0.00251607, 194.4, -0.00370968, 208.8, -0.0059708, 223.2, -0.00929944, 237.6, -0.0136956, 252, -0.0191592, 266.4, -0.0241608, 280.8, -0.0271707, 295.2, -0.0281889, 309.6, -0.0272154, 324, -0.0242502, 338.4, -0.0192933, 352.8, -0.0123447)
+points = PackedVector2Array(-10, 0, -4.96, 0, 2.16, 0, 11.36, 0, 22.64, 0, 36, 0, 50.4, 1.32901e-05, 64.8, 5.31603e-05, 79.2, 0.000119611, 93.6, 0.000212641, 108, 0.000332252, 122.4, 0.000542317, 136.8, 0.000906711, 151.2, 0.00142543, 165.6, 0.00209848, 180, 0.00292586, 194.4, 0.00375288, 208.8, 0.00442484, 223.2, 0.00494175, 237.6, 0.0053036, 252, 0.0055104, 266.4, 0.00498016, 280.8, 0.0031309, 295.2, -3.73651e-05, 309.6, -0.00452465, 324, -0.0103309, 338.4, -0.0174563, 352.8, -0.0259006)
 texture = SubResource("CanvasTexture_6684t")
 texture_mode = 2
 script = ExtResource("4_e6x1l")
@@ -92,8 +92,11 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_i82gq")
 expand_mode = 1
 
-[node name="Movements" parent="." index="2" node_paths=PackedStringArray("actor")]
+[node name="FollowComponent" parent="." index="3" node_paths=PackedStringArray("actor")]
 actor = NodePath("..")
 
-[node name="AnimatedSpriteTexture" parent="." index="4" node_paths=PackedStringArray("sprite_node")]
+[node name="Movements" parent="." index="4" node_paths=PackedStringArray("actor")]
+actor = NodePath("..")
+
+[node name="AnimatedSpriteTexture" parent="." index="6" node_paths=PackedStringArray("sprite_node")]
 sprite_node = NodePath("../Pos/MouseRot/Drag/Rotation/Sprite2D")

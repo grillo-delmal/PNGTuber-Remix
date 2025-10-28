@@ -53,7 +53,7 @@ func remake_files():
 		add_file(i)
 	
 	var assets : TreeItem = %Tree.get_root().get_child(0)
-	assets.set_text(0, str(assets.get_child_count()))
+	assets.set_text(0, "Images " + "(" + str(assets.get_child_count()) + ")")
 
 func add_file(file : ImageData):
 		var spawn : TreeItem = %Tree.create_item(%Tree.get_root().get_child(0))

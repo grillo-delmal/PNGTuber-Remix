@@ -102,10 +102,13 @@ z_index = 4096
 z_as_relative = false
 texture = ExtResource("2_1i6gu")
 
-[node name="Movements" parent="." index="2" node_paths=PackedStringArray("actor")]
+[node name="FollowComponent" parent="." index="3" node_paths=PackedStringArray("actor")]
 actor = NodePath("..")
 
-[node name="AnimatedSpriteTexture" parent="." index="4" node_paths=PackedStringArray("sprite_node")]
+[node name="Movements" parent="." index="4" node_paths=PackedStringArray("actor")]
+actor = NodePath("..")
+
+[node name="AnimatedSpriteTexture" parent="." index="6" node_paths=PackedStringArray("sprite_node")]
 sprite_node = NodePath("../Pos/MouseRot/Drag/Rotation/Sprite2D")
 
 [connection signal="timeout" from="Animation" to="." method="animation"]

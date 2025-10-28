@@ -124,7 +124,9 @@ func editor_blink():
 				%Pos.modulate.a = 0.2
 		
 		blinking = true
-		await get_tree().create_timer(0.2 * Global.settings_dict.blink_speed, false, false).timeout
+		%Blink.wait_time = 0.2 * Global.settings_dict.blink_speed
+		%Blink.start()
+		await %Blink.timeout
 		if actor.get_value("should_blink"):
 			if not actor.get_value("open_eyes"):
 				%Pos.modulate.a = 0.2
@@ -146,7 +148,9 @@ func blink():
 				%Pos.hide()
 		
 		blinking = true
-		await get_tree().create_timer(0.2 * Global.settings_dict.blink_speed, false, false).timeout
+		%Blink.wait_time = 0.2 * Global.settings_dict.blink_speed
+		%Blink.start()
+		await %Blink.timeout
 		if actor.get_value("should_blink"):
 			if not actor.get_value("open_eyes"):
 				%Pos.hide()

@@ -41,14 +41,17 @@ func _ready():
 	Global.image_replaced.connect(image_replaced)
 	Global.reparent_objects.connect(reparent_obj)
 	Global.reparent_objects.connect(set_anchor_sprite)
-	%Dragger.top_level = true
-	%Dragger.global_position = %Pos.global_position
-	set_process(true)
 	update_wiggle_parts()
 	Global.reinfo.connect(sel)
 	Global.deselect.connect(desel)
 	grab_object.button_down.connect(_on_grab_button_down)
 	grab_object.button_up.connect(_on_grab_button_up)
+
+
+func set_dragger_pos():
+	%Dragger.top_level = true
+	%Dragger.global_position = %Pos.global_position
+
 
 func sel():
 	if self in Global.held_sprites:
@@ -76,7 +79,7 @@ func correct_sprite_size(ret : bool = false):
 	if ret:
 		return [w, l]
 
-func _process(_delta):
+func _physics_process(_delta: float) -> void:
 	if selected:
 		%Grab.mouse_filter = Control.MouseFilter.MOUSE_FILTER_PASS
 		%Selection.show()

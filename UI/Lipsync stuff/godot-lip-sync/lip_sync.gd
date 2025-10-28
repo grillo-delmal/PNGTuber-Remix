@@ -267,8 +267,7 @@ func _ready() -> void:
 		_player.play()
 
 
-# Process the lip-sync audio
-func _process(_delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	# Calculate absolute energy
 	var energy := BANDS_DEF.duplicate()
 	var energy_sum := 0.0
@@ -307,7 +306,6 @@ func _process(_delta: float) -> void:
 		var old_weight: float = visemes[i]
 		var new_weight: float = scores[i] * score_scale
 		visemes[i] = lerp(old_weight, new_weight, slew_scale)
-
 
 # Get or create an audio bus with the specified name
 static func _get_or_create_audio_bus(name: String) -> int:
