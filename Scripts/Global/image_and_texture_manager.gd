@@ -9,6 +9,8 @@ static var appendage_scene = load("res://Misc/AppendageObject/Appendage_object.t
 static var sprite_scene = load("res://Misc/SpriteObject/sprite_object.tscn") as PackedScene
 
 
+
+
 static func load_apng(sprite , image_data = null, normal = false):
 	var buffer = []
 	var img = null
@@ -36,7 +38,10 @@ static func load_apng(sprite , image_data = null, normal = false):
 	image_data.img_animated = false
 	image_data.anim_texture = buffer
 	var text = ImageTexture.create_from_image(cframe.content)
-	image_data.runtime_texture = text
+	if text == null:
+		image_data.runtime_texture = ImageTexture.create_from_image(Image.create_empty(32,32,false, Image.FORMAT_ETC2_RGBA8))
+	else:
+		image_data.runtime_texture = text
 	image_data.animated_frames.clear()
 	for i in image_data.frames:
 		var new_frame : AnimatedFrame = AnimatedFrame.new()
@@ -65,7 +70,11 @@ static func load_gif(sprite, image_data = null, normal = true):
 		gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], n).get_image().fix_alpha_edges()
 		
 	var text = ImageTexture.create_from_image(gif_tex.get_frame_texture(gif_tex.get_animation_names()[0], 0).get_image())
-	image_data.runtime_texture = text
+	if text == null:
+		image_data.runtime_texture = ImageTexture.create_from_image(Image.create_empty(32,32,false, Image.FORMAT_ETC2_RGBA8))
+	else:
+		image_data.runtime_texture = text
+	
 	image_data.animated_frames.clear()
 	for i in gif_tex.get_frame_count(gif_tex.get_animation_names()[0]):
 		var new_frame : AnimatedFrame = AnimatedFrame.new()

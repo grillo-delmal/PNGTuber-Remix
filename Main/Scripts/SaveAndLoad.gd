@@ -243,44 +243,55 @@ func _build_and_add_sprites(load_dict: Dictionary) -> void:
 
 		var image_data : ImageData = null
 		var image_data_normal : ImageData = null
-		var sprite_node = sprite_obj.get_node("%Sprite2D")
 		var canv : CanvasTexture = CanvasTexture.new()
-		sprite_node.texture = canv
+		canv.diffuse_texture = preload("res://Misc/SpriteObject/Folder.png")
+		sprite_obj.get_node("%Sprite2D").texture = canv
 
-		
-		if Global.image_manager_data.size() == 0:
+		if load_dict.get("image_manager_data", []) == [] && !sprite.states[0].get("folder"):
 			image_data = ImageData.new()
-			image_data_normal = ImageData.new()
+			if sprite.has("normal"):
+				if sprite.normal != null:
+					image_data_normal = ImageData.new()
 			if sprite.has("is_apng"):
 				ImageTextureLoaderManager.load_apng(sprite, image_data)
-				ImageTextureLoaderManager.load_apng(sprite, image_data_normal, true)
+				if image_data_normal != null:
+					ImageTextureLoaderManager.load_apng(sprite, image_data_normal, true)
 			else:
 				if sprite.has("img_animated") and sprite.img_animated:
 					ImageTextureLoaderManager.load_gif(sprite_obj, sprite, image_data)
-					ImageTextureLoaderManager.load_gif(sprite, image_data_normal, true)
+					if image_data_normal != null:
+						ImageTextureLoaderManager.load_gif(sprite, image_data_normal, true)
 				else:
 					load_sprite(sprite, image_data)
-					load_sprite(sprite, image_data_normal, true)
-
+					if image_data_normal != null:
+						load_sprite(sprite, image_data_normal, true)
+				
 				canv.diffuse_texture = image_data.runtime_texture
 				sprite_obj.referenced_data = image_data
 				sprite_obj.used_image_id = image_data.id
 				image_data.image_name = sprite_obj.sprite_name
-				canv.normal_texture = image_data_normal.runtime_texture
-				sprite_obj.referenced_data_normal = image_data_normal
-				sprite_obj.used_image_id_normal = image_data_normal.id
-				image_data_normal.image_name = sprite_obj.sprite_name + "(Normal)"
+				Global.image_manager_data.append(image_data)
+				if image_data_normal != null:
+					canv.normal_texture = image_data_normal.runtime_texture
+					sprite_obj.referenced_data_normal = image_data_normal
+					sprite_obj.used_image_id_normal = image_data_normal.id
+					image_data_normal.image_name = sprite_obj.sprite_name + "(Normal)"
+					Global.image_manager_data.append(image_data_normal)
 		else:
-			for i in Global.image_manager_data:
-				if i.id == sprite_obj.used_image_id:
-					var im = i
-					sprite_obj.referenced_data = im
-					sprite_node.texture.diffuse_texture = ImageTextureLoaderManager.check_flips(im.runtime_texture, sprite_obj)
-					
-				if i.id == sprite_obj.used_image_id_normal:
-					var imn = i
-					sprite_obj.referenced_data_normal = imn
-					sprite_node.texture.normal_texture = ImageTextureLoaderManager.check_flips(imn.runtime_texture, sprite_obj)
+			if !sprite.states[0].get("folder"):
+				for i in Global.image_manager_data:
+					if i.id == sprite_obj.used_image_id:
+						var im = i
+						sprite_obj.referenced_data = im
+						sprite_obj.get_node("%Sprite2D").texture.diffuse_texture = ImageTextureLoaderManager.check_flips(im.runtime_texture, sprite_obj)
+						
+					if i.id == sprite_obj.used_image_id_normal:
+						var imn = i
+						sprite_obj.referenced_data_normal = imn
+						sprite_obj.get_node("%Sprite2D").texture.normal_texture = ImageTextureLoaderManager.check_flips(imn.runtime_texture, sprite_obj)
+				
+		
+
 		var cleaned_array := []
 		for st in sprite.states:
 			if not st.is_empty():
@@ -306,7 +317,7 @@ func _build_and_add_sprites(load_dict: Dictionary) -> void:
 			sprite_obj.parent_id = sprite.parent_id
 		if sprite.has("is_collapsed"):
 			sprite_obj.is_collapsed = sprite.is_collapsed
-		sprite_node.get_node("Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
+		sprite_obj.get_node("%Sprite2D").get_node("Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		to_add.append(sprite_obj)
 		
 	for s in to_add:
@@ -383,11 +394,14 @@ func load_sprite(sprite, image_data = null, normal = false):
 		img.load_png_from_buffer(img_data)
 	else:
 		img.load_png_from_buffer(type)
+		
 	if sprite.has("is_premultiplied") == false:
 		img.fix_alpha_edges()
-	var img_tex = ImageTexture.new()
-	img_tex.set_image(img)
-	image_data.runtime_texture = img_tex
+	var img_tex = ImageTexture.create_from_image(img)
+	if img_tex == null:
+		image_data.runtime_texture = ImageTexture.create_from_image(Image.create_empty(32,32,false, Image.FORMAT_ETC2_RGBA8))
+	else:
+		image_data.runtime_texture = img_tex
 	image_data.has_data = true
 
 func load_pngplus_file(path):

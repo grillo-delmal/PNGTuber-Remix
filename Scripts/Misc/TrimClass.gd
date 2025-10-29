@@ -77,6 +77,7 @@ static func trim_normal(image : Image, normal : Image) -> Image:
 static func set_thumbnail(item : TreeItem):
 	var img = Image.new()
 	if item.get_metadata(0) is ImageData:
+		#var test = item.get_metadata(0)
 		img = item.get_metadata(0).runtime_texture.get_image().duplicate(true)
 	else:
 		if item.get_metadata(0).sprite_object.img_animated:

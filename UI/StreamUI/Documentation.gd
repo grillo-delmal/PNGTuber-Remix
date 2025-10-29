@@ -1,4 +1,8 @@
-# PNGTuber Remix WebSocket API Documentation
+extends Node
+class_name WebsocketDoc
+
+
+static var doc : String = '# PNGTuber Remix WebSocket API Documentation
 
 This document provides comprehensive documentation for all available WebSocket commands in PNGTuber Remix.
 
@@ -54,14 +58,14 @@ Switch between different character states (expressions, poses, etc.) by name or 
 **Example Usage:**
 ```javascript
 // Switch by name (recommended - more user-friendly)
-websocket.send('{"event": "state", "state_name": "Pickles Idle"}');
-websocket.send('{"event": "state", "state_name": "Pickles Smug"}');
-websocket.send('{"event": "state", "state_name": "Pickles Distracted"}');
+websocket.send("{"event": "state", "state_name": "Pickles Idle"}");
+websocket.send("{"event": "state", "state_name": "Pickles Smug"}");
+websocket.send("{"event": "state", "state_name": "Pickles Distracted"}");
 
 // Switch by ID (still supported)
-websocket.send('{"event": "state", "state_id": 1}');
-websocket.send('{"event": "state", "state_id": 2}');
-websocket.send('{"event": "state", "state_id": 3}');
+websocket.send("{"event": "state", "state_id": 1}");
+websocket.send("{"event": "state", "state_id": 2}");
+websocket.send("{"event": "state", "state_id": 3}");
 ```
 
 ---
@@ -203,22 +207,22 @@ Get a list of all sprites with their current visibility status, IDs, and group i
   "event": "list_sprites",
   "result": "success",
   "sprites": [
-    {
-      "name": "WholeHead2", 
-      "visible": true, 
-      "id": 12345, 
-      "is_group": true, 
-      "children": ["EarL2", "EarR2", "Head2", "Face2"], 
-      "parent_id": 0
-    },
-    {
-      "name": "EarL2", 
-      "visible": true, 
-      "id": 67890, 
-      "is_group": false, 
-      "children": [], 
-      "parent_id": 12345
-    }
+	{
+	  "name": "WholeHead2", 
+	  "visible": true, 
+	  "id": 12345, 
+	  "is_group": true, 
+	  "children": ["EarL2", "EarR2", "Head2", "Face2"], 
+	  "parent_id": 0
+	},
+	{
+	  "name": "EarL2", 
+	  "visible": true, 
+	  "id": 67890, 
+	  "is_group": false, 
+	  "children": [], 
+	  "parent_id": 12345
+	}
   ]
 }
 ```
@@ -239,13 +243,13 @@ Get a list of all sprites that have children (groups only).
   "event": "list_groups", 
   "result": "success", 
   "groups": [
-    {
-      "name": "WholeHead2", 
-      "visible": true, 
-      "id": 12345, 
-      "children": ["EarL2", "EarR2", "Head2", "Face2"], 
-      "child_count": 4
-    }
+	{
+	  "name": "WholeHead2", 
+	  "visible": true, 
+	  "id": 12345, 
+	  "children": ["EarL2", "EarR2", "Head2", "Face2"], 
+	  "child_count": 4
+	}
   ]
 }
 ```
@@ -319,7 +323,7 @@ OR
 ---
 
 ### 7.4. Toggle Group
-Toggle a group's visibility and all its children.
+Toggle a group"s visibility and all its children.
 
 **Request:**
 ```json
@@ -495,9 +499,9 @@ Get a list of all available states with their names, IDs, and current status.
   "event": "list_states",
   "result": "success",
   "states": [
-    {"name": "Pickles Idle", "id": 1, "is_current": true},
-    {"name": "Pickles Smug", "id": 2, "is_current": false},
-    {"name": "Pickles Distracted", "id": 3, "is_current": false}
+	{"name": "Pickles Idle", "id": 1, "is_current": true},
+	{"name": "Pickles Smug", "id": 2, "is_current": false},
+	{"name": "Pickles Distracted", "id": 3, "is_current": false}
   ]
 }
 ```
@@ -542,65 +546,65 @@ Load a different PNGTuber model file for performance optimization or model switc
 ### JavaScript WebSocket Client
 ```javascript
 // Connect to the WebSocket server
-const websocket = new WebSocket('ws://localhost:9321');
+const websocket = new WebSocket("ws://localhost:9321");
 
 websocket.onopen = function() {
-    console.log('Connected to PNGTuber Remix');
-    
-    // Test connection
-    websocket.send('{"event": "ping"}');
+	console.log("Connected to PNGTuber Remix");
+	
+	// Test connection
+	websocket.send("{"event": "ping"}");
 };
 
 websocket.onmessage = function(event) {
-    const response = JSON.parse(event.data);
-    console.log('Received:', response);
+	const response = JSON.parse(event.data);
+	console.log("Received:", response);
 };
 
 // Switch to happy state by name (recommended)
-websocket.send('{"event": "state", "state_name": "Pickles Smug"}');
+websocket.send("{"event": "state", "state_name": "Pickles Smug"}");
 
 // Switch to state by ID (still works)
-websocket.send('{"event": "state", "state_id": 2}');
+websocket.send("{"event": "state", "state_id": 2}");
 
 // Hide hat
-websocket.send('{"event": "hide_sprite", "sprite_name": "Hat"}');
+websocket.send("{"event": "hide_sprite", "sprite_name": "Hat"}");
 
 // Show glasses
-websocket.send('{"event": "show_sprite", "sprite_name": "Glasses"}');
+websocket.send("{"event": "show_sprite", "sprite_name": "Glasses"}");
 
 // Toggle background visibility
-websocket.send('{"event": "toggle_sprite", "sprite_name": "Background"}');
+websocket.send("{"event": "toggle_sprite", "sprite_name": "Background"}");
 
 // Hide entire head group (including all children like ears, eyes, mouth)
-websocket.send('{"event": "hide_group", "group_name": "WholeHead2"}');
+websocket.send("{"event": "hide_group", "group_name": "WholeHead2"}");
 
 // Show entire head group 
-websocket.send('{"event": "show_group", "group_name": "WholeHead2"}');
+websocket.send("{"event": "show_group", "group_name": "WholeHead2"}");
 
 // Toggle entire head group
-websocket.send('{"event": "toggle_group", "group_name": "WholeHead2"}');
+websocket.send("{"event": "toggle_group", "group_name": "WholeHead2"}");
 
 // Get list of all sprites (including group information)
-websocket.send('{"event": "list_sprites"}');
+websocket.send("{"event": "list_sprites"}");
 
 // Get list of groups only
-websocket.send('{"event": "list_groups"}');
+websocket.send("{"event": "list_groups"}");
 
 // Animation commands (Phase 1)
-websocket.send('{"event": "move_sprite", "sprite_name": "EyeL", "x": 100, "y": 50, "duration": 1.0}');
-websocket.send('{"event": "animate_sprite", "sprite_name": "Head", "scale": 1.2, "rotation": 15, "duration": 0.5}');
-websocket.send('{"event": "shake_sprite", "sprite_name": "WholeHead2", "intensity": 10, "duration": 2.0}');
-websocket.send('{"event": "bounce_sprite", "sprite_name": "Hat", "height": 20, "duration": 0.5}');
+websocket.send("{"event": "move_sprite", "sprite_name": "EyeL", "x": 100, "y": 50, "duration": 1.0}");
+websocket.send("{"event": "animate_sprite", "sprite_name": "Head", "scale": 1.2, "rotation": 15, "duration": 0.5}");
+websocket.send("{"event": "shake_sprite", "sprite_name": "WholeHead2", "intensity": 10, "duration": 2.0}");
+websocket.send("{"event": "bounce_sprite", "sprite_name": "Hat", "height": 20, "duration": 0.5}");
 
 // Animation with auto-reset (perfect for temporary reactions)
-websocket.send('{"event": "move_sprite", "sprite_name": "EyeL", "x": 100, "y": 50, "duration": 0.5, "reset": true, "reset_delay": 2.0}');
-websocket.send('{"event": "animate_sprite", "sprite_name": "Head", "scale": 1.3, "rotation": 10, "duration": 0.3, "reset": true, "reset_delay": 1.0}');
+websocket.send("{"event": "move_sprite", "sprite_name": "EyeL", "x": 100, "y": 50, "duration": 0.5, "reset": true, "reset_delay": 2.0}");
+websocket.send("{"event": "animate_sprite", "sprite_name": "Head", "scale": 1.3, "rotation": 10, "duration": 0.3, "reset": true, "reset_delay": 1.0}");
 
 // Get list of all states
-websocket.send('{"event": "list_states"}');
+websocket.send("{"event": "list_states"}");
 
 // Load a different model
-websocket.send('{"event": "load_model", "file_path": "C:/Models/PerformanceModel.pngRemix"}');
+websocket.send("{"event": "load_model", "file_path": "C:/Models/PerformanceModel.pngRemix"}");
 ```
 
 ### Python WebSocket Client
@@ -609,49 +613,49 @@ import websocket
 import json
 
 def on_message(ws, message):
-    response = json.loads(message)
-    print(f"Received: {response}")
+	response = json.loads(message)
+	print(f"Received: {response}")
 
 def on_open(ws):
-    print("Connected to PNGTuber Remix")
-    # Test connection
-    ws.send('{"event": "ping"}')
+	print("Connected to PNGTuber Remix")
+	# Test connection
+	ws.send("{"event": "ping"}")
 
 # Connect to WebSocket
 ws = websocket.WebSocketApp("ws://localhost:9321",
-                           on_open=on_open,
-                           on_message=on_message)
+						   on_open=on_open,
+						   on_message=on_message)
 
 # Switch states by name (recommended)
-ws.send('{"event": "state", "state_name": "Pickles Idle"}')
+ws.send("{"event": "state", "state_name": "Pickles Idle"}")
 
 # Switch states by ID (still works)
-ws.send('{"event": "state", "state_id": 1}')
+ws.send("{"event": "state", "state_id": 1}")
 
 # Get available states
-ws.send('{"event": "list_states"}')
+ws.send("{"event": "list_states"}")
 
 # Control sprite visibility
-ws.send('{"event": "hide_sprite", "sprite_name": "Hat"}')
-ws.send('{"event": "toggle_sprite", "id": 12345}')
+ws.send("{"event": "hide_sprite", "sprite_name": "Hat"}")
+ws.send("{"event": "toggle_sprite", "id": 12345}")
 
 # Control group visibility (affects all children too)
-ws.send('{"event": "hide_group", "group_name": "WholeHead2"}')
-ws.send('{"event": "show_group", "group_name": "WholeHead2"}')
-ws.send('{"event": "toggle_group", "group_name": "WholeHead2"}')
+ws.send("{"event": "hide_group", "group_name": "WholeHead2"}")
+ws.send("{"event": "show_group", "group_name": "WholeHead2"}")
+ws.send("{"event": "toggle_group", "group_name": "WholeHead2"}")
 
 # Get group information
-ws.send('{"event": "list_groups"}')
+ws.send("{"event": "list_groups"}")
 
 # Animation commands (Phase 1)
-ws.send('{"event": "move_sprite", "sprite_name": "EyeL", "x": 100, "y": 50, "duration": 1.0}')
-ws.send('{"event": "animate_sprite", "sprite_name": "Head", "scale": 1.2, "rotation": 15, "duration": 0.5}')
-ws.send('{"event": "shake_sprite", "sprite_name": "WholeHead2", "intensity": 10, "duration": 2.0}')
-ws.send('{"event": "bounce_sprite", "sprite_name": "Hat", "height": 20, "duration": 0.5}')
+ws.send("{"event": "move_sprite", "sprite_name": "EyeL", "x": 100, "y": 50, "duration": 1.0}")
+ws.send("{"event": "animate_sprite", "sprite_name": "Head", "scale": 1.2, "rotation": 15, "duration": 0.5}")
+ws.send("{"event": "shake_sprite", "sprite_name": "WholeHead2", "intensity": 10, "duration": 2.0}")
+ws.send("{"event": "bounce_sprite", "sprite_name": "Hat", "height": 20, "duration": 0.5}")
 
 # Animation with auto-reset (perfect for temporary reactions)
-ws.send('{"event": "move_sprite", "sprite_name": "EyeL", "x": 100, "y": 50, "duration": 0.5, "reset": true, "reset_delay": 2.0}')
-ws.send('{"event": "animate_sprite", "sprite_name": "Head", "scale": 1.3, "rotation": 10, "duration": 0.3, "reset": true, "reset_delay": 1.0}')
+ws.send("{"event": "move_sprite", "sprite_name": "EyeL", "x": 100, "y": 50, "duration": 0.5, "reset": true, "reset_delay": 2.0}")
+ws.send("{"event": "animate_sprite", "sprite_name": "Head", "scale": 1.3, "rotation": 10, "duration": 0.3, "reset": true, "reset_delay": 1.0}")
 ```
 
 ## Error Handling
@@ -662,10 +666,10 @@ All commands follow a consistent error response format:
 - Additional context-specific fields when applicable
 
 Common error types:
-- **"sprite not found"**: The specified sprite name or ID doesn't exist
+- **"sprite not found"**: The specified sprite name or ID doesn"t exist
 - **"invalid state_id"**: The state number is out of range
 - **"file_path is required"**: Missing required parameter
-- **"file not found"**: The specified file doesn't exist
+- **"file not found"**: The specified file doesn"t exist
 - **"invalid file extension"**: Unsupported file format
 
 ## Tips for Performance
@@ -696,6 +700,8 @@ Common error types:
 2. **State Not Changing**: 
    - Use `list_states` to see all available states and their exact names
    - Verify state names match exactly (case-sensitive)
-   - If using state_id, verify it's within the available range
+   - If using state_id, verify it"s within the available range
 3. **Sprite Not Found**: Use `list_sprites` to see all available sprites and their current names/IDs
-4. **Model Won't Load**: Check file path exists and has correct extension (.pngRemix or .save)
+4. **Model Won"t Load**: Check file path exists and has correct extension (.pngRemix or .save)
+
+'

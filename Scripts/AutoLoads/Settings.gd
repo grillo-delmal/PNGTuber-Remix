@@ -53,7 +53,7 @@ const SAVED_LAYOUT_PATH := "user://layout.tres"
 }
 var save_location = OS.get_executable_path().get_base_dir() + "/Preferences.pRDat" 
 var autosave_location = OS.get_executable_path().get_base_dir() + "/autosaves"
-var websocket_api = OS.get_executable_path().get_base_dir() + "/WebsocketDocumentation.md"
+var websocket_api = OS.get_executable_path().get_base_dir() + "/WebsocketDocumentation.txt"
 
 
 @onready var os_path = OS.get_executable_path().get_base_dir()
@@ -103,14 +103,10 @@ func _ready():
 	await  get_tree().create_timer(0.1).timeout
 	if get_tree().get_root().has_node("Main/%TopUI"):
 		top_bar = get_tree().get_root().get_node("Main/%TopUI")
-	
 	if !FileAccess.file_exists(websocket_api):
-		var saved_doc = FileAccess.open(websocket_api, FileAccess.WRITE)
-		var local_doc = FileAccess.open("res://UI/StreamUI/WebSocket Documentation.md", FileAccess.READ)
-		var data = local_doc.get_as_text()
-		saved_doc.store_string(data)
-		saved_doc.close()
-
+		var save_data = FileAccess.open(websocket_api, FileAccess.WRITE)
+		save_data.store_string(WebsocketDoc.doc)
+		save_data.close()
 
 	if FileAccess.file_exists(save_location):
 		var load_file = FileAccess.open(save_location, FileAccess.READ)
