@@ -55,22 +55,23 @@ func follow_calculation(_delta):
 	var main_marker = Global.main.get_node("%Marker")
 	if WindowHandler.windows:
 		mouse_coords = Vector2.ZERO
-		if main_marker.current_screen == Monitor.ALL_SCREENS or main_marker.mouse_in_current_screen():
-			mouse_coords = main_marker.global_coords
+		if main_marker.current_screen == Monitor.ALL_SCREENS:
+			mouse_coords = main_marker.coords
 	elif main_marker.current_screen != Monitor.ALL_SCREENS:
-		if main_marker.mouse_in_current_screen():
-			var viewport_size = actor.get_viewport().size
-			var origin = actor.get_global_transform_with_canvas().origin
-			var x_per = 1.0 - origin.x / float(viewport_size.x)
-			var y_per = 1.0 - origin.y / float(viewport_size.y)
-			var display_size = DisplayServer.screen_get_size(main_marker.current_screen)
-			var offset = Vector2(display_size.x * x_per, display_size.y * y_per)
-			var mouse_pos = main_marker.global_coords - DisplayServer.screen_get_position(main_marker.current_screen)
-			mouse_coords = mouse_pos - display_size + offset
+		var screen_size = Vector2(DisplayServer.screen_get_size(main_marker.current_screen))
+		var origin = actor.get_global_transform_with_canvas().origin
+		var x_per = 1.0 - origin.x / float(screen_size.x)
+		var y_per = 1.0 - origin.y / float(screen_size.y)
+		var offset = Vector2(x_per, y_per)
+		if Global.settings_dict.snap_out_of_bounds:
+			var mouse_pos = main_marker.coords
+			mouse_coords = mouse_pos + offset
 		else:
-			mouse_coords = Vector2.ZERO
+			var mouse_pos = actor.get_node("%Sprite2D").to_local(main_marker.coords)
+			mouse_coords = mouse_pos + offset
+
 	else:
-		mouse_coords = actor.get_local_mouse_position()
+		mouse_coords = actor.get_node("%Sprite2D").to_local(main_marker.global_coords)
 	
 	var dir = distance.direction_to(mouse_coords)
 	var dist = mouse_coords.length()
