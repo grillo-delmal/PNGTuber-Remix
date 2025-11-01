@@ -36,7 +36,12 @@ func get_default_object_data() -> Dictionary:
 		mirror_anchor_movement_h = false,
 		mirror_anchor_movement_v = false,
 	}
-# Called when the node enters the scene tree for the first time.
+
+func _init() -> void:
+	cached_defaults = DEFAULT_DATA.merged(get_default_object_data(), true)
+	sprite_data = cached_defaults.duplicate(true)
+
+
 func _ready():
 	Global.image_replaced.connect(image_replaced)
 	Global.reparent_objects.connect(reparent_obj)
@@ -46,6 +51,7 @@ func _ready():
 	Global.deselect.connect(desel)
 	grab_object.button_down.connect(_on_grab_button_down)
 	grab_object.button_up.connect(_on_grab_button_up)
+	set_dragger_pos()
 
 
 func set_dragger_pos():
@@ -88,10 +94,11 @@ func _physics_process(_delta: float) -> void:
 		%Selection.hide()
 	#	%Origin.mouse_filter = 2
 	if dragging:
-		var mpos = get_parent().to_local(get_global_mouse_position())
-		position = mpos - of
-		sprite_data.position = position
-		save_state(Global.current_state)
+		var mouse_pos = get_parent().to_local(get_global_mouse_position())
+		for s in Global.held_sprites:
+			s.position = mouse_pos - drag_offsets[s]
+			s.sprite_data.position = s.position
+			s.save_state(Global.current_state)
 		Global.update_pos_spins.emit()
 	
 	
@@ -236,8 +243,13 @@ func check_talk():
 
 func _on_grab_button_down():
 	if selected:
-		of = get_parent().to_local(get_global_mouse_position()) - position
-		dragging = true
+		if not Input.is_action_pressed("ctrl"):
+			dragging = true
+			drag_offsets.clear()
+			var mouse_pos = get_parent().to_local(get_global_mouse_position())
+			for s in Global.held_sprites:
+				drag_offsets[s] = mouse_pos - s.position
+
 
 func _on_grab_button_up():
 	if selected:

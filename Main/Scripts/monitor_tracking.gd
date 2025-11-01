@@ -5,6 +5,7 @@ class_name Monitor
 const ALL_SCREENS = 9999
 var current_screen = ALL_SCREENS
 var coords : Vector2 = Vector2(0,0)
+var global_coords : Vector2 = Vector2(0,0)
 var screen_count = 0
 
 func _ready():
@@ -14,7 +15,16 @@ func _physics_process(_delta: float) -> void:
 	var global_mouse_pos = get_local_mouse_position()
 	if current_screen == ALL_SCREENS:
 		# All Screens mode
-		coords = global_mouse_pos
+		if OS.has_feature("linux"):
+			coords = global_mouse_pos
+			global_coords = global_mouse_pos
+		else:
+			if GlobInput.get_mouse_position() != null:
+				coords = GlobInput.get_mouse_position()
+				global_coords = GlobInput.get_mouse_position()
+			else:
+				coords = global_mouse_pos
+				global_coords = global_mouse_pos
 	else:
 		# Specific screen mode
 		if (mouse_in_current_screen()):

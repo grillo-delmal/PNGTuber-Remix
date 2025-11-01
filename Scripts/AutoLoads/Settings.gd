@@ -29,7 +29,7 @@ const SAVED_LAYOUT_PATH := "user://layout.tres"
 	properties = 0,
 	layers = -100,
 	file_manager = 0,
-	lipsync_file_path = OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres",
+	lipsync_file_path = path_helper(OS.get_executable_path().get_base_dir(), "/DefaultTraining.tres"),
 	microphone = null,
 	enable_trimmer = false,
 	save_raw_sprite = true, #save the original sprite even when trimmed
@@ -51,14 +51,15 @@ const SAVED_LAYOUT_PATH := "user://layout.tres"
 	language = "automatic",
 	save_unused_files = false,
 }
-var save_location = OS.get_executable_path().get_base_dir() + "/Preferences.pRDat" 
-var autosave_location = OS.get_executable_path().get_base_dir() + "/autosaves"
-var websocket_api = OS.get_executable_path().get_base_dir() + "/WebsocketDocumentation.txt"
+var save_location = ""
+var autosave_location = ""
+var websocket_api = ""
 
 
-@onready var os_path = OS.get_executable_path().get_base_dir()
-
-var additional_output = RefCounted.new()
+func _enter_tree() -> void:
+	save_location = path_helper(OS.get_executable_path().get_base_dir(), "/Preferences.pRDat")
+	autosave_location = path_helper(OS.get_executable_path().get_base_dir(), "/autosaves")
+	websocket_api = path_helper(OS.get_executable_path().get_base_dir(), "/WebsocketDocumentation.txt")
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -92,11 +93,7 @@ func auto_save():
 	if Global.settings_dict.auto_save:
 		save_timer.start()
 
-func _exit_tree() -> void:
-	DisplayServer.unregister_additional_output(additional_output)
-
 func _ready():
-	DisplayServer.register_additional_output(additional_output)
 	save_timer.timeout.connect(auto_save)
 	save_timer.one_shot = true
 	add_child(save_timer)
@@ -180,7 +177,6 @@ func lipsync_set_up():
 	else:
 		file_error.emit("INVALID_LIP_SYNC_PATH")
 	if !FileAccess.file_exists(theme_settings.lipsync_file_path):
-		#ResourceSaver.save(preload("res://UI/Lipsync stuff/PrebuildFile/DefaultTraining.tres") ,OS.get_executable_path().get_base_dir() + "/DefaultTraining.tres")
 		LipSyncGlobals.file_data = preload("res://UI/Lipsync stuff/DefaultTraining.tres")
 		LipSyncGlobals.save_file_as(theme_settings.lipsync_file_path)
 		
@@ -278,7 +274,6 @@ func set_always_on_top(toggle):
 	get_window().always_on_top = Settings.theme_settings.always_on_top
 	save()
 
-
 func get_custom_cursor() -> Image:
 	var cursor := (preload("res://Misc/TestAssets/PicklesCursor.png") as Texture2D).get_image()
 	if theme_settings.custom_cursor_path.is_empty(): return cursor
@@ -309,3 +304,13 @@ func set_ui_pieces(val : int, id : int):
 	elif 7:
 		theme_settings.hide_bottom_bar = val
 	save()
+
+func path_helper(path, dir: String = "") -> String:
+	var target = ""
+	var current = DirAccess.open(path)
+	if current == null:
+		target = OS.get_user_data_dir() + dir
+	else:
+		target = path + dir
+	
+	return target

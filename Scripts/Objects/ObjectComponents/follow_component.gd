@@ -22,7 +22,8 @@ var pos_node
 var mouse_rot
 var drag_node
 var sprite_node
-var rest_mode : bool = false
+var rest : bool = false
+
 
 func _ready() -> void:
 	pos_node = %Pos
@@ -32,11 +33,15 @@ func _ready() -> void:
 	Global.update_mouse_vel_pos.connect(mouse_delay)
 
 func _physics_process(delta: float) -> void:
-	if not Global.static_view:
-		if !rest_mode:
-			follow_calculation(delta)
-		else:
+	if not Global.static_view or actor.rest_mode != 5:
+		if (actor.rest_mode == 1 or actor.rest_mode == 3) && rest:
 			%Pos.position = Vector2.ZERO
+		else:
+			follow_calculation(delta)
+	else:
+		%Pos.position = Vector2.ZERO
+		%MouseRot.rotation = 0.0
+		%Drag.scale = Vector2(1,1)
 
 func mouse_delay():
 	var mouse_delta = last_mouse_position - mouse_coords
@@ -51,7 +56,7 @@ func follow_calculation(_delta):
 	if WindowHandler.windows:
 		mouse_coords = Vector2.ZERO
 		if main_marker.current_screen == Monitor.ALL_SCREENS or main_marker.mouse_in_current_screen():
-			mouse_coords = DisplayServer.mouse_get_position()
+			mouse_coords = main_marker.global_coords
 	elif main_marker.current_screen != Monitor.ALL_SCREENS:
 		if main_marker.mouse_in_current_screen():
 			var viewport_size = actor.get_viewport().size
@@ -60,7 +65,7 @@ func follow_calculation(_delta):
 			var y_per = 1.0 - origin.y / float(viewport_size.y)
 			var display_size = DisplayServer.screen_get_size(main_marker.current_screen)
 			var offset = Vector2(display_size.x * x_per, display_size.y * y_per)
-			var mouse_pos = DisplayServer.mouse_get_position() - DisplayServer.screen_get_position(main_marker.current_screen)
+			var mouse_pos = main_marker.global_coords - DisplayServer.screen_get_position(main_marker.current_screen)
 			mouse_coords = mouse_pos - display_size + offset
 		else:
 			mouse_coords = Vector2.ZERO
@@ -292,5 +297,6 @@ func follow_sprite_anim(dir, dist):
 			%Sprite2D.frame_coords.x = floor(frame_h)
 			%Sprite2D.frame_coords.y = floor(frame_v)
 
+
 func _on_sprite_object_visibility_changed() -> void:
-	rest_mode = !actor.is_visible_in_tree()
+	rest = !actor.is_visible_in_tree()

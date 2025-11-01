@@ -4,6 +4,7 @@
 
 [node name="ModelOptimizer" type="Window"]
 transparent_bg = true
+oversampling_override = 1.0
 initial_position = 1
 size = Vector2i(500, 200)
 script = ExtResource("1_x5vtu")

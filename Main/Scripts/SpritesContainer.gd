@@ -148,34 +148,35 @@ func save_state(id):
 		not_speaking()
 
 func get_state(state):
-	if not Global.settings_dict.states[state].is_empty():
-		var dict : Dictionary = Global.settings_dict.states[state]
-		mouth_closed = dict.mouth_closed
-		mouth_open = dict.mouth_open
-		current_mc_anim = dict.current_mc_anim
-		current_mo_anim = dict.current_mo_anim
-		dim_color = dict.get("dim_color", Global.settings_dict.dim_color)
-		if dict.has("state_param_mo"):
-			bounce_state = dict.bounce_state
-			state_param_mo.merge(dict.state_param_mo, true)
-			state_param_mc.merge(dict.state_param_mc, true)
-			model_effects.merge(dict.model_effects, true)
-			set_effects()
-		
-		if dict.has("squish_amount"):
-			squish_amount = dict.squish_amount
-			should_squish = dict.should_squish
-		
-		if bounce_state:
-			if !Global.static_view:
-				state_bounce()
+	if !Global.settings_dict.states.is_empty():
+		if not Global.settings_dict.states[state].is_empty():
+			var dict : Dictionary = Global.settings_dict.states[state]
+			mouth_closed = dict.mouth_closed
+			mouth_open = dict.mouth_open
+			current_mc_anim = dict.current_mc_anim
+			current_mo_anim = dict.current_mo_anim
+			dim_color = dict.get("dim_color", Global.settings_dict.dim_color)
+			if dict.has("state_param_mo"):
+				bounce_state = dict.bounce_state
+				state_param_mo.merge(dict.state_param_mo, true)
+				state_param_mc.merge(dict.state_param_mc, true)
+				model_effects.merge(dict.model_effects, true)
+				set_effects()
 			
-		if GlobalMicAudio.has_spoken:
-			speaking()
-		else:
-			not_speaking()
-	
-	reinfoanim.emit()
+			if dict.has("squish_amount"):
+				squish_amount = dict.squish_amount
+				should_squish = dict.should_squish
+			
+			if bounce_state:
+				if !Global.static_view:
+					state_bounce()
+				
+			if GlobalMicAudio.has_spoken:
+				speaking()
+			else:
+				not_speaking()
+		
+		reinfoanim.emit()
 
 func not_speaking():
 	currenly_speaking = false

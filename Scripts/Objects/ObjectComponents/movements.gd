@@ -36,6 +36,8 @@ var sprite_node
 var last_wobble_pos := Vector2.ZERO
 var paused_wobble := Vector2.ZERO
 
+var rest : bool = false
+
 func _ready() -> void:
 	dragger = %Dragger
 	rotation_node = %Rotation
@@ -48,12 +50,18 @@ func _physics_process(delta: float) -> void:
 	applied_rotation = 0.0
 	applied_scale = Vector2(1.0, 1.0)
 	if not Global.static_view:
-		if actor.get_value("should_rotate"):
-			auto_rotate()
+		if actor.rest_mode != 5:
+			if (actor.rest_mode == 2 or actor.rest_mode == 3) && rest:
+				pass
+			else:
+				if actor.get_value("should_rotate"):
+					auto_rotate()
+				else:
+					%Pos.rotation = 0.0
+				rainbow(delta)
+				movements(delta)
 		else:
-			%Pos.rotation = 0.0
-		rainbow(delta)
-		movements(delta)
+			rest_mode_movements(delta)
 	else:
 		static_prev()
 	follow_wiggle(delta)
@@ -86,13 +94,29 @@ func movements(delta):
 		rotationalDrag(length, delta)
 		stretch(length)
 
+func rest_mode_movements(delta):
+	if !Global.static_view:
+		glob = %Dragger.global_position
+		drag(delta)
+		if actor.get_value("ignore_bounce"):
+			glob.y -= Global.sprite_container.bounceChange
+		var length = (glob.y - %Dragger.global_position.y)
+		if actor.get_value("physics"):
+			if (actor.get_parent() is Sprite2D && is_instance_valid(actor.get_parent())) or (actor.get_parent() is WigglyAppendage2D && is_instance_valid(actor.get_parent())):
+				var c_parent = actor.get_parent().owner
+				if c_parent != null && is_instance_valid(c_parent):
+					var c_parrent_length = (c_parent.get_node("%Movements").glob.y - c_parent.get_node("%Pos").global_position.y)
+					var c_parrent_length2 = (c_parent.get_node("%Movements").glob.x - c_parent.get_node("%Pos").global_position.x)
+					length += c_parrent_length + c_parrent_length2
+		rotationalDrag(length, delta)
+		stretch(length)
+
 func drag(_delta):
 	if actor.get_value("dragSpeed") == 0:
 		%Dragger.global_position = placeholder_position
 	else:
 		%Dragger.global_position = lerp(%Dragger.global_position, placeholder_position,1/max(actor.get_value("dragSpeed"), 1))
 		%Drag.global_position = %Dragger.global_position
-
 
 func wobble(delta: float) -> void:
 	if actor.is_default("xFrq"):
@@ -230,7 +254,5 @@ func auto_rotate():
 	%Pos.rotate(actor.get_value("should_rot_speed"))
 	%Pos.rotation = GlobalCalculations.is_nan_or_inf(%Pos.rotation)
 
-
 func _on_sprite_object_visibility_changed() -> void:
-	pass
-	#set_physics_process(actor.is_visible_in_tree())
+	rest = !actor.is_visible_in_tree()

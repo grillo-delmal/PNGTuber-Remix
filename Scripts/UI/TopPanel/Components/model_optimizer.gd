@@ -21,12 +21,16 @@ func _on_apply_optimization_pressed() -> void:
 			SaveAndLoad.save_file(Global.save_path.get_basename() + "Optimized" + ".pngRemix")
 		else:
 			SaveAndLoad.save_file(Settings.autosave_location + "/" + "Optimized" + str(randi())+ ".pngRemix")
+		
+		var save_path = Global.save_path
+		SaveAndLoad.import_trimmed = true
 		await get_tree().process_frame
-		ImageTextureLoaderManager.trim = true
-		SaveAndLoad.load_file(Global.save_path)
+		Global.new_file.emit()
+		SaveAndLoad.load_file(save_path)
 		await get_tree().process_frame
-		SaveAndLoad.save_file(Global.save_path)
+		SaveAndLoad.save_file(save_path)
 		check_toggles()
+		SaveAndLoad.import_trimmed = false
 
 func _on_about_to_popup() -> void:
 	check_toggles()

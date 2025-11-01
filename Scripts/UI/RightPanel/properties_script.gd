@@ -41,6 +41,7 @@ func nullfy():
 	%OffsetYSpinBox.editable = false
 	%FlipSpriteH.disabled = true
 	%FlipSpriteV.disabled = true
+	%RestModeOption.disabled = true
 
 func enable():
 	for i in Global.held_sprites:
@@ -67,6 +68,7 @@ func enable():
 			%OffsetYSpinBox.editable = true
 			%FlipSpriteH.disabled = false
 			%FlipSpriteV.disabled = false
+			%RestModeOption.disabled = false
 			
 			set_data()
 
@@ -114,6 +116,8 @@ func set_data():
 		else:
 			%MouthOption.select(0)
 		
+		
+		%RestModeOption.select(i.rest_mode)
 		if i.sprite_type == "Sprite2D":
 			%FlipSpriteH.button_pressed = i.get_value("flip_sprite_h")
 			%FlipSpriteV.button_pressed = i.get_value("flip_sprite_v")
@@ -500,3 +504,8 @@ func _on_mouth_option_item_selected(index: int) -> void:
 			
 		
 		Global.not_speaking.emit()
+
+
+func _on_rest_mode_option_item_selected(index: int) -> void:
+	for i in Global.held_sprites:
+		i.rest_mode = index

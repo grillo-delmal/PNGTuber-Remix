@@ -10,42 +10,26 @@ func _ready() -> void:
 	Global.speaking.connect(speaking)
 	Global.not_speaking.connect(not_speaking)
 	Global.blink.connect(blink)
-	Global.key_pressed.connect(asset)
-	Global.key_pressed.connect(should_disappear)
 	Global.mode_changed.connect(update_to_mode_change)
 	Global.blink.connect(editor_blink)
 	Global.animation_state.connect(reset_animations)
 	await  get_tree().physics_frame
 	not_speaking()
 
-func _physics_process(_delta: float) -> void:
-	if actor.saved_event is InputEventJoypadButton or actor.saved_event is InputEventJoypadMotion:
-		if actor.is_asset && InputMap.action_get_events(str(actor.sprite_id)).size() > 0:
-			if Input.is_action_just_pressed(str(actor.sprite_id)):
-				if actor.saved_event == InputMap.action_get_events(str(actor.sprite_id))[0]:
-					if actor.show_only:
-						%Drag.visible = true
-					else:
-						%Drag.visible = !%Drag.visible
-					actor.was_active_before = %Drag.visible
-
-func asset(key):
-	if actor.is_asset && InputMap.action_get_events(str(actor.sprite_id)).size() > 0:
-		if actor.saved_event.as_text() == key:
-			if actor.show_only:
-				%Drag.visible = true
-			else:
-				%Drag.visible = !%Drag.visible
-			actor.was_active_before = %Drag.visible
-
-func should_disappear(key):
-	if actor.should_disappear:
-		if key in actor.saved_keys:
-			%Drag.visible = false
-			actor.was_active_before = false
-			if !actor.is_asset && !%Drag.visible:
-				%Drag.visible = true
-				actor.was_active_before = true
+func _process(_delta: float) -> void:
+	if GlobInput.is_action_just_pressed(str(actor.sprite_id)):
+		if actor.show_only:
+			%Drag.visible = true
+		else:
+			%Drag.visible = !%Drag.visible
+		actor.was_active_before = %Drag.visible
+	
+	if GlobInput.is_action_just_pressed(actor.disappear_keys):
+		%Drag.visible = false
+		actor.was_active_before = false
+		if !actor.is_asset && !%Drag.visible:
+			%Drag.visible = true
+			actor.was_active_before = true
 
 func update_to_mode_change(mode : int):
 	match mode:

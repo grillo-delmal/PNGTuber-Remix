@@ -46,8 +46,9 @@ func set_data():
 	%IsAssetCheck.button_pressed = Global.held_sprites[0].is_asset
 	%DontHideOnToggleCheck.button_pressed = Global.held_sprites[0].show_only
 	%ShouldDisList.clear()
-	for i in Global.held_sprites[0].saved_keys:
-		%ShouldDisList.add_item(i)
+	if InputMap.has_action(Global.held_sprites[0].disappear_keys):
+		for i in InputMap.action_get_events(Global.held_sprites[0].disappear_keys):
+			%ShouldDisList.add_item(i.as_text())
 	%ShouldDisappearCheck.button_pressed = Global.held_sprites[0].should_disappear
 	if %ShouldDisappearCheck.button_pressed:
 		%ShouldDisListContainer.show()

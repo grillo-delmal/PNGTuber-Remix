@@ -82,6 +82,10 @@ func enable():
 func _on_delete_button_pressed():
 	for i in Global.held_sprites:
 		if i != null && is_instance_valid(i):
+			if InputMap.has_action(i.disappear_keys):
+				InputMap.erase_action(i.disappear_keys)
+			if InputMap.has_action(str(i.sprite_id)):
+				InputMap.erase_action(str(i.sprite_id))
 			i.treeitem.free()
 			i.free()
 	Global.deselect.emit()

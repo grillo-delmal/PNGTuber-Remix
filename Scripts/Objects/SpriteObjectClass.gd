@@ -169,6 +169,8 @@ var was_active_before : bool = true
 var show_only : bool = false
 var should_disappear : bool = false
 var saved_keys : Array = []
+var disappear_keys : String = str(sprite_id) + "Disappear"
+var rest_mode : int = 1
 
 var last_mouse_position : Vector2 = Vector2(0,0)
 var last_dist : Vector2 = Vector2(0,0)
@@ -177,12 +179,13 @@ var old_global: Vector2 = Vector2(-999999999999,-9999999999)
 
 var selected : bool = false
 
+var drag_offsets = {} 
+
+
 func get_default_object_data() -> Dictionary:
 	return {}
 
-func _init() -> void:
-	cached_defaults = DEFAULT_DATA.merged(get_default_object_data(), true)
-	sprite_data = cached_defaults.duplicate()
+
 
 func does_value_match_default(value: Variant, key: String) -> bool:
 	if value is float:
@@ -272,10 +275,10 @@ func set_blend(blend):
 func reparent_obj(parent):
 	for i in parent:
 		if i.sprite_id == parent_id:
-			var new_parent = i.sprite_object
-			reparent(new_parent)
+			var og_pos = global_position
+			reparent(i.sprite_object)
+			global_position = og_pos
 			break
-	
 
 func image_replaced(image_date : ImageData):
 	if !get_value("folder"):
@@ -300,4 +303,16 @@ func zazaza_reposition(parent):
 					var desired_global = contain.to_global(state.position)
 					var desired_local = contain.to_local(desired_global) +Vector2(640, 360)
 					state.position = get_parent().to_local(desired_local)
-				
+			break
+
+
+func old_reposition():
+	var parent = get_parent().owner
+	if parent is not SpriteObject:
+		parent = Global.sprite_container
+
+	for state in states:
+		if state.has("global_position"):
+			var gl = state.global_position
+			state.position = parent.to_local(gl)
+			state.erase("global_position")

@@ -122,6 +122,7 @@ func _on_file_dialog_file_selected(path):
 	match current_state:
 		State.LoadFile:
 			ImageTextureLoaderManager.trim = false
+			SaveAndLoad.import_trimmed = false
 			if path.get_extension().to_lower() == "save":
 				if Settings.theme_settings.enable_trimmer:
 					model_path = path
@@ -169,7 +170,6 @@ func _on_file_dialog_files_selected(paths):
 			import_objects()
 
 func import_objects():
-	#	var sprite_nodes = []
 		for path in sprite_paths:
 			var sprte_obj
 			if current_state == State.LoadSprites:
@@ -180,6 +180,8 @@ func import_objects():
 			sprte_obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 
 			sprte_obj.sprite_id = sprte_obj.get_instance_id()
+			sprte_obj.disappear_keys = str(sprte_obj.sprite_id) + "Disappear"
+			
 			sprte_obj.states = []
 			var states = get_tree().get_nodes_in_group("StateButtons").size()
 			for i in states:
@@ -212,6 +214,8 @@ func clear_sprites():
 	for i in get_tree().get_nodes_in_group("Sprites"):
 		if InputMap.has_action(str(i.sprite_id)):
 			InputMap.erase_action(str(i.sprite_id))
+		if InputMap.has_action(i.disappear_keys):
+			InputMap.erase_action(i.disappear_keys)
 
 	for i in %SpritesContainer.get_children():
 		i.queue_free()
