@@ -33,7 +33,7 @@ func set_mouse_positions():
 		coords = global_mouse_pos
 		global_coords = global_mouse_pos
 	else:
-		if GlobInput.get_mouse_position() != null:
+		if GlobInput.get_mouse_position() != null or !GlobInput.get_mouse_position().is_finite():
 			coords = Global.sprite_container.to_local(GlobInput.get_mouse_position())
 			global_coords = Global.sprite_container.to_local(GlobInput.get_mouse_position())
 		else:

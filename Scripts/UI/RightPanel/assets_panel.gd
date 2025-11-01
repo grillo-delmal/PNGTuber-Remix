@@ -95,7 +95,7 @@ func _on_cycle_choice_sprite_item_selected(index: int) -> void:
 				i.sprite_data.cycle = index
 				for l in Global.settings_dict.cycles:
 					if l.sprites.has(i.sprite_id):
-						l.remove_at(l.find(i.sprite_id))
+						l.sprites.remove_at(l.find(i.sprite_id))
 				Global.settings_dict.cycles[%CycleChoiceSprite.get_selected_id() - 1].sprites.append(i.sprite_id)
 	if %CycleChoice.get_selected_id() == 0:
 		for i in Global.held_sprites:
@@ -103,7 +103,7 @@ func _on_cycle_choice_sprite_item_selected(index: int) -> void:
 				i.sprite_data.cycle = index
 				for l in Global.settings_dict.cycles:
 					if l.sprites.has(i.sprite_id):
-						l.remove_at(l.find(i.sprite_id))
+						l.sprites.remove_at(l.find(i.sprite_id))
 						l.get_node("%Drag").show()
 						l.was_active_before = l.get_node("%Drag").visible
 
