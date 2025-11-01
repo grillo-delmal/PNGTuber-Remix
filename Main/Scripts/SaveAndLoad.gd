@@ -107,7 +107,6 @@ func load_file(path: String, autoload : bool = false):
 	else:
 		load_model(path)
 
-
 func load_model(path: String) -> void:
 	Global.delete_states.emit()
 	Global.main.clear_sprites()
@@ -355,8 +354,6 @@ func load_objects(load_dict : Dictionary):
 		sprite_obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		Global.sprite_container.add_child(sprite_obj)
 
-
-
 func load_sprite(sprite, image_data = null, normal = false):
 	var img_data
 	var img = Image.new()
@@ -564,8 +561,8 @@ func load_pngplus_file(path):
 	Global.reparent_objects.emit(get_tree().get_nodes_in_group("Sprites"))
 
 	for spr in get_tree().get_nodes_in_group("Sprites"):
-		spr.zazaza(get_tree().get_nodes_in_group("Sprites"))
 		spr.set_dragger_pos()
+		spr.zazaza(get_tree().get_nodes_in_group("Sprites"))
 
 	Global.settings_dict.should_delta = false
 	Global.reinfoanim.emit()
