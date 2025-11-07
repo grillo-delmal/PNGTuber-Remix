@@ -55,6 +55,17 @@ func check_data():
 	#%UseThreads.button_pressed = Settings.theme_settings.use_threading
 	%KeepOldTrimData.button_pressed = Settings.theme_settings.save_raw_sprite
 	%SaveUnusedImages.button_pressed = Settings.theme_settings.save_unused_files
+	match Settings.theme_settings.backend_type:
+		"default":
+			%BackendOption.select(0)
+		"uiohook":
+			%BackendOption.select(1)
+		"windows":
+			if OS.has_feature("windows"):
+				%BackendOption.select(2)
+			else:
+				%BackendOption.set_item_disabled(2, true)
+				%BackendOption.select(0)
 	
 	change_setting = true
 
@@ -254,4 +265,18 @@ func _on_fix_mic_delay_pressed() -> void:
 
 func _on_save_unused_images_toggled(toggled_on: bool) -> void:
 	Settings.theme_settings.save_unused_files = toggled_on
+	Settings.save()
+
+
+func _on_backend_option_item_selected(index: int) -> void:
+	match index:
+		0:
+			GlobInput.backend = "default"
+			Settings.theme_settings.backend_type = "default"
+		1:
+			GlobInput.backend = "uiohook"
+			Settings.theme_settings.backend_type = "uiohook"
+		2:
+			GlobInput.backend = "windows"
+			Settings.theme_settings.backend_type = "windows"
 	Settings.save()

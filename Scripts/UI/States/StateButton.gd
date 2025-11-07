@@ -56,7 +56,7 @@ func select_state():
 	selected_state = self
 	%Selected.show()
 
-func _process(_delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if input_key != "Null" or input_key != "":
 		if GlobInput.is_action_just_pressed(input_key):
 			select_state()

@@ -15,11 +15,12 @@ func _physics_process(_delta: float) -> void:
 	if current_screen == ALL_SCREENS:
 		set_mouse_positions()
 	else:
-		screen_based_position()
+		if current_screen in range(screen_count):
+			screen_based_position()
 
 func mouse_in_current_screen():
-	var screen_pos = Vector2(DisplayServer.screen_get_position(current_screen))
-	var screen_size = Vector2(DisplayServer.screen_get_size(current_screen))
+	var screen_pos = Vector2(DisplayServer.screen_get_position(current_screen)) - Vector2(1,1)
+	var screen_size = Vector2(DisplayServer.screen_get_size(current_screen))+ Vector2(1,1)
 	var mouse_pos = get_local_mouse_position()
 	if GlobInput.get_mouse_position() != null:
 		mouse_pos = GlobInput.get_mouse_position()
@@ -45,12 +46,8 @@ func set_global_mouse_position():
 	if OS.has_feature("linux"):
 		global_coords = global_mouse_pos
 	else:
-		if GlobInput.get_mouse_position() != null:
-			if Global.settings_dict.snap_out_of_bounds:
-				global_coords = Global.sprite_container.to_local(GlobInput.get_mouse_position() -Vector2(640, 360))
-				
-			else:
-				global_coords = Global.sprite_container.to_local(GlobInput.get_mouse_position())
+		if GlobInput.get_mouse_position() != null or !GlobInput.get_mouse_position().is_finite():
+			global_coords = Global.sprite_container.to_local(GlobInput.get_mouse_position())
 		else:
 			global_coords = global_mouse_pos
 
@@ -61,11 +58,9 @@ func screen_based_position():
 			global_coords = Vector2(0,0)
 		else:
 			set_global_mouse_position()
-			var screen_pos = Vector2(DisplayServer.screen_get_position(current_screen))
-			var relative_pos = Vector2(global_coords) - screen_pos
+			var relative_pos = Vector2(global_coords)
 			coords = Vector2(relative_pos)
 	else:
 		set_global_mouse_position()
-		var screen_pos = Vector2(DisplayServer.screen_get_position(current_screen))
-		var relative_pos = Vector2(global_coords) - screen_pos
+		var relative_pos = Vector2(global_coords)
 		coords = Vector2(relative_pos)

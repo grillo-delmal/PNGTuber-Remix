@@ -1,9 +1,8 @@
 ![image0-22](https://github.com/MudkipWorld/PNGTuber-Remix/assets/94318023/47bd9ee0-13e3-4ad8-af88-90dd5fa34628)
 
-Note : This is a forked version of PNGTuber+, credits for the core stuff goes to Kaiakairos. make sure to support them :D
 If you always wanted to try the most recent version, install Godot then clone the repository to open the project files. Builds/ compiled versions will only be for main updates or bugs that needed to be patched quickly 
 
-_<br> This project uses Godot 4.4 </br>_
+_<br> This project uses Godot 4.5.1 </br>_
 
 
 <h3>PNGTube-Remix!</h3>
@@ -23,3 +22,5 @@ _<br> This project uses Godot 4.4 </br>_
 ![Model](https://github.com/user-attachments/assets/a5e98f4d-52c8-48a9-83c0-1c2337c307fd)
 
 ![ThemesPreview](https://github.com/user-attachments/assets/c2abcb85-06dd-4128-92bd-4b598182ec15)
+
+<br>Note : This used to be a forked of PNGTuber+, credits to Kaiakairos. make sure to support them :D</br>

@@ -16,7 +16,7 @@ func _ready() -> void:
 	await  get_tree().physics_frame
 	not_speaking()
 
-func _process(_delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if GlobInput.is_action_just_pressed(str(actor.sprite_id)):
 		if actor.show_only:
 			%Drag.visible = true

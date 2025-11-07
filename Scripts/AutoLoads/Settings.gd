@@ -50,6 +50,8 @@ const SAVED_LAYOUT_PATH := "user://layout.tres"
 	use_threading = false,
 	language = "automatic",
 	save_unused_files = false,
+	backend_type = "default",
+	
 }
 var save_location = ""
 var autosave_location = ""
@@ -162,13 +164,27 @@ func _ready():
 			AudioServer.input_device = theme_settings.microphone
 	
 	change_cursor()
-
+	update_tracking_backend()
 	# Load language
 	var locale = Util.get_locale(theme_settings.language)
 	if locale == "automatic":
 		TranslationServer.set_locale(OS.get_locale_language())
 	else:
 		TranslationServer.set_locale(locale)
+
+
+func update_tracking_backend():
+	match theme_settings.backend_type:
+		"default":
+			GlobInput.backend = "default"
+		"uiohook":
+			GlobInput.backend = "uiohook"
+		"windows":
+			if OS.has_feature("windows"):
+				GlobInput.backend = "windows"
+			else:
+				GlobInput.backend = "default"
+
 
 func lipsync_set_up():
 	var parent_path = Util.get_parent_path(save_location);
