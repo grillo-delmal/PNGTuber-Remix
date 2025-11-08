@@ -34,7 +34,7 @@ func set_mouse_positions():
 		coords = global_mouse_pos
 		global_coords = global_mouse_pos
 	else:
-		if GlobInput.get_mouse_position() != null or !GlobInput.get_mouse_position().is_finite():
+		if GlobInput.get_mouse_position() != null && !GlobInput.get_mouse_position().is_finite():
 			coords = Global.sprite_container.to_local(GlobInput.get_mouse_position())
 			global_coords = Global.sprite_container.to_local(GlobInput.get_mouse_position())
 		else:
@@ -46,7 +46,7 @@ func set_global_mouse_position():
 	if OS.has_feature("linux"):
 		global_coords = global_mouse_pos
 	else:
-		if GlobInput.get_mouse_position() != null or !GlobInput.get_mouse_position().is_finite():
+		if GlobInput.get_mouse_position() != null && !GlobInput.get_mouse_position().is_finite():
 			global_coords = Global.sprite_container.to_local(GlobInput.get_mouse_position())
 		else:
 			global_coords = global_mouse_pos

@@ -80,8 +80,9 @@ func movements(delta):
 		wobble(delta)
 		if actor.get_value("ignore_bounce"):
 			glob.y -= Global.sprite_container.bounceChange
+			glob.x -= Global.sprite_container.bounceChange
 			
-		var length = (glob.y - %Dragger.global_position.y)
+		var length = (glob.y - %Dragger.global_position.y) + (glob.x - %Dragger.global_position.x)
 		
 		if actor.get_value("physics"):
 			if (actor.get_parent() is Sprite2D && is_instance_valid(actor.get_parent())) or (actor.get_parent() is WigglyAppendage2D && is_instance_valid(actor.get_parent())):
