@@ -301,7 +301,7 @@ func zazaza_reposition(parent):
 				if !state.is_empty():
 					var contain = i
 					var desired_global = contain.to_global(state.position)
-					var desired_local = contain.to_local(desired_global) +Vector2(640, 360)
+					var desired_local = contain.to_local(desired_global)
 					state.position = get_parent().to_local(desired_local)
 			break
 

@@ -223,9 +223,9 @@ func clear_sprites():
 	Global.delete_states.emit()
 	Global.reset_states.emit()
 	%Camera2D.zoom = Vector2(1,1)
-	%CamPos.global_position = Vector2(640, 360)
+	%CamPos.global_position = Vector2(0, 0)
 	Global.settings_dict.zoom = Vector2(1,1)
-	Global.settings_dict.pan = Vector2(640, 360)
+	Global.settings_dict.pan = Vector2(0, 0)
 
 func set_zoom(new_zoom: Vector2) -> void:
 	var mouse_pos := %Node2D.get_local_mouse_position() as Vector2

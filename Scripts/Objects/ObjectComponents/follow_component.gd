@@ -53,28 +53,21 @@ func mouse_delay():
 
 func follow_calculation(_delta):
 	var main_marker = Global.main.get_node("%Marker")
-	if WindowHandler.windows:
-		mouse_coords = Vector2.ZERO
-		if main_marker.current_screen == Monitor.ALL_SCREENS:
-			mouse_coords = main_marker.coords
-	elif main_marker.current_screen != Monitor.ALL_SCREENS:
-		var screen_size = Vector2(DisplayServer.screen_get_size(main_marker.current_screen))
-		var origin = actor.get_global_transform_with_canvas().origin
-		var x_per = 1.0 - origin.x / float(screen_size.x)
-		var y_per = 1.0 - origin.y / float(screen_size.y)
-		var offset = Vector2(x_per, y_per)
-		if Global.settings_dict.snap_out_of_bounds:
-			if !main_marker.mouse_in_current_screen():
-				mouse_coords = Vector2(0,0)
-			else:
-				var mouse_pos = actor.get_node("%Sprite2D").to_local(main_marker.coords)
-				mouse_coords = mouse_pos + offset
-		else:
-			var mouse_pos = actor.get_node("%Sprite2D").to_local(main_marker.coords)
-			mouse_coords = mouse_pos + offset
 
+	if main_marker.current_screen != main_marker.ALL_SCREENS:
+		if !main_marker.mouse_in_current_screen() && Global.settings_dict.snap_out_of_bounds:
+			mouse_coords = Vector2.ZERO
+		else:
+			var viewport_size = actor.get_viewport().size
+			var origin = actor.get_global_transform_with_canvas().origin
+			var x_per = 1.0 - origin.x/float(viewport_size.x)
+			var y_per = 1.0 - origin.y/float(viewport_size.y)
+			var display_size = DisplayServer.screen_get_size(main_marker.current_screen)
+			var offset = Vector2(display_size.x * x_per, display_size.y * y_per)
+			var mouse_pos = DisplayServer.mouse_get_position() - DisplayServer.screen_get_position(main_marker.current_screen)
+			mouse_coords = Vector2(mouse_pos - display_size) + offset 
 	else:
-		mouse_coords = actor.get_node("%Sprite2D").to_local(main_marker.global_coords)
+		mouse_coords = actor.get_local_mouse_position()
 	
 	var dir = distance.direction_to(mouse_coords)
 	var dist = mouse_coords.length()
@@ -242,8 +235,8 @@ func follow_mouse_scale(mouse, main_marker):
 	var norm_y = clamp(abs(mouse.y) / center.y, 0.0, 1.0)
 	var target_scale_x = lerp(1.0, 1.0 - actor.get_value("mouse_scale_x"), max(norm_x, 0.001))
 	var target_scale_y = lerp(1.0, 1.0 - actor.get_value("mouse_scale_y"), max(norm_y, 0.001))
-	%Drag.scale.x = GlobalCalculations.is_nan_or_inf(lerp(%Drag.scale.x, target_scale_x, actor.get_value("mouse_delay")), true)
-	%Drag.scale.y = GlobalCalculations.is_nan_or_inf(lerp(%Drag.scale.y, target_scale_y, actor.get_value("mouse_delay")), true)
+	%Drag.scale.x = GlobalCalculations.is_nan_or_inf(target_scale_x, true)
+	%Drag.scale.y = GlobalCalculations.is_nan_or_inf(target_scale_y, true)
 
 func follow_controller_position(_axis, t_x, t_y):
 	if actor.sprite_type == "Sprite2D" and actor.get_value("non_animated_sheet") and actor.get_value("animate_to_mouse") and not actor.get_value("animate_to_mouse_track_pos"):

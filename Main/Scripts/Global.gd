@@ -87,7 +87,7 @@ var settings_dict : Dictionary = {
 	
 	saved_inputs = [],
 	zoom = Vector2(1,1),
-	pan = Vector2(640, 360),
+	pan = Vector2(0, 0),
 	
 	should_delta = true,
 	max_fps = 60,

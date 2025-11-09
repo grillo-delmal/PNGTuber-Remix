@@ -21,35 +21,19 @@ func _physics_process(_delta: float) -> void:
 func mouse_in_current_screen():
 	var screen_pos = Vector2(DisplayServer.screen_get_position(current_screen)) - Vector2(1,1)
 	var screen_size = Vector2(DisplayServer.screen_get_size(current_screen))+ Vector2(1,1)
-	var mouse_pos = get_local_mouse_position()
-	if GlobInput.get_mouse_position() != null:
-		mouse_pos = GlobInput.get_mouse_position()
-	
+	var mouse_pos = Vector2(DisplayServer.mouse_get_position())
+
 	return (mouse_pos.x >= screen_pos.x and mouse_pos.x < (screen_size.x + screen_pos.x) and 
 			mouse_pos.y >= screen_pos.y and mouse_pos.y < (screen_size.y + screen_pos.y))
 
 func set_mouse_positions():
 	var global_mouse_pos = get_local_mouse_position()
-	if OS.has_feature("linux"):
-		coords = global_mouse_pos
-		global_coords = global_mouse_pos
-	else:
-		if GlobInput.get_mouse_position() != null && !GlobInput.get_mouse_position().is_finite():
-			coords = Global.sprite_container.to_local(GlobInput.get_mouse_position())
-			global_coords = Global.sprite_container.to_local(GlobInput.get_mouse_position())
-		else:
-			coords = global_mouse_pos
-			global_coords = global_mouse_pos
+	coords = global_mouse_pos
+	global_coords = global_mouse_pos
 
 func set_global_mouse_position():
 	var global_mouse_pos = get_local_mouse_position()
-	if OS.has_feature("linux"):
-		global_coords = global_mouse_pos
-	else:
-		if GlobInput.get_mouse_position() != null && !GlobInput.get_mouse_position().is_finite():
-			global_coords = Global.sprite_container.to_local(GlobInput.get_mouse_position())
-		else:
-			global_coords = global_mouse_pos
+	global_coords = global_mouse_pos
 
 func screen_based_position():
 	if Global.settings_dict.snap_out_of_bounds:
@@ -58,7 +42,8 @@ func screen_based_position():
 			global_coords = Vector2(0,0)
 		else:
 			set_global_mouse_position()
-			var relative_pos = Vector2(global_coords)
+			var t = Vector2(DisplayServer.screen_get_position(current_screen))
+			var relative_pos = Vector2(global_coords + t)
 			coords = Vector2(relative_pos)
 	else:
 		set_global_mouse_position()

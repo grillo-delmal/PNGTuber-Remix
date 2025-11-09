@@ -261,7 +261,7 @@ func _on_out_of_bounds_toggled(toggled_on: bool) -> void:
 	Global.settings_dict.snap_out_of_bounds = toggled_on
 
 func _on_fix_mic_delay_pressed() -> void:
-	GlobalAudioStreamPlayer.restart_mic_and_timer()
+	GlobalAudioStreamPlayer.mic_restart_timer_timeout()
 
 func _on_save_unused_images_toggled(toggled_on: bool) -> void:
 	Settings.theme_settings.save_unused_files = toggled_on

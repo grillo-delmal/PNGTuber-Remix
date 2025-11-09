@@ -7,8 +7,8 @@ var record_effect : AudioEffectCapture
 const VU_COUNT = 4
 const HEIGHT = 40
 const  MAX_FREQ = 11050.0
-const MIC_RESTART_TIME: float = 120
-const MIC_RESTART_TIME_FIX: float = 600
+const MIC_RESTART_TIME: float = 640
+const MIC_RESTART_TIME_FIX: float = 360
 var bar_stuff = []
 var used_bar = 0
 
@@ -37,19 +37,15 @@ func change_mic_restart_time(delay_fix := false) -> void:
 	mic_restart_timer.wait_time = MIC_RESTART_TIME_FIX if delay_fix else MIC_RESTART_TIME
 
 func mic_restart_timer_timeout():
-	pass
 	restart_mic()
 
 func restart_mic():
 	playing = false
 	record_effect.clear_buffer()
 	await get_tree().physics_frame
+	await get_tree().physics_frame
 	playing = true
 
-func restart_mic_and_timer():
-	restart_mic()
-	mic_restart_timer.stop()
-	mic_restart_timer.start()
 
 func global_lipsync():
 	_fingerprint.populate(LipSyncGlobals.speech_spectrum)
