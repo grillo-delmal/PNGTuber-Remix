@@ -31,21 +31,11 @@ func set_mouse_positions():
 	coords = global_mouse_pos
 	global_coords = global_mouse_pos
 
-func set_global_mouse_position():
-	var global_mouse_pos = get_local_mouse_position()
-	global_coords = global_mouse_pos
 
 func screen_based_position():
 	if Global.settings_dict.snap_out_of_bounds:
 		if !mouse_in_current_screen():
 			coords = Vector2(0,0)
 			global_coords = Vector2(0,0)
-		else:
-			set_global_mouse_position()
-			var t = Vector2(DisplayServer.screen_get_position(current_screen))
-			var relative_pos = Vector2(global_coords + t)
-			coords = Vector2(relative_pos)
-	else:
-		set_global_mouse_position()
-		var relative_pos = Vector2(global_coords)
-		coords = Vector2(relative_pos)
+			return
+	set_mouse_positions()

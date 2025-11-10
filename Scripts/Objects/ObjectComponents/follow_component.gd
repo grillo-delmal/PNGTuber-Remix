@@ -59,15 +59,14 @@ func follow_calculation(_delta):
 			mouse_coords = Vector2.ZERO
 		else:
 			var viewport_size = actor.get_viewport().size
-			var origin = actor.get_global_transform_with_canvas().origin
+			var origin = actor.sprite_object.get_global_transform_with_canvas().origin
 			var x_per = 1.0 - origin.x/float(viewport_size.x)
 			var y_per = 1.0 - origin.y/float(viewport_size.y)
-			var display_size = DisplayServer.screen_get_size(main_marker.current_screen)
-			var offset = Vector2(display_size.x * x_per, display_size.y * y_per)
-			var mouse_pos = DisplayServer.mouse_get_position() - DisplayServer.screen_get_position(main_marker.current_screen)
-			mouse_coords = Vector2(mouse_pos - display_size) + offset 
+			var offset = Vector2( x_per, y_per)
+			var mouse_pos = actor.sprite_object.get_local_mouse_position()
+			mouse_coords = Vector2(mouse_pos - Vector2(DisplayServer.screen_get_position(main_marker.current_screen))) + offset 
 	else:
-		mouse_coords = actor.get_local_mouse_position()
+		mouse_coords = actor.sprite_object.get_local_mouse_position()
 	
 	var dir = distance.direction_to(mouse_coords)
 	var dist = mouse_coords.length()
