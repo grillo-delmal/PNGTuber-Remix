@@ -16,7 +16,7 @@ run/main_scene="uid://ckgt30cxu04dj"
 run/print_header=false
 config/auto_accept_quit=false
 config/quit_on_go_back=false
-config/features=PackedStringArray("4.5")
+config/features=PackedStringArray("4.4")
 boot_splash/bg_color=Color(0.1118, 0.135361, 0.218212, 1)
 boot_splash/fullsize=false
 boot_splash/use_filter=false
@@ -54,6 +54,7 @@ gdscript/warnings/get_node_default_without_onready=0
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+window/size/transparent=true
 window/energy_saving/keep_screen_on=false
 window/stretch/aspect="ignore"
 window/per_pixel_transparency/allowed=true
@@ -73,9 +74,9 @@ Dockables=""
 
 [gui]
 
+theme/custom_font="uid://2jnndjm4c7yc"
 theme/default_font_antialiasing=0
 theme/default_font_subpixel_positioning=2
-theme/custom_font="uid://2jnndjm4c7yc"
 
 [input]
 

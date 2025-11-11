@@ -1,19 +1,19 @@
 <br />
 <div align="center">
   <a href="https://github.com/MudkipWorld/PNGTuber-Remix">
-    <img src="https://github.com/MudkipWorld/PNGTuber-Remix/assets/94318023/47bd9ee0-13e3-4ad8-af88-90dd5fa34628" alt="Logo" width="350" height="350">
+	<img src="https://github.com/MudkipWorld/PNGTuber-Remix/assets/94318023/47bd9ee0-13e3-4ad8-af88-90dd5fa34628" alt="Logo" width="350" height="350">
   </a>
 
   <h3 align="center">PNGTube-Remix</h3>
 
   <p align="center">
-    Start PNGTubing in a more interesting and alive way.
-    <br />
-    <a href="https://docs.google.com/document/d/1p5CSKFrBaDk-bDVbm13CNPw3AkUdGX1o_BnKcr2oi40/edit?usp=sharing"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    &middot;
-    <a href="https://github.com/MudkipWorld/PNGTuber-Remix/issues">Report Bug</a>
+	Start PNGTubing in a more interesting and alive way.
+	<br />
+	<a href="https://docs.google.com/document/d/1p5CSKFrBaDk-bDVbm13CNPw3AkUdGX1o_BnKcr2oi40/edit?usp=sharing"><strong>Explore the docs »</strong></a>
+	<br />
+	<br />
+	&middot;
+	<a href="https://github.com/MudkipWorld/PNGTuber-Remix/issues">Report Bug</a>
   </p>
 </div>
 
@@ -59,4 +59,3 @@ Please, if you would like a direct contact with me. Join the official discord!
 * Mushie for the Documentation
 
 <br>Note : This used to be a forked of PNGTuber+, credits to Kaiakairos. make sure to support them :D</br>
-
