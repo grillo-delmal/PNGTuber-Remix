@@ -135,6 +135,7 @@ func _on_duplicate_button_pressed():
 			obj.saved_keys = sprite.saved_keys.duplicate(true)
 			obj.should_disappear = sprite.should_disappear
 			obj.show_only = sprite.show_only
+			obj.hold_to_show = sprite.hold_to_show
 			obj.is_asset = sprite.is_asset
 			obj.saved_event = sprite.saved_event
 			obj.was_active_before = sprite.was_active_before
@@ -200,6 +201,7 @@ func _on_duplicate_button_pressed():
 				obj_to_spawn.saved_keys = t.saved_keys.duplicate(true)
 				obj_to_spawn.should_disappear = t.should_disappear
 				obj_to_spawn.show_only = t.show_only
+				obj_to_spawn.hold_to_show = t.hold_to_show
 				obj_to_spawn.is_asset = t.is_asset
 				obj_to_spawn.saved_event = t.saved_event
 				obj_to_spawn.was_active_before = t.was_active_before

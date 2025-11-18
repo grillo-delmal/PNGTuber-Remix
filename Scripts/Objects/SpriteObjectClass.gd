@@ -168,6 +168,7 @@ var is_asset : bool = false
 var was_active_before : bool = true
 var show_only : bool = false
 var should_disappear : bool = false
+var hold_to_show : bool = false
 var saved_keys : Array = []
 var disappear_keys : String = str(sprite_id) + "Disappear"
 var rest_mode : int = 1

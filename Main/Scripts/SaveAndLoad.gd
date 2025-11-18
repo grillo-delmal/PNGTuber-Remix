@@ -64,6 +64,7 @@ func save_data():
 			"should_disappear": sprt.should_disappear,
 			"show_only": sprt.show_only,
 			"saved_disappear": saved_events,
+			"hold_to_show":sprt.hold_to_show,
 			"is_collapsed": sprt.is_collapsed,
 			"is_premultiplied": true,
 			"layer_color": sprt.layer_color,
@@ -202,6 +203,7 @@ func load_model(path: String) -> void:
 	Global.main.get_node("%Marker").current_screen = Global.settings_dict.monitor
 	Global.project_updates.emit("Project Loaded!")
 	Global.remake_image_manager.emit()
+	Global.load_model.emit()
 	Global.load_sprite_states(0)
 
 func load_objects(load_dict : Dictionary):
@@ -262,6 +264,8 @@ func load_objects(load_dict : Dictionary):
 			sprite_obj.should_disappear = sprite.should_disappear
 			if sprite.has("show_only"):
 				sprite_obj.show_only = sprite.show_only
+			if sprite.has("hold_to_show"):
+				sprite_obj.hold_to_show = sprite.hold_to_show
 			sprite_obj.get_node("%Drag").visible = sprite.was_active_before
 			sprite_obj.was_active_before = sprite.was_active_before
 

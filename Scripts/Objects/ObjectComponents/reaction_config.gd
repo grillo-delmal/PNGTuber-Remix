@@ -17,19 +17,73 @@ func _ready() -> void:
 	not_speaking()
 
 func _physics_process(_delta: float) -> void:
-	if GlobInput.is_action_just_pressed(str(actor.sprite_id)):
-		if actor.show_only:
-			%Drag.visible = true
-		else:
-			%Drag.visible = !%Drag.visible
-		actor.was_active_before = %Drag.visible
+	if Global.settings_dict.checkinput != true:
+		return
+		
+	# pressed hotkeys, pressed(and holding) key with hold_to_show feature
+	# BUG: is_action_just_pressed() ignores some key inputs when quickly and repeatedly pressed,
+	#      but is_action_pressed() can capture key inputs every frame.
+	var is_trying_to_appear = false
+	var is_trying_to_disappear = false
 	
+	# case to toggle:
+	if GlobInput.is_action_just_pressed(str(actor.sprite_id)):
+		if %Drag.visible and !actor.show_only:
+			is_trying_to_disappear = true
+		elif !%Drag.visible:
+			is_trying_to_appear = true
+	#case to hold_to_show 
+	if GlobInput.is_action_pressed(str(actor.sprite_id)) and actor.hold_to_show and !actor.was_active_before:
+		is_trying_to_appear = true
+	# case to disappear:
+	# pressed disappear_keys, released key with hold_to_show feature 
 	if GlobInput.is_action_just_pressed(actor.disappear_keys):
+		is_trying_to_disappear = true
+	if !GlobInput.is_action_pressed(str(actor.sprite_id)) and actor.hold_to_show and actor.was_active_before:
+		is_trying_to_disappear = true
+	
+	if is_trying_to_appear:
+		%Drag.visible = true
+	if is_trying_to_disappear:
 		%Drag.visible = false
-		actor.was_active_before = false
 		if !actor.is_asset && !%Drag.visible:
 			%Drag.visible = true
-			actor.was_active_before = true
+	
+	actor.was_active_before = %Drag.visible
+	
+	# trying to show sprite in a cycle will hide the remained
+	# hiding will display the first sprite
+	# TODO: move to cycle.gd
+	# TODO: consider whether the effectw of hiding sprite meets user expectations
+	if actor.sprite_data.is_cycle and actor.sprite_data.cycle > 0:
+		var cycle = Global.settings_dict.cycles[actor.sprite_data.cycle - 1]
+		var sprite_pos = cycle.sprites.find(actor.sprite_id)
+		
+		if is_trying_to_appear:
+			cycle.active = true
+			cycle.pos = sprite_pos
+			cycle.last_sprite = actor.sprite_id
+			
+			for sprite in get_tree().get_nodes_in_group("Sprites"):
+				if sprite.sprite_id in cycle.sprites and sprite.get_value("is_cycle"):
+					sprite.get_node("%Drag").hide()
+					sprite.was_active_before = sprite.get_node("%Drag").visible
+				if sprite.sprite_id == cycle.last_sprite and sprite.get_value("is_cycle"):
+					sprite.get_node("%Drag").show()
+					sprite.was_active_before = sprite.get_node("%Drag").visible
+					
+		if is_trying_to_disappear:
+			cycle.active = true
+			cycle.pos = 0
+			cycle.last_sprite = cycle.sprites[0]
+			
+			for sprite in get_tree().get_nodes_in_group("Sprites"):
+				if sprite.sprite_id in cycle.sprites and sprite.get_value("is_cycle"):
+					sprite.get_node("%Drag").hide()
+					sprite.was_active_before = sprite.get_node("%Drag").visible
+				if sprite.sprite_id == cycle.last_sprite and sprite.get_value("is_cycle"):
+					sprite.get_node("%Drag").show()
+					sprite.was_active_before = sprite.get_node("%Drag").visible
 
 func update_to_mode_change(mode : int):
 	match mode:

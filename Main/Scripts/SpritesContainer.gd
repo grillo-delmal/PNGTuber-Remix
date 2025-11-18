@@ -281,3 +281,6 @@ func set_effects():
 	if Global.viewer != null && is_instance_valid(Global.viewer):
 		Global.viewport.material.set_shader_parameter("effect", model_effects.color_blindness_effect)
 		Global.viewer.material.set_shader_parameter("effect", model_effects.effect_type)
+		# outline, auro
+		Global.viewer.material.set_shader_parameter("line_scale", model_effects.effect_size)
+		Global.viewer.material.set_shader_parameter("line_color", model_effects.effect_color)
