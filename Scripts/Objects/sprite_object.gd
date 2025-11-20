@@ -35,11 +35,6 @@ func _ready():
 	Global.deselect.connect(desel)
 	grab_object.button_down.connect(_on_grab_button_down)
 	grab_object.button_up.connect(_on_grab_button_up)
-	set_dragger_pos()
-
-func set_dragger_pos():
-	%Dragger.top_level = true
-	%Dragger.global_position = %Pos.global_position
 
 func sel():
 	if self in Global.held_sprites:
@@ -128,7 +123,6 @@ func _process(_delta):
 		
 	advanced_lipsyc()
 
-
 func _on_grab_button_down():
 	if selected:
 		if not Input.is_action_pressed("ctrl"):
@@ -196,28 +190,22 @@ func get_state(id):
 	if !states[id].is_empty():
 		var dict = states[id]
 		sprite_data.merge(dict, true)
-		
-		
 		if get_value("should_reset_state"):
 			%ReactionConfig.reset_anim()
 		
 		var old_glob = global_position
-		
-		
 		position = get_value("position")
-		
-		
 		%Sprite2D.position = get_value("offset") 
 		%Sprite2D.scale = Vector2(1,1)
 		
-		%Rotation.z_index = get_value("z_index")
+		%Modifier1.z_index = get_value("z_index")
 		modulate = get_value("colored")
 		scale = get_value("scale")
 	#	global_position = get_value("global_position")
 		
 		
 		if (global_position - old_glob).length() > get_value("drag_snap") && get_value("drag_snap") != 999999.0:
-			%Dragger.global_position = %Pos.global_position
+			%Modifier.global_position = %Modifier1.global_position
 		
 		%Sprite2D.set_clip_children_mode(get_value("clip"))
 		rotation = get_value("rotation")
@@ -238,7 +226,7 @@ func get_state(id):
 			%Sprite2D.hframes = 6
 		
 		if !get_value("should_blink"):
-			%Pos.show()
+			%Modifier1.show()
 		else:
 			%ReactionConfig.update_to_mode_change(Global.mode)
 

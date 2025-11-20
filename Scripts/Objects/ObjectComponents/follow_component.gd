@@ -18,30 +18,25 @@ var target_y : float = 0
 var target_rotation_axis : Vector2 = Vector2.ZERO
 var target_scale_axis : Vector2 = Vector2.ZERO
 
-var pos_node
-var mouse_rot
-var drag_node
-var sprite_node
+@export var modifier : Node2D
 var rest : bool = false
+var smoothed_dir := Vector2.ZERO 
+
 
 
 func _ready() -> void:
-	pos_node = %Pos
-	mouse_rot = %MouseRot
-	drag_node = %Drag
-	sprite_node = %Sprite2D
 	Global.update_mouse_vel_pos.connect(mouse_delay)
 
 func _physics_process(delta: float) -> void:
 	if not Global.static_view or actor.rest_mode != 5:
 		if (actor.rest_mode == 1 or actor.rest_mode == 3) && rest:
-			%Pos.position = Vector2.ZERO
+			modifier.position = Vector2.ZERO
 		else:
 			follow_calculation(delta)
 	else:
-		%Pos.position = Vector2.ZERO
-		%MouseRot.rotation = 0.0
-		%Drag.scale = Vector2(1,1)
+		modifier.position = Vector2.ZERO
+		modifier.rotation = 0.0
+		modifier.scale = Vector2(1,1)
 
 func mouse_delay():
 	var mouse_delta = last_mouse_position - mouse_coords
@@ -71,9 +66,9 @@ func follow_calculation(_delta):
 	var dir = distance.direction_to(mouse_coords)
 	var dist = mouse_coords.length()
 	
-	follow_stuff(mouse_coords, main_marker, dir, dist)
+	follow_stuff(mouse_coords, main_marker, dir, dist, _delta)
 
-func follow_position(dir, dist, axis_left, axis_right, axis_shoulderl, axis_shoulderr,axis_lr_3):
+func follow_position(dir, dist, axis_left, axis_right, axis_shoulderl, axis_shoulderr,axis_lr_3, delta):
 	if actor.get_value("follow_type") == 0:
 		if actor.get_value("follow_mouse_velocity"):
 			follow_mouse_vel_position()
@@ -112,13 +107,13 @@ func follow_position(dir, dist, axis_left, axis_right, axis_shoulderl, axis_shou
 		follow_sprite_anim(axis_lr_3, dist_lr)
 		
 	else:
-		%Pos.position = Vector2.ZERO
+		modifier.position = Vector2.ZERO
 		return
 
-func follow_rotation(mouse, main_marker , axis_left, axis_right, axis_shoulderl, axis_shoulderr,axis_lr_3):
+func follow_rotation(mouse, main_marker , axis_left, axis_right, axis_shoulderl, axis_shoulderr,axis_lr_3, delta):
 	if actor.get_value("follow_type2") == 0:
 		if actor.get_value("follow_mouse_velocity"):
-			follow_mouse_vel_rotation()
+			follow_mouse_vel_rotation(delta)
 		else:
 			follow_mouse_rotation(mouse, main_marker)
 	elif actor.get_value("follow_type2") == 1 or actor.get_value("follow_type2") == 2:
@@ -135,13 +130,13 @@ func follow_rotation(mouse, main_marker , axis_left, axis_right, axis_shoulderl,
 		target_rotation_axis = target_rotation_axis.lerp(axis_lr_3, 0.15) if actor.get_value("snap_rot") and not axis_lr_3.is_zero_approx() else axis_lr_3
 		follow_controller_rotation(target_rotation_axis)
 	else:
-		%MouseRot.rotation = 0.0
+		modifier.rotation = 0.0
 		return
 
-func follow_scale(mouse, main_marker, axis_left, axis_right, axis_shoulderl, axis_shoulderr,axis_lr_3):
+func follow_scale(mouse, main_marker, axis_left, axis_right, axis_shoulderl, axis_shoulderr,axis_lr_3, delta):
 	if actor.get_value("follow_type3") == 0:
 		if actor.get_value("follow_mouse_velocity"):
-			follow_mouse_vel_scale()
+			follow_mouse_vel_scale(delta)
 		else:
 			follow_mouse_scale(mouse, main_marker)
 	elif actor.get_value("follow_type3") == 1 or actor.get_value("follow_type3") == 2:
@@ -158,10 +153,10 @@ func follow_scale(mouse, main_marker, axis_left, axis_right, axis_shoulderl, axi
 		target_scale_axis = target_scale_axis.lerp(axis_lr_3, 0.15) if actor.get_value("snap_scale") and axis_lr_3.is_zero_approx() else axis_lr_3
 		follow_controller_scale(target_scale_axis)
 	else:
-		%Drag.position = Vector2.ZERO
+		modifier.position = Vector2.ZERO
 		return
 
-func follow_stuff(mouse, main_marker, dir, dist):
+func follow_stuff(mouse, main_marker, dir, dist, delta):
 	if actor.get_value("follow_mouse_velocity"):
 		var mouse_delta = last_mouse_position - mouse
 		var delta_abs = Vector2(abs(tanh(mouse_delta.x)), abs(tanh(mouse_delta.y)))
@@ -179,44 +174,58 @@ func follow_stuff(mouse, main_marker, dir, dist):
 	var axis_shoulderl = Input.get_vector("ShoulderL1", "ShoulderR1", "ShoulderL1", "ShoulderR1")
 	var axis_shoulderr = Input.get_vector("ShoulderL2", "ShoulderR2", "ShoulderL2", "ShoulderR2")
 	var axis_lr_3 = Input.get_vector("L3", "R3", "L3", "R3")
-	follow_position(dir, dist, axis_left, axis_right, axis_shoulderl, axis_shoulderr, axis_lr_3)
-	follow_rotation(mouse, main_marker , axis_left, axis_right, axis_shoulderl, axis_shoulderr, axis_lr_3)
-	follow_scale(mouse, main_marker, axis_left, axis_right, axis_shoulderl, axis_shoulderr, axis_lr_3)
+	follow_position(dir, dist, axis_left, axis_right, axis_shoulderl, axis_shoulderr, axis_lr_3, delta)
+	follow_rotation(mouse, main_marker , axis_left, axis_right, axis_shoulderl, axis_shoulderr, axis_lr_3, delta)
+	follow_scale(mouse, main_marker, axis_left, axis_right, axis_shoulderl, axis_shoulderr, axis_lr_3, delta)
 
 func follow_mouse_vel_position():
 	var target = last_dist
 	if actor.sprite_type == "Sprite2D" and actor.get_value("non_animated_sheet") and actor.get_value("animate_to_mouse") and not actor.get_value("animate_to_mouse_track_pos"):
 		target = Vector2.ZERO
-	%Pos.position.x = GlobalCalculations.is_nan_or_inf(lerp(%Pos.position.x, target.x, actor.get_value("mouse_delay")))
-	%Pos.position.y = GlobalCalculations.is_nan_or_inf(lerp(%Pos.position.y, target.y, actor.get_value("mouse_delay")))
+	modifier.position.x = GlobalCalculations.is_nan_or_inf(lerp(modifier.position.x, target.x, actor.get_value("mouse_delay")))
+	modifier.position.y = GlobalCalculations.is_nan_or_inf(lerp(modifier.position.y, target.y, actor.get_value("mouse_delay")))
 
-func follow_mouse_vel_rotation():
-	var normalized_mouse = clamp((-dir_vel_anim.x / 2), -1.0, 1.0)
-	var rotation_factor = lerp(actor.get_value("mouse_rotation_max"), actor.get_value("mouse_rotation"), max(normalized_mouse / 2, 0.01))
+func follow_mouse_vel_rotation(delta):
+	update_smoothed_dir(delta)
+	if smoothed_dir.length()  < 0.1:
+		return
+	var normalized_mouse = clamp((-smoothed_dir.x / 2), -1.0, 1.0)
+	var rotation_factor = lerp(actor.get_value("mouse_rotation_max"), actor.get_value("mouse_rotation"), max(abs(normalized_mouse), 0.01))
 	var safe_rot_min = clamp(actor.get_value("rLimitMin"), -360, 360)
 	var safe_rot_max = clamp(actor.get_value("rLimitMax"), -360, 360)
 	var target_rotation = clamp(normalized_mouse * rotation_factor * deg_to_rad(90), deg_to_rad(safe_rot_min), deg_to_rad(safe_rot_max))
-	%MouseRot.rotation = GlobalCalculations.is_nan_or_inf(lerp_angle(%MouseRot.rotation, target_rotation, actor.get_value("mouse_delay")))
+	var t = 1.0 - pow(1.0 - actor.get_value("mouse_delay"), delta * 60.0)
+	modifier.rotation = lerp_angle(modifier.rotation, target_rotation, t)
 
-func follow_mouse_vel_scale():
-	var t = dir_vel_anim.normalized() / 2
+func follow_mouse_vel_scale(delta):
+	update_smoothed_dir(delta)
+	if smoothed_dir.length()  < 0.1:
+		return
+	var t = smoothed_dir.normalized() / 2
 	var norm_x = clamp(abs(t.x), 0.0, 1.0)
 	var norm_y = clamp(abs(t.y), 0.0, 1.0)
 	var target_scale_x = lerp(1.0, 1.0 - actor.get_value("mouse_scale_x"), max(norm_x, 0.01))
 	var target_scale_y = lerp(1.0, 1.0 - actor.get_value("mouse_scale_y"), max(norm_y, 0.01))
-	%Drag.scale.x = GlobalCalculations.is_nan_or_inf(lerp(%Drag.scale.x, target_scale_x, actor.get_value("mouse_delay")), true)
-	%Drag.scale.y = GlobalCalculations.is_nan_or_inf(lerp(%Drag.scale.y, target_scale_y, actor.get_value("mouse_delay")), true)
+	var lerp_t = 1.0 - pow(1.0 - actor.get_value("mouse_delay"), delta * 60.0)
+	modifier.scale.x = lerp(modifier.scale.x, target_scale_x, lerp_t)
+	modifier.scale.y = lerp(modifier.scale.y, target_scale_y, lerp_t)
+
+
+
+func update_smoothed_dir(delta):
+	smoothed_dir = smoothed_dir.lerp(dir_vel_anim, clamp(delta * 10.0, 0.0, 1.0))
+
 
 func follow_mouse_position(dir, dist):
 	var target = Vector2(dir.x * min(dist, actor.get_value("look_at_mouse_pos")), dir.y * min(dist, actor.get_value("look_at_mouse_pos_y")))
 	if actor.sprite_type == "Sprite2D" and actor.get_value("non_animated_sheet") and actor.get_value("animate_to_mouse") and not actor.get_value("animate_to_mouse_track_pos"):
 		target = Vector2.ZERO
-	%Pos.position.x = GlobalCalculations.is_nan_or_inf(lerp(%Pos.position.x, target.x, actor.get_value("mouse_delay")))
-	%Pos.position.y = GlobalCalculations.is_nan_or_inf(lerp(%Pos.position.y, target.y, actor.get_value("mouse_delay")))
+	modifier.position.x = GlobalCalculations.is_nan_or_inf(lerp(modifier.position.x, target.x, actor.get_value("mouse_delay")))
+	modifier.position.y = GlobalCalculations.is_nan_or_inf(lerp(modifier.position.y, target.y, actor.get_value("mouse_delay")))
 	if actor.get_value("look_at_mouse_pos") == 0:
-		%Pos.position.x = target.x
+		modifier.position.x = target.x
 	if actor.get_value("look_at_mouse_pos_y") == 0:
-		%Pos.position.y = target.y
+		modifier.position.y = target.y
 
 func follow_mouse_rotation(mouse, main_marker):
 	var screen_size = DisplayServer.screen_get_size(main_marker.current_screen if main_marker.current_screen != Monitor.ALL_SCREENS else 1)
@@ -225,7 +234,7 @@ func follow_mouse_rotation(mouse, main_marker):
 	var safe_rot_min = clamp(actor.sprite_data.rLimitMin, -360, 360)
 	var safe_rot_max = clamp(actor.sprite_data.rLimitMax, -360, 360)
 	var target_rotation = clamp(rotation_factor, deg_to_rad(safe_rot_min), deg_to_rad(safe_rot_max))
-	%MouseRot.rotation = GlobalCalculations.is_nan_or_inf(lerp_angle(%MouseRot.rotation, target_rotation, actor.get_value("mouse_delay")))
+	modifier.rotation = GlobalCalculations.is_nan_or_inf(lerp_angle(modifier.rotation, target_rotation, actor.get_value("mouse_delay")))
 
 func follow_mouse_scale(mouse, main_marker):
 	var screen_size = DisplayServer.screen_get_size(main_marker.current_screen if main_marker.current_screen != Monitor.ALL_SCREENS else 1)
@@ -234,21 +243,21 @@ func follow_mouse_scale(mouse, main_marker):
 	var norm_y = clamp(abs(mouse.y) / center.y, 0.0, 1.0)
 	var target_scale_x = lerp(1.0, 1.0 - actor.get_value("mouse_scale_x"), max(norm_x, 0.001))
 	var target_scale_y = lerp(1.0, 1.0 - actor.get_value("mouse_scale_y"), max(norm_y, 0.001))
-	%Drag.scale.x = GlobalCalculations.is_nan_or_inf(target_scale_x, true)
-	%Drag.scale.y = GlobalCalculations.is_nan_or_inf(target_scale_y, true)
+	modifier.scale.x = GlobalCalculations.is_nan_or_inf(target_scale_x, true)
+	modifier.scale.y = GlobalCalculations.is_nan_or_inf(target_scale_y, true)
 
 func follow_controller_position(_axis, t_x, t_y):
 	if actor.sprite_type == "Sprite2D" and actor.get_value("non_animated_sheet") and actor.get_value("animate_to_mouse") and not actor.get_value("animate_to_mouse_track_pos"):
-		%Pos.position.x = lerp(%Pos.position.x, 0.0, actor.get_value("mouse_delay"))
-		%Pos.position.y = lerp(%Pos.position.y, 0.0, actor.get_value("mouse_delay"))
+		modifier.position.x = lerp(modifier.position.x, 0.0, actor.get_value("mouse_delay"))
+		modifier.position.y = lerp(modifier.position.y, 0.0, actor.get_value("mouse_delay"))
 	else:
-		%Pos.position.x = lerp(%Pos.position.x, t_x, actor.get_value("mouse_delay"))
-		%Pos.position.y = lerp(%Pos.position.y, t_y, actor.get_value("mouse_delay"))
+		modifier.position.x = lerp(modifier.position.x, t_x, actor.get_value("mouse_delay"))
+		modifier.position.y = lerp(modifier.position.y, t_y, actor.get_value("mouse_delay"))
 
 	if actor.get_value("look_at_mouse_pos") == 0:
-		%Pos.position.x = 0.0
+		modifier.position.x = 0.0
 	if actor.get_value("look_at_mouse_pos_y") == 0:
-		%Pos.position.y = 0.0
+		modifier.position.y = 0.0
 
 func follow_controller_rotation(axis):
 	var normalized = clamp(axis.x, -1.0, 1.0)
@@ -256,15 +265,15 @@ func follow_controller_rotation(axis):
 	var rot_max = clamp(actor.get_value("rLimitMax"), -360, 360)
 	var rotation_factor = lerp(actor.get_value("mouse_rotation"), actor.get_value("mouse_rotation_max"), max((normalized + 1) / 2, 0.001))
 	var target_rotation = clamp(rotation_factor, deg_to_rad(rot_min), deg_to_rad(rot_max))
-	%MouseRot.rotation = lerp_angle(%MouseRot.rotation, target_rotation, actor.get_value("mouse_delay"))
+	modifier.rotation = lerp_angle(modifier.rotation, target_rotation, actor.get_value("mouse_delay"))
 
 func follow_controller_scale(axis):
 	var norm_x = clamp(abs(axis.x), 0.0, 1.0)
 	var norm_y = clamp(abs(axis.y), 0.0, 1.0)
 	var target_scale_x = lerp(1.0, 1.0 - actor.get_value("mouse_scale_x"), max(norm_x, 0.001))
 	var target_scale_y = lerp(1.0, 1.0 - actor.get_value("mouse_scale_y"), max(norm_y, 0.001))
-	%Drag.scale.x = lerp(%Drag.scale.x, target_scale_x, actor.get_value("mouse_delay"))
-	%Drag.scale.y = lerp(%Drag.scale.y, target_scale_y, actor.get_value("mouse_delay"))
+	modifier.scale.x = lerp(modifier.scale.x, target_scale_x, actor.get_value("mouse_delay"))
+	modifier.scale.y = lerp(modifier.scale.y, target_scale_y, actor.get_value("mouse_delay"))
 
 func follow_sprite_anim(dir, dist):
 	if actor.sprite_type == "Sprite2D":

@@ -262,7 +262,7 @@ func load_objects(load_dict : Dictionary):
 			sprite_obj.should_disappear = sprite.should_disappear
 			if sprite.has("show_only"):
 				sprite_obj.show_only = sprite.show_only
-			sprite_obj.get_node("%Drag").visible = sprite.was_active_before
+			sprite_obj.get_node("%Sprite2D").visible = sprite.was_active_before
 			sprite_obj.was_active_before = sprite.was_active_before
 
 			sprite_obj.disappear_keys = str(sprite.sprite_id) + "Disappear"

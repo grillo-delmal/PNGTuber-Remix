@@ -151,9 +151,6 @@ func _finalize_move(sprite, og_pos: Vector2) -> void:
 	sprite.sprite_data.position = sprite.position
 	sprite.save_state(Global.current_state)
 	await get_tree().physics_frame
-	var dragger = sprite.get_node("%Dragger")
-	if dragger:
-		dragger.global_position = og_pos
 	recolor_layer()
 
 func recolor_layer() -> void:
