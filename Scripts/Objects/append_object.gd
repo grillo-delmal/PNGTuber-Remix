@@ -41,7 +41,6 @@ func _init() -> void:
 	cached_defaults = DEFAULT_DATA.merged(get_default_object_data(), true)
 	sprite_data = cached_defaults.duplicate(true)
 
-
 func _ready():
 	Global.image_replaced.connect(image_replaced)
 	Global.reparent_objects.connect(reparent_obj)

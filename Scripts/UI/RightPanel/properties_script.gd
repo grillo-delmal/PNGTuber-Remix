@@ -280,7 +280,7 @@ func _on_z_order_spinbox_value_changed(value):
 				var og_val = i.sprite_data.duplicate()
 				i.sprite_data.z_index = value
 				StateButton.multi_edit(value, "z_index", i, i.states)
-				i.get_node("%Rotation").z_index = value
+				i.get_node("%Modifier1").z_index = value
 				i.save_state(Global.current_state)
 				undo_redo_data.append({sprite_object = i, 
 				data = i.sprite_data.duplicate(), 

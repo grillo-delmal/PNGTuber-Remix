@@ -116,6 +116,7 @@ var top_ui = null
 var file_dialog : FileDialog = null
 var light = null
 var camera : Camera2D = null
+var camera_pos : Node2D = null
 
 var frame_counter : int = 0
 const FRAME_INTERVAL : int = 3  # Run every 5 frames
@@ -219,7 +220,6 @@ func _input(_event : InputEvent):
 				elif Input.is_action_pressed("scrolldown"):
 					i.sprite_data.rotation += 0.05
 					rot(i)
-					
 
 
 func offset(i):
