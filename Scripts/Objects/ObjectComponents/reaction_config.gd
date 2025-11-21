@@ -20,9 +20,6 @@ func _physics_process(_delta: float) -> void:
 	if Global.settings_dict.checkinput != true:
 		return
 		
-	# pressed hotkeys, pressed(and holding) key with hold_to_show feature
-	# BUG: is_action_just_pressed() ignores some key inputs when quickly and repeatedly pressed,
-	#      but is_action_pressed() can capture key inputs every frame.
 	var is_trying_to_appear = false
 	var is_trying_to_disappear = false
 	if GlobInput.is_action_just_pressed(str(actor.sprite_id)):
@@ -31,36 +28,21 @@ func _physics_process(_delta: float) -> void:
 		else:
 			%Sprite2D.visible = !%Sprite2D.visible
 		actor.was_active_before = %Sprite2D.visible
-	
-	# case to toggle:
-	if GlobInput.is_action_just_pressed(str(actor.sprite_id)):
-		if %Drag.visible and !actor.show_only:
-			is_trying_to_disappear = true
-		elif !%Drag.visible:
-			is_trying_to_appear = true
-	#case to hold_to_show 
 	if GlobInput.is_action_pressed(str(actor.sprite_id)) and actor.hold_to_show and !actor.was_active_before:
 		is_trying_to_appear = true
-	# case to disappear:
-	# pressed disappear_keys, released key with hold_to_show feature 
 	if GlobInput.is_action_just_pressed(actor.disappear_keys):
 		is_trying_to_disappear = true
 	if !GlobInput.is_action_pressed(str(actor.sprite_id)) and actor.hold_to_show and actor.was_active_before:
 		is_trying_to_disappear = true
-	
 	if is_trying_to_appear:
-		%Drag.visible = true
+		%Sprite2D.visible = true
 	if is_trying_to_disappear:
-		%Drag.visible = false
-		if !actor.is_asset && !%Drag.visible:
-			%Drag.visible = true
+		%Sprite2D.visible = false
+		if !actor.is_asset && !%Sprite2D.visible:
+			%Sprite2D.visible = true
 	
-	actor.was_active_before = %Drag.visible
 	
-	# trying to show sprite in a cycle will hide the remained
-	# hiding will display the first sprite
-	# TODO: move to cycle.gd
-	# TODO: consider whether the effectw of hiding sprite meets user expectations
+	'''
 	if actor.sprite_data.is_cycle and actor.sprite_data.cycle > 0:
 		var cycle = Global.settings_dict.cycles[actor.sprite_data.cycle - 1]
 		var sprite_pos = cycle.sprites.find(actor.sprite_id)
@@ -72,11 +54,11 @@ func _physics_process(_delta: float) -> void:
 			
 			for sprite in get_tree().get_nodes_in_group("Sprites"):
 				if sprite.sprite_id in cycle.sprites and sprite.get_value("is_cycle"):
-					sprite.get_node("%Drag").hide()
-					sprite.was_active_before = sprite.get_node("%Drag").visible
+					sprite.get_node("%Sprite2D").hide()
+					sprite.was_active_before = sprite.get_node("%Sprite2D").visible
 				if sprite.sprite_id == cycle.last_sprite and sprite.get_value("is_cycle"):
-					sprite.get_node("%Drag").show()
-					sprite.was_active_before = sprite.get_node("%Drag").visible
+					sprite.get_node("%Sprite2D").show()
+					sprite.was_active_before = sprite.get_node("%Sprite2D").visible
 					
 		if is_trying_to_disappear:
 			cycle.active = true
@@ -85,16 +67,16 @@ func _physics_process(_delta: float) -> void:
 			
 			for sprite in get_tree().get_nodes_in_group("Sprites"):
 				if sprite.sprite_id in cycle.sprites and sprite.get_value("is_cycle"):
-					sprite.get_node("%Drag").hide()
-					sprite.was_active_before = sprite.get_node("%Drag").visible
+					sprite.get_node("%Sprite2D").hide()
+					sprite.was_active_before = sprite.get_node("%Sprite2D").visible
 				if sprite.sprite_id == cycle.last_sprite and sprite.get_value("is_cycle"):
-					sprite.get_node("%Drag").show()
-					sprite.was_active_before = sprite.get_node("%Drag").visible
-		%Sprite2D.visible = false
+					sprite.get_node("%Sprite2D").show()
+					sprite.was_active_before = sprite.get_node("%Sprite2D").visible
+		
 		actor.was_active_before = false
 		if !actor.is_asset && !%Sprite2D.visible:
 			%Sprite2D.visible = true
-			actor.was_active_before = true
+			actor.was_active_before = true'''
 
 func update_to_mode_change(mode : int):
 	match mode:

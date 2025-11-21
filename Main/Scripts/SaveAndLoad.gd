@@ -211,7 +211,6 @@ func load_model(path: String) -> void:
 	Global.load_model.emit()
 	Global.load_sprite_states(0)
 
-
 func _resize_image_data(image_data: ImageData, sprite_node: Node2D, percent: float) -> void:
 	if percent == 100.0 or image_data.runtime_texture == null:
 		return
@@ -382,7 +381,6 @@ func load_objects(load_dict: Dictionary) -> void:
 			sprite_obj.is_collapsed = sprite.is_collapsed
 		sprite_obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		Global.sprite_container.add_child(sprite_obj)
-
 
 func load_sprite(sprite, image_data = null, normal = false):
 	var img_data
