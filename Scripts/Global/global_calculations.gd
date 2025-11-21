@@ -86,13 +86,13 @@ static func follow_type_helper(type_name : String = "follow_type", actor : Node 
 	if type == "position":
 		if actor.get_value("snap_pos"):
 			if selected_axis.x != 0:
-				move.target_x = lerp(move.target_x, selected_axis.x * actor.get_value("look_at_mouse_pos"),actor.get_value("mouse_delay"))
+				move.tracked.target_x = lerp(move.tracked.target_x, selected_axis.x * actor.get_value("look_at_mouse_pos"),actor.get_value("mouse_delay"))
 			if selected_axis.y != 0 && actor.get_value("snap_pos"):
-				move.target_y = lerp(move.target_y, selected_axis.y * actor.get_value("look_at_mouse_pos_y"), actor.get_value("mouse_delay"))
+				move.tracked.target_y = lerp(move.tracked.target_y, selected_axis.y * actor.get_value("look_at_mouse_pos_y"), actor.get_value("mouse_delay"))
 		else:
-			move.target_x = selected_axis.x * actor.get_value("look_at_mouse_pos")
-			move.target_y = selected_axis.y * actor.get_value("look_at_mouse_pos_y")
-		dist = Vector2(move.target_x, move.target_y).length()
+			move.tracked.target_x = selected_axis.x * actor.get_value("look_at_mouse_pos")
+			move.tracked.target_y = selected_axis.y * actor.get_value("look_at_mouse_pos_y")
+		dist = Vector2(move.tracked.target_x, move.tracked.target_y).length()
 		return {axis = selected_axis, dist = dist}
 
 	if type == "angle":
@@ -100,13 +100,13 @@ static func follow_type_helper(type_name : String = "follow_type", actor : Node 
 			if !selected_axis.is_zero_approx():
 				move.target_rotation_axis = move.target_rotation_axis.lerp(axis_left, 0.15)
 		else:
-			move.target_rotation_axis = selected_axis
+			move.tracked.target_rotation_axis = selected_axis
 		return {axis = selected_axis}
 	
 	if type == "scale":
 		if actor.get_value("snap_scale"):
 			if selected_axis.is_zero_approx():
-				move.target_scale_axis = move.target_scale_axis.lerp(selected_axis, 0.15)
+				move.tracked.target_scale_axis = move.tracked.target_scale_axis.lerp(selected_axis, 0.15)
 		else:
-			move.target_scale_axis = selected_axis
+			move.tracked.target_scale_axis = selected_axis
 		return {axis = selected_axis}

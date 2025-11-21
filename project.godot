@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="PNGTube-Remix"
-config/version="1.4"
+config/version="1.4.1"
 run/main_scene="uid://ckgt30cxu04dj"
 run/print_header=false
 config/auto_accept_quit=false
@@ -34,8 +34,8 @@ driver/enable_input=true
 VersionConverter="*res://Scripts/AutoLoads/VersionConversion/VersionConverter.tscn"
 Global="*res://Main/Scripts/Global.gd"
 SaveAndLoad="*res://Main/Scripts/SaveAndLoad.gd"
-GlobalAudioStreamPlayer="*res://Scripts/AutoLoads/audio_stream_player.tscn"
 Settings="*res://Scripts/AutoLoads/Settings.gd"
+GlobalAudioStreamPlayer="*res://Scripts/AutoLoads/audio_stream_player.tscn"
 LipSyncGlobals="*res://UI/Lipsync stuff/godot-lip-sync/lip_sync_globals.gd"
 GlobalMicAudio="*res://Main/Scripts/GlobalMicAudio.gd"
 WebsocketHandler="*res://Main/Scripts/websocket_handler.gd"
@@ -63,7 +63,7 @@ window/enable_file_logging=false
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/aimg_io/plugin.cfg", "res://addons/wiggly_appendage_2d/plugin.cfg")
+enabled=PackedStringArray("res://addons/Double_HSlider_gd/plugin.cfg", "res://addons/aimg_io/plugin.cfg", "res://addons/wiggly_appendage_2d/plugin.cfg")
 
 [global_group]
 
@@ -322,6 +322,7 @@ debug_rep={
 [input_devices]
 
 pen_tablet/driver.windows="auto"
+buffering/agile_event_flushing=true
 
 [internationalization]
 

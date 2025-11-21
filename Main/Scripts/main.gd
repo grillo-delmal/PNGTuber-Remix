@@ -32,6 +32,7 @@ func _ready():
 	Global.top_ui = %TopUI
 	Global.light = %LightSource
 	Global.camera = %Camera2D
+	Global.camera_pos = %CamPos
 	Global.update_camera_smoothing()
 	
 	Global.theme_update.connect(update_theme)
@@ -78,7 +79,7 @@ func save_as_file():
 	%FileDialog.show()
 
 func load_sprites():
-	%FileDialog.filters = ["*.png, *.apng, *.gif", "*.png", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
+	%FileDialog.filters = ["*.png, *.apng, *.gif", "*.png", "*.svg", "*.apng"]
 	$FileDialog.file_mode = 1
 	current_state = State.LoadSprites
 	%FileDialog.show()
@@ -90,7 +91,7 @@ func import_psd():
 	%FileDialog.show()
 
 func load_append_sprites():
-	%FileDialog.filters = ["*.png, *.apng, *.gif", "*.png", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
+	%FileDialog.filters = ["*.png, *.apng, *.gif", "*.png", "*.svg", "*.apng"]
 	$FileDialog.file_mode = 1
 	current_state = State.AddAppend
 	%FileDialog.show()
@@ -99,7 +100,7 @@ func replacing_sprite():
 	if Global.held_sprites.size() == 1:
 		if Global.held_sprites[0] != null && is_instance_valid(Global.held_sprites[0]):
 			if not Global.held_sprites[0].get_value("folder"):
-				%FileDialog.filters = ["*.png, *.apng, *.gif", "*.jpeg", "*.jpg", "*.svg", "*.apng"]
+				%FileDialog.filters = ["*.png, *.apng, *.gif", "*.svg", "*.apng"]
 				$FileDialog.file_mode = 0
 				current_state = State.ReplaceSprite
 				%FileDialog.show()
@@ -113,7 +114,7 @@ func add_normal_sprite():
 				elif Global.held_sprites[0].referenced_data.is_apng:
 					%FileDialog.filters = ["*.png","*.apng"]
 				else:
-					%FileDialog.filters = ["*.png", "*.jpeg", "*.jpg", "*.svg"]
+					%FileDialog.filters = ["*.png", "*.svg"]
 				$FileDialog.file_mode = 0
 				current_state = State.AddNormal
 				%FileDialog.show()
@@ -217,12 +218,12 @@ func clear_sprites():
 		if InputMap.has_action(i.disappear_keys):
 			InputMap.erase_action(i.disappear_keys)
 
-	for i in %SpritesContainer.get_children():
+	for i in Global.sprite_container.get_children():
 		i.queue_free()
 	
 	Global.delete_states.emit()
 	Global.reset_states.emit()
-	%Camera2D.zoom = Vector2(1,1)
+	Global.camera.zoom = Vector2(1,1)
 	%CamPos.global_position = Vector2(0, 0)
 	Global.settings_dict.zoom = Vector2(1,1)
 	Global.settings_dict.pan = Vector2(0, 0)

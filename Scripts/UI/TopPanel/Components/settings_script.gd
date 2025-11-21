@@ -36,7 +36,6 @@ func _ready() -> void:
 	
 	check_data()
 
-
 func close():
 	get_parent().queue_free()
 
@@ -55,6 +54,14 @@ func check_data():
 	#%UseThreads.button_pressed = Settings.theme_settings.use_threading
 	%KeepOldTrimData.button_pressed = Settings.theme_settings.save_raw_sprite
 	%SaveUnusedImages.button_pressed = Settings.theme_settings.save_unused_files
+	
+	match Settings.theme_settings.audio_capturer:
+		0:
+			%AudioBackendOption.select(0)
+		2:
+			%AudioBackendOption.select(1)
+	
+	
 	match Settings.theme_settings.backend_type:
 		"default":
 			%BackendOption.select(0)
@@ -85,8 +92,6 @@ func sliders_revalue(settings_dict):
 	%DeltaTimeCheck.button_pressed = settings_dict.should_delta
 	%MaxFPSlider.value = settings_dict.max_fps
 	%OutOfBounds.button_pressed = settings_dict.snap_out_of_bounds
-	
-
 
 func _on_volume_slider_drag_ended(value_changed: bool) -> void:
 	if value_changed:
@@ -103,26 +108,20 @@ func _on_sensitivity_slider_drag_ended(value_changed: bool) -> void:
 func _on_sensitivity_slider_value_changed(value: float) -> void:
 	%SensitivityBar.value = value
 
-
 func _on_auto_load_check_toggled(toggled_on: bool) -> void:
 	Settings.theme_settings.auto_load = toggled_on
 	Settings.save()
-
 
 func _on_save_on_exit_check_toggled(toggled_on: bool) -> void:
 	Settings.theme_settings.save_on_exit = toggled_on
 	Settings.save()
 
-
 func _on_delta_time_check_toggled(toggled_on: bool) -> void:
 	Global.settings_dict.should_delta = toggled_on
-
 
 func _on_auto_save_spin_value_changed(value):
 	Settings.save_timer.wait_time = value * 60
 	Global.settings_dict.auto_save_timer = value
-
-
 
 func choosing_device(id):
 	if id != null:
@@ -144,7 +143,6 @@ func reset_mic_list():
 		
 	choosing_device(0)
 
-
 func _on_anti_al_check_toggled(toggled_on):
 	Global.settings_dict.anti_alias = toggled_on
 	if toggled_on:
@@ -152,7 +150,6 @@ func _on_anti_al_check_toggled(toggled_on):
 
 	else:
 		Global.sprite_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST_WITH_MIPMAPS
-
 
 func _on_input_check_button_toggled(toggled_on):
 	Global.settings_dict.checkinput = toggled_on
@@ -166,7 +163,6 @@ func _on_max_fp_slider_drag_ended(value_changed: bool) -> void:
 func _on_max_fp_slider_value_changed(value: float) -> void:
 	%MaxFPSLabel.text = "Max FPS : " + str(value)
 
-
 func _on_auto_save_check_toggled(toggled_on):
 	Global.settings_dict.auto_save = toggled_on
 	if toggled_on:
@@ -174,11 +170,9 @@ func _on_auto_save_check_toggled(toggled_on):
 	else:
 		Settings.save_timer.stop()
 
-
 func _on_import_trim_toggled(toggled_on: bool) -> void:
 	Settings.theme_settings.enable_trimmer = toggled_on
 	Settings.save()
-
 
 func _on_selected_screen_item_selected(index: int) -> void:
 	if index == 0:
@@ -189,7 +183,6 @@ func _on_selected_screen_item_selected(index: int) -> void:
 	Global.settings_dict.monitor = Global.main.get_node("%Marker").current_screen
 	print(Global.settings_dict.monitor)
 
-
 func _on_ui_scaling_slider_value_changed(value: float) -> void:
 	if change_setting:
 		Settings.theme_settings.ui_scaling = value
@@ -197,7 +190,6 @@ func _on_ui_scaling_slider_value_changed(value: float) -> void:
 		Settings.save()
 		%UIScalingSpinBox.value = value
 		get_parent().move_to_center()
-
 
 func _on_ui_scaling_spin_box_value_changed(value: float) -> void:
 	if change_setting:
@@ -210,7 +202,6 @@ func _on_ui_scaling_spin_box_value_changed(value: float) -> void:
 func cursor_changed():
 	Settings.change_cursor()
 	Settings.save()
-
 
 func _on_custom_cursor_editor_toggled(toggled_on: bool) -> void:
 	if !change_setting: return
@@ -267,7 +258,6 @@ func _on_save_unused_images_toggled(toggled_on: bool) -> void:
 	Settings.theme_settings.save_unused_files = toggled_on
 	Settings.save()
 
-
 func _on_backend_option_item_selected(index: int) -> void:
 	match index:
 		0:
@@ -280,3 +270,22 @@ func _on_backend_option_item_selected(index: int) -> void:
 			GlobInput.backend = "windows"
 			Settings.theme_settings.backend_type = "windows"
 	Settings.save()
+
+func _on_audio_backend_option_item_selected(index: int) -> void:
+	match index:
+		0:
+			await GlobalAudioStreamPlayer.mic_restart_timer_timeout()
+			Settings.theme_settings.audio_capturer = 0
+			GlobalAudioStreamPlayer.record_effect = AudioServer.get_bus_effect(GlobalAudioStreamPlayer.record_bus_index, Settings.theme_settings.get("audio_capturer", 0))
+			AudioServer.set_bus_effect_enabled(GlobalAudioStreamPlayer.record_bus_index, 0, true)
+			AudioServer.set_bus_effect_enabled(GlobalAudioStreamPlayer.record_bus_index, 2, false)
+			await GlobalAudioStreamPlayer.mic_restart_timer_timeout()
+			Settings.save()
+		1:
+			await GlobalAudioStreamPlayer.mic_restart_timer_timeout()
+			Settings.theme_settings.audio_capturer = 2
+			GlobalAudioStreamPlayer.record_effect = AudioServer.get_bus_effect(GlobalAudioStreamPlayer.record_bus_index, Settings.theme_settings.get("audio_capturer", 2))
+			AudioServer.set_bus_effect_enabled(GlobalAudioStreamPlayer.record_bus_index, 0, false)
+			AudioServer.set_bus_effect_enabled(GlobalAudioStreamPlayer.record_bus_index, 2, true)
+			await GlobalAudioStreamPlayer.mic_restart_timer_timeout()
+			Settings.save()

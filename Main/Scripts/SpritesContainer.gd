@@ -140,7 +140,8 @@ func save_state(id):
 		model_effects = model_effects.duplicate(),
 		dim_color = dim_color,
 	}
-	Global.settings_dict.states[id] = dict
+	if id in range(Global.settings_dict.states.size()):
+		Global.settings_dict.states[id] = dict
 	
 	if GlobalMicAudio.has_spoken:
 		speaking()

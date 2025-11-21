@@ -43,15 +43,15 @@ gradient = SubResource("Gradient_uswo1")
 
 [node name="SpriteObject" node_paths=PackedStringArray("sprite_object", "grab_object") instance=ExtResource("1_31wc5")]
 script = ExtResource("1_yuqos")
-sprite_object = NodePath("Pos/MouseRot/Drag/Rotation/Sprite2D")
-grab_object = NodePath("Pos/MouseRot/Drag/Rotation/Sprite2D/Grab")
+sprite_object = NodePath("Modifier1/Modifier/Sprite2D")
+grab_object = NodePath("Modifier1/Modifier/Sprite2D/Grab")
 
-[node name="Sprite2D" type="Line2D" parent="Pos/MouseRot/Drag/Rotation" index="1"]
+[node name="Sprite2D" type="Line2D" parent="Modifier1/Modifier" index="1"]
 unique_name_in_owner = true
 physics_interpolation_mode = 1
 texture_repeat = 2
 material = SubResource("ShaderMaterial_lijf4")
-points = PackedVector2Array(-10, 0, -4.96, 0, 2.16, 0, 11.36, 0, 22.64, 0, 36, 0, 50.4, -0.000123844, 64.8, -0.000495376, 79.2, -0.0011146, 93.6, -0.0019815, 108, -0.0030961, 122.4, -0.0042091, 136.8, -0.00507124, 151.2, -0.0056825, 165.6, -0.00604289, 180, -0.00615241, 194.4, -0.00599815, 208.8, -0.00556719, 223.2, -0.00485955, 237.6, -0.00387521, 252, -0.00261419, 266.4, -0.00111895, 280.8, 0.000568032, 295.2, 0.00244675, 309.6, 0.0045172, 324, 0.00677939, 338.4, 0.00923332, 352.8, 0.011879)
+points = PackedVector2Array(-10, 0, -4.96, 0, 2.16, 0, 11.36, 0, 22.64, 0, 36, 0, 50.4, -3.77139e-05, 64.8, -0.000150856, 79.2, -0.000339425, 93.6, -0.000603423, 108, -0.000942848, 122.4, -0.00129253, 136.8, -0.00158732, 151.2, -0.0018272, 165.6, -0.00201217, 180, -0.00214224, 194.4, -0.00234404, 208.8, -0.00274422, 223.2, -0.00334276, 237.6, -0.00413967, 252, -0.00513495, 266.4, -0.00692408, 280.8, -0.0101026, 295.2, -0.0146704, 309.6, -0.0206275, 324, -0.027974, 338.4, -0.0367099, 352.8, -0.0468351)
 texture = SubResource("CanvasTexture_6684t")
 texture_mode = 2
 script = ExtResource("4_e6x1l")
@@ -63,7 +63,7 @@ max_angular_momentum = 20.0
 subdivision = 5
 additional_start_segment = true
 
-[node name="Grab" type="TextureButton" parent="Pos/MouseRot/Drag/Rotation/Sprite2D" index="0"]
+[node name="Grab" type="TextureButton" parent="Modifier1/Modifier/Sprite2D" index="0"]
 unique_name_in_owner = true
 z_index = 4096
 anchors_preset = 15
@@ -76,7 +76,7 @@ size_flags_vertical = 3
 mouse_filter = 1
 texture_normal = SubResource("GradientTexture2D_wmc63")
 
-[node name="Selection" type="TextureRect" parent="Pos/MouseRot/Drag/Rotation/Sprite2D/Grab" index="0"]
+[node name="Selection" type="TextureRect" parent="Modifier1/Modifier/Sprite2D/Grab" index="0"]
 unique_name_in_owner = true
 visible = false
 z_index = 4096
@@ -99,4 +99,4 @@ actor = NodePath("..")
 actor = NodePath("..")
 
 [node name="AnimatedSpriteTexture" parent="." index="6" node_paths=PackedStringArray("sprite_node")]
-sprite_node = NodePath("../Pos/MouseRot/Drag/Rotation/Sprite2D")
+sprite_node = NodePath("../Modifier1/Modifier/Sprite2D")

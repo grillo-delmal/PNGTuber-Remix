@@ -5,10 +5,13 @@ var save_dict : Dictionary = {}
 var can_load_plus : bool = false
 const YIELD_EVERY : int = 25
 
+
 var import_trimmed : bool = false
+var import_resized : bool = false
+var import_percent : float = 50.0
 @onready var dire = Settings.path_helper(OS.get_executable_path().get_base_dir(), "/ExportedAssets")
 
-func save_file(path):
+func save_file(path : String):
 	save_model(path)
 
 func save_data():
@@ -105,6 +108,7 @@ func load_file(path: String, autoload : bool = false):
 	if path.get_extension() == "save":
 		can_load_plus = true
 		load_pngplus_file(path)
+
 	else:
 		load_model(path)
 
@@ -113,7 +117,8 @@ func load_model(path: String) -> void:
 	Global.main.clear_sprites()
 	Global.main.get_node("Timer").start()
 	Global.delete_states.emit()
-	await Global.main.get_node("Timer").timeout
+	await get_tree().process_frame
+	await get_tree().process_frame
 
 	var file = FileAccess.open(path, FileAccess.READ)
 	if file == null:
@@ -148,8 +153,8 @@ func load_model(path: String) -> void:
 	Global.remake_states.emit(load_dict.settings_dict.states)
 	if not path.begins_with("res://"):
 		Global.save_path = path
-	
-	
+		
+		
 	load_objects(load_dict)
 
 	if load_dict.input_array != null:
@@ -206,13 +211,32 @@ func load_model(path: String) -> void:
 	Global.load_model.emit()
 	Global.load_sprite_states(0)
 
-func load_objects(load_dict : Dictionary):
+
+func _resize_image_data(image_data: ImageData, sprite_node: Node2D, percent: float) -> void:
+	if percent == 100.0 or image_data.runtime_texture == null:
+		return
+	var img: Image = image_data.runtime_texture.get_image().duplicate(true)
+	var scale = percent / 100.0
+	var new_w = max(int(img.get_width() * scale), 1)
+	var new_h = max(int(img.get_height() * scale), 1)
+	img.resize(new_w, new_h, Image.INTERPOLATE_LANCZOS)
+	image_data.runtime_texture = ImageTexture.create_from_image(img)
+	image_data.offset *= scale
+	if sprite_node != null:
+		sprite_node.position *= scale
+
+func load_objects(load_dict: Dictionary) -> void:
 	Global.image_manager_data.clear()
-	var sheet_textures : Dictionary = {}
-	for sprite in load_dict.sprites_array:
-		if sprite.has("states"):
-			for st in sprite.states:
-				if not st.is_empty():
+	var sheet_textures: Dictionary = {}
+
+	if load_dict.has("sprites_array"):
+		for sprite in load_dict.sprites_array:
+			if typeof(sprite) != TYPE_DICTIONARY:
+				continue
+			if sprite.has("states"):
+				for st in sprite.states:
+					if typeof(st) != TYPE_DICTIONARY or st.is_empty():
+						continue
 					var hframes = st.get("hframes", 1)
 					var vframes = st.get("vframes", 1)
 					var non_animated_sheet = st.get("non_animated_sheet", false)
@@ -222,41 +246,39 @@ func load_objects(load_dict : Dictionary):
 						if tex_name != 0:
 							sheet_textures[tex_name] = true
 
-	var seen_ids := {}
-	for i in load_dict.get("image_manager_data", []):
-		var incoming_id = null
-		if typeof(i) == TYPE_DICTIONARY and i.has("id"):
-			incoming_id = i.id
-		elif typeof(i) == TYPE_DICTIONARY:
-			incoming_id = i.get("id", null)
+	var seen_ids: Dictionary = {}
+	var arr = load_dict.get("image_manager_data", [])
+	for i in arr:
+		if typeof(i) != TYPE_DICTIONARY:
+			continue
+		var incoming_id = i.get("id", null)
 		if incoming_id == null or seen_ids.has(incoming_id):
 			continue
 		seen_ids[incoming_id] = true
 
-		var image_data : ImageData = ImageData.new()
+		var image_data: ImageData = ImageData.new()
 		image_data.set_data(i)
-		if import_trimmed and !Global.settings_dict.trimmed:
-			if not (image_data.id in sheet_textures):
-				image_data.trim_image()
+
+		if import_trimmed and !Global.settings_dict.trimmed and !sheet_textures.has(image_data.id):
+			image_data.trim_image()
+		if import_resized and import_percent != 100.0:
+			_resize_image_data(image_data, null, import_percent)
+
 		Global.image_manager_data.append(image_data)
-
-
 	for sprite in load_dict.sprites_array:
 		var sprite_obj
 		if sprite.has("sprite_type") and sprite.sprite_type == "WiggleApp":
 			sprite_obj = preload("res://Misc/AppendageObject/Appendage_object.tscn").instantiate()
 		else:
-			sprite_obj =  preload("res://Misc/SpriteObject/sprite_object.tscn").instantiate()
+			sprite_obj = preload("res://Misc/SpriteObject/sprite_object.tscn").instantiate()
 
 		sprite_obj.layer_color = sprite.get("layer_color", Color.BLACK)
 		sprite_obj.used_image_id = sprite.get("image_id", 0)
 		sprite_obj.used_image_id_normal = sprite.get("normal_id", 0)
 		sprite_obj.sprite_id = sprite.sprite_id
 		sprite_obj.rest_mode = sprite.get("rest_mode", 1)
-		
-		if sprite.has("parent_id") && sprite.parent_id != null:
+		if sprite.has("parent_id") and sprite.parent_id != null:
 			sprite_obj.parent_id = sprite.parent_id
-
 
 		if sprite.has("is_asset"):
 			sprite_obj.is_asset = sprite.is_asset
@@ -266,7 +288,7 @@ func load_objects(load_dict : Dictionary):
 				sprite_obj.show_only = sprite.show_only
 			if sprite.has("hold_to_show"):
 				sprite_obj.hold_to_show = sprite.hold_to_show
-			sprite_obj.get_node("%Drag").visible = sprite.was_active_before
+			sprite_obj.get_node("%Sprite2D").visible = sprite.was_active_before
 			sprite_obj.was_active_before = sprite.was_active_before
 
 			sprite_obj.disappear_keys = str(sprite.sprite_id) + "Disappear"
@@ -285,13 +307,12 @@ func load_objects(load_dict : Dictionary):
 					InputMap.action_add_event(str(sprite.sprite_id), sprite_obj.saved_event)
 
 		sprite_obj.sprite_name = sprite.sprite_name
-
-
-		var image_data : ImageData = null
-		var image_data_normal : ImageData = null
-		var canv : CanvasTexture = CanvasTexture.new()
+		var canv: CanvasTexture = CanvasTexture.new()
 		canv.diffuse_texture = preload("res://Misc/SpriteObject/Folder.png")
 		sprite_obj.get_node("%Sprite2D").texture = canv
+
+		var image_data: ImageData = null
+		var image_data_normal: ImageData = null
 
 		if load_dict.get("image_manager_data", []) == [] and !sprite.states[0].get("folder"):
 			image_data = ImageData.new()
@@ -302,33 +323,36 @@ func load_objects(load_dict : Dictionary):
 				ImageTextureLoaderManager.load_apng(sprite, image_data)
 				if image_data_normal != null:
 					ImageTextureLoaderManager.load_apng(sprite, image_data_normal, true)
+			elif sprite.has("img_animated") and sprite.img_animated:
+				ImageTextureLoaderManager.load_gif(sprite_obj, sprite, image_data)
+				if image_data_normal != null:
+					ImageTextureLoaderManager.load_gif(sprite, image_data_normal, true)
 			else:
-				if sprite.has("img_animated") and sprite.img_animated:
-					ImageTextureLoaderManager.load_gif(sprite_obj, sprite, image_data)
-					if image_data_normal != null:
-						ImageTextureLoaderManager.load_gif(sprite, image_data_normal, true)
-				else:
-					load_sprite(sprite, image_data)
-					if image_data_normal != null:
-						load_sprite(sprite, image_data_normal, true)
-
+				load_sprite(sprite, image_data)
+				if image_data_normal != null:
+					load_sprite(sprite, image_data_normal, true)
 			canv.diffuse_texture = image_data.runtime_texture
 			sprite_obj.referenced_data = image_data
 			sprite_obj.used_image_id = image_data.id
 			image_data.image_name = sprite_obj.sprite_name
 			Global.image_manager_data.append(image_data)
+
 			if image_data_normal != null:
 				canv.normal_texture = image_data_normal.runtime_texture
 				sprite_obj.referenced_data_normal = image_data_normal
 				sprite_obj.used_image_id_normal = image_data_normal.id
 				image_data_normal.image_name = sprite_obj.sprite_name + "(Normal)"
 				Global.image_manager_data.append(image_data_normal)
+			if import_resized and import_percent != 100.0:
+				_resize_image_data(image_data, sprite_obj.get_node("%Sprite2D"), import_percent)
+				if image_data_normal != null:
+					_resize_image_data(image_data_normal, null, import_percent)
+
 		else:
 			if !sprite.states[0].get("folder"):
 				sprite_obj.rotated = sprite.get("rotated", 0)
 				sprite_obj.flipped_h = sprite.get("flipped_h", false)
 				sprite_obj.flipped_v = sprite.get("flipped_v", false)
-
 				for i in Global.image_manager_data:
 					if i.id == sprite_obj.used_image_id:
 						sprite_obj.referenced_data = i
@@ -341,22 +365,24 @@ func load_objects(load_dict : Dictionary):
 		for st in sprite.states:
 			if not st.is_empty():
 				if import_trimmed and !Global.settings_dict.trimmed and sprite_obj.referenced_data != null:
-					var delta = sprite_obj.referenced_data.offset
-					st["offset"] += delta
+					st["offset"] += sprite_obj.referenced_data.offset
+				if import_resized and import_percent != 100.0:
+					var scale := import_percent / 100.0
+					st["offset"] *= scale
+					if st.has("position"):
+						st["position"] *= scale
 				cleaned_array.append(st)
 		for st in cleaned_array:
 			var new_dict = sprite_obj.sprite_data.duplicate()
 			new_dict.merge(st, true)
 			st = new_dict
-
 		sprite_obj.states = cleaned_array
 
 		if sprite.has("is_collapsed"):
 			sprite_obj.is_collapsed = sprite.is_collapsed
-			
-			
 		sprite_obj.get_node("%Sprite2D/Grab").anchors_preset = Control.LayoutPreset.PRESET_FULL_RECT
 		Global.sprite_container.add_child(sprite_obj)
+
 
 func load_sprite(sprite, image_data = null, normal = false):
 	var img_data

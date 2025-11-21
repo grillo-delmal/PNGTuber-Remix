@@ -51,7 +51,7 @@ const SAVED_LAYOUT_PATH := "user://layout.tres"
 	language = "automatic",
 	save_unused_files = false,
 	backend_type = "default",
-	
+	audio_capturer = 2,
 }
 var save_location = ""
 var autosave_location = ""
@@ -171,7 +171,17 @@ func _ready():
 		TranslationServer.set_locale(OS.get_locale_language())
 	else:
 		TranslationServer.set_locale(locale)
-
+	
+	GlobalAudioStreamPlayer.record_effect = AudioServer.get_bus_effect(GlobalAudioStreamPlayer.record_bus_index, theme_settings.get("audio_capturer", 2))
+	match theme_settings.audio_capturer:
+		0:
+			AudioServer.set_bus_effect_enabled(GlobalAudioStreamPlayer.record_bus_index, 0, true)
+			AudioServer.set_bus_effect_enabled(GlobalAudioStreamPlayer.record_bus_index, 2, false)
+			GlobalAudioStreamPlayer.mic_restart_timer_timeout()
+		2:
+			AudioServer.set_bus_effect_enabled(GlobalAudioStreamPlayer.record_bus_index, 0, false)
+			AudioServer.set_bus_effect_enabled(GlobalAudioStreamPlayer.record_bus_index, 2, true)
+			GlobalAudioStreamPlayer.mic_restart_timer_timeout()
 
 func update_tracking_backend():
 	match theme_settings.backend_type:
@@ -184,7 +194,6 @@ func update_tracking_backend():
 				GlobInput.backend = "windows"
 			else:
 				GlobInput.backend = "default"
-
 
 func lipsync_set_up():
 	var parent_path = Util.get_parent_path(save_location);
