@@ -124,7 +124,6 @@ func get_state(id):
 		sprite_data.merge(dict, true)
 		%Modifier1.z_index = get_value("z_index")
 		modulate = get_value("colored")
-		visible = get_value("visible")
 		scale = get_value("scale")
 	#	global_position = get_value("global_position")
 		if get_value("should_reset_state"):
@@ -162,6 +161,12 @@ func get_state(id):
 			%Modifier1.show()
 		else:
 			%ReactionConfig.update_to_mode_change(Global.mode)
+			
+		if get_value("fade"):
+			trigger_fade(visible)
+		else:
+			modulate.a = 1.0
+			visible = get_value("visible")
 			
 		update_wiggle_parts()
 		set_anchor_sprite()

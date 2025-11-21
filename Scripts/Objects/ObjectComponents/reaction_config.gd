@@ -4,6 +4,7 @@ extends Node
 @export var animation_handler : Node
 var currently_speaking : bool = false
 var blinking : bool = false
+var tween : Tween
 
 
 func _ready() -> void:
@@ -25,9 +26,17 @@ func _physics_process(_delta: float) -> void:
 	if GlobInput.is_action_just_pressed(str(actor.sprite_id)):
 		if actor.show_only:
 			%Sprite2D.visible = true
+
 		else:
-			%Sprite2D.visible = !%Sprite2D.visible
-		actor.was_active_before = %Sprite2D.visible
+			if actor.get_value("fade_asset"):
+				var new_vis = await actor.fade_asset(actor.was_active_before, actor, %Sprite2D)
+				actor.was_active_before = new_vis
+				%Sprite2D.visible = new_vis
+			else:
+				%Sprite2D.visible = !%Sprite2D.visible
+				actor.was_active_before = %Sprite2D.visible
+
+
 	if GlobInput.is_action_pressed(str(actor.sprite_id)) and actor.hold_to_show and !actor.was_active_before:
 		is_trying_to_appear = true
 	if GlobInput.is_action_just_pressed(actor.disappear_keys):
@@ -37,10 +46,15 @@ func _physics_process(_delta: float) -> void:
 	if is_trying_to_appear:
 		%Sprite2D.visible = true
 	if is_trying_to_disappear:
-		%Sprite2D.visible = false
+		if actor.get_value("fade_asset"):
+			var new_visibility = await actor.fade_asset(false, actor, %Sprite2D)
+			%Sprite2D.visible = new_visibility
+			actor.was_active_before = new_visibility
+		else:
+			%Sprite2D.visible = false
+			actor.was_active_before = %Sprite2D.visible
 		if !actor.is_asset && !%Sprite2D.visible:
 			%Sprite2D.visible = true
-	
 	
 	'''
 	if actor.sprite_data.is_cycle and actor.sprite_data.cycle > 0:

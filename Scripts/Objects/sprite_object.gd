@@ -133,7 +133,6 @@ func _on_grab_button_down():
 			for s in Global.held_sprites:
 				drag_offsets[s] = mouse_pos - s.position
 
-
 func _on_grab_button_up():
 	if selected && dragging:
 		save_state(Global.current_state)
@@ -144,8 +143,6 @@ func _input(event: InputEvent) -> void:
 		if selected && dragging:
 			save_state(Global.current_state)
 			dragging = false
-
-
 
 func wiggle_sprite():
 	var length : float = 0.0
@@ -230,8 +227,13 @@ func get_state(id):
 		else:
 			%ReactionConfig.update_to_mode_change(Global.mode)
 
-		visible = get_value("visible")
+		if get_value("fade"):
+			trigger_fade(visible)
+		else:
+			modulate.a = 1.0
+			visible = get_value("visible")
 		
+			
 		animation()
 		set_blend(get_value("blend_mode"))
 		advanced_lipsyc()
@@ -252,7 +254,6 @@ func check_talk():
 	else:
 		%Rotation.show()
 
-
 func zazaza(parent):
 	for i in parent:
 		if i.sprite_id == parent_id:
@@ -262,4 +263,3 @@ func zazaza(parent):
 					if !state.is_empty():
 						global = global_position
 						state.position = get_value("position")
-						

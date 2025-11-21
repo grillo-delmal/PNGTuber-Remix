@@ -92,6 +92,10 @@ const DEFAULT_DATA := {
 	offset = Vector2(0,0),
 	ignore_bounce = false,
 	clip = 0,
+	fade = false,
+	fade_asset = false,
+	fade_speed = 1.0,
+	fade_speed_asset = 1.0,
 	physics = true,
 	advanced_lipsync = false,
 	should_reset = false,
@@ -130,6 +134,7 @@ var used_image_id_normal : int = 0
 var referenced_data  = null
 var referenced_data_normal = null
 
+var tween : Tween
 #Movement
 var heldTicks = 0
 #Wobble
@@ -317,3 +322,41 @@ func old_reposition():
 			var gl = state.global_position
 			state.position = parent.to_local(gl)
 			state.erase("global_position")
+
+func trigger_fade(was_visible: bool):
+	if tween:
+		tween.kill()
+	var target = get_value("visible")
+	if target:
+		visible = true
+		if !was_visible:
+			modulate.a = 0.0
+		tween = get_tree().create_tween()
+		tween.tween_property(self, "modulate:a", 1.0, get_value("fade_speed"))
+	else:
+		if was_visible:
+			modulate.a = 1.0
+		tween = get_tree().create_tween()
+		tween.tween_property(self, "modulate:a", 0.0, get_value("fade_speed"))
+		await tween.finished
+		visible = false
+
+func fade_asset(was_visible: bool, node: Node, node_hide: Node) -> bool:
+	if tween:
+		tween.kill()
+	var target = !was_visible
+	node_hide.visible = true  
+	if target:
+		node.modulate.a = 0.0
+		tween = get_tree().create_tween()
+		tween.tween_property(node, "modulate:a", 1.0, get_value("fade_speed_asset"))
+		await tween.finished
+		node.modulate.a = 1.0
+		return true
+	else:
+		node.modulate.a = 1.0
+		tween = get_tree().create_tween()
+		tween.tween_property(node, "modulate:a", 0.0, get_value("fade_speed_asset"))
+		await tween.finished
+		node_hide.visible = false
+		return false
