@@ -67,6 +67,7 @@ texture = SubResource("CanvasTexture_4xt5n")
 
 [node name="Selection" type="Sprite2D" parent="Modifier1/Modifier/Sprite2D" index="0"]
 unique_name_in_owner = true
+visible = false
 z_index = 4096
 z_as_relative = false
 material = SubResource("ShaderMaterial_5cd6y")

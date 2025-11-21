@@ -22,11 +22,16 @@ var target_x := 0.0
 var target_y := 0.0
 var target_rotation := Vector2.ZERO
 var target_scale := Vector2.ONE
+var target_pos = Vector2.ZERO
 
+var mouse_delta := Vector2.ZERO
 var rest := false
+var axis_left := Vector2.ZERO
+var axis_right := Vector2.ZERO
+var axis_shoulderl := Vector2.ZERO
+var axis_shoulderr := Vector2.ZERO
+var axis_lr_3 := Vector2.ZERO
 
-func _ready() -> void:
-	Global.update_mouse_vel_pos.connect(mouse_delay)
 
 func _physics_process(delta: float) -> void:
 	if Global.static_view and actor.rest_mode == 5:
@@ -38,29 +43,26 @@ func _physics_process(delta: float) -> void:
 		process_follow(delta)
 		last_mouse_position = mouse_coords
 
-func mouse_delay():
-	var mouse_delta = last_mouse_position - mouse_coords
-	if !mouse_delta.is_zero_approx():
-		distance = Vector2(tanh(mouse_delta.x), tanh(mouse_delta.y))
-		if distance.length() == NAN:
-			distance = Vector2(0.0, 0.0)
-		last_mouse_position = mouse_coords 
-
 func reset_modifier() -> void:
 	modifier.position = Vector2.ZERO
 	modifier.rotation = 0.0
 	modifier.scale = Vector2.ONE
 
+func mouse_delay():
+	mouse_delta = last_mouse_position - mouse_coords
+	distance = Vector2(tanh(mouse_delta.x), tanh(mouse_delta.y))
+	if !mouse_delta.is_zero_approx():
+		if distance.length() == NAN:
+			distance = Vector2(0.0, 0.0)
+		last_mouse_position = mouse_coords
+
 func process_follow(delta: float) -> void:
 	if actor.get_value("follow_mouse_velocity"):
-		var mouse_delta = mouse_coords - last_mouse_position
-		# Use raw delta directly, no lerp
-		var dist_vel_x = clamp(abs(mouse_delta.x), 0, actor.get_value("look_at_mouse_pos"))
-		var dist_vel_y = clamp(abs(mouse_delta.y), 0, actor.get_value("look_at_mouse_pos_y"))
-		var dir_vel_x = sign(mouse_delta.x)
-		var dir_vel_y = sign(mouse_delta.y)
-		last_dist.x = dir_vel_x * dist_vel_x
-		last_dist.y = dir_vel_y * dist_vel_y
+		mouse_delay()
+		var dir_vel_x = -sign(mouse_delta.x)
+		var dir_vel_y = -sign(mouse_delta.y)
+		last_dist.x = lerp(last_dist.x, dir_vel_x * (distance.length() * actor.get_value("look_at_mouse_pos")), 0.5)
+		last_dist.y = lerp(last_dist.y, dir_vel_y * (distance.length() * actor.get_value("look_at_mouse_pos_y")), 0.5)
 		vel = mouse_delta
 		dir_vel_anim = mouse_delta 
 	var dir = (mouse_coords - Vector2.ZERO).normalized() if mouse_coords.length() > 0.0001 else Vector2.ZERO
@@ -96,12 +98,6 @@ func follow_calculation(_delta = 0.0):
 	
 	return mouse_coords
 
-var axis_left := Vector2.ZERO
-var axis_right := Vector2.ZERO
-var axis_shoulderl := Vector2.ZERO
-var axis_shoulderr := Vector2.ZERO
-var axis_lr_3 := Vector2.ZERO
-
 func update_controller_inputs() -> void:
 	axis_left = Input.get_vector("ControllerLeft", "ControllerRight", "ControllerUp", "ControllerDown")
 	axis_right = Input.get_vector("ControllerFour", "ControllerTwo", "ControllerOne", "ControllerThree")
@@ -110,7 +106,7 @@ func update_controller_inputs() -> void:
 	axis_lr_3 = Input.get_vector("L3", "R3", "L3", "R3")
 
 func update_position(dir: Vector2, dist: float, _delta: float) -> void:
-	var target_pos = Vector2.ZERO
+	
 	var follow_type = actor.get_value("follow_type")
 	var keyboard_axis := Vector2.ZERO
 	if follow_type in [3,4,5,6,7,8]:
@@ -121,15 +117,12 @@ func update_position(dir: Vector2, dist: float, _delta: float) -> void:
 		else:
 			if actor.get_value("follow_mouse_velocity"):
 				if actor.get_value("snap_pos"):
-					if last_dist.x != 0:
-						target_x = lerp(target_x, last_dist.x, actor.get_value("mouse_delay"))
-					if last_dist.y != 0:
-						target_y = lerp(target_y, last_dist.y, actor.get_value("mouse_delay"))
-				
-					target_pos = Vector2(target_x, target_y)
+					if abs(distance.x) > 0.5:
+						target_pos.x = lerp(target_pos.x, last_dist.x, actor.get_value("mouse_delay"))
+					if abs(distance.y) > 0.5:
+						target_pos.y = lerp(target_pos.y, last_dist.y, actor.get_value("mouse_delay"))
 				else:
-					target_pos.x = last_dist.x
-					target_pos.y = last_dist.y
+					target_pos = target_pos.lerp(last_dist, actor.get_value("mouse_delay")) 
 			
 			else:
 				target_pos.x = dir.x * min(dist, actor.get_value("look_at_mouse_pos"))
