@@ -162,7 +162,7 @@ func update_position(dir: Vector2, dist: float, _delta: float) -> void:
 	modifier.position.x = GlobalCalculations.is_nan_or_inf(lerp(modifier.position.x, target_pos.x, actor.get_value("mouse_delay")))
 	modifier.position.y = GlobalCalculations.is_nan_or_inf(lerp(modifier.position.y, target_pos.y, actor.get_value("mouse_delay")))
 
-func update_rotation(dir: Vector2, delta: float) -> void:
+func update_rotation(_dir: Vector2, delta: float) -> void:
 	var follow_type2 = actor.get_value("follow_type2")
 	var target_rot = 0.0
 	var keyboard_axis := Vector2.ZERO

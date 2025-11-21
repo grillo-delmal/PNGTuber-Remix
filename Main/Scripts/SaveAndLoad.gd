@@ -5,7 +5,6 @@ var save_dict : Dictionary = {}
 var can_load_plus : bool = false
 const YIELD_EVERY : int = 25
 
-
 var import_trimmed : bool = false
 var import_resized : bool = false
 var import_percent : float = 50.0
@@ -224,6 +223,31 @@ func _resize_image_data(image_data: ImageData, sprite_node: Node2D, percent: flo
 	if sprite_node != null:
 		sprite_node.position *= scale
 
+func _resize_apng_frames(image_data: ImageData, percent: float) -> void:
+	if percent == 100.0:
+		return
+
+	var scale = percent / 100.0
+	for frame: AImgIOFrame in image_data.frames:
+		var img := frame.content.duplicate(true)
+		var new_w = max(int(img.get_width() * scale), 1)
+		var new_h = max(int(img.get_height() * scale), 1)
+		img.resize(new_w, new_h, Image.INTERPOLATE_LANCZOS)
+		frame.content = img
+	image_data.offset *= scale
+	var first_frame: Image = image_data.frames[0].content
+	image_data.runtime_texture = ImageTexture.create_from_image(first_frame)
+	image_data.animated_frames.clear()
+	for frame in image_data.frames:
+		var af := AnimatedFrame.new()
+		af.texture = ImageTexture.create_from_image(frame.content)
+		af.duration = frame.duration
+		image_data.animated_frames.append(af)
+	var exporter := AImgIOAPNGExporter.new()
+	var apng_bytes := exporter.export_animation(image_data.frames, 24, null, null, [])
+	image_data.anim_texture = apng_bytes
+
+
 func load_objects(load_dict: Dictionary) -> void:
 	Global.image_manager_data.clear()
 	var sheet_textures: Dictionary = {}
@@ -261,7 +285,11 @@ func load_objects(load_dict: Dictionary) -> void:
 		if import_trimmed and !Global.settings_dict.trimmed and !sheet_textures.has(image_data.id):
 			image_data.trim_image()
 		if import_resized and import_percent != 100.0:
-			_resize_image_data(image_data, null, import_percent)
+			if image_data.is_apng:
+				_resize_apng_frames(image_data, import_percent)
+			else:
+				_resize_image_data(image_data, null, import_percent)
+
 
 		Global.image_manager_data.append(image_data)
 	for sprite in load_dict.sprites_array:

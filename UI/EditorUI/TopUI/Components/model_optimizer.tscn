@@ -71,7 +71,7 @@ suffix = "%"
 custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
 text = "Note : Due to this being a destructive action, this will save a new Model with \"Optimized\" next to the original file.
-APNG and GIF optimization isn't supported yet."
+GIF optimization isn't supported."
 autowrap_mode = 2
 
 [node name="ApplyOptimization" type="Button" parent="MarginContainer/VBoxContainer"]

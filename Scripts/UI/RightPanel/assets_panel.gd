@@ -109,8 +109,7 @@ func _on_cycle_choice_sprite_item_selected(index: int) -> void:
 				for l in Global.settings_dict.cycles:
 					if l.sprites.has(i.sprite_id):
 						l.sprites.remove_at(l.sprites.find(i.sprite_id))
-						i.get_node("%Drag").show()
-						i.get_node("%Drag").visible
+						i.get_node("%Sprite2D").show()
 
 func update_cycle_choice():
 	%CycleChoice.clear()

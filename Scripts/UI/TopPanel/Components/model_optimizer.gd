@@ -34,13 +34,11 @@ func _on_apply_optimization_pressed() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	SaveAndLoad.import_trimmed = false
+	SaveAndLoad.import_resized = false
 	SaveAndLoad.save_model(save_path)
-	
-
 
 func _on_about_to_popup() -> void:
 	check_toggles()
-
 
 func check_toggles(_arg = ""):
 	%ApplyOptimization.disabled = false
@@ -48,10 +46,8 @@ func check_toggles(_arg = ""):
 	%ImageResize.disabled = false
 	%ResizePrecent.editable = true
 
-
 func _on_image_resize_toggled(toggled_on: bool) -> void:
 	apply_resize = toggled_on
-
 
 func _on_spin_box_value_changed(value: float) -> void:
 	SaveAndLoad.import_percent = value

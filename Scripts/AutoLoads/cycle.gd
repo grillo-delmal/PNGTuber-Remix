@@ -43,17 +43,17 @@ func toggle_cycle(cycle):
 
 		for sprite in get_tree().get_nodes_in_group("Sprites"):
 			if sprite.sprite_id in cycle.sprites and sprite.get_value("is_cycle"):
-				sprite.get_node("%Drag").hide()
-				sprite.was_active_before = sprite.get_node("%Drag").visible
+				sprite.get_node("%Sprite2D").hide()
+				sprite.was_active_before = sprite.get_node("%Sprite2D").visible
 
 			if sprite.sprite_id == cycle.last_sprite and sprite.get_value("is_cycle"):
-				sprite.get_node("%Drag").show()
-				sprite.was_active_before = sprite.get_node("%Drag").visible
+				sprite.get_node("%Sprite2D").show()
+				sprite.was_active_before = sprite.get_node("%Sprite2D").visible
 	else:
 		for sprite in get_tree().get_nodes_in_group("Sprites"):
 			if sprite.sprite_id in cycle.sprites and sprite.get_value("is_cycle"):
-				sprite.get_node("%Drag").hide()
-				sprite.was_active_before = sprite.get_node("%Drag").visible
+				sprite.get_node("%Sprite2D").hide()
+				sprite.was_active_before = sprite.get_node("%Sprite2D").visible
 
 func toggle_forward(cycle):
 	cycle.active = true
@@ -61,11 +61,11 @@ func toggle_forward(cycle):
 	cycle.last_sprite = cycle.sprites[cycle.pos]
 	for sprite in get_tree().get_nodes_in_group("Sprites"):
 		if sprite.sprite_id in cycle.sprites and sprite.get_value("is_cycle"):
-			sprite.get_node("%Drag").hide()
-			sprite.was_active_before = sprite.get_node("%Drag").visible
+			sprite.get_node("%Sprite2D").hide()
+			sprite.was_active_before = sprite.get_node("%Sprite2D").visible
 		if sprite.sprite_id == cycle.last_sprite and sprite.get_value("is_cycle"):
-			sprite.get_node("%Drag").show()
-			sprite.was_active_before = sprite.get_node("%Drag").visible
+			sprite.get_node("%Sprite2D").show()
+			sprite.was_active_before = sprite.get_node("%Sprite2D").visible
 
 func toggle_backward(cycle):
 	cycle.active = true
@@ -73,11 +73,11 @@ func toggle_backward(cycle):
 	cycle.last_sprite = cycle.sprites[cycle.pos]
 	for sprite in get_tree().get_nodes_in_group("Sprites"):
 		if sprite.sprite_id in cycle.sprites and sprite.get_value("is_cycle"):
-			sprite.get_node("%Drag").hide()
-			sprite.was_active_before = sprite.get_node("%Drag").visible
+			sprite.get_node("%Sprite2D").hide()
+			sprite.was_active_before = sprite.get_node("%Sprite2D").visible
 		if sprite.sprite_id == cycle.last_sprite and sprite.get_value("is_cycle"):
-			sprite.get_node("%Drag").show()
-			sprite.was_active_before = sprite.get_node("%Drag").visible
+			sprite.get_node("%Sprite2D").show()
+			sprite.was_active_before = sprite.get_node("%Sprite2D").visible
 
 func toggle_to(cycle, pos):
 	cycle.active = true
@@ -85,8 +85,8 @@ func toggle_to(cycle, pos):
 	cycle.last_sprite = cycle.sprites[cycle.pos]
 	for sprite in get_tree().get_nodes_in_group("Sprites"):
 		if sprite.sprite_id in cycle.sprites and sprite.get_value("is_cycle"):
-			sprite.get_node("%Drag").hide()
-			sprite.was_active_before = sprite.get_node("%Drag").visible
+			sprite.get_node("%Sprite2D").hide()
+			sprite.was_active_before = sprite.get_node("%Sprite2D").visible
 		if sprite.sprite_id == cycle.last_sprite and sprite.get_value("is_cycle"):
-			sprite.get_node("%Drag").show()
-			sprite.was_active_before = sprite.get_node("%Drag").visible
+			sprite.get_node("%Sprite2D").show()
+			sprite.was_active_before = sprite.get_node("%Sprite2D").visible
