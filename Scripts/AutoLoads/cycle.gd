@@ -11,17 +11,23 @@ func update_cycles(settings_dict = Global.settings_dict):
 		var toggle = cycle.get("toggle", null)
 		var forward = cycle.get("forward", null)
 		var backward = cycle.get("backward", null)
-		
+
 		if toggle != null:
-			if GlobInput.is_key_just_pressed(cycle.toggle.keycode):
+			if cycle.toggle is InputEventKey and GlobInput.is_key_just_pressed(cycle.toggle.keycode):
+				toggle_cycle(cycle)
+			elif cycle.toggle is InputEventMouseButton and GlobInput.is_mouse_just_pressed(cycle.toggle.button_index):
 				toggle_cycle(cycle)
 
 		if forward != null:
-			if GlobInput.is_key_just_pressed(cycle.forward.keycode):
+			if cycle.forward is InputEventKey and GlobInput.is_key_just_pressed(cycle.forward.keycode):
+				toggle_forward(cycle)
+			elif cycle.forward is InputEventMouseButton and GlobInput.is_mouse_just_pressed(cycle.forward.button_index):
 				toggle_forward(cycle)
 
 		if backward != null:
-			if GlobInput.is_key_just_pressed(cycle.backward.keycode):
+			if cycle.backward is InputEventKey and GlobInput.is_key_just_pressed(cycle.backward.keycode):
+				toggle_backward(cycle)
+			elif cycle.backward is InputEventMouseButton and GlobInput.is_mouse_just_pressed(cycle.backward.button_index):
 				toggle_backward(cycle)
 
 func toggle_cycle(cycle):
@@ -50,6 +56,7 @@ func toggle_cycle(cycle):
 				sprite.was_active_before = sprite.get_node("%Drag").visible
 
 func toggle_forward(cycle):
+	cycle.active = true
 	cycle.pos = wrap(cycle.pos + 1, 0, cycle.sprites.size())
 	cycle.last_sprite = cycle.sprites[cycle.pos]
 	for sprite in get_tree().get_nodes_in_group("Sprites"):
@@ -61,7 +68,20 @@ func toggle_forward(cycle):
 			sprite.was_active_before = sprite.get_node("%Drag").visible
 
 func toggle_backward(cycle):
+	cycle.active = true
 	cycle.pos = wrap(cycle.pos - 1, 0, cycle.sprites.size())
+	cycle.last_sprite = cycle.sprites[cycle.pos]
+	for sprite in get_tree().get_nodes_in_group("Sprites"):
+		if sprite.sprite_id in cycle.sprites and sprite.get_value("is_cycle"):
+			sprite.get_node("%Drag").hide()
+			sprite.was_active_before = sprite.get_node("%Drag").visible
+		if sprite.sprite_id == cycle.last_sprite and sprite.get_value("is_cycle"):
+			sprite.get_node("%Drag").show()
+			sprite.was_active_before = sprite.get_node("%Drag").visible
+
+func toggle_to(cycle, pos):
+	cycle.active = true
+	cycle.pos = wrap(pos, 0, cycle.sprites.size())
 	cycle.last_sprite = cycle.sprites[cycle.pos]
 	for sprite in get_tree().get_nodes_in_group("Sprites"):
 		if sprite.sprite_id in cycle.sprites and sprite.get_value("is_cycle"):

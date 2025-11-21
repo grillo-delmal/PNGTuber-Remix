@@ -236,7 +236,7 @@ func get_state(id):
 		set_blend(get_value("blend_mode"))
 		advanced_lipsyc()
 			
-		if !get_value("cycle") in range(Global.settings_dict.cycles.size()):
+		if !get_value("cycle") in range(Global.settings_dict.cycles.size() + 1):
 			sprite_data.cycle = 0
 		
 		

@@ -57,6 +57,9 @@ func select_state():
 	%Selected.show()
 
 func _physics_process(_delta: float) -> void:
+	if Global.settings_dict.checkinput != true:
+		return
+	
 	if input_key != "Null" or input_key != "":
 		if GlobInput.is_action_just_pressed(input_key):
 			select_state()
