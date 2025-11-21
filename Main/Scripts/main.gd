@@ -224,7 +224,7 @@ func clear_sprites():
 	Global.delete_states.emit()
 	Global.reset_states.emit()
 	Global.camera.zoom = Vector2(1,1)
-	Global.camera_pos.global_position = Vector2(0, 0)
+	%CamPos.global_position = Vector2(0, 0)
 	Global.settings_dict.zoom = Vector2(1,1)
 	Global.settings_dict.pan = Vector2(0, 0)
 

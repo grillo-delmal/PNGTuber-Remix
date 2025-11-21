@@ -122,7 +122,12 @@ func _on_duplicate_button_pressed():
 					var norm = ImageTextureLoaderManager.check_flips(obj.referenced_data_normal.runtime_texture, obj)
 					canv.normal_texture = norm
 				obj.get_node("%Sprite2D").texture = canv
-
+			else:
+				var canv: CanvasTexture = CanvasTexture.new()
+				canv.diffuse_texture = preload("res://Misc/SpriteObject/Folder.png")
+				obj.get_node("%Sprite2D").texture = canv
+			
+			
 			obj.sprite_name = "Duplicate" + sprite.sprite_name 
 			if sprite.get_value("folder"):
 				obj.sprite_data.folder = true
@@ -185,6 +190,10 @@ func _on_duplicate_button_pressed():
 						var norm = ImageTextureLoaderManager.check_flips(obj_to_spawn.referenced_data_normal.runtime_texture, obj_to_spawn)
 						canv.normal_texture = norm
 						
+					obj_to_spawn.get_node("%Sprite2D").texture = canv
+				else:
+					var canv: CanvasTexture = CanvasTexture.new()
+					canv.diffuse_texture = preload("res://Misc/SpriteObject/Folder.png")
 					obj_to_spawn.get_node("%Sprite2D").texture = canv
 
 				obj_to_spawn.sprite_name = "Duplicate" + t.sprite_name
